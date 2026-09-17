@@ -334,6 +334,18 @@
   }
   .member-more:hover{border-bottom-color:currentColor;}
 
+  /* ---------- CV BUTTON ---------- */
+  .cv-btn{
+    display:inline-flex; align-items:center; gap:8px; align-self:flex-start;
+    margin-top:22px; padding:12px 22px; border-radius:6px;
+    font-family:'Inter'; font-weight:700; font-size:0.9rem; text-decoration:none;
+    background:var(--teal); color:var(--white);
+    transition:transform .15s ease, box-shadow .15s ease, background .15s ease;
+  }
+  .cv-btn:hover{transform:translateY(-2px); box-shadow:0 10px 24px rgba(39,18,95,0.25);}
+  .mentor-cv{background:var(--mint); color:var(--navy-deep); margin-top:18px;}
+  .mentor-cv:hover{background:#5cfcc3;}
+
   /* ---------- MEMBER MODAL ---------- */
   .member-modal{
     position:fixed; inset:0; z-index:100; display:none;
@@ -384,6 +396,11 @@
     font-size:0.68rem; font-weight:700; padding:3px 8px; border-radius:20px;
     background:var(--mint); color:var(--navy-deep);
   }
+  .tool h3 .tag-active{
+    display:inline-flex; align-items:center; gap:6px;
+    background:rgba(58,247,178,0.14); color:var(--mint); border:1px solid rgba(58,247,178,0.55);
+  }
+  .tool h3 .tag-active::before{content:""; width:6px; height:6px; border-radius:50%; background:var(--mint); flex:none;}
   .tool p{color:var(--muted-dark); font-size:0.92rem;}
 
   /* ---------- PRESUPUESTO ---------- */
@@ -592,7 +609,7 @@
     <div class="mission-grid">
       <div class="mission-item">
         <div class="eyebrow">Misión</div>
-        <h3>Ingeniería real, desde la prepa.</h3>
+        <h3>Ingeniería real, desde la preparatoria.</h3>
         <p>Representar a Preparatoria Celta en el Desafío STEM Racing México diseñando, fabricando y compitiendo con un auto de Fórmula 1 a escala, desarrollando en el camino las habilidades técnicas, de negocio y de liderazgo que nos van a definir como ingenieros.</p>
       </div>
       <div class="mission-item">
@@ -605,7 +622,7 @@
       <span class="value-chip">Precisión</span>
       <span class="value-chip">Trabajo en equipo</span>
       <span class="value-chip">Ambición</span>
-      <span class="value-chip">Aprender haciendo</span>
+      <span class="value-chip">Aprendizaje práctico</span>
     </div>
   </div>
 </div>
@@ -648,42 +665,21 @@
 
     <div class="team-grid">
 
-      <div class="member-card c-teal">
+      <div class="member-card c-electric" data-cv="https://drive.google.com/file/d/1vVcseQcXGQWL2v5xiMk1wLopQhp4DP7s/view?usp=drive_link">
         <div class="member-top">
           <div class="member-number">01</div>
-          <span class="member-badge">Ing. de análisis de datos y desarrollo de software</span>
-        </div>
-        <h3>Carlo David Serafín González Pacheco</h3>
-        <p class="member-headline">Construye el cerebro digital de la escudería.</p>
-        <ul class="member-points">
-          <li>Full-stack en C++, Python y TypeScript: certificado por Harvard (CS50, CS50AI)</li>
-          <li>Interfaces en Three.js, telemetría y la plataforma Blueprint OS del equipo</li>
-          <li>Simulación CFD en Ansys Discovery/Fluent para minimizar el coeficiente de arrastre (Cd)</li>
-        </ul>
-        <div class="member-extra">
-          <ul class="member-points">
-            <li>1er lugar estatal en programación, Concurso Internacional de Ciencias del Tec de Monterrey</li>
-            <li>Desarrolla los scripts de telemetría y balance de masa del auto</li>
-            <li>Configura y ejecuta el túnel de viento virtual del equipo</li>
-          </ul>
-        </div>
-        <button class="member-more" type="button">Ver trayectoria completa →</button>
-      </div>
-
-      <div class="member-card c-electric">
-        <div class="member-top">
-          <div class="member-number">02</div>
           <span class="member-badge">Directora de escudería e ing. de diseño</span>
         </div>
         <h3>Ariadna Mejía Hernández</h3>
         <p class="member-headline">Dirige la operación como una escudería real.</p>
         <ul class="member-points">
           <li>Dirección general, presupuesto y estrategia de la escudería</li>
-          <li>Investigación aplicada en aerodinámica</li>
-          <li>Certificación en Diseño de Prototipos, UPAEP</li>
+          <li>Diseño y modelado CAD del chasis y la carrocería en Autodesk Fusion</li>
+          <li>Investigación aplicada en aerodinámica del vehículo</li>
         </ul>
         <div class="member-extra">
           <ul class="member-points">
+            <li>Certificación en Diseño de Prototipos, UPAEP</li>
             <li>2° lugar estatal en Física, Concurso Internacional de Ciencias del Tec de Monterrey</li>
             <li>Responsable del control financiero y la planeación de recursos de temporada</li>
           </ul>
@@ -691,20 +687,21 @@
         <button class="member-more" type="button">Ver trayectoria completa →</button>
       </div>
 
-      <div class="member-card c-teal">
+      <div class="member-card c-teal" data-cv="https://drive.google.com/file/d/1i_IsFwTlzdV9ORZlZnu82A09VdbjMjcI/view?usp=drive_link">
         <div class="member-top">
-          <div class="member-number">03</div>
+          <div class="member-number">02</div>
           <span class="member-badge">Ing. Mecánico y de Operaciones</span>
         </div>
         <h3>Unai Bozalongo Valiente</h3>
         <p class="member-headline">La voz del equipo frente a jueces y patrocinadores.</p>
         <ul class="member-points">
-          <li>Fundador de FitPath, plataforma desarrollada con IA: certificado en IA por Google</li>
+          <li>Diseño mecánico del chasis y del sistema de propulsión por CO₂</li>
           <li>Gestión de finanzas estudiantiles y relación con patrocinadores</li>
           <li>Defensa oral y negociación ante paneles de jueces</li>
         </ul>
         <div class="member-extra">
           <ul class="member-points">
+            <li>Fundador de FitPath, plataforma desarrollada con IA: certificado en IA por Google</li>
             <li>Distinciones como mejor orador y negociador en foros de Modelo de Naciones Unidas</li>
             <li>Encabeza la estrategia de relaciones públicas del equipo</li>
           </ul>
@@ -712,20 +709,21 @@
         <button class="member-more" type="button">Ver trayectoria completa →</button>
       </div>
 
-      <div class="member-card c-purple">
+      <div class="member-card c-purple" data-cv="https://drive.google.com/file/d/1qccW8wV871Jfrt4iiXEZVuGmmoWDLGpF/view?usp=drive_link">
         <div class="member-top">
-          <div class="member-number">04</div>
+          <div class="member-number">03</div>
           <span class="member-badge">Directora creativa e identidad de marca</span>
         </div>
         <h3>María Fernanda Escobar López</h3>
         <p class="member-headline">Construye la identidad visual de la escudería.</p>
         <ul class="member-points">
           <li>Branding, diseño industrial y desarrollo de producto</li>
-          <li>Certificación en Diseño de Prototipos, UPAEP</li>
-          <li>Liderazgo y dirección del pit display en competencia</li>
+          <li>Diseño y dirección del pit display y materiales de presentación</li>
+          <li>Desarrollo de la identidad visual completa de la escudería</li>
         </ul>
         <div class="member-extra">
           <ul class="member-points">
+            <li>Certificación en Diseño de Prototipos, UPAEP</li>
             <li>Fundadora de Tulip Accessories: manufactura y comercialización de producto propio</li>
             <li>Certificación en IA aplicada, Skills for Work (Santander Open Academy)</li>
           </ul>
@@ -733,21 +731,44 @@
         <button class="member-more" type="button">Ver trayectoria completa →</button>
       </div>
 
-      <div class="member-card c-electric">
+      <div class="member-card c-electric" data-cv="https://drive.google.com/file/d/130ZYlRsIeTAfhnr1l7F4l0F-7mSYwKji/view?usp=drive_link">
         <div class="member-top">
-          <div class="member-number">05</div>
+          <div class="member-number">04</div>
           <span class="member-badge">Ing. de manufactura</span>
         </div>
         <h3>Josué Ulises Gutiérrez Rodríguez</h3>
         <p class="member-headline">Convierte el diseño en pieza física, sin errores.</p>
         <ul class="member-points">
           <li>Manufactura práctica: soldadura de arco manual con electrodo revestido (SMAW/MMA)</li>
-          <li>Diseño y fabricación de prototipos y estructuras mecánicas</li>
+          <li>Fabricación del chasis con manufactura CNC e impresión 3D</li>
           <li>Responsable de tolerancias, geometría y viabilidad mecánica del vehículo</li>
         </ul>
         <div class="member-extra">
           <ul class="member-points">
             <li>Base matemática sólida: instructor certificado de matemáticas nivel medio superior</li>
+          </ul>
+        </div>
+        <button class="member-more" type="button">Ver trayectoria completa →</button>
+      </div>
+
+      <div class="member-card c-teal" data-cv="https://drive.google.com/file/d/1KeXEGCWQBprt5_iR433gfYvhZeAIp4nF/view?usp=drive_link">
+        <div class="member-top">
+          <div class="member-number">05</div>
+          <span class="member-badge">Ing. de análisis de datos y desarrollo de software</span>
+        </div>
+        <h3>Carlo David Serafín González Pacheco</h3>
+        <p class="member-headline">Construye el cerebro digital de la escudería.</p>
+        <ul class="member-points">
+          <li>Desarrollo de software, telemetría y la plataforma Blueprint OS del equipo</li>
+          <li>Simulación CFD en Ansys Discovery/Fluent para minimizar el coeficiente de arrastre (Cd)</li>
+          <li>Interfaces 3D en Three.js para la visualización del auto</li>
+        </ul>
+        <div class="member-extra">
+          <ul class="member-points">
+            <li>Full-stack en C++, Python y TypeScript: certificado por Harvard (CS50, CS50AI)</li>
+            <li>1er lugar estatal en programación, Concurso Internacional de Ciencias del Tec de Monterrey</li>
+            <li>Desarrolla los scripts de telemetría y balance de masa del auto</li>
+            <li>Configura y ejecuta el túnel de viento virtual del equipo</li>
           </ul>
         </div>
         <button class="member-more" type="button">Ver trayectoria completa →</button>
@@ -770,6 +791,7 @@
           <span class="badge">Lean Six Sigma Black Belt</span>
           <span class="badge">SolidWorks CSWA / CSWP</span>
         </div>
+        <a class="cv-btn mentor-cv" href="https://drive.google.com/file/d/1I8RPbkDco-DnOVXhY6fJZOL8M37_beMt/view?usp=drive_link" target="_blank" rel="noopener">Ver CV Oficial (Drive) ↗</a>
       </div>
     </div>
   </div>
@@ -784,7 +806,7 @@
     </div>
     <div class="tool-grid">
       <div class="tool">
-        <h3>Autodesk Fusion <span class="tag">Ya lo usamos</span></h3>
+        <h3>Autodesk Fusion <span class="tag tag-active">En uso activo</span></h3>
         <p>Socio oficial de CAD/CAM/CAE de STEM Racing. Aquí modelamos el auto pieza por pieza y preparamos las trayectorias de maquinado.</p>
       </div>
       <div class="tool">
@@ -809,6 +831,7 @@
       <div class="eyebrow-tag">Presupuesto</div>
       <h2>Desglose real: temporada Regional</h2>
       <p>Esto es lo que cuesta competir en la etapa Regional, y cuánto necesitamos de patrocinios para lograrlo.</p>
+      <p style="margin-top:10px; font-size:0.9rem; color:var(--muted); font-style:italic;">Presupuesto proyectado y aproximado para la temporada Regional (sujeto a variaciones por proveedores o sedes de competencia).</p>
     </div>
     <div class="budget-box">
       <div class="budget-summary">
@@ -835,6 +858,9 @@
       <div class="budget-note">
         <b>Aceptamos patrocinio en especie:</b> materiales de manufactura, maquinado CNC, impresión 3D, uniformes, equipo de cómputo o transporte. Toda aportación en especie se cuantifica y se acredita en el nivel de patrocinio equivalente (Bronce, Plata u Oro).
       </div>
+      <div class="budget-note" style="margin-top:14px;">
+        <b>Deducibilidad fiscal:</b> Para todo apoyo económico coordinamos la emisión de comprobante/factura por donativo para que sea deducible.
+      </div>
     </div>
   </div>
 </section>
@@ -844,7 +870,7 @@
     <div class="section-head center" style="max-width:720px;">
       <div class="eyebrow-tag">Patrocinios</div>
       <h2>¿Por qué invertir en Striker Racing?</h2>
-      <p>Tu marca viaja con nosotros de la regional a la final mundial (esa es la meta). Esto es lo que se lleva un patrocinador.</p>
+      <p>Una alianza estratégica que proyecta la marca de tu empresa ante un entorno preuniversitario, tecnológico y familiar de alto impacto en Querétaro y la competencia nacional.</p>
     </div>
 
     <div class="why-grid">
@@ -872,8 +898,8 @@
     <div class="tiers">
       <div class="tier">
         <h3>Bronce</h3>
-        <div class="price">$3,000–5,000</div>
-        <div class="price-note">MXN · aportación puntual</div>
+        <div class="price">$1,000–10,000</div>
+        <div class="price-note">MXN · Cupo abierto</div>
         <ul>
           <li>Logo en el pit display</li>
           <li>Mención en redes del equipo</li>
@@ -887,8 +913,8 @@
       <div class="tier featured">
         <span class="ribbon">Recomendado</span>
         <h3>Plata</h3>
-        <div class="price">$5,000–10,000</div>
-        <div class="price-note">MXN · aportación puntual</div>
+        <div class="price">$10,000–15,000</div>
+        <div class="price-note">MXN · Cupo limitado</div>
         <ul>
           <li>Todo lo de Bronce</li>
           <li>Logo en el auto (zona lateral)</li>
@@ -903,8 +929,8 @@
       <div class="tier premium">
         <span class="ribbon">Máximo impacto</span>
         <h3>Oro</h3>
-        <div class="price">$10,000+</div>
-        <div class="price-note">MXN · patrocinador principal</div>
+        <div class="price">Más de $15,000</div>
+        <div class="price-note">MXN · Patrocinador principal · Cupo exclusivo</div>
         <ul>
           <li>Todo lo de Plata</li>
           <li>Logo destacado en el auto y pit display</li>
@@ -1010,6 +1036,18 @@
     if(extra){
       var extraPoints = extra.querySelector('.member-points');
       if(extraPoints) modalBody.appendChild(extraPoints.cloneNode(true));
+    }
+
+    var cvUrl = card.getAttribute('data-cv');
+    if(cvUrl){
+      var cvBtn = document.createElement('a');
+      cvBtn.className = 'cv-btn';
+      cvBtn.href = cvUrl;
+      cvBtn.target = '_blank';
+      cvBtn.rel = 'noopener';
+      cvBtn.textContent = 'Ver CV Oficial (Drive) ↗';
+      cvBtn.style.background = accentClass ? ACCENTS[accentClass] : '#2080A0';
+      modalBody.appendChild(cvBtn);
     }
 
     lastFocused = document.activeElement;
