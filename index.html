@@ -324,14 +324,6 @@
     clip-path:polygon(8px 0, 100% 0, 100% 100%, 0 100%, 0 8px);
   }
   .member-card h3{font-size:1.12rem; margin-bottom:4px; line-height:1.25;}
-  .member-headline{color:var(--muted); font-size:0.9rem; font-style:italic; margin-bottom:14px;}
-  .member-points{list-style:none; margin-bottom:16px; flex:1;}
-  .member-points li{
-    font-size:0.87rem; color:var(--muted); padding:6px 0 6px 18px; position:relative;
-  }
-  .member-points li::before{
-    content:"▸"; position:absolute; left:0; color:var(--accent, var(--teal)); font-weight:700;
-  }
   /* ---------- CV BUTTON ---------- */
   .cv-btn{
     display:inline-flex; align-items:center; gap:8px; align-self:flex-start;
@@ -368,11 +360,6 @@
     font-size:0.68rem; font-weight:700; padding:3px 8px; border-radius:20px;
     background:var(--mint); color:var(--navy-deep);
   }
-  .tool h3 .tag-active{
-    display:inline-flex; align-items:center; gap:6px;
-    background:rgba(58,247,178,0.14); color:var(--mint); border:1px solid rgba(58,247,178,0.55);
-  }
-  .tool h3 .tag-active::before{content:""; width:6px; height:6px; border-radius:50%; background:var(--mint); flex:none;}
   .tool p{color:var(--muted-dark); font-size:0.92rem;}
 
   /* ---------- PRESUPUESTO ---------- */
@@ -384,12 +371,9 @@
   }
   @media (max-width:700px){ .budget-box{padding:28px 22px;} }
   .budget-summary{
-    display:grid; grid-template-columns:repeat(3,1fr); gap:24px;
     padding-bottom:28px; margin-bottom:8px; border-bottom:1px solid var(--line);
   }
-  @media (max-width:700px){ .budget-summary{grid-template-columns:1fr; gap:18px;} }
-  .budget-figure{font-family:'Oswald'; font-size:1.9rem; color:var(--navy); font-weight:600;}
-  .budget-figure.accent{color:var(--electric);}
+  .budget-figure{font-family:'Oswald'; font-size:2.6rem; color:var(--navy); font-weight:600;}
   .budget-figure-unit{font-size:0.8rem; color:var(--muted); font-family:'Inter'; font-weight:500; margin-left:6px;}
   .budget-figure-label{font-size:0.86rem; color:var(--muted); margin-top:4px;}
   .budget-list{list-style:none; margin-top:20px;}
@@ -558,9 +542,8 @@
     </div>
     <div class="about-grid">
       <div>
-        <p>Durante la temporada, diseñamos un auto de Fórmula 1 a escala impulsado por CO₂ usando herramientas de ingeniería profesional (CAD, CAM, CFD), lo fabricamos siguiendo un reglamento técnico estricto, y lo corremos en pista contra otras escuderías de todo el país.</p>
-        <p>Pero el auto es solo una parte. También construimos un plan de negocio, gestionamos un presupuesto real, diseñamos nuestra identidad de marca y presentamos el proyecto ante un panel de jueces, igual que lo haría cualquier escudería de F1 buscando patrocinadores.</p>
-        <p>Ganar la categoría en la final nacional abre la puerta a representar a México en la final mundial de STEM Racing, junto a equipos de más de 60 países.</p>
+        <p>Diseñamos un monoplaza impulsado por CO₂ utilizando herramientas de ingeniería profesional (CAD, CAM, CFD) bajo un reglamento técnico estricto.</p>
+        <p>Gestionamos la escudería como una empresa real: administramos presupuesto, identidad de marca y planes de negocio, buscando representar a México en la final mundial.</p>
       </div>
       <div>
         <div class="fact-card">
@@ -582,12 +565,12 @@
       <div class="mission-item">
         <div class="eyebrow">Misión</div>
         <h3>Ingeniería real, desde la preparatoria.</h3>
-        <p>Representar a Preparatoria Celta en el Desafío STEM Racing México diseñando, fabricando y compitiendo con un auto de Fórmula 1 a escala, desarrollando en el camino las habilidades técnicas, de negocio y de liderazgo que nos van a definir como ingenieros.</p>
+        <p>Diseñar, manufacturar y competir con un monoplaza a escala F1, desarrollando habilidades técnicas y de gestión a nivel profesional.</p>
       </div>
       <div class="mission-item">
         <div class="eyebrow">Visión</div>
         <h3>Querétaro en la final mundial.</h3>
-        <p>Ser la escudería que lleve a Preparatoria Celta, y a Querétaro, a competir en la final mundial de STEM Racing, demostrando que el talento de nuestra región compite al más alto nivel internacional.</p>
+        <p>Representar a Querétaro en la final mundial de STEM Racing, compitiendo con estándares de ingeniería de clase mundial.</p>
       </div>
     </div>
     <div class="value-row">
@@ -643,16 +626,7 @@
           <span class="member-badge">Directora de escudería e ing. de diseño</span>
         </div>
         <h3>Ariadna Mejía Hernández</h3>
-        <p class="member-headline">Dirige la operación como una escudería real.</p>
-        <ul class="member-points">
-          <li>Dirección general, presupuesto y estrategia de la escudería</li>
-          <li>Diseño y modelado CAD del chasis y la carrocería en Autodesk Fusion</li>
-          <li>Investigación aplicada en aerodinámica del vehículo</li>
-          <li>Certificación en Diseño de Prototipos, UPAEP</li>
-          <li>2° lugar estatal en Física, Concurso Internacional de Ciencias del Tec de Monterrey</li>
-          <li>Responsable del control financiero y la planeación de recursos de temporada</li>
-        </ul>
-        <a class="cv-btn" href="https://drive.google.com/file/d/1vVcseQcXGQWL2v5xiMk1wLopQhp4DP7s/view?usp=drive_link" target="_blank" rel="noopener">Ver CV completo ↗</a>
+        <a class="cv-btn" href="https://drive.google.com/file/d/1vVcseQcXGQWL2v5xiMk1wLopQhp4DP7s/view?usp=drive_link" target="_blank" rel="noopener">Ver CV técnico ↗</a>
       </div>
 
       <div class="card-reveal member-card c-teal">
@@ -661,16 +635,7 @@
           <span class="member-badge">Ing. Mecánico y de Operaciones</span>
         </div>
         <h3>Unai Bozalongo Valiente</h3>
-        <p class="member-headline">La voz del equipo frente a jueces y patrocinadores.</p>
-        <ul class="member-points">
-          <li>Diseño mecánico del chasis y del sistema de propulsión por CO₂</li>
-          <li>Gestión de finanzas estudiantiles y relación con patrocinadores</li>
-          <li>Defensa oral y negociación ante paneles de jueces</li>
-          <li>Fundador de FitPath, plataforma desarrollada con IA: certificado en IA por Google</li>
-          <li>Distinciones como mejor orador y negociador en foros de Modelo de Naciones Unidas</li>
-          <li>Encabeza la estrategia de relaciones públicas del equipo</li>
-        </ul>
-        <a class="cv-btn" href="https://drive.google.com/file/d/1i_IsFwTlzdV9ORZlZnu82A09VdbjMjcI/view?usp=drive_link" target="_blank" rel="noopener">Ver CV completo ↗</a>
+        <a class="cv-btn" href="https://drive.google.com/file/d/1i_IsFwTlzdV9ORZlZnu82A09VdbjMjcI/view?usp=drive_link" target="_blank" rel="noopener">Ver CV técnico ↗</a>
       </div>
 
       <div class="card-reveal member-card c-purple">
@@ -679,16 +644,7 @@
           <span class="member-badge">Directora creativa e identidad de marca</span>
         </div>
         <h3>María Fernanda Escobar López</h3>
-        <p class="member-headline">Construye la identidad visual de la escudería.</p>
-        <ul class="member-points">
-          <li>Branding, diseño industrial y desarrollo de producto</li>
-          <li>Diseño y dirección del pit display y materiales de presentación</li>
-          <li>Desarrollo de la identidad visual completa de la escudería</li>
-          <li>Certificación en Diseño de Prototipos, UPAEP</li>
-          <li>Fundadora de Tulip Accessories: manufactura y comercialización de producto propio</li>
-          <li>Certificación en IA aplicada, Skills for Work (Santander Open Academy)</li>
-        </ul>
-        <a class="cv-btn" href="https://drive.google.com/file/d/1qccW8wV871Jfrt4iiXEZVuGmmoWDLGpF/view?usp=drive_link" target="_blank" rel="noopener">Ver CV completo ↗</a>
+        <a class="cv-btn" href="https://drive.google.com/file/d/1qccW8wV871Jfrt4iiXEZVuGmmoWDLGpF/view?usp=drive_link" target="_blank" rel="noopener">Ver CV técnico ↗</a>
       </div>
 
       <div class="card-reveal member-card c-electric">
@@ -697,14 +653,7 @@
           <span class="member-badge">Ing. de manufactura</span>
         </div>
         <h3>Josué Ulises Gutiérrez Rodríguez</h3>
-        <p class="member-headline">Convierte el diseño en pieza física, sin errores.</p>
-        <ul class="member-points">
-          <li>Manufactura práctica: soldadura de arco manual con electrodo revestido (SMAW/MMA)</li>
-          <li>Fabricación del chasis con manufactura CNC e impresión 3D</li>
-          <li>Responsable de tolerancias, geometría y viabilidad mecánica del vehículo</li>
-          <li>Base matemática sólida: instructor certificado de matemáticas nivel medio superior</li>
-        </ul>
-        <a class="cv-btn" href="https://drive.google.com/file/d/130ZYlRsIeTAfhnr1l7F4l0F-7mSYwKji/view?usp=drive_link" target="_blank" rel="noopener">Ver CV completo ↗</a>
+        <a class="cv-btn" href="https://drive.google.com/file/d/130ZYlRsIeTAfhnr1l7F4l0F-7mSYwKji/view?usp=drive_link" target="_blank" rel="noopener">Ver CV técnico ↗</a>
       </div>
 
       <div class="card-reveal member-card c-teal">
@@ -713,17 +662,7 @@
           <span class="member-badge">Ing. de análisis de datos y desarrollo de software</span>
         </div>
         <h3>Carlo David Serafín González Pacheco</h3>
-        <p class="member-headline">Construye el cerebro digital de la escudería.</p>
-        <ul class="member-points">
-          <li>Desarrollo de software, telemetría y la plataforma Blueprint OS del equipo</li>
-          <li>Simulación CFD en Ansys Discovery/Fluent para minimizar el coeficiente de arrastre (Cd)</li>
-          <li>Interfaces 3D en Three.js para la visualización del auto</li>
-          <li>Full-stack en C++, Python y TypeScript: certificado por Harvard (CS50, CS50AI)</li>
-          <li>1er lugar estatal en programación, Concurso Internacional de Ciencias del Tec de Monterrey</li>
-          <li>Desarrolla los scripts de telemetría y balance de masa del auto</li>
-          <li>Configura y ejecuta el túnel de viento virtual del equipo</li>
-        </ul>
-        <a class="cv-btn" href="https://drive.google.com/file/d/1KeXEGCWQBprt5_iR433gfYvhZeAIp4nF/view?usp=drive_link" target="_blank" rel="noopener">Ver CV completo ↗</a>
+        <a class="cv-btn" href="https://drive.google.com/file/d/1KeXEGCWQBprt5_iR433gfYvhZeAIp4nF/view?usp=drive_link" target="_blank" rel="noopener">Ver CV técnico ↗</a>
       </div>
 
     </div>
@@ -743,7 +682,7 @@
           <span class="badge">Lean Six Sigma Black Belt</span>
           <span class="badge">SolidWorks CSWA / CSWP</span>
         </div>
-        <a class="cv-btn mentor-cv" href="https://drive.google.com/file/d/1I8RPbkDco-DnOVXhY6fJZOL8M37_beMt/view?usp=drive_link" target="_blank" rel="noopener">Ver CV Oficial (Drive) ↗</a>
+        <a class="cv-btn mentor-cv" href="https://drive.google.com/file/d/1I8RPbkDco-DnOVXhY6fJZOL8M37_beMt/view?usp=drive_link" target="_blank" rel="noopener">Ver CV técnico ↗</a>
       </div>
     </div>
   </div>
@@ -758,7 +697,7 @@
     </div>
     <div class="tool-grid">
       <div class="tool">
-        <h3>Autodesk Fusion <span class="tag tag-active">En uso activo</span></h3>
+        <h3>Autodesk Fusion</h3>
         <p>Socio oficial de CAD/CAM/CAE de STEM Racing. Aquí modelamos el auto pieza por pieza y preparamos las trayectorias de maquinado.</p>
       </div>
       <div class="tool">
@@ -783,21 +722,13 @@
       <div class="eyebrow-tag">Presupuesto</div>
       <h2>Desglose real: temporada Regional</h2>
       <p>Esto es lo que cuesta competir en la etapa Regional, y cuánto necesitamos de patrocinios para lograrlo.</p>
-      <p style="margin-top:10px; font-size:0.9rem; color:var(--muted); font-style:italic;">Presupuesto proyectado y aproximado para la temporada Regional (sujeto a variaciones por proveedores o sedes de competencia).</p>
+      <p style="margin-top:10px; font-size:0.9rem; color:var(--muted); font-style:italic;">Presupuesto aproximado partiendo desde cero. Los costos son estimaciones logísticas y de manufactura que pueden variar (hacia arriba o hacia abajo) dependiendo de la sede oficial y cotizaciones finales de proveedores.</p>
     </div>
     <div class="budget-box">
       <div class="budget-summary">
         <div>
           <div class="budget-figure">$65,450.00<span class="budget-figure-unit">MXN</span></div>
-          <div class="budget-figure-label">Costo total de la temporada Regional</div>
-        </div>
-        <div>
-          <div class="budget-figure">$10,000.00<span class="budget-figure-unit">MXN</span></div>
-          <div class="budget-figure-label">Recurso propio disponible</div>
-        </div>
-        <div>
-          <div class="budget-figure accent">$55,450.00<span class="budget-figure-unit">MXN</span></div>
-          <div class="budget-figure-label">Meta neta a recaudar en patrocinios</div>
+          <div class="budget-figure-label">Costo total estimado de la temporada Regional</div>
         </div>
       </div>
       <ul class="budget-list">
@@ -822,7 +753,7 @@
     <div class="section-head center" style="max-width:720px;">
       <div class="eyebrow-tag">Patrocinios</div>
       <h2>¿Por qué invertir en Striker Racing?</h2>
-      <p>Una alianza estratégica que proyecta la marca de tu empresa ante un entorno preuniversitario, tecnológico y familiar de alto impacto en Querétaro y la competencia nacional.</p>
+      <p>Exposición directa de marca en un entorno tecnológico, preuniversitario y de alto rendimiento.</p>
     </div>
 
     <div class="why-grid">
