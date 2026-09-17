@@ -3,11 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Striker Racing — STEM Racing México 2027</title>
-<meta name="description" content="Striker Racing es la escudería de Prepa Celta en el Desafío STEM Racing México. Cinco estudiantes diseñando y compitiendo con un auto de Fórmula 1 a escala. Súmate como patrocinador.">
+<title>Striker Racing · STEM Racing México 2027</title>
+<meta name="description" content="Striker Racing es la escudería de Preparatoria Celta en el Desafío STEM Racing México. Cinco estudiantes diseñando y compitiendo con un auto de Fórmula 1 a escala. Súmate como patrocinador.">
 <meta name="theme-color" content="#27125F">
-<meta property="og:title" content="Striker Racing — STEM Racing México">
-<meta property="og:description" content="La escudería de Prepa Celta en el Desafío STEM Racing México. Súmate como patrocinador.">
+<meta property="og:title" content="Striker Racing · STEM Racing México">
+<meta property="og:description" content="La escudería de Preparatoria Celta en el Desafío STEM Racing México. Súmate como patrocinador.">
 <meta property="og:type" content="website">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -82,7 +82,9 @@
     display:flex; align-items:center; gap:10px;
     font-family:'Oswald'; font-weight:700; font-size:1.25rem; color:var(--white); letter-spacing:0.02em;
   }
-  .brand .dot{width:10px; height:10px; border-radius:50%; background:var(--mint); box-shadow:0 0 10px rgba(58,247,178,0.7);}
+  .brand-mark{width:26px; height:26px; flex:none;}
+  footer .brand-mark{width:22px; height:22px;}
+  footer .brand{display:inline-flex; align-items:center; gap:8px; font-size:1rem; color:var(--navy); margin-bottom:6px;}
   nav ul{list-style:none; display:flex; gap:28px;}
   nav a{font-size:0.92rem; font-weight:600; color:var(--ice); text-decoration:none; position:relative; padding-bottom:2px;}
   nav a::after{
@@ -302,15 +304,17 @@
   .member-card.c-electric{--accent:var(--electric);}
   .member-top{display:flex; align-items:center; gap:14px; margin-bottom:16px;}
   .member-number{
-    width:44px; height:44px; flex:none; border-radius:4px;
+    width:44px; height:44px; flex:none;
+    clip-path:polygon(18% 0, 100% 0, 100% 82%, 82% 100%, 0 100%, 0 18%);
     display:flex; align-items:center; justify-content:center;
     font-family:'Oswald'; font-weight:700; font-size:1.35rem; color:var(--accent, var(--teal));
     background:var(--paper); border:1.5px solid var(--accent, var(--teal));
   }
   .member-badge{
-    display:inline-block; font-size:0.72rem; font-weight:700; letter-spacing:0.03em;
-    padding:5px 11px; border-radius:20px; color:var(--white);
+    display:inline-block; font-size:0.72rem; font-weight:700; letter-spacing:0.02em;
+    padding:5px 12px; color:var(--white); line-height:1.3;
     background:var(--accent, var(--teal));
+    clip-path:polygon(8px 0, 100% 0, 100% 100%, 0 100%, 0 8px);
   }
   .member-card h3{font-size:1.12rem; margin-bottom:4px; line-height:1.25;}
   .member-headline{color:var(--muted); font-size:0.9rem; font-style:italic; margin-bottom:14px;}
@@ -319,7 +323,7 @@
     font-size:0.87rem; color:var(--muted); padding:6px 0 6px 18px; position:relative;
   }
   .member-points li::before{
-    content:"—"; position:absolute; left:0; color:var(--accent, var(--teal)); font-weight:700;
+    content:"▸"; position:absolute; left:0; color:var(--accent, var(--teal)); font-weight:700;
   }
   .member-extra{display:none;}
   .member-more{
@@ -436,7 +440,7 @@
   .tier .price-note{font-size:0.8rem; color:var(--muted); margin-bottom:18px;}
   .tier ul{list-style:none; flex:1; margin-bottom:22px;}
   .tier li{padding:7px 0; font-size:0.92rem; color:var(--muted); padding-left:18px; position:relative;}
-  .tier li::before{content:"—"; position:absolute; left:0; color:var(--teal);}
+  .tier li::before{content:"▸"; position:absolute; left:0; color:var(--teal);}
   .tier-cta{display:flex; gap:8px; flex-wrap:wrap;}
   .tier-cta a{
     flex:1; text-align:center; font-size:0.82rem; font-weight:600; padding:10px 12px;
@@ -516,7 +520,14 @@
 
 <nav>
   <div class="wrap">
-    <div class="brand"><span class="dot"></span>STRIKER RACING</div>
+    <div class="brand">
+      <svg class="brand-mark" viewBox="0 0 32 32" aria-hidden="true">
+        <polygon points="16,2 30,9 30,23 16,30 2,23 2,9" fill="none" stroke="#3AF7B2" stroke-width="2"/>
+        <polygon points="16,9 24,13 16,17 8,13" fill="#3AF7B2"/>
+        <polygon points="16,15 24,19 16,23 8,19" fill="#7138D4"/>
+      </svg>
+      STRIKER RACING
+    </div>
     <ul id="navList">
       <li><a href="#proyecto">El proyecto</a></li>
       <li><a href="#equipo">Equipo</a></li>
@@ -531,7 +542,7 @@
 <header class="hero">
   <div class="wrap hero-grid">
     <div class="hero-inner">
-      <div class="kicker">Prepa Celta · Querétaro · STEM Racing México, temporada 2026–2027</div>
+      <div class="kicker">Preparatoria Celta · Querétaro · STEM Racing México, temporada 2026–2027</div>
       <h1>Presentando a <em>Striker Racing</em>.</h1>
       <p class="lead">Diseñamos, fabricamos y corremos un auto de Fórmula 1 a escala en el Desafío STEM Racing México (antes F1 in Schools), la iniciativa educativa oficial de la Fórmula 1®. Cinco estudiantes, un proyecto de ingeniería real, y una meta: llegar de la regional a la final mundial.</p>
       <div class="cta-row">
@@ -562,7 +573,7 @@
     <div class="about-grid">
       <div>
         <p>Durante la temporada, diseñamos un auto de Fórmula 1 a escala impulsado por CO₂ usando herramientas de ingeniería profesional (CAD, CAM, CFD), lo fabricamos siguiendo un reglamento técnico estricto, y lo corremos en pista contra otras escuderías de todo el país.</p>
-        <p>Pero el auto es solo una parte. También construimos un plan de negocio, gestionamos un presupuesto real, diseñamos nuestra identidad de marca y presentamos el proyecto ante un panel de jueces —igual que lo haría cualquier escudería de F1 buscando patrocinadores.</p>
+        <p>Pero el auto es solo una parte. También construimos un plan de negocio, gestionamos un presupuesto real, diseñamos nuestra identidad de marca y presentamos el proyecto ante un panel de jueces, igual que lo haría cualquier escudería de F1 buscando patrocinadores.</p>
         <p>Ganar la categoría en la final nacional abre la puerta a representar a México en la final mundial de STEM Racing, junto a equipos de más de 60 países.</p>
       </div>
       <div>
@@ -585,12 +596,12 @@
       <div class="mission-item">
         <div class="eyebrow">Misión</div>
         <h3>Ingeniería real, desde la prepa.</h3>
-        <p>Representar a Prepa Celta en el Desafío STEM Racing México diseñando, fabricando y compitiendo con un auto de Fórmula 1 a escala — desarrollando en el camino las habilidades técnicas, de negocio y de liderazgo que nos van a definir como ingenieros.</p>
+        <p>Representar a Preparatoria Celta en el Desafío STEM Racing México diseñando, fabricando y compitiendo con un auto de Fórmula 1 a escala, desarrollando en el camino las habilidades técnicas, de negocio y de liderazgo que nos van a definir como ingenieros.</p>
       </div>
       <div class="mission-item">
         <div class="eyebrow">Visión</div>
         <h3>Querétaro en la final mundial.</h3>
-        <p>Ser la escudería que lleve a Prepa Celta —y a Querétaro— a competir en la final mundial de STEM Racing, demostrando que el talento de nuestra región compite al más alto nivel internacional.</p>
+        <p>Ser la escudería que lleve a Preparatoria Celta, y a Querétaro, a competir en la final mundial de STEM Racing, demostrando que el talento de nuestra región compite al más alto nivel internacional.</p>
       </div>
     </div>
     <div class="value-row">
@@ -643,12 +654,12 @@
       <div class="member-card c-teal">
         <div class="member-top">
           <div class="member-number">01</div>
-          <span class="member-badge">CTO &amp; Lead Developer</span>
+          <span class="member-badge">Ing. de análisis de datos y desarrollo de software</span>
         </div>
-        <h3>Carlo David Serafín</h3>
+        <h3>Carlo David Serafín González Pacheco</h3>
         <p class="member-headline">Construye el cerebro digital de la escudería.</p>
         <ul class="member-points">
-          <li>Full-stack en C++, Python y TypeScript — certificado por Harvard (CS50, CS50AI)</li>
+          <li>Full-stack en C++, Python y TypeScript: certificado por Harvard (CS50, CS50AI)</li>
           <li>Interfaces en Three.js, telemetría y la plataforma Blueprint OS del equipo</li>
           <li>Simulación CFD en Ansys Discovery/Fluent para minimizar el coeficiente de arrastre (Cd)</li>
         </ul>
@@ -665,7 +676,7 @@
       <div class="member-card c-electric">
         <div class="member-top">
           <div class="member-number">02</div>
-          <span class="member-badge">Team Manager</span>
+          <span class="member-badge">Directora de escudería e ing. de diseño</span>
         </div>
         <h3>Ariadna Mejía Hernández</h3>
         <p class="member-headline">Dirige la operación como una escudería real.</p>
@@ -686,12 +697,12 @@
       <div class="member-card c-teal">
         <div class="member-top">
           <div class="member-number">03</div>
-          <span class="member-badge">VP &amp; Vocero</span>
+          <span class="member-badge">Ing. de operaciones y finanzas</span>
         </div>
-        <h3>Unai Bozalongo</h3>
+        <h3>Unai Bozalongo Valiente</h3>
         <p class="member-headline">La voz del equipo frente a jueces y patrocinadores.</p>
         <ul class="member-points">
-          <li>Fundador de FitPath, plataforma desarrollada con IA — certificado en IA por Google</li>
+          <li>Fundador de FitPath, plataforma desarrollada con IA: certificado en IA por Google</li>
           <li>Gestión de finanzas estudiantiles y relación con patrocinadores</li>
           <li>Defensa oral y negociación ante paneles de jueces</li>
         </ul>
@@ -707,9 +718,9 @@
       <div class="member-card c-purple">
         <div class="member-top">
           <div class="member-number">04</div>
-          <span class="member-badge">Directora Creativa</span>
+          <span class="member-badge">Directora creativa e identidad de marca</span>
         </div>
-        <h3>María Fernanda Escobar</h3>
+        <h3>María Fernanda Escobar López</h3>
         <p class="member-headline">Construye la identidad visual de la escudería.</p>
         <ul class="member-points">
           <li>Branding, diseño industrial y desarrollo de producto</li>
@@ -718,7 +729,7 @@
         </ul>
         <div class="member-extra">
           <ul class="member-points">
-            <li>Fundadora de Tulip Accessories — manufactura y comercialización de producto propio</li>
+            <li>Fundadora de Tulip Accessories: manufactura y comercialización de producto propio</li>
             <li>Certificación en IA aplicada, Skills for Work (Santander Open Academy)</li>
           </ul>
         </div>
@@ -728,9 +739,9 @@
       <div class="member-card c-electric">
         <div class="member-top">
           <div class="member-number">05</div>
-          <span class="member-badge">CAD &amp; Manufactura</span>
+          <span class="member-badge">Ing. de manufactura</span>
         </div>
-        <h3>Josue Gutierrez</h3>
+        <h3>Josué Ulises Gutiérrez Rodríguez</h3>
         <p class="member-headline">Convierte el diseño en pieza física, sin errores.</p>
         <ul class="member-points">
           <li>Manufactura práctica: soldadura de arco manual con electrodo revestido (SMAW/MMA)</li>
@@ -739,7 +750,7 @@
         </ul>
         <div class="member-extra">
           <ul class="member-points">
-            <li>Base matemática sólida — instructor certificado de matemáticas nivel medio superior</li>
+            <li>Base matemática sólida: instructor certificado de matemáticas nivel medio superior</li>
           </ul>
         </div>
         <button class="member-more" type="button">Ver trayectoria completa →</button>
@@ -753,12 +764,12 @@
   <div class="wrap">
     <div class="mentor-row">
       <div>
-        <div class="mentor-role">Mentor del equipo · Respaldo institucional (obligatorio por reglamento)</div>
+        <div class="mentor-role">Ing. Mecatrónico · Mentor · Respaldo institucional obligatorio</div>
         <h3>Alejandro Félix Barajas</h3>
         <p>Ingeniero en Mecatrónica por la Universidad Anáhuac Querétaro (Mención Honorífica) y profesor titular de Matemáticas, Robótica y CAD en Colegio Celta Internacional. Asesor técnico oficial de Striker Racing ante STEM Racing México.</p>
         <div class="badge-row">
           <span class="badge">Docente Colegio Celta</span>
-          <span class="badge">Mención Honorífica — Anáhuac</span>
+          <span class="badge">Mención Honorífica · Anáhuac</span>
           <span class="badge">Lean Six Sigma Black Belt</span>
           <span class="badge">SolidWorks CSWA / CSWP</span>
         </div>
@@ -772,7 +783,7 @@
     <div class="section-head on-dark">
       <div class="eyebrow-tag">Stack técnico</div>
       <h2>Lo que usamos para diseñar el auto</h2>
-      <p>El software que necesitamos es gratuito para estudiantes — lo que financian los patrocinadores es el kit físico, el equipo y la logística, no las licencias.</p>
+      <p>El software que necesitamos es gratuito para estudiantes, lo que financian los patrocinadores es el kit físico, el equipo y la logística, no las licencias.</p>
     </div>
     <div class="tool-grid">
       <div class="tool">
@@ -785,11 +796,11 @@
       </div>
       <div class="tool">
         <h3>Equipo de cómputo</h3>
-        <p>Las simulaciones de CFD exigen equipos con buena capacidad gráfica — es una de las áreas donde el apoyo de un patrocinador acelera directamente nuestro trabajo.</p>
+        <p>Las simulaciones de CFD exigen equipos con buena capacidad gráfica: es una de las áreas donde el apoyo de un patrocinador acelera directamente nuestro trabajo.</p>
       </div>
       <div class="tool">
         <h3>Kit oficial F1SRMX</h3>
-        <p>Bloques de material para el chasis, tanques de CO₂, ruedas, ejes y armellas — provisto al pagar la inscripción de la temporada.</p>
+        <p>Bloques de material para el chasis, tanques de CO₂, ruedas, ejes y armellas, provisto al pagar la inscripción de la temporada.</p>
       </div>
     </div>
   </div>
@@ -805,7 +816,7 @@
     <div class="budget-box">
       <div class="budget-summary">
         <div>
-          <div class="budget-figure">$58,490.00<span class="budget-figure-unit">MXN</span></div>
+          <div class="budget-figure">$65,450.00<span class="budget-figure-unit">MXN</span></div>
           <div class="budget-figure-label">Costo total de la temporada Regional</div>
         </div>
         <div>
@@ -813,15 +824,15 @@
           <div class="budget-figure-label">Recurso propio disponible</div>
         </div>
         <div>
-          <div class="budget-figure accent">$48,490.00<span class="budget-figure-unit">MXN</span></div>
+          <div class="budget-figure accent">$55,450.00<span class="budget-figure-unit">MXN</span></div>
           <div class="budget-figure-label">Meta neta a recaudar en patrocinios</div>
         </div>
       </div>
       <ul class="budget-list">
-        <li><span><b>1.</b> Inscripción y licencias oficiales <em>(1 cuota de escudería)</em></span> <b>$43,500.00</b></li>
-        <li><span><b>2.</b> Manufactura e impresión (CNC / 3D)</span> <b>$4,000.00</b></li>
+        <li><span><b>1.</b> Inscripción y licencias oficiales <em>($43,500 + IVA reglamentario · 1 cuota)</em></span> <b>$50,460.00</b></li>
+        <li><span><b>2.</b> Manufactura e impresión (CNC / 3D) <em>(2 unidades a $2,000 c/u)</em></span> <b>$4,000.00</b></li>
         <li><span><b>3.</b> Uniformes oficiales del equipo <em>(6 piezas a $750 c/u)</em></span> <b>$4,500.00</b></li>
-        <li><span><b>4.</b> Pit Display (stand, lonas y cartelería) <em>(9 piezas a $110 c/u)</em></span> <b>$990.00</b></li>
+        <li><span><b>4.</b> Pit Display y stand <em>(9 piezas de cartelería y lonas a $110 c/u)</em></span> <b>$990.00</b></li>
         <li><span><b>5.</b> Viáticos regionales (transporte y alimentos)</span> <b>$5,500.00</b></li>
       </ul>
       <div class="budget-note">
@@ -836,19 +847,19 @@
     <div class="section-head center" style="max-width:720px;">
       <div class="eyebrow-tag">Patrocinios</div>
       <h2>¿Por qué invertir en Striker Racing?</h2>
-      <p>Tu marca viaja con nosotros de la regional a —esperamos— la final mundial. Esto es lo que se lleva un patrocinador.</p>
+      <p>Tu marca viaja con nosotros de la regional a la final mundial (esa es la meta). Esto es lo que se lleva un patrocinador.</p>
     </div>
 
     <div class="why-grid">
       <div class="why-item c-teal">
         <span class="why-num">01</span>
         <h3>Visibilidad con propósito</h3>
-        <p>Tu logo no va en un evento cualquiera: va en un proyecto real de ingeniería, seguido por la comunidad de Prepa Celta y por STEM Racing México durante toda la temporada.</p>
+        <p>Tu logo no va en un evento cualquiera: va en un proyecto real de ingeniería, seguido por la comunidad de Preparatoria Celta y por STEM Racing México durante toda la temporada.</p>
       </div>
       <div class="why-item c-purple">
         <span class="why-num">02</span>
         <h3>Alineación con innovación</h3>
-        <p>Asocias tu marca con ciencia, tecnología e ingeniería aplicada — el mismo terreno donde compites por talento y clientes.</p>
+        <p>Asocias tu marca con ciencia, tecnología e ingeniería aplicada: el mismo terreno donde compites por talento y clientes.</p>
       </div>
       <div class="why-item c-electric">
         <span class="why-num">03</span>
@@ -872,8 +883,8 @@
           <li>Agradecimiento en presentación final</li>
         </ul>
         <div class="tier-cta">
-          <a href="https://wa.me/525511839779?text=Hola%2C%20me%20interesa%20el%20nivel%20Bronce%20de%20patrocinio%20de%20Striker%20Racing" target="_blank" rel="noopener">WhatsApp</a>
-          <a href="mailto:strikerracingf1@gmail.com?subject=Patrocinio%20Striker%20Racing%20—%20Nivel%20Bronce">Correo</a>
+          <a href="https://wa.me/525511839779?text=Hola%2C%20nos%20interesa%20sumarnos%20a%20Striker%20Racing%20como%20patrocinador%20nivel%20Bronce." target="_blank" rel="noopener">WhatsApp</a>
+          <a href="mailto:strikerracingf1@gmail.com?subject=Patrocinio%20Striker%20Racing%3A%20Nivel%20Bronce">Correo</a>
         </div>
       </div>
       <div class="tier featured">
@@ -888,8 +899,8 @@
           <li>Reporte de resultados tras cada etapa</li>
         </ul>
         <div class="tier-cta">
-          <a href="https://wa.me/525511839779?text=Hola%2C%20me%20interesa%20el%20nivel%20Plata%20de%20patrocinio%20de%20Striker%20Racing" target="_blank" rel="noopener">WhatsApp</a>
-          <a href="mailto:strikerracingf1@gmail.com?subject=Patrocinio%20Striker%20Racing%20—%20Nivel%20Plata">Correo</a>
+          <a href="https://wa.me/525511839779?text=Hola%2C%20nos%20interesa%20conocer%20los%20espacios%20en%20el%20auto%20para%20el%20patrocinio%20nivel%20Plata." target="_blank" rel="noopener">WhatsApp</a>
+          <a href="mailto:strikerracingf1@gmail.com?subject=Patrocinio%20Striker%20Racing%3A%20Nivel%20Plata">Correo</a>
         </div>
       </div>
       <div class="tier premium">
@@ -904,8 +915,8 @@
           <li>Video/reel de agradecimiento dedicado</li>
         </ul>
         <div class="tier-cta">
-          <a href="https://wa.me/525511839779?text=Hola%2C%20me%20interesa%20el%20nivel%20Oro%20de%20patrocinio%20de%20Striker%20Racing" target="_blank" rel="noopener">WhatsApp</a>
-          <a href="mailto:strikerracingf1@gmail.com?subject=Patrocinio%20Striker%20Racing%20—%20Nivel%20Oro">Correo</a>
+          <a href="https://wa.me/525511839779?text=Hola%2C%20queremos%20evaluar%20la%20alianza%20como%20patrocinador%20principal%20(Nivel%20Oro)%20con%20Striker%20Racing." target="_blank" rel="noopener">WhatsApp</a>
+          <a href="mailto:strikerracingf1@gmail.com?subject=Patrocinio%20Striker%20Racing%3A%20Nivel%20Oro">Correo</a>
         </div>
       </div>
     </div>
@@ -925,7 +936,7 @@
       </details>
       <details>
         <summary>¿Necesitan factura?</summary>
-        <p>Podemos coordinar comprobante de la aportación a través de Prepa Celta o Persiste A.C., el organismo que opera STEM Racing México. Lo resolvemos directamente contigo.</p>
+        <p>Podemos coordinar comprobante de la aportación a través de Preparatoria Celta o Persiste A.C., el organismo que opera STEM Racing México. Lo resolvemos directamente contigo.</p>
       </details>
     </div>
   </div>
@@ -934,18 +945,25 @@
 <section id="contacto" class="contact-band reveal">
   <div class="wrap">
     <h2>¿Te interesa patrocinarnos?</h2>
-    <p>Escríbenos y platicamos los detalles — niveles, tiempos y cómo se usa tu aportación.</p>
+    <p>Escríbenos y platicamos los detalles: niveles, tiempos y cómo se usa tu aportación.</p>
     <div class="contact-links">
-      <a class="primary" href="https://wa.me/525511839779?text=Hola%2C%20me%20interesa%20conocer%20m%C3%A1s%20sobre%20patrocinar%20a%20Striker%20Racing" target="_blank" rel="noopener">WhatsApp directo</a>
+      <a class="primary" href="https://wa.me/525511839779?text=Hola%2C%20me%20comunico%20para%20conocer%20la%20propuesta%20de%20patrocinio%20de%20Striker%20Racing." target="_blank" rel="noopener">WhatsApp directo</a>
       <a href="mailto:strikerracingf1@gmail.com?subject=Patrocinio%20Striker%20Racing">strikerracingf1@gmail.com</a>
       <a href="tel:+525511839779">(+52) 55 1183 9779 · Patrocinios</a>
-      <a href="tel:4422810958">442 281 0958 · Querétaro</a>
     </div>
   </div>
 </section>
 
 <footer>
-  Striker Racing · Prepa Celta, Querétaro · STEM Racing México, temporada 2026–2027
+  <div class="brand">
+    <svg class="brand-mark" viewBox="0 0 32 32" aria-hidden="true">
+      <polygon points="16,2 30,9 30,23 16,30 2,23 2,9" fill="none" stroke="#2080A0" stroke-width="2"/>
+      <polygon points="16,9 24,13 16,17 8,13" fill="#2080A0"/>
+      <polygon points="16,15 24,19 16,23 8,19" fill="#7138D4"/>
+    </svg>
+    STRIKER RACING
+  </div>
+  Preparatoria Celta, Querétaro · STEM Racing México, temporada 2026–2027
 </footer>
 
 <div class="member-modal" id="memberModal" aria-hidden="true">
