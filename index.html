@@ -11,7 +11,7 @@
 <meta property="og:type" content="website">
 <link rel="icon" href="logo.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
   :root{
     --navy:#27125F;
@@ -48,6 +48,31 @@
     line-height:1.55;
     -webkit-font-smoothing:antialiased;
   }
+
+  /* ---------- CAD CURSOR ---------- */
+  html.cad-cursor-on, html.cad-cursor-on body{cursor:none;}
+  .cad-cursor{
+    position:fixed; top:0; left:0; width:26px; height:26px;
+    pointer-events:none; z-index:9999;
+    transform:translate(-50%,-50%);
+    opacity:0; transition:opacity .2s ease, width .16s ease, height .16s ease;
+    will-change:transform;
+  }
+  .cad-cursor.is-visible{opacity:1;}
+  .cad-cursor::before, .cad-cursor::after{
+    content:""; position:absolute; background:var(--mint);
+  }
+  .cad-cursor::before{top:50%; left:0; width:100%; height:1px; transform:translateY(-50%);}
+  .cad-cursor::after{left:50%; top:0; height:100%; width:1px; transform:translateX(-50%);}
+  .cad-cursor .cad-ring{
+    position:absolute; inset:0; border:1px solid rgba(58,247,178,0.55); border-radius:50%;
+  }
+  .cad-cursor.is-hover{width:48px; height:48px;}
+  .cad-cursor.is-hover .cad-ring{border-color:var(--mint); border-width:1.5px;}
+  @media (pointer:coarse){
+    .cad-cursor{display:none;}
+    html.cad-cursor-on, html.cad-cursor-on body{cursor:auto;}
+  }
   h1,h2,h3,.display{
     font-family:'Oswald', system-ui, sans-serif;
     text-transform:none;
@@ -65,6 +90,11 @@
   .reveal{opacity:0; transform:translateY(18px); transition:opacity .7s ease, transform .7s ease;}
   .reveal.in-view{opacity:1; transform:translateY(0);}
   @media (prefers-reduced-motion:reduce){ .reveal{opacity:1; transform:none; transition:none;} }
+
+  /* ---------- STAGGERED CARD REVEAL ---------- */
+  .card-reveal{opacity:0; transform:translateY(26px); transition:opacity .6s ease, transform .6s ease;}
+  .card-reveal.in-view{opacity:1; transform:translateY(0);}
+  @media (prefers-reduced-motion:reduce){ .card-reveal{opacity:1; transform:none; transition:none;} }
 
   /* ---------- NAV ---------- */
   nav{
@@ -126,12 +156,13 @@
   }
   .hero::before{
     content:"";
-    position:absolute; inset:0;
+    position:absolute; inset:-10%;
     background-image:
       linear-gradient(rgba(205,222,239,0.06) 1px, transparent 1px),
       linear-gradient(90deg, rgba(205,222,239,0.06) 1px, transparent 1px);
     background-size:32px 32px;
     pointer-events:none;
+    animation:bp-pan 50s linear infinite;
   }
   .hero::after{
     content:"";
@@ -145,6 +176,47 @@
     transform:rotate(8deg);
     pointer-events:none;
   }
+  @keyframes bp-pan{
+    from{background-position:0 0;}
+    to{background-position:320px 320px;}
+  }
+  @media (prefers-reduced-motion:reduce){ .hero::before{animation:none;} }
+
+  /* ---------- WIND TUNNEL / CFD STREAMLINES ---------- */
+  .wind-tunnel{
+    position:absolute; inset:0; overflow:hidden; pointer-events:none; z-index:1;
+  }
+  .streamline{
+    position:absolute; left:100%; height:1px;
+    background:linear-gradient(90deg, transparent 0%, rgba(205,222,239,0.55) 12%, rgba(58,247,178,0.65) 50%, rgba(205,222,239,0.55) 88%, transparent 100%);
+    animation-name:stream-flow; animation-timing-function:linear; animation-iteration-count:infinite;
+  }
+  @keyframes stream-flow{
+    from{transform:translateX(0);}
+    to{transform:translateX(-220vw);}
+  }
+  @media (prefers-reduced-motion:reduce){ .streamline{display:none;} }
+
+  /* ---------- TELEMETRY HUD OVERLAY ---------- */
+  .hud-overlay{
+    position:absolute; inset:18px; pointer-events:none; z-index:3;
+  }
+  .hud-corner{position:absolute; width:26px; height:26px; border-color:rgba(58,247,178,0.55);}
+  .hud-corner.tl{top:0; left:0; border-top:2px solid; border-left:2px solid;}
+  .hud-corner.tr{top:0; right:0; border-top:2px solid; border-right:2px solid;}
+  .hud-corner.bl{bottom:0; left:0; border-bottom:2px solid; border-left:2px solid;}
+  .hud-corner.br{bottom:0; right:0; border-bottom:2px solid; border-right:2px solid;}
+  .hud-data{
+    position:absolute; display:flex; flex-direction:column; gap:4px;
+    font-family:'JetBrains Mono', monospace; font-size:0.72rem; letter-spacing:0.03em;
+    color:rgba(205,222,239,0.75); text-transform:uppercase;
+  }
+  .hud-data.hud-bl{left:2px; bottom:2px;}
+  .hud-data.hud-br{right:2px; bottom:2px; text-align:right;}
+  .hud-data b{color:var(--mint); font-weight:600;}
+  .hud-blink{animation:hud-blink 2.2s ease-in-out infinite;}
+  @keyframes hud-blink{0%,100%{opacity:1;} 50%{opacity:0.35;}}
+  @media (max-width:700px){ .hud-overlay{display:none;} }
   .hero-grid{
     position:relative; z-index:2;
     display:grid; grid-template-columns:1.05fr 0.95fr; gap:32px; align-items:center;
@@ -409,7 +481,9 @@
     background-image:linear-gradient(rgba(32,128,160,0.10) 1px, transparent 1px), linear-gradient(90deg, rgba(32,128,160,0.10) 1px, transparent 1px);
     background-size:28px 28px;
     border:1px solid var(--line); border-top:3px solid var(--electric); border-radius:4px; padding:36px;
+    animation:bp-pan 60s linear infinite;
   }
+  @media (prefers-reduced-motion:reduce){ .budget-box{animation:none;} }
   @media (max-width:700px){ .budget-box{padding:28px 22px;} }
   .budget-summary{
     display:grid; grid-template-columns:repeat(3,1fr); gap:24px;
@@ -554,6 +628,23 @@
 </nav>
 
 <header class="hero">
+  <div class="wind-tunnel" id="windTunnel" aria-hidden="true"></div>
+  <div class="hud-overlay" aria-hidden="true">
+    <span class="hud-corner tl"></span>
+    <span class="hud-corner tr"></span>
+    <span class="hud-corner bl"></span>
+    <span class="hud-corner br"></span>
+    <div class="hud-data hud-bl">
+      <span>SYS.LINK: <b class="hud-blink">ACTIVE</b></span>
+      <span>MASS: 50.0g</span>
+      <span>DRAG(Cd): 0.284</span>
+    </div>
+    <div class="hud-data hud-br">
+      <span>TARGET: REGIONAL_QRO</span>
+      <span>TEAM: STRIKER_RC</span>
+      <span>SEASON: 2026–2027</span>
+    </div>
+  </div>
   <div class="wrap hero-grid">
     <div class="hero-inner">
       <div class="kicker">Categoría de Desarrollo · STEM Racing México 2026–2027 · Preparatoria Celta, Querétaro</div>
@@ -665,7 +756,7 @@
 
     <div class="team-grid">
 
-      <div class="member-card c-electric" data-cv="https://drive.google.com/file/d/1vVcseQcXGQWL2v5xiMk1wLopQhp4DP7s/view?usp=drive_link">
+      <div class="card-reveal member-card c-electric" data-cv="https://drive.google.com/file/d/1vVcseQcXGQWL2v5xiMk1wLopQhp4DP7s/view?usp=drive_link">
         <div class="member-top">
           <div class="member-number">01</div>
           <span class="member-badge">Directora de escudería e ing. de diseño</span>
@@ -687,7 +778,7 @@
         <button class="member-more" type="button">Ver trayectoria completa →</button>
       </div>
 
-      <div class="member-card c-teal" data-cv="https://drive.google.com/file/d/1i_IsFwTlzdV9ORZlZnu82A09VdbjMjcI/view?usp=drive_link">
+      <div class="card-reveal member-card c-teal" data-cv="https://drive.google.com/file/d/1i_IsFwTlzdV9ORZlZnu82A09VdbjMjcI/view?usp=drive_link">
         <div class="member-top">
           <div class="member-number">02</div>
           <span class="member-badge">Ing. Mecánico y de Operaciones</span>
@@ -709,7 +800,7 @@
         <button class="member-more" type="button">Ver trayectoria completa →</button>
       </div>
 
-      <div class="member-card c-purple" data-cv="https://drive.google.com/file/d/1qccW8wV871Jfrt4iiXEZVuGmmoWDLGpF/view?usp=drive_link">
+      <div class="card-reveal member-card c-purple" data-cv="https://drive.google.com/file/d/1qccW8wV871Jfrt4iiXEZVuGmmoWDLGpF/view?usp=drive_link">
         <div class="member-top">
           <div class="member-number">03</div>
           <span class="member-badge">Directora creativa e identidad de marca</span>
@@ -731,7 +822,7 @@
         <button class="member-more" type="button">Ver trayectoria completa →</button>
       </div>
 
-      <div class="member-card c-electric" data-cv="https://drive.google.com/file/d/130ZYlRsIeTAfhnr1l7F4l0F-7mSYwKji/view?usp=drive_link">
+      <div class="card-reveal member-card c-electric" data-cv="https://drive.google.com/file/d/130ZYlRsIeTAfhnr1l7F4l0F-7mSYwKji/view?usp=drive_link">
         <div class="member-top">
           <div class="member-number">04</div>
           <span class="member-badge">Ing. de manufactura</span>
@@ -751,7 +842,7 @@
         <button class="member-more" type="button">Ver trayectoria completa →</button>
       </div>
 
-      <div class="member-card c-teal" data-cv="https://drive.google.com/file/d/1KeXEGCWQBprt5_iR433gfYvhZeAIp4nF/view?usp=drive_link">
+      <div class="card-reveal member-card c-teal" data-cv="https://drive.google.com/file/d/1KeXEGCWQBprt5_iR433gfYvhZeAIp4nF/view?usp=drive_link">
         <div class="member-top">
           <div class="member-number">05</div>
           <span class="member-badge">Ing. de análisis de datos y desarrollo de software</span>
@@ -896,7 +987,7 @@
     </div>
 
     <div class="tiers">
-      <div class="tier">
+      <div class="card-reveal tier">
         <h3>Bronce</h3>
         <div class="price">$1,000–10,000</div>
         <div class="price-note">MXN · Cupo abierto</div>
@@ -910,7 +1001,7 @@
           <a href="mailto:strikerracingf1@gmail.com?subject=Patrocinio%20Striker%20Racing%3A%20Nivel%20Bronce">Correo</a>
         </div>
       </div>
-      <div class="tier featured">
+      <div class="card-reveal tier featured">
         <span class="ribbon">Recomendado</span>
         <h3>Plata</h3>
         <div class="price">$10,000–15,000</div>
@@ -926,7 +1017,7 @@
           <a href="mailto:strikerracingf1@gmail.com?subject=Patrocinio%20Striker%20Racing%3A%20Nivel%20Plata">Correo</a>
         </div>
       </div>
-      <div class="tier premium">
+      <div class="card-reveal tier premium">
         <span class="ribbon">Máximo impacto</span>
         <h3>Oro</h3>
         <div class="price">Más de $15,000</div>
@@ -1091,6 +1182,80 @@
     });
   }, {threshold:0.12, rootMargin:'0px 0px -60px 0px'});
   items.forEach(function(el){ io.observe(el); });
+})();
+</script>
+
+<script>
+(function(){
+  if(!('IntersectionObserver' in window)) return;
+  var STAGGER_MS = 90;
+  var groups = document.querySelectorAll('.team-grid, .tiers');
+  groups.forEach(function(group){
+    var cards = group.querySelectorAll('.card-reveal');
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(entry){
+        if(entry.isIntersecting){
+          var index = Array.prototype.indexOf.call(cards, entry.target);
+          entry.target.style.transitionDelay = (Math.max(index, 0) * STAGGER_MS) + 'ms';
+          entry.target.classList.add('in-view');
+          io.unobserve(entry.target);
+        }
+      });
+    }, {threshold:0.15, rootMargin:'0px 0px -40px 0px'});
+    cards.forEach(function(el){ io.observe(el); });
+  });
+})();
+</script>
+
+<script>
+(function(){
+  var prefersReduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var isCoarsePointer = window.matchMedia && window.matchMedia('(pointer: coarse)').matches;
+
+  /* ---- CAD custom cursor ---- */
+  if(!isCoarsePointer){
+    document.documentElement.classList.add('cad-cursor-on');
+    var cursor = document.createElement('div');
+    cursor.className = 'cad-cursor';
+    cursor.innerHTML = '<span class="cad-ring"></span>';
+    document.body.appendChild(cursor);
+
+    var cx = window.innerWidth / 2, cy = window.innerHeight / 2;
+    var shown = false;
+
+    window.addEventListener('mousemove', function(e){
+      cx = e.clientX; cy = e.clientY;
+      cursor.style.transform = 'translate(' + cx + 'px,' + cy + 'px) translate(-50%,-50%)';
+      if(!shown){ cursor.classList.add('is-visible'); shown = true; }
+    });
+    document.addEventListener('mouseleave', function(){ cursor.classList.remove('is-visible'); });
+    document.addEventListener('mouseenter', function(){ cursor.classList.add('is-visible'); });
+
+    var hoverSelector = 'a, button, .btn, .member-more, .cv-btn, .tier-cta a, summary, input, select, textarea';
+    document.addEventListener('mouseover', function(e){
+      if(e.target.closest && e.target.closest(hoverSelector)) cursor.classList.add('is-hover');
+    });
+    document.addEventListener('mouseout', function(e){
+      if(e.target.closest && e.target.closest(hoverSelector)) cursor.classList.remove('is-hover');
+    });
+  }
+
+  /* ---- Wind tunnel CFD streamlines ---- */
+  var tunnel = document.getElementById('windTunnel');
+  if(tunnel && !prefersReduced){
+    var LINE_COUNT = 16;
+    for(var i = 0; i < LINE_COUNT; i++){
+      var line = document.createElement('div');
+      line.className = 'streamline';
+      line.style.top = (Math.random() * 100) + '%';
+      line.style.width = (60 + Math.random() * 220) + 'px';
+      line.style.opacity = (0.15 + Math.random() * 0.35).toFixed(2);
+      var duration = 4 + Math.random() * 7;
+      line.style.animationDuration = duration + 's';
+      line.style.animationDelay = (-Math.random() * duration) + 's';
+      tunnel.appendChild(line);
+    }
+  }
 })();
 </script>
 
