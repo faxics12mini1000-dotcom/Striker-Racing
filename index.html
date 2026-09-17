@@ -332,14 +332,6 @@
   .member-points li::before{
     content:"▸"; position:absolute; left:0; color:var(--accent, var(--teal)); font-weight:700;
   }
-  .member-extra{display:none;}
-  .member-more{
-    align-self:flex-start; background:none; border:none; cursor:pointer;
-    font-family:'Inter'; font-weight:600; font-size:0.85rem; color:var(--accent, var(--teal));
-    padding:4px 0; border-bottom:1px solid transparent;
-  }
-  .member-more:hover{border-bottom-color:currentColor;}
-
   /* ---------- CV BUTTON ---------- */
   .cv-btn{
     display:inline-flex; align-items:center; gap:8px; align-self:flex-start;
@@ -351,32 +343,6 @@
   .cv-btn:hover{transform:translateY(-2px); box-shadow:0 10px 24px rgba(39,18,95,0.25);}
   .mentor-cv{background:var(--mint); color:var(--navy-deep); margin-top:18px;}
   .mentor-cv:hover{background:#5cfcc3;}
-
-  /* ---------- MEMBER MODAL ---------- */
-  .member-modal{
-    position:fixed; inset:0; z-index:100; display:none;
-    align-items:center; justify-content:center; padding:24px;
-  }
-  .member-modal.open{display:flex;}
-  .member-modal-backdrop{
-    position:absolute; inset:0; background:rgba(22,9,52,0.72); backdrop-filter:blur(3px);
-  }
-  .member-modal-panel{
-    position:relative; z-index:1; background:var(--white); border-radius:12px;
-    max-width:540px; width:100%; max-height:84vh; overflow-y:auto;
-    padding:36px 32px; box-shadow:0 30px 70px rgba(0,0,0,0.35);
-  }
-  .member-modal-close{
-    position:absolute; top:16px; right:16px; width:34px; height:34px; border-radius:50%;
-    border:1px solid var(--line); background:var(--paper); color:var(--navy);
-    font-size:1.2rem; cursor:pointer; line-height:1;
-  }
-  .member-modal-close:hover{background:var(--mint); border-color:var(--mint); color:var(--navy-deep);}
-  #modalBadge{margin-bottom:14px;}
-  #modalName{font-size:1.4rem; margin-bottom:4px;}
-  #modalHeadline{color:var(--muted); font-style:italic; margin-bottom:18px; font-size:0.95rem;}
-  .member-modal-panel .member-points{margin-bottom:4px;}
-  .member-modal-panel .member-points li{font-size:0.92rem;}
 
   /* ---------- MENTOR ---------- */
   .mentor-band{background:var(--navy-deep); color:var(--white); padding:44px 0; position:relative;}
@@ -671,7 +637,7 @@
 
     <div class="team-grid">
 
-      <div class="card-reveal member-card c-electric" data-cv="https://drive.google.com/file/d/1vVcseQcXGQWL2v5xiMk1wLopQhp4DP7s/view?usp=drive_link">
+      <div class="card-reveal member-card c-electric">
         <div class="member-top">
           <div class="member-number">01</div>
           <span class="member-badge">Directora de escudería e ing. de diseño</span>
@@ -682,18 +648,14 @@
           <li>Dirección general, presupuesto y estrategia de la escudería</li>
           <li>Diseño y modelado CAD del chasis y la carrocería en Autodesk Fusion</li>
           <li>Investigación aplicada en aerodinámica del vehículo</li>
+          <li>Certificación en Diseño de Prototipos, UPAEP</li>
+          <li>2° lugar estatal en Física, Concurso Internacional de Ciencias del Tec de Monterrey</li>
+          <li>Responsable del control financiero y la planeación de recursos de temporada</li>
         </ul>
-        <div class="member-extra">
-          <ul class="member-points">
-            <li>Certificación en Diseño de Prototipos, UPAEP</li>
-            <li>2° lugar estatal en Física, Concurso Internacional de Ciencias del Tec de Monterrey</li>
-            <li>Responsable del control financiero y la planeación de recursos de temporada</li>
-          </ul>
-        </div>
-        <button class="member-more" type="button">Ver trayectoria completa →</button>
+        <a class="cv-btn" href="https://drive.google.com/file/d/1vVcseQcXGQWL2v5xiMk1wLopQhp4DP7s/view?usp=drive_link" target="_blank" rel="noopener">Ver CV completo ↗</a>
       </div>
 
-      <div class="card-reveal member-card c-teal" data-cv="https://drive.google.com/file/d/1i_IsFwTlzdV9ORZlZnu82A09VdbjMjcI/view?usp=drive_link">
+      <div class="card-reveal member-card c-teal">
         <div class="member-top">
           <div class="member-number">02</div>
           <span class="member-badge">Ing. Mecánico y de Operaciones</span>
@@ -704,18 +666,14 @@
           <li>Diseño mecánico del chasis y del sistema de propulsión por CO₂</li>
           <li>Gestión de finanzas estudiantiles y relación con patrocinadores</li>
           <li>Defensa oral y negociación ante paneles de jueces</li>
+          <li>Fundador de FitPath, plataforma desarrollada con IA: certificado en IA por Google</li>
+          <li>Distinciones como mejor orador y negociador en foros de Modelo de Naciones Unidas</li>
+          <li>Encabeza la estrategia de relaciones públicas del equipo</li>
         </ul>
-        <div class="member-extra">
-          <ul class="member-points">
-            <li>Fundador de FitPath, plataforma desarrollada con IA: certificado en IA por Google</li>
-            <li>Distinciones como mejor orador y negociador en foros de Modelo de Naciones Unidas</li>
-            <li>Encabeza la estrategia de relaciones públicas del equipo</li>
-          </ul>
-        </div>
-        <button class="member-more" type="button">Ver trayectoria completa →</button>
+        <a class="cv-btn" href="https://drive.google.com/file/d/1i_IsFwTlzdV9ORZlZnu82A09VdbjMjcI/view?usp=drive_link" target="_blank" rel="noopener">Ver CV completo ↗</a>
       </div>
 
-      <div class="card-reveal member-card c-purple" data-cv="https://drive.google.com/file/d/1qccW8wV871Jfrt4iiXEZVuGmmoWDLGpF/view?usp=drive_link">
+      <div class="card-reveal member-card c-purple">
         <div class="member-top">
           <div class="member-number">03</div>
           <span class="member-badge">Directora creativa e identidad de marca</span>
@@ -726,18 +684,14 @@
           <li>Branding, diseño industrial y desarrollo de producto</li>
           <li>Diseño y dirección del pit display y materiales de presentación</li>
           <li>Desarrollo de la identidad visual completa de la escudería</li>
+          <li>Certificación en Diseño de Prototipos, UPAEP</li>
+          <li>Fundadora de Tulip Accessories: manufactura y comercialización de producto propio</li>
+          <li>Certificación en IA aplicada, Skills for Work (Santander Open Academy)</li>
         </ul>
-        <div class="member-extra">
-          <ul class="member-points">
-            <li>Certificación en Diseño de Prototipos, UPAEP</li>
-            <li>Fundadora de Tulip Accessories: manufactura y comercialización de producto propio</li>
-            <li>Certificación en IA aplicada, Skills for Work (Santander Open Academy)</li>
-          </ul>
-        </div>
-        <button class="member-more" type="button">Ver trayectoria completa →</button>
+        <a class="cv-btn" href="https://drive.google.com/file/d/1qccW8wV871Jfrt4iiXEZVuGmmoWDLGpF/view?usp=drive_link" target="_blank" rel="noopener">Ver CV completo ↗</a>
       </div>
 
-      <div class="card-reveal member-card c-electric" data-cv="https://drive.google.com/file/d/130ZYlRsIeTAfhnr1l7F4l0F-7mSYwKji/view?usp=drive_link">
+      <div class="card-reveal member-card c-electric">
         <div class="member-top">
           <div class="member-number">04</div>
           <span class="member-badge">Ing. de manufactura</span>
@@ -748,16 +702,12 @@
           <li>Manufactura práctica: soldadura de arco manual con electrodo revestido (SMAW/MMA)</li>
           <li>Fabricación del chasis con manufactura CNC e impresión 3D</li>
           <li>Responsable de tolerancias, geometría y viabilidad mecánica del vehículo</li>
+          <li>Base matemática sólida: instructor certificado de matemáticas nivel medio superior</li>
         </ul>
-        <div class="member-extra">
-          <ul class="member-points">
-            <li>Base matemática sólida: instructor certificado de matemáticas nivel medio superior</li>
-          </ul>
-        </div>
-        <button class="member-more" type="button">Ver trayectoria completa →</button>
+        <a class="cv-btn" href="https://drive.google.com/file/d/130ZYlRsIeTAfhnr1l7F4l0F-7mSYwKji/view?usp=drive_link" target="_blank" rel="noopener">Ver CV completo ↗</a>
       </div>
 
-      <div class="card-reveal member-card c-teal" data-cv="https://drive.google.com/file/d/1KeXEGCWQBprt5_iR433gfYvhZeAIp4nF/view?usp=drive_link">
+      <div class="card-reveal member-card c-teal">
         <div class="member-top">
           <div class="member-number">05</div>
           <span class="member-badge">Ing. de análisis de datos y desarrollo de software</span>
@@ -768,16 +718,12 @@
           <li>Desarrollo de software, telemetría y la plataforma Blueprint OS del equipo</li>
           <li>Simulación CFD en Ansys Discovery/Fluent para minimizar el coeficiente de arrastre (Cd)</li>
           <li>Interfaces 3D en Three.js para la visualización del auto</li>
+          <li>Full-stack en C++, Python y TypeScript: certificado por Harvard (CS50, CS50AI)</li>
+          <li>1er lugar estatal en programación, Concurso Internacional de Ciencias del Tec de Monterrey</li>
+          <li>Desarrolla los scripts de telemetría y balance de masa del auto</li>
+          <li>Configura y ejecuta el túnel de viento virtual del equipo</li>
         </ul>
-        <div class="member-extra">
-          <ul class="member-points">
-            <li>Full-stack en C++, Python y TypeScript: certificado por Harvard (CS50, CS50AI)</li>
-            <li>1er lugar estatal en programación, Concurso Internacional de Ciencias del Tec de Monterrey</li>
-            <li>Desarrolla los scripts de telemetría y balance de masa del auto</li>
-            <li>Configura y ejecuta el túnel de viento virtual del equipo</li>
-          </ul>
-        </div>
-        <button class="member-more" type="button">Ver trayectoria completa →</button>
+        <a class="cv-btn" href="https://drive.google.com/file/d/1KeXEGCWQBprt5_iR433gfYvhZeAIp4nF/view?usp=drive_link" target="_blank" rel="noopener">Ver CV completo ↗</a>
       </div>
 
     </div>
@@ -991,17 +937,6 @@
   Preparatoria Celta, Querétaro · STEM Racing México, temporada 2026–2027
 </footer>
 
-<div class="member-modal" id="memberModal" aria-hidden="true">
-  <div class="member-modal-backdrop" data-close></div>
-  <div class="member-modal-panel" role="dialog" aria-modal="true" aria-labelledby="modalName">
-    <button class="member-modal-close" data-close aria-label="Cerrar">×</button>
-    <span class="member-badge" id="modalBadge"></span>
-    <h3 id="modalName"></h3>
-    <p id="modalHeadline"></p>
-    <div id="modalBody"></div>
-  </div>
-</div>
-
 <script>
   var navToggle = document.getElementById('navToggle');
   var navList = document.getElementById('navList');
@@ -1015,73 +950,6 @@
       navToggle.setAttribute('aria-expanded', 'false');
     }
   });
-</script>
-
-<script>
-(function(){
-  var modal = document.getElementById('memberModal');
-  var modalBadge = document.getElementById('modalBadge');
-  var modalName = document.getElementById('modalName');
-  var modalHeadline = document.getElementById('modalHeadline');
-  var modalBody = document.getElementById('modalBody');
-  var lastFocused = null;
-
-  var ACCENTS = {'c-teal':'#2080A0', 'c-purple':'#7138D4', 'c-electric':'#2020E0'};
-
-  function openModal(card){
-    modalBadge.textContent = card.querySelector('.member-badge').textContent;
-    var accentClass = ['c-teal','c-purple','c-electric'].filter(function(c){ return card.classList.contains(c); })[0];
-    modalBadge.style.background = accentClass ? ACCENTS[accentClass] : '#2080A0';
-    modalName.textContent = card.querySelector('h3').textContent;
-    modalHeadline.textContent = card.querySelector('.member-headline').textContent;
-
-    var mainPoints = card.querySelector('.member-points').cloneNode(true);
-    var extra = card.querySelector('.member-extra');
-    modalBody.innerHTML = '';
-    modalBody.appendChild(mainPoints);
-    if(extra){
-      var extraPoints = extra.querySelector('.member-points');
-      if(extraPoints) modalBody.appendChild(extraPoints.cloneNode(true));
-    }
-
-    var cvUrl = card.getAttribute('data-cv');
-    if(cvUrl){
-      var cvBtn = document.createElement('a');
-      cvBtn.className = 'cv-btn';
-      cvBtn.href = cvUrl;
-      cvBtn.target = '_blank';
-      cvBtn.rel = 'noopener';
-      cvBtn.textContent = 'Ver CV Oficial (Drive) ↗';
-      cvBtn.style.background = accentClass ? ACCENTS[accentClass] : '#2080A0';
-      modalBody.appendChild(cvBtn);
-    }
-
-    lastFocused = document.activeElement;
-    modal.classList.add('open');
-    modal.setAttribute('aria-hidden', 'false');
-    modal.querySelector('.member-modal-close').focus();
-    document.body.style.overflow = 'hidden';
-  }
-
-  function closeModal(){
-    modal.classList.remove('open');
-    modal.setAttribute('aria-hidden', 'true');
-    document.body.style.overflow = '';
-    if(lastFocused) lastFocused.focus();
-  }
-
-  document.querySelectorAll('.member-more').forEach(function(btn){
-    btn.addEventListener('click', function(){
-      openModal(btn.closest('.member-card'));
-    });
-  });
-  modal.querySelectorAll('[data-close]').forEach(function(el){
-    el.addEventListener('click', closeModal);
-  });
-  document.addEventListener('keydown', function(e){
-    if(e.key === 'Escape' && modal.classList.contains('open')) closeModal();
-  });
-})();
 </script>
 
 <script>
