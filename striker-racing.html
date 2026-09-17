@@ -1,0 +1,1154 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Striker Racing — STEM Racing México 2027</title>
+<meta name="description" content="Striker Racing es la escudería de Prepa Celta en el Desafío STEM Racing México. Cinco estudiantes diseñando y compitiendo con un auto de Fórmula 1 a escala. Súmate como patrocinador.">
+<meta name="theme-color" content="#27125F">
+<meta property="og:title" content="Striker Racing — STEM Racing México">
+<meta property="og:description" content="La escudería de Prepa Celta en el Desafío STEM Racing México. Súmate como patrocinador.">
+<meta property="og:type" content="website">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:#27125F;
+    --navy-deep:#160934;
+    --teal:#2080A0;
+    --teal-deep:#155A70;
+    --electric:#2020E0;
+    --purple:#7138D4;
+    --purple-deep:#4F27A3;
+    --mint:#3AF7B2;
+    --mint-deep:#0FAE7C;
+    --ice:#CDDEEF;
+    --paper:#F3F6FC;
+    --ink:#1C1033;
+    --muted:#4A4568;
+    --muted-dark:#B9C7E0;
+    --white:#FFFFFF;
+    --line: rgba(39,18,95,0.14);
+    --line-dark: rgba(205,222,239,0.18);
+  }
+  .blueprint{
+    background-color:var(--paper);
+    background-image:
+      linear-gradient(rgba(32,128,160,0.10) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(32,128,160,0.10) 1px, transparent 1px);
+    background-size:28px 28px;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    font-family:'Inter', system-ui, sans-serif;
+    color:var(--ink);
+    background:var(--white);
+    line-height:1.55;
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3,.display{
+    font-family:'Oswald', system-ui, sans-serif;
+    text-transform:none;
+    letter-spacing:0.01em;
+    color:var(--navy);
+  }
+  a{color:inherit;}
+  img{max-width:100%; display:block;}
+  .wrap{max-width:1120px; margin:0 auto; padding:0 24px;}
+  section{padding:88px 0;}
+  section[id]{scroll-margin-top:76px;}
+  @media (max-width:700px){ section{padding:56px 0;} }
+
+  /* ---------- SCROLL REVEAL ---------- */
+  .reveal{opacity:0; transform:translateY(18px); transition:opacity .7s ease, transform .7s ease;}
+  .reveal.in-view{opacity:1; transform:translateY(0);}
+  @media (prefers-reduced-motion:reduce){ .reveal{opacity:1; transform:none; transition:none;} }
+
+  /* ---------- NAV ---------- */
+  nav{
+    position:sticky; top:0; z-index:50;
+    background:rgba(27,16,63,0.78);
+    backdrop-filter:blur(10px);
+    -webkit-backdrop-filter:blur(10px);
+    border-bottom:1px solid rgba(205,222,239,0.14);
+  }
+  nav .wrap{
+    position:relative;
+    display:flex; align-items:center; justify-content:space-between;
+    padding-top:14px; padding-bottom:14px;
+  }
+  .brand{
+    display:flex; align-items:center; gap:10px;
+    font-family:'Oswald'; font-weight:700; font-size:1.25rem; color:var(--white); letter-spacing:0.02em;
+  }
+  .brand .dot{width:10px; height:10px; border-radius:50%; background:var(--mint); box-shadow:0 0 10px rgba(58,247,178,0.7);}
+  nav ul{list-style:none; display:flex; gap:28px;}
+  nav a{font-size:0.92rem; font-weight:600; color:var(--ice); text-decoration:none; position:relative; padding-bottom:2px;}
+  nav a::after{
+    content:""; position:absolute; left:0; right:100%; bottom:-3px; height:2px; background:var(--mint);
+    transition:right .18s ease;
+  }
+  nav a:hover{color:var(--white);}
+  nav a:hover::after{right:0;}
+  .nav-toggle{display:none; background:none; border:none; cursor:pointer; padding:6px;}
+  .nav-toggle span, .nav-toggle span::before, .nav-toggle span::after{
+    content:""; display:block; width:22px; height:2px; background:var(--white); position:relative; transition:transform .15s ease;
+  }
+  .nav-toggle span::before{position:absolute; top:-7px;}
+  .nav-toggle span::after{position:absolute; top:7px;}
+  @media (max-width:700px){
+    nav ul{
+      display:none; position:absolute; top:100%; left:0; right:0;
+      flex-direction:column; gap:0; background:var(--navy);
+      border-bottom:1px solid rgba(205,222,239,0.14);
+    }
+    nav ul.open{display:flex;}
+    nav ul li{border-top:1px solid rgba(205,222,239,0.12);}
+    nav ul a{display:block; padding:14px 24px;}
+    nav ul a::after{display:none;}
+    .nav-toggle{display:block;}
+  }
+
+  /* ---------- HERO ---------- */
+  .hero{
+    position:relative;
+    background:
+      radial-gradient(circle at 82% 12%, rgba(32,32,224,0.32) 0%, transparent 45%),
+      linear-gradient(135deg, var(--navy) 0%, var(--navy-deep) 75%);
+    color:var(--white);
+    padding:110px 0 140px;
+    overflow:hidden;
+    clip-path: polygon(0 0, 100% 0, 100% 92%, 0 100%);
+  }
+  .hero::before{
+    content:"";
+    position:absolute; inset:0;
+    background-image:
+      linear-gradient(rgba(205,222,239,0.06) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(205,222,239,0.06) 1px, transparent 1px);
+    background-size:32px 32px;
+    pointer-events:none;
+  }
+  .hero::after{
+    content:"";
+    position:absolute; right:-10%; top:10%;
+    width:60%; height:220%;
+    background:repeating-linear-gradient(
+      100deg,
+      rgba(58,247,178,0.14) 0px, rgba(58,247,178,0.14) 3px,
+      transparent 3px, transparent 60px
+    );
+    transform:rotate(8deg);
+    pointer-events:none;
+  }
+  .hero-grid{
+    position:relative; z-index:2;
+    display:grid; grid-template-columns:1.05fr 0.95fr; gap:32px; align-items:center;
+  }
+  @media (max-width:900px){ .hero-grid{grid-template-columns:1fr;} }
+  .hero-inner{max-width:600px;}
+  .hero-visual{position:relative;}
+  #car3d-wrap{
+    position:relative; width:100%; aspect-ratio:1/1; touch-action:none; cursor:grab;
+  }
+  #car3d-wrap::before{
+    content:""; position:absolute; inset:8%;
+    background:radial-gradient(circle, rgba(58,247,178,0.24) 0%, rgba(113,56,212,0.22) 45%, transparent 72%);
+    filter:blur(6px); pointer-events:none;
+  }
+  #car3d-wrap:active{cursor:grabbing;}
+  #car3d{display:block; width:100%; height:100%; position:relative; z-index:1;}
+  .drag-hint{
+    text-align:center; font-size:0.78rem; color:var(--muted-dark); margin-top:6px;
+    letter-spacing:0.02em;
+  }
+  @media (max-width:900px){ #car3d-wrap{aspect-ratio:4/3; max-width:420px; margin:0 auto;} }
+  .kicker{
+    display:inline-flex; align-items:center; gap:8px;
+    font-weight:600; font-size:0.88rem; color:var(--ice);
+    margin-bottom:16px; padding:6px 14px 6px 10px; border-radius:20px;
+    background:rgba(32,128,160,0.30); border:1px solid rgba(32,128,160,0.6);
+  }
+  .kicker::before{content:""; width:7px; height:7px; border-radius:50%; background:var(--mint); flex:none;}
+  .hero h1{
+    font-size:clamp(2.4rem, 5.5vw, 4rem);
+    color:var(--white);
+    line-height:1.04;
+    margin-bottom:22px;
+  }
+  .hero h1 em{
+    font-style:normal;
+    color:var(--mint);
+  }
+  .hero p.lead{
+    font-size:1.15rem; color:var(--ice); max-width:560px; margin-bottom:36px;
+  }
+  .cta-row{display:flex; gap:16px; flex-wrap:wrap;}
+  .btn{
+    display:inline-block; padding:14px 26px; border-radius:4px;
+    font-weight:600; font-size:0.98rem; text-decoration:none;
+    transition:transform .15s ease, background .15s ease, box-shadow .15s ease;
+  }
+  .btn:hover{transform:translateY(-2px);}
+  .btn-primary{background:var(--mint); color:var(--navy-deep);}
+  .btn-primary:hover{background:#5cfcc3; box-shadow:0 8px 24px rgba(58,247,178,0.35);}
+  .btn-ghost{background:transparent; color:var(--white); border:1.5px solid rgba(255,255,255,0.5);}
+  .btn-ghost:hover{border-color:var(--mint); color:var(--mint);}
+
+  .stat-strip{
+    position:relative; z-index:2;
+    display:grid; grid-template-columns:repeat(4,1fr);
+    gap:0; margin-top:64px; max-width:760px;
+    border-top:1px solid rgba(205,222,239,0.22);
+  }
+  .stat-strip div{padding:18px 20px 0 0;}
+  .stat-num{font-family:'Oswald'; font-size:2rem; color:var(--mint); font-weight:600;}
+  .stat-label{font-size:0.82rem; color:var(--muted-dark); margin-top:2px;}
+  @media (max-width:700px){
+    .stat-strip{grid-template-columns:repeat(2,1fr); row-gap:22px;}
+  }
+
+  /* ---------- SECTION HEAD ---------- */
+  .section-head{max-width:640px; margin-bottom:48px;}
+  .eyebrow-tag{
+    display:inline-block; font-size:0.76rem; font-weight:700; letter-spacing:0.08em; text-transform:uppercase;
+    color:var(--teal-deep); margin-bottom:12px;
+  }
+  .section-head h2{font-size:clamp(1.8rem,3.4vw,2.5rem); margin-bottom:14px;}
+  .section-head p{color:var(--muted); font-size:1.05rem;}
+  .section-head.on-dark .eyebrow-tag{color:var(--mint);}
+  .section-head.on-dark h2{color:var(--white);}
+  .section-head.on-dark p{color:var(--muted-dark);}
+  .section-head.center{margin-left:auto; margin-right:auto; text-align:center;}
+
+  /* ---------- MISIÓN / VISIÓN ---------- */
+  .mission-band{
+    background:linear-gradient(135deg, var(--navy) 0%, var(--navy-deep) 100%);
+    color:var(--white); padding:80px 0; position:relative; overflow:hidden;
+  }
+  .mission-band::after{
+    content:""; position:absolute; left:-8%; bottom:-30%; width:50%; height:140%;
+    background:repeating-linear-gradient(100deg, rgba(58,247,178,0.10) 0px, rgba(58,247,178,0.10) 2px, transparent 2px, transparent 46px);
+    transform:rotate(-6deg); pointer-events:none;
+  }
+  .mission-grid{position:relative; z-index:1; display:grid; grid-template-columns:1fr 1fr; gap:48px;}
+  @media (max-width:800px){ .mission-grid{grid-template-columns:1fr; gap:32px;} }
+  .mission-item .eyebrow{
+    font-size:0.8rem; font-weight:700; letter-spacing:0.06em; text-transform:uppercase;
+    color:var(--mint); margin-bottom:10px;
+  }
+  .mission-item h3{color:var(--white); font-size:1.5rem; margin-bottom:12px;}
+  .mission-item p{color:var(--ice); font-size:1rem;}
+  .value-row{position:relative; z-index:1; display:flex; gap:10px; flex-wrap:wrap; margin-top:32px;}
+  .value-chip{
+    font-size:0.82rem; font-weight:600; padding:7px 16px; border-radius:20px;
+    background:rgba(255,255,255,0.1); border:1px solid rgba(58,247,178,0.4); color:var(--ice);
+  }
+
+  /* ---------- QUIENES SOMOS ---------- */
+  .about-grid{display:grid; grid-template-columns:1.1fr 0.9fr; gap:56px; align-items:start;}
+  @media (max-width:800px){ .about-grid{grid-template-columns:1fr;} }
+  .about-grid p{color:var(--muted); margin-bottom:16px;}
+  .fact-card{
+    background:var(--white); border-left:4px solid var(--teal);
+    padding:22px 24px; border-radius:2px; border-top:1px solid var(--line); border-right:1px solid var(--line); border-bottom:1px solid var(--line);
+    box-shadow:0 2px 14px rgba(39,18,95,0.05);
+  }
+  .fact-card h3{font-size:1.05rem; margin-bottom:8px; color:var(--navy);}
+  .fact-card p{color:var(--muted); font-size:0.95rem; margin:0;}
+  .fact-card + .fact-card{margin-top:16px;}
+
+  /* ---------- TIMELINE ---------- */
+  .timeline{
+    display:flex; gap:0; overflow-x:auto; padding-bottom:8px;
+    border-top:1px solid var(--line);
+  }
+  .tl-step{
+    flex:1 0 220px; padding:28px 24px 0 0; position:relative;
+  }
+  .tl-step::before{
+    content:attr(data-n);
+    display:block; font-family:'Oswald'; font-size:1.6rem; color:var(--electric);
+    margin-bottom:10px; font-weight:600;
+  }
+  .tl-step h3{font-size:1.05rem; margin-bottom:6px;}
+  .tl-step p{color:var(--muted); font-size:0.92rem;}
+  .tl-step + .tl-step{border-left:1px solid var(--line); padding-left:24px;}
+
+  /* ---------- EQUIPO ---------- */
+  .team-grid{
+    display:grid; grid-template-columns:repeat(auto-fit,minmax(250px,1fr)); gap:22px;
+    margin-top:8px;
+  }
+  .member-card{
+    background:var(--white); border:1px solid var(--line); border-radius:10px;
+    padding:26px 24px; position:relative; overflow:hidden;
+    box-shadow:0 3px 16px rgba(39,18,95,0.06);
+    transition:transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+    display:flex; flex-direction:column;
+  }
+  .member-card::before{
+    content:""; position:absolute; top:0; left:0; right:0; height:4px;
+    background:var(--accent, var(--teal));
+  }
+  .member-card:hover{
+    transform:translateY(-4px);
+    box-shadow:0 14px 30px rgba(39,18,95,0.14);
+    border-color:var(--accent, var(--teal));
+  }
+  .member-card.c-teal{--accent:var(--teal);}
+  .member-card.c-purple{--accent:var(--purple);}
+  .member-card.c-electric{--accent:var(--electric);}
+  .member-top{display:flex; align-items:center; gap:14px; margin-bottom:16px;}
+  .member-number{
+    width:44px; height:44px; flex:none; border-radius:4px;
+    display:flex; align-items:center; justify-content:center;
+    font-family:'Oswald'; font-weight:700; font-size:1.35rem; color:var(--accent, var(--teal));
+    background:var(--paper); border:1.5px solid var(--accent, var(--teal));
+  }
+  .member-badge{
+    display:inline-block; font-size:0.72rem; font-weight:700; letter-spacing:0.03em;
+    padding:5px 11px; border-radius:20px; color:var(--white);
+    background:var(--accent, var(--teal));
+  }
+  .member-card h3{font-size:1.12rem; margin-bottom:4px; line-height:1.25;}
+  .member-headline{color:var(--muted); font-size:0.9rem; font-style:italic; margin-bottom:14px;}
+  .member-points{list-style:none; margin-bottom:16px; flex:1;}
+  .member-points li{
+    font-size:0.87rem; color:var(--muted); padding:6px 0 6px 18px; position:relative;
+  }
+  .member-points li::before{
+    content:"—"; position:absolute; left:0; color:var(--accent, var(--teal)); font-weight:700;
+  }
+  .member-extra{display:none;}
+  .member-more{
+    align-self:flex-start; background:none; border:none; cursor:pointer;
+    font-family:'Inter'; font-weight:600; font-size:0.85rem; color:var(--accent, var(--teal));
+    padding:4px 0; border-bottom:1px solid transparent;
+  }
+  .member-more:hover{border-bottom-color:currentColor;}
+
+  /* ---------- MEMBER MODAL ---------- */
+  .member-modal{
+    position:fixed; inset:0; z-index:100; display:none;
+    align-items:center; justify-content:center; padding:24px;
+  }
+  .member-modal.open{display:flex;}
+  .member-modal-backdrop{
+    position:absolute; inset:0; background:rgba(22,9,52,0.72); backdrop-filter:blur(3px);
+  }
+  .member-modal-panel{
+    position:relative; z-index:1; background:var(--white); border-radius:12px;
+    max-width:540px; width:100%; max-height:84vh; overflow-y:auto;
+    padding:36px 32px; box-shadow:0 30px 70px rgba(0,0,0,0.35);
+  }
+  .member-modal-close{
+    position:absolute; top:16px; right:16px; width:34px; height:34px; border-radius:50%;
+    border:1px solid var(--line); background:var(--paper); color:var(--navy);
+    font-size:1.2rem; cursor:pointer; line-height:1;
+  }
+  .member-modal-close:hover{background:var(--mint); border-color:var(--mint); color:var(--navy-deep);}
+  #modalBadge{margin-bottom:14px;}
+  #modalName{font-size:1.4rem; margin-bottom:4px;}
+  #modalHeadline{color:var(--muted); font-style:italic; margin-bottom:18px; font-size:0.95rem;}
+  .member-modal-panel .member-points{margin-bottom:4px;}
+  .member-modal-panel .member-points li{font-size:0.92rem;}
+
+  /* ---------- MENTOR ---------- */
+  .mentor-band{background:var(--navy-deep); color:var(--white); padding:44px 0; position:relative;}
+  .mentor-row{border-left:3px solid var(--mint); padding-left:24px;}
+  .mentor-role{font-size:0.8rem; font-weight:600; color:var(--mint); text-transform:uppercase; letter-spacing:0.04em; margin-bottom:4px;}
+  .mentor-row h3{color:var(--white); font-size:1.3rem; margin-bottom:6px;}
+  .mentor-row p{color:var(--ice); font-size:0.94rem; max-width:640px; margin-bottom:14px;}
+  .badge-row{display:flex; gap:8px; flex-wrap:wrap;}
+  .badge{
+    font-size:0.75rem; font-weight:600; padding:5px 12px; border-radius:20px;
+    background:rgba(32,128,160,0.24); border:1px solid rgba(32,128,160,0.6); color:var(--ice);
+  }
+
+  /* ---------- CAD / HERRAMIENTAS ---------- */
+  .tools-band{background:var(--navy); color:var(--white);}
+  .tools-band .section-head p{color:var(--muted-dark);}
+  .tools-band .section-head h2{color:var(--white);}
+  .tool-grid{display:grid; grid-template-columns:repeat(2,1fr); gap:1px; background:rgba(205,222,239,0.14);}
+  @media (max-width:700px){ .tool-grid{grid-template-columns:1fr;} }
+  .tool{background:var(--navy); padding:28px 26px;}
+  .tool h3{color:var(--white); font-size:1.1rem; margin-bottom:8px; display:flex; align-items:center; gap:10px;}
+  .tool h3 .tag{
+    font-size:0.68rem; font-weight:700; padding:3px 8px; border-radius:20px;
+    background:var(--mint); color:var(--navy-deep);
+  }
+  .tool p{color:var(--muted-dark); font-size:0.92rem;}
+
+  /* ---------- PRESUPUESTO ---------- */
+  .budget-box{
+    background-color:var(--paper);
+    background-image:linear-gradient(rgba(32,128,160,0.10) 1px, transparent 1px), linear-gradient(90deg, rgba(32,128,160,0.10) 1px, transparent 1px);
+    background-size:28px 28px;
+    border:1px solid var(--line); border-top:3px solid var(--electric); border-radius:4px; padding:36px;
+  }
+  @media (max-width:700px){ .budget-box{padding:28px 22px;} }
+  .budget-summary{
+    display:grid; grid-template-columns:repeat(3,1fr); gap:24px;
+    padding-bottom:28px; margin-bottom:8px; border-bottom:1px solid var(--line);
+  }
+  @media (max-width:700px){ .budget-summary{grid-template-columns:1fr; gap:18px;} }
+  .budget-figure{font-family:'Oswald'; font-size:1.9rem; color:var(--navy); font-weight:600;}
+  .budget-figure.accent{color:var(--electric);}
+  .budget-figure-unit{font-size:0.8rem; color:var(--muted); font-family:'Inter'; font-weight:500; margin-left:6px;}
+  .budget-figure-label{font-size:0.86rem; color:var(--muted); margin-top:4px;}
+  .budget-list{list-style:none; margin-top:20px;}
+  .budget-list li{
+    display:flex; justify-content:space-between; gap:16px; padding:10px 0;
+    border-bottom:1px solid var(--line); font-size:0.94rem; color:var(--muted);
+  }
+  .budget-list li b{color:var(--navy);}
+  .budget-list li em{font-style:normal; color:var(--muted); opacity:0.8;}
+  .budget-note{
+    margin-top:28px; padding:20px 24px; border-radius:4px; font-size:0.92rem; color:var(--muted);
+    background:rgba(58,247,178,0.08); border:1px solid var(--teal); border-left:4px solid var(--mint);
+  }
+  .budget-note b{color:var(--teal-deep);}
+
+  /* ---------- POR QUÉ PATROCINAR ---------- */
+  .why-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:28px; margin-bottom:64px;}
+  @media (max-width:800px){ .why-grid{grid-template-columns:1fr;} }
+  .why-item{padding-top:20px; border-top:3px solid var(--accent, var(--teal)); position:relative;}
+  .why-item.c-teal{--accent:var(--teal);}
+  .why-item.c-purple{--accent:var(--purple);}
+  .why-item.c-electric{--accent:var(--electric);}
+  .why-item .why-num{
+    font-family:'Oswald'; font-size:1.5rem; font-weight:600; color:var(--accent, var(--teal)); margin-bottom:10px; display:block;
+  }
+  .why-item h3{font-size:1.1rem; margin-bottom:8px;}
+  .why-item p{color:var(--muted); font-size:0.92rem;}
+
+  /* ---------- TIERS / PRICING ---------- */
+  .tiers{display:grid; grid-template-columns:repeat(3,1fr); gap:22px;}
+  @media (max-width:800px){ .tiers{grid-template-columns:1fr;} }
+  .tier{
+    padding:32px 26px; border-radius:12px; background:var(--white);
+    border:1px solid var(--line); display:flex; flex-direction:column;
+  }
+  .tier h3{font-size:1.3rem; margin-bottom:4px;}
+  .tier .price{font-family:'Oswald'; font-size:1.55rem; color:var(--teal-deep); margin-bottom:6px;}
+  .tier .price-note{font-size:0.8rem; color:var(--muted); margin-bottom:18px;}
+  .tier ul{list-style:none; flex:1; margin-bottom:22px;}
+  .tier li{padding:7px 0; font-size:0.92rem; color:var(--muted); padding-left:18px; position:relative;}
+  .tier li::before{content:"—"; position:absolute; left:0; color:var(--teal);}
+  .tier-cta{display:flex; gap:8px; flex-wrap:wrap;}
+  .tier-cta a{
+    flex:1; text-align:center; font-size:0.82rem; font-weight:600; padding:10px 12px;
+    border-radius:5px; text-decoration:none; border:1px solid var(--line); color:var(--navy);
+    transition:background .15s ease, border-color .15s ease, color .15s ease;
+  }
+  .tier-cta a:hover{border-color:var(--teal); color:var(--teal-deep);}
+
+  .tier.featured{
+    background:var(--navy); color:var(--white); position:relative;
+    border:1.5px solid var(--mint); box-shadow:0 16px 40px rgba(58,247,178,0.16);
+    transform:scale(1.02);
+  }
+  .tier.featured .ribbon{
+    position:absolute; top:-1px; right:18px; background:var(--mint); color:var(--navy-deep);
+    font-size:0.7rem; font-weight:700; letter-spacing:0.04em; text-transform:uppercase;
+    padding:5px 12px; border-radius:0 0 6px 6px;
+  }
+  .tier.featured h3{color:var(--white);}
+  .tier.featured .price{color:var(--mint);}
+  .tier.featured .price-note{color:var(--muted-dark);}
+  .tier.featured li{color:var(--ice);}
+  .tier.featured li::before{color:var(--mint);}
+  .tier.featured .tier-cta a{border-color:rgba(205,222,239,0.3); color:var(--white);}
+  .tier.featured .tier-cta a:hover{background:var(--mint); border-color:var(--mint); color:var(--navy-deep);}
+
+  .tier.premium{
+    background:linear-gradient(160deg, var(--navy) 0%, var(--navy-deep) 100%); color:var(--white);
+    position:relative; border:1px solid var(--purple);
+  }
+  .tier.premium .ribbon{
+    position:absolute; top:-1px; right:18px; background:var(--purple); color:var(--white);
+    font-size:0.7rem; font-weight:700; letter-spacing:0.04em; text-transform:uppercase;
+    padding:5px 12px; border-radius:0 0 6px 6px;
+  }
+  .tier.premium h3{color:var(--white);}
+  .tier.premium .price{color:var(--ice);}
+  .tier.premium .price-note{color:var(--muted-dark);}
+  .tier.premium li{color:var(--ice);}
+  .tier.premium li::before{color:var(--electric);}
+  .tier.premium .tier-cta a{border-color:rgba(205,222,239,0.3); color:var(--white);}
+  .tier.premium .tier-cta a:hover{background:var(--mint); border-color:var(--mint); color:var(--navy-deep);}
+
+  /* ---------- FAQ ---------- */
+  .faq{max-width:760px; margin-top:56px;}
+  .faq details{border-bottom:1px solid var(--line); padding:16px 0;}
+  .faq summary{
+    cursor:pointer; font-weight:600; color:var(--navy); font-size:1rem;
+    list-style:none; display:flex; justify-content:space-between; align-items:center; gap:16px;
+  }
+  .faq summary::-webkit-details-marker{display:none;}
+  .faq summary::after{content:"+"; font-size:1.3rem; color:var(--teal-deep); font-weight:400; flex:none;}
+  .faq details[open] summary::after{content:"–";}
+  .faq p{color:var(--muted); font-size:0.92rem; margin-top:10px;}
+
+  /* ---------- CONTACTO ---------- */
+  .contact-band{
+    background:linear-gradient(135deg, var(--navy-deep) 0%, var(--navy) 100%); color:var(--white);
+  }
+  .contact-band h2{color:var(--white); font-size:clamp(1.8rem,3.6vw,2.6rem); margin-bottom:16px;}
+  .contact-band p{color:var(--ice); max-width:520px; margin-bottom:32px; font-size:1.05rem;}
+  .contact-links{display:flex; gap:18px; flex-wrap:wrap;}
+  .contact-links a{
+    padding:12px 20px; border-radius:4px;
+    font-weight:600; font-size:0.92rem; text-decoration:none; color:var(--white);
+    border:1px solid rgba(205,222,239,0.3); background:rgba(255,255,255,0.08);
+    transition:background .15s ease, border-color .15s ease;
+  }
+  .contact-links a:hover{background:var(--mint); border-color:var(--mint); color:var(--navy-deep);}
+  .contact-links a.primary{background:var(--mint); color:var(--navy-deep); border-color:var(--mint);}
+  .contact-links a.primary:hover{background:#5cfcc3;}
+
+  footer{padding:28px 0; text-align:center; color:var(--muted); font-size:0.85rem; background:var(--paper);}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="wrap">
+    <div class="brand"><span class="dot"></span>STRIKER RACING</div>
+    <ul id="navList">
+      <li><a href="#proyecto">El proyecto</a></li>
+      <li><a href="#equipo">Equipo</a></li>
+      <li><a href="#herramientas">Herramientas</a></li>
+      <li><a href="#patrocinios">Patrocinios</a></li>
+      <li><a href="#contacto">Contacto</a></li>
+    </ul>
+    <button class="nav-toggle" id="navToggle" aria-label="Abrir menú" aria-expanded="false" aria-controls="navList"><span></span></button>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="wrap hero-grid">
+    <div class="hero-inner">
+      <div class="kicker">Prepa Celta · Querétaro · STEM Racing México, temporada 2026–2027</div>
+      <h1>Presentando a <em>Striker Racing</em>.</h1>
+      <p class="lead">Diseñamos, fabricamos y corremos un auto de Fórmula 1 a escala en el Desafío STEM Racing México (antes F1 in Schools), la iniciativa educativa oficial de la Fórmula 1®. Cinco estudiantes, un proyecto de ingeniería real, y una meta: llegar de la regional a la final mundial.</p>
+      <div class="cta-row">
+        <a class="btn btn-primary" href="#patrocinios">Ver niveles de patrocinio</a>
+        <a class="btn btn-ghost" href="#contacto">Contactar al equipo</a>
+      </div>
+      <div class="stat-strip">
+        <div><div class="stat-num">5</div><div class="stat-label">Integrantes</div></div>
+        <div><div class="stat-num">$43,500</div><div class="stat-label">MXN + IVA de inscripción</div></div>
+        <div><div class="stat-num">60+</div><div class="stat-label">Países en STEM Racing</div></div>
+        <div><div class="stat-num">2027</div><div class="stat-label">Meta: final nacional</div></div>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <div id="car3d-wrap"><canvas id="car3d"></canvas></div>
+      <div class="drag-hint">Arrastra para girar el modelo</div>
+    </div>
+  </div>
+</header>
+
+<section id="proyecto" class="reveal">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="eyebrow-tag">El proyecto</div>
+      <h2>Qué es el Desafío STEM Racing</h2>
+      <p>No es un club escolar más: es una competencia internacional avalada por la Fórmula 1® donde actuamos como una escudería real, de principio a fin.</p>
+    </div>
+    <div class="about-grid">
+      <div>
+        <p>Durante la temporada, diseñamos un auto de Fórmula 1 a escala impulsado por CO₂ usando herramientas de ingeniería profesional (CAD, CAM, CFD), lo fabricamos siguiendo un reglamento técnico estricto, y lo corremos en pista contra otras escuderías de todo el país.</p>
+        <p>Pero el auto es solo una parte. También construimos un plan de negocio, gestionamos un presupuesto real, diseñamos nuestra identidad de marca y presentamos el proyecto ante un panel de jueces —igual que lo haría cualquier escudería de F1 buscando patrocinadores.</p>
+        <p>Ganar la categoría en la final nacional abre la puerta a representar a México en la final mundial de STEM Racing, junto a equipos de más de 60 países.</p>
+      </div>
+      <div>
+        <div class="fact-card">
+          <h3>Lo que se evalúa</h3>
+          <p>Ingeniería del auto, velocidad en pista, plan de negocios, identidad de marca (pit display) y presentación oral ante jueces.</p>
+        </div>
+        <div class="fact-card">
+          <h3>Por qué importa</h3>
+          <p>OCDE, UNICEF y el Banco Mundial coinciden en que más del 80% de los empleos emergentes requerirán habilidades STEM. Este proyecto es esa práctica, con consecuencias reales.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="mission-band reveal">
+  <div class="wrap">
+    <div class="mission-grid">
+      <div class="mission-item">
+        <div class="eyebrow">Misión</div>
+        <h3>Ingeniería real, desde la prepa.</h3>
+        <p>Representar a Prepa Celta en el Desafío STEM Racing México diseñando, fabricando y compitiendo con un auto de Fórmula 1 a escala — desarrollando en el camino las habilidades técnicas, de negocio y de liderazgo que nos van a definir como ingenieros.</p>
+      </div>
+      <div class="mission-item">
+        <div class="eyebrow">Visión</div>
+        <h3>Querétaro en la final mundial.</h3>
+        <p>Ser la escudería que lleve a Prepa Celta —y a Querétaro— a competir en la final mundial de STEM Racing, demostrando que el talento de nuestra región compite al más alto nivel internacional.</p>
+      </div>
+    </div>
+    <div class="value-row">
+      <span class="value-chip">Precisión</span>
+      <span class="value-chip">Trabajo en equipo</span>
+      <span class="value-chip">Ambición</span>
+      <span class="value-chip">Aprender haciendo</span>
+    </div>
+  </div>
+</div>
+
+<section class="blueprint reveal">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="eyebrow-tag">Calendario</div>
+      <h2>El camino hasta la final</h2>
+      <p>Así avanza una escudería de la categoría Desafío (Bachillerato) durante la temporada 2026–2027.</p>
+    </div>
+    <div class="timeline">
+      <div class="tl-step" data-n="01">
+        <h3>Inscripción</h3>
+        <p>Registro y pago de la cuota de participación. Formamos oficialmente la escudería.</p>
+      </div>
+      <div class="tl-step" data-n="02">
+        <h3>Capacitación</h3>
+        <p>Dic 2026 – abr 2027. Formación técnica y de negocios para todo el equipo.</p>
+      </div>
+      <div class="tl-step" data-n="03">
+        <h3>Regional</h3>
+        <p>Mar – abr 2027. Competimos contra escuderías de la zona Bajío-Norte.</p>
+      </div>
+      <div class="tl-step" data-n="04">
+        <h3>Final nacional</h3>
+        <p>Jun – jul 2027. Los mejores del país. Boleto directo a la final mundial.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="equipo" class="reveal">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="eyebrow-tag">El equipo</div>
+      <h2>Ficha técnica de la escudería</h2>
+      <p>Cinco integrantes, cinco frentes de trabajo. Credenciales duras, no relleno.</p>
+    </div>
+
+    <div class="team-grid">
+
+      <div class="member-card c-teal">
+        <div class="member-top">
+          <div class="member-number">01</div>
+          <span class="member-badge">CTO &amp; Lead Developer</span>
+        </div>
+        <h3>Carlo David Serafín</h3>
+        <p class="member-headline">Construye el cerebro digital de la escudería.</p>
+        <ul class="member-points">
+          <li>Full-stack en C++, Python y TypeScript — certificado por Harvard (CS50, CS50AI)</li>
+          <li>Interfaces en Three.js, telemetría y la plataforma Blueprint OS del equipo</li>
+          <li>Simulación CFD en Ansys Discovery/Fluent para minimizar el coeficiente de arrastre (Cd)</li>
+        </ul>
+        <div class="member-extra">
+          <ul class="member-points">
+            <li>1er lugar estatal en programación, Concurso Internacional de Ciencias del Tec de Monterrey</li>
+            <li>Desarrolla los scripts de telemetría y balance de masa del auto</li>
+            <li>Configura y ejecuta el túnel de viento virtual del equipo</li>
+          </ul>
+        </div>
+        <button class="member-more" type="button">Ver trayectoria completa →</button>
+      </div>
+
+      <div class="member-card c-electric">
+        <div class="member-top">
+          <div class="member-number">02</div>
+          <span class="member-badge">Team Manager</span>
+        </div>
+        <h3>Ariadna Mejía Hernández</h3>
+        <p class="member-headline">Dirige la operación como una escudería real.</p>
+        <ul class="member-points">
+          <li>Dirección general, presupuesto y estrategia de la escudería</li>
+          <li>Investigación aplicada en aerodinámica</li>
+          <li>Certificación en Diseño de Prototipos, UPAEP</li>
+        </ul>
+        <div class="member-extra">
+          <ul class="member-points">
+            <li>2° lugar estatal en Física, Concurso Internacional de Ciencias del Tec de Monterrey</li>
+            <li>Responsable del control financiero y la planeación de recursos de temporada</li>
+          </ul>
+        </div>
+        <button class="member-more" type="button">Ver trayectoria completa →</button>
+      </div>
+
+      <div class="member-card c-teal">
+        <div class="member-top">
+          <div class="member-number">03</div>
+          <span class="member-badge">VP &amp; Vocero</span>
+        </div>
+        <h3>Unai Bozalongo</h3>
+        <p class="member-headline">La voz del equipo frente a jueces y patrocinadores.</p>
+        <ul class="member-points">
+          <li>Fundador de FitPath, plataforma desarrollada con IA — certificado en IA por Google</li>
+          <li>Gestión de finanzas estudiantiles y relación con patrocinadores</li>
+          <li>Defensa oral y negociación ante paneles de jueces</li>
+        </ul>
+        <div class="member-extra">
+          <ul class="member-points">
+            <li>Distinciones como mejor orador y negociador en foros de Modelo de Naciones Unidas</li>
+            <li>Encabeza la estrategia de relaciones públicas del equipo</li>
+          </ul>
+        </div>
+        <button class="member-more" type="button">Ver trayectoria completa →</button>
+      </div>
+
+      <div class="member-card c-purple">
+        <div class="member-top">
+          <div class="member-number">04</div>
+          <span class="member-badge">Directora Creativa</span>
+        </div>
+        <h3>María Fernanda Escobar</h3>
+        <p class="member-headline">Construye la identidad visual de la escudería.</p>
+        <ul class="member-points">
+          <li>Branding, diseño industrial y desarrollo de producto</li>
+          <li>Certificación en Diseño de Prototipos, UPAEP</li>
+          <li>Liderazgo y dirección del pit display en competencia</li>
+        </ul>
+        <div class="member-extra">
+          <ul class="member-points">
+            <li>Fundadora de Tulip Accessories — manufactura y comercialización de producto propio</li>
+            <li>Certificación en IA aplicada, Skills for Work (Santander Open Academy)</li>
+          </ul>
+        </div>
+        <button class="member-more" type="button">Ver trayectoria completa →</button>
+      </div>
+
+      <div class="member-card c-electric">
+        <div class="member-top">
+          <div class="member-number">05</div>
+          <span class="member-badge">CAD &amp; Manufactura</span>
+        </div>
+        <h3>Josue Gutierrez</h3>
+        <p class="member-headline">Convierte el diseño en pieza física, sin errores.</p>
+        <ul class="member-points">
+          <li>Manufactura práctica: soldadura de arco manual con electrodo revestido (SMAW/MMA)</li>
+          <li>Diseño y fabricación de prototipos y estructuras mecánicas</li>
+          <li>Responsable de tolerancias, geometría y viabilidad mecánica del vehículo</li>
+        </ul>
+        <div class="member-extra">
+          <ul class="member-points">
+            <li>Base matemática sólida — instructor certificado de matemáticas nivel medio superior</li>
+          </ul>
+        </div>
+        <button class="member-more" type="button">Ver trayectoria completa →</button>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<div class="mentor-band reveal">
+  <div class="wrap">
+    <div class="mentor-row">
+      <div>
+        <div class="mentor-role">Mentor del equipo · Respaldo institucional (obligatorio por reglamento)</div>
+        <h3>Alejandro Félix Barajas</h3>
+        <p>Ingeniero en Mecatrónica por la Universidad Anáhuac Querétaro (Mención Honorífica) y profesor titular de Matemáticas, Robótica y CAD en Colegio Celta Internacional. Asesor técnico oficial de Striker Racing ante STEM Racing México.</p>
+        <div class="badge-row">
+          <span class="badge">Docente Colegio Celta</span>
+          <span class="badge">Mención Honorífica — Anáhuac</span>
+          <span class="badge">Lean Six Sigma Black Belt</span>
+          <span class="badge">SolidWorks CSWA / CSWP</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<section id="herramientas" class="tools-band reveal">
+  <div class="wrap">
+    <div class="section-head on-dark">
+      <div class="eyebrow-tag">Stack técnico</div>
+      <h2>Lo que usamos para diseñar el auto</h2>
+      <p>El software que necesitamos es gratuito para estudiantes — lo que financian los patrocinadores es el kit físico, el equipo y la logística, no las licencias.</p>
+    </div>
+    <div class="tool-grid">
+      <div class="tool">
+        <h3>Autodesk Fusion <span class="tag">Ya lo usamos</span></h3>
+        <p>Socio oficial de CAD/CAM/CAE de STEM Racing. Aquí modelamos el auto pieza por pieza y preparamos las trayectorias de maquinado.</p>
+      </div>
+      <div class="tool">
+        <h3>Ansys Student <span class="tag">Gratis</span></h3>
+        <p>Incluye Ansys Discovery, socio oficial de CFD del torneo. Simulamos el flujo de aire sobre el auto antes de fabricar cada versión.</p>
+      </div>
+      <div class="tool">
+        <h3>Equipo de cómputo</h3>
+        <p>Las simulaciones de CFD exigen equipos con buena capacidad gráfica — es una de las áreas donde el apoyo de un patrocinador acelera directamente nuestro trabajo.</p>
+      </div>
+      <div class="tool">
+        <h3>Kit oficial F1SRMX</h3>
+        <p>Bloques de material para el chasis, tanques de CO₂, ruedas, ejes y armellas — provisto al pagar la inscripción de la temporada.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="presupuesto" class="reveal">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="eyebrow-tag">Presupuesto</div>
+      <h2>Desglose real: temporada Regional</h2>
+      <p>Esto es lo que cuesta competir en la etapa Regional, y cuánto necesitamos de patrocinios para lograrlo.</p>
+    </div>
+    <div class="budget-box">
+      <div class="budget-summary">
+        <div>
+          <div class="budget-figure">$58,490.00<span class="budget-figure-unit">MXN</span></div>
+          <div class="budget-figure-label">Costo total de la temporada Regional</div>
+        </div>
+        <div>
+          <div class="budget-figure">$10,000.00<span class="budget-figure-unit">MXN</span></div>
+          <div class="budget-figure-label">Recurso propio disponible</div>
+        </div>
+        <div>
+          <div class="budget-figure accent">$48,490.00<span class="budget-figure-unit">MXN</span></div>
+          <div class="budget-figure-label">Meta neta a recaudar en patrocinios</div>
+        </div>
+      </div>
+      <ul class="budget-list">
+        <li><span><b>1.</b> Inscripción y licencias oficiales <em>(1 cuota de escudería)</em></span> <b>$43,500.00</b></li>
+        <li><span><b>2.</b> Manufactura e impresión (CNC / 3D)</span> <b>$4,000.00</b></li>
+        <li><span><b>3.</b> Uniformes oficiales del equipo <em>(6 piezas a $750 c/u)</em></span> <b>$4,500.00</b></li>
+        <li><span><b>4.</b> Pit Display (stand, lonas y cartelería) <em>(9 piezas a $110 c/u)</em></span> <b>$990.00</b></li>
+        <li><span><b>5.</b> Viáticos regionales (transporte y alimentos)</span> <b>$5,500.00</b></li>
+      </ul>
+      <div class="budget-note">
+        <b>Aceptamos patrocinio en especie:</b> materiales de manufactura, maquinado CNC, impresión 3D, uniformes, equipo de cómputo o transporte. Toda aportación en especie se cuantifica y se acredita en el nivel de patrocinio equivalente (Bronce, Plata u Oro).
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="patrocinios" class="blueprint reveal">
+  <div class="wrap">
+    <div class="section-head center" style="max-width:720px;">
+      <div class="eyebrow-tag">Patrocinios</div>
+      <h2>¿Por qué invertir en Striker Racing?</h2>
+      <p>Tu marca viaja con nosotros de la regional a —esperamos— la final mundial. Esto es lo que se lleva un patrocinador.</p>
+    </div>
+
+    <div class="why-grid">
+      <div class="why-item c-teal">
+        <span class="why-num">01</span>
+        <h3>Visibilidad con propósito</h3>
+        <p>Tu logo no va en un evento cualquiera: va en un proyecto real de ingeniería, seguido por la comunidad de Prepa Celta y por STEM Racing México durante toda la temporada.</p>
+      </div>
+      <div class="why-item c-purple">
+        <span class="why-num">02</span>
+        <h3>Alineación con innovación</h3>
+        <p>Asocias tu marca con ciencia, tecnología e ingeniería aplicada — el mismo terreno donde compites por talento y clientes.</p>
+      </div>
+      <div class="why-item c-electric">
+        <span class="why-num">03</span>
+        <h3>Acceso a talento joven</h3>
+        <p>Conoces de primera mano a cinco estudiantes que ya construyen, programan y gestionan proyectos reales antes de entrar a la universidad.</p>
+      </div>
+    </div>
+
+    <div class="section-head">
+      <h2 style="font-size:1.5rem;">Elige tu nivel de patrocinio</h2>
+    </div>
+
+    <div class="tiers">
+      <div class="tier">
+        <h3>Bronce</h3>
+        <div class="price">$3,000–5,000</div>
+        <div class="price-note">MXN · aportación puntual</div>
+        <ul>
+          <li>Logo en el pit display</li>
+          <li>Mención en redes del equipo</li>
+          <li>Agradecimiento en presentación final</li>
+        </ul>
+        <div class="tier-cta">
+          <a href="https://wa.me/525511839779?text=Hola%2C%20me%20interesa%20el%20nivel%20Bronce%20de%20patrocinio%20de%20Striker%20Racing" target="_blank" rel="noopener">WhatsApp</a>
+          <a href="mailto:strikerracingf1@gmail.com?subject=Patrocinio%20Striker%20Racing%20—%20Nivel%20Bronce">Correo</a>
+        </div>
+      </div>
+      <div class="tier featured">
+        <span class="ribbon">Recomendado</span>
+        <h3>Plata</h3>
+        <div class="price">$5,000–10,000</div>
+        <div class="price-note">MXN · aportación puntual</div>
+        <ul>
+          <li>Todo lo de Bronce</li>
+          <li>Logo en el auto (zona lateral)</li>
+          <li>Logo en playeras del equipo</li>
+          <li>Reporte de resultados tras cada etapa</li>
+        </ul>
+        <div class="tier-cta">
+          <a href="https://wa.me/525511839779?text=Hola%2C%20me%20interesa%20el%20nivel%20Plata%20de%20patrocinio%20de%20Striker%20Racing" target="_blank" rel="noopener">WhatsApp</a>
+          <a href="mailto:strikerracingf1@gmail.com?subject=Patrocinio%20Striker%20Racing%20—%20Nivel%20Plata">Correo</a>
+        </div>
+      </div>
+      <div class="tier premium">
+        <span class="ribbon">Máximo impacto</span>
+        <h3>Oro</h3>
+        <div class="price">$10,000+</div>
+        <div class="price-note">MXN · patrocinador principal</div>
+        <ul>
+          <li>Todo lo de Plata</li>
+          <li>Logo destacado en el auto y pit display</li>
+          <li>Mención como patrocinador principal</li>
+          <li>Video/reel de agradecimiento dedicado</li>
+        </ul>
+        <div class="tier-cta">
+          <a href="https://wa.me/525511839779?text=Hola%2C%20me%20interesa%20el%20nivel%20Oro%20de%20patrocinio%20de%20Striker%20Racing" target="_blank" rel="noopener">WhatsApp</a>
+          <a href="mailto:strikerracingf1@gmail.com?subject=Patrocinio%20Striker%20Racing%20—%20Nivel%20Oro">Correo</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="faq">
+      <details>
+        <summary>¿El patrocinio puede ser en especie y no en efectivo?</summary>
+        <p>Sí. Materiales de manufactura, equipo de cómputo, diseño, impresión o transporte cuentan como aportación y se reconocen en el nivel equivalente.</p>
+      </details>
+      <details>
+        <summary>¿Cómo sabré en qué se usó mi aportación?</summary>
+        <p>Enviamos un reporte breve después de cada etapa (regional y nacional) con avances del auto, resultados y fotos del pit display con tu marca.</p>
+      </details>
+      <details>
+        <summary>¿Puedo patrocinar solo una parte del proceso, no la temporada completa?</summary>
+        <p>Sí, los niveles son flexibles. Podemos ajustar los beneficios a una aportación puntual, por ejemplo solo para viáticos de la final nacional.</p>
+      </details>
+      <details>
+        <summary>¿Necesitan factura?</summary>
+        <p>Podemos coordinar comprobante de la aportación a través de Prepa Celta o Persiste A.C., el organismo que opera STEM Racing México. Lo resolvemos directamente contigo.</p>
+      </details>
+    </div>
+  </div>
+</section>
+
+<section id="contacto" class="contact-band reveal">
+  <div class="wrap">
+    <h2>¿Te interesa patrocinarnos?</h2>
+    <p>Escríbenos y platicamos los detalles — niveles, tiempos y cómo se usa tu aportación.</p>
+    <div class="contact-links">
+      <a class="primary" href="https://wa.me/525511839779?text=Hola%2C%20me%20interesa%20conocer%20m%C3%A1s%20sobre%20patrocinar%20a%20Striker%20Racing" target="_blank" rel="noopener">WhatsApp directo</a>
+      <a href="mailto:strikerracingf1@gmail.com?subject=Patrocinio%20Striker%20Racing">strikerracingf1@gmail.com</a>
+      <a href="tel:+525511839779">(+52) 55 1183 9779 · Patrocinios</a>
+      <a href="tel:4422810958">442 281 0958 · Querétaro</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  Striker Racing · Prepa Celta, Querétaro · STEM Racing México, temporada 2026–2027
+</footer>
+
+<div class="member-modal" id="memberModal" aria-hidden="true">
+  <div class="member-modal-backdrop" data-close></div>
+  <div class="member-modal-panel" role="dialog" aria-modal="true" aria-labelledby="modalName">
+    <button class="member-modal-close" data-close aria-label="Cerrar">×</button>
+    <span class="member-badge" id="modalBadge"></span>
+    <h3 id="modalName"></h3>
+    <p id="modalHeadline"></p>
+    <div id="modalBody"></div>
+  </div>
+</div>
+
+<script>
+  var navToggle = document.getElementById('navToggle');
+  var navList = document.getElementById('navList');
+  navToggle.addEventListener('click', function(){
+    var isOpen = navList.classList.toggle('open');
+    navToggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+  });
+  navList.addEventListener('click', function(e){
+    if(e.target.tagName === 'A'){
+      navList.classList.remove('open');
+      navToggle.setAttribute('aria-expanded', 'false');
+    }
+  });
+</script>
+
+<script>
+(function(){
+  var modal = document.getElementById('memberModal');
+  var modalBadge = document.getElementById('modalBadge');
+  var modalName = document.getElementById('modalName');
+  var modalHeadline = document.getElementById('modalHeadline');
+  var modalBody = document.getElementById('modalBody');
+  var lastFocused = null;
+
+  var ACCENTS = {'c-teal':'#2080A0', 'c-purple':'#7138D4', 'c-electric':'#2020E0'};
+
+  function openModal(card){
+    modalBadge.textContent = card.querySelector('.member-badge').textContent;
+    var accentClass = ['c-teal','c-purple','c-electric'].filter(function(c){ return card.classList.contains(c); })[0];
+    modalBadge.style.background = accentClass ? ACCENTS[accentClass] : '#2080A0';
+    modalName.textContent = card.querySelector('h3').textContent;
+    modalHeadline.textContent = card.querySelector('.member-headline').textContent;
+
+    var mainPoints = card.querySelector('.member-points').cloneNode(true);
+    var extra = card.querySelector('.member-extra');
+    modalBody.innerHTML = '';
+    modalBody.appendChild(mainPoints);
+    if(extra){
+      var extraPoints = extra.querySelector('.member-points');
+      if(extraPoints) modalBody.appendChild(extraPoints.cloneNode(true));
+    }
+
+    lastFocused = document.activeElement;
+    modal.classList.add('open');
+    modal.setAttribute('aria-hidden', 'false');
+    modal.querySelector('.member-modal-close').focus();
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeModal(){
+    modal.classList.remove('open');
+    modal.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
+    if(lastFocused) lastFocused.focus();
+  }
+
+  document.querySelectorAll('.member-more').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      openModal(btn.closest('.member-card'));
+    });
+  });
+  modal.querySelectorAll('[data-close]').forEach(function(el){
+    el.addEventListener('click', closeModal);
+  });
+  document.addEventListener('keydown', function(e){
+    if(e.key === 'Escape' && modal.classList.contains('open')) closeModal();
+  });
+})();
+</script>
+
+<script>
+(function(){
+  if(!('IntersectionObserver' in window)) return;
+  var items = document.querySelectorAll('.reveal');
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(entry){
+      if(entry.isIntersecting){
+        entry.target.classList.add('in-view');
+        io.unobserve(entry.target);
+      }
+    });
+  }, {threshold:0.12, rootMargin:'0px 0px -60px 0px'});
+  items.forEach(function(el){ io.observe(el); });
+})();
+</script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+(function(){
+  var wrap = document.getElementById('car3d-wrap');
+  var canvas = document.getElementById('car3d');
+  if(!wrap || !canvas || typeof THREE === 'undefined') return;
+
+  var NAVY = 0x27125F, PURPLE = 0x7138D4, MINT = 0x3AF7B2, ELECTRIC = 0x2020E0, TEAL = 0x2080A0;
+
+  var scene = new THREE.Scene();
+  var camera = new THREE.PerspectiveCamera(36, 1, 0.1, 100);
+  camera.position.set(4.6, 2.5, 5.4);
+  camera.lookAt(0, 0.35, 0);
+
+  var renderer = new THREE.WebGLRenderer({canvas:canvas, antialias:true, alpha:true});
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+
+  scene.add(new THREE.AmbientLight(0x8899bb, 0.7));
+  var keyLight = new THREE.DirectionalLight(0xffffff, 1.0);
+  keyLight.position.set(4, 6, 5);
+  scene.add(keyLight);
+  var rimLight = new THREE.DirectionalLight(MINT, 0.7);
+  rimLight.position.set(-5, 3, -4);
+  scene.add(rimLight);
+  var fillLight = new THREE.DirectionalLight(PURPLE, 0.35);
+  fillLight.position.set(2, -3, 4);
+  scene.add(fillLight);
+
+  var carGroup = new THREE.Group();
+
+  function part(geo, color, x, y, z, rx, ry, rz){
+    var solidMat = new THREE.MeshStandardMaterial({
+      color: color, transparent: true, opacity: 0.42, roughness: 0.35, metalness: 0.25
+    });
+    var mesh = new THREE.Mesh(geo, solidMat);
+    var wireMat = new THREE.MeshBasicMaterial({color: MINT, wireframe: true, transparent:true, opacity:0.9});
+    mesh.add(new THREE.Mesh(geo, wireMat));
+    mesh.position.set(x, y, z);
+    mesh.rotation.set(rx || 0, ry || 0, rz || 0);
+    carGroup.add(mesh);
+    return mesh;
+  }
+
+  /* chassis */
+  part(new THREE.BoxGeometry(3.6, 0.3, 0.86), PURPLE, -0.15, 0.5, 0);
+  /* nose cone */
+  part(new THREE.ConeGeometry(0.32, 1.35, 4), TEAL, 2.55, 0.44, 0, 0, 0, Math.PI/2);
+  /* cockpit bump */
+  part(new THREE.BoxGeometry(0.85, 0.46, 0.66), NAVY, 0.1, 0.85, 0);
+  /* engine cover taper */
+  part(new THREE.BoxGeometry(1.1, 0.4, 0.7), NAVY, -1.55, 0.62, 0);
+  /* rear wing uprights + plane */
+  part(new THREE.BoxGeometry(0.08, 0.55, 1.5), ELECTRIC, -2.15, 0.95, 0);
+  part(new THREE.BoxGeometry(0.5, 0.05, 1.55), ELECTRIC, -1.95, 1.22, 0);
+  /* front wing */
+  part(new THREE.BoxGeometry(0.4, 0.05, 1.7), ELECTRIC, 2.95, 0.27, 0);
+  /* side pods */
+  part(new THREE.BoxGeometry(1.0, 0.38, 1.05), TEAL, -0.55, 0.5, 0);
+
+  /* wheels */
+  function wheel(x, z){
+    var geo = new THREE.CylinderGeometry(0.42, 0.42, 0.32, 18);
+    part(geo, NAVY, x, 0.42, z, 0, 0, Math.PI/2);
+  }
+  wheel(1.6, 0.7); wheel(1.6, -0.7);
+  wheel(-1.55, 0.7); wheel(-1.55, -0.7);
+
+  carGroup.rotation.x = 0.14;
+  carGroup.rotation.y = 0.6;
+  scene.add(carGroup);
+
+  function resize(){
+    var w = wrap.clientWidth, h = wrap.clientHeight;
+    if(!w || !h) return;
+    renderer.setSize(w, h, false);
+    camera.aspect = w / h;
+    camera.updateProjectionMatrix();
+  }
+
+  var isDragging = false, prevX = 0, targetRotY = carGroup.rotation.y, autoSpeed = 0.0032;
+
+  canvas.addEventListener('pointerdown', function(e){
+    isDragging = true; prevX = e.clientX;
+    try{ canvas.setPointerCapture(e.pointerId); }catch(err){}
+  });
+  window.addEventListener('pointerup', function(){ isDragging = false; });
+  canvas.addEventListener('pointermove', function(e){
+    if(!isDragging) return;
+    var dx = e.clientX - prevX; prevX = e.clientX;
+    targetRotY += dx * 0.01;
+  });
+
+  function animate(){
+    requestAnimationFrame(animate);
+    if(!isDragging){ targetRotY += autoSpeed; }
+    carGroup.rotation.y += (targetRotY - carGroup.rotation.y) * 0.12;
+    renderer.render(scene, camera);
+  }
+
+  window.addEventListener('resize', resize);
+  resize();
+  animate();
+})();
+</script>
+
+</body>
+</html>
