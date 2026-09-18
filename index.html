@@ -381,14 +381,15 @@
   /* ---------- CV BUTTON ---------- */
   .cv-btn{
     display:inline-flex; align-items:center; gap:8px; align-self:flex-start;
-    margin-top:22px; padding:12px 22px; border-radius:6px;
-    font-family:'Inter'; font-weight:700; font-size:0.9rem; text-decoration:none;
-    background:var(--teal); color:var(--white);
-    transition:transform .15s ease, box-shadow .15s ease, background .15s ease;
+    margin-top:22px; padding:6px 12px; border-radius:0;
+    font-family:var(--mono); font-weight:500; font-size:0.8rem; text-decoration:none;
+    background:transparent; color:var(--ice); border:1px solid var(--line-dark);
+    transition:color .15s ease, border-color .15s ease;
   }
-  .cv-btn:hover{transform:translateY(-2px); box-shadow:0 10px 24px rgba(39,18,95,0.25);}
-  .mentor-cv{background:var(--mint); color:var(--navy-deep); margin-top:18px;}
-  .mentor-cv:hover{background:#5cfcc3;}
+  .cv-btn:hover{color:var(--mint); border-color:var(--mint);}
+  .cv-icon{flex:none;}
+  .mentor-cv{background:var(--mint); color:var(--navy-deep); border-color:var(--mint); margin-top:18px;}
+  .mentor-cv:hover{background:#5cfcc3; color:var(--navy-deep);}
 
   /* ---------- MENTOR ---------- */
   .mentor-band{background:var(--navy-deep); color:var(--white); padding:44px 0; position:relative;}
@@ -398,8 +399,9 @@
   .mentor-row p{color:var(--ice); font-size:0.94rem; max-width:640px; margin-bottom:14px;}
   .badge-row{display:flex; gap:8px; flex-wrap:wrap;}
   .badge{
-    font-size:0.75rem; font-weight:600; padding:5px 12px; border-radius:20px;
-    background:rgba(32,128,160,0.24); border:1px solid rgba(32,128,160,0.6); color:var(--ice);
+    padding:5px 12px; border-radius:2px;
+    font-family:var(--mono); font-size:0.75rem; font-weight:500; text-transform:uppercase; letter-spacing:0.02em;
+    background:rgba(255,255,255,0.03); border:1px solid var(--line-dark); color:var(--ice);
   }
 
   /* ---------- CAD / HERRAMIENTAS ---------- */
@@ -486,9 +488,10 @@
     transform:scale(1.02);
   }
   .tier.featured .ribbon{
-    position:absolute; top:-1px; right:18px; background:var(--mint); color:var(--navy-deep);
-    font-size:0.7rem; font-weight:700; letter-spacing:0.04em; text-transform:uppercase;
-    padding:5px 12px; border-radius:0 0 6px 6px;
+    position:absolute; top:-1px; right:18px;
+    background:var(--navy-deep); color:var(--mint);
+    font-family:var(--mono); font-size:0.7rem; font-weight:500; letter-spacing:0.08em; text-transform:uppercase;
+    padding:5px 12px; border:1px solid var(--mint); border-top:none; border-radius:0;
   }
   .tier.featured h3{color:var(--white);}
   .tier.featured .price{color:var(--mint);}
@@ -503,9 +506,10 @@
     position:relative; border:1px solid var(--purple);
   }
   .tier.premium .ribbon{
-    position:absolute; top:-1px; right:18px; background:var(--purple); color:var(--white);
-    font-size:0.7rem; font-weight:700; letter-spacing:0.04em; text-transform:uppercase;
-    padding:5px 12px; border-radius:0 0 6px 6px;
+    position:absolute; top:-1px; right:18px;
+    background:var(--navy-deep); color:var(--ice);
+    font-family:var(--mono); font-size:0.7rem; font-weight:500; letter-spacing:0.08em; text-transform:uppercase;
+    padding:5px 12px; border:1px solid var(--purple); border-top:none; border-radius:0;
   }
   .tier.premium h3{color:var(--white);}
   .tier.premium .price{color:var(--ice);}
@@ -686,7 +690,7 @@
           <span class="member-badge">Directora de escudería e ing. de diseño</span>
         </div>
         <h3>Ariadna Mejía Hernández</h3>
-        <a class="cv-btn" href="https://drive.google.com/file/d/1vVcseQcXGQWL2v5xiMk1wLopQhp4DP7s/view?usp=drive_link" target="_blank" rel="noopener">Ver CV técnico ↗</a>
+        <a class="cv-btn" href="https://drive.google.com/file/d/1vVcseQcXGQWL2v5xiMk1wLopQhp4DP7s/view?usp=drive_link" target="_blank" rel="noopener">Ver CV técnico<svg class="cv-icon" viewBox="0 0 12 12" width="12" height="12" fill="none" stroke="currentColor" stroke-width="1.3"><path d="M4.5 1.5H10.5V7.5"/><path d="M10.5 1.5L1.5 10.5"/></svg></a>
       </div>
 
       <div class="card-reveal member-card c-teal">
@@ -695,7 +699,7 @@
           <span class="member-badge">Ing. Mecánico y de Operaciones</span>
         </div>
         <h3>Unai Bozalongo Valiente</h3>
-        <a class="cv-btn" href="https://drive.google.com/file/d/1i_IsFwTlzdV9ORZlZnu82A09VdbjMjcI/view?usp=drive_link" target="_blank" rel="noopener">Ver CV técnico ↗</a>
+        <a class="cv-btn" href="https://drive.google.com/file/d/1i_IsFwTlzdV9ORZlZnu82A09VdbjMjcI/view?usp=drive_link" target="_blank" rel="noopener">Ver CV técnico<svg class="cv-icon" viewBox="0 0 12 12" width="12" height="12" fill="none" stroke="currentColor" stroke-width="1.3"><path d="M4.5 1.5H10.5V7.5"/><path d="M10.5 1.5L1.5 10.5"/></svg></a>
       </div>
 
       <div class="card-reveal member-card c-purple">
@@ -704,7 +708,7 @@
           <span class="member-badge">Directora creativa e identidad de marca</span>
         </div>
         <h3>María Fernanda Escobar López</h3>
-        <a class="cv-btn" href="https://drive.google.com/file/d/1qccW8wV871Jfrt4iiXEZVuGmmoWDLGpF/view?usp=drive_link" target="_blank" rel="noopener">Ver CV técnico ↗</a>
+        <a class="cv-btn" href="https://drive.google.com/file/d/1qccW8wV871Jfrt4iiXEZVuGmmoWDLGpF/view?usp=drive_link" target="_blank" rel="noopener">Ver CV técnico<svg class="cv-icon" viewBox="0 0 12 12" width="12" height="12" fill="none" stroke="currentColor" stroke-width="1.3"><path d="M4.5 1.5H10.5V7.5"/><path d="M10.5 1.5L1.5 10.5"/></svg></a>
       </div>
 
       <div class="card-reveal member-card c-electric">
@@ -713,7 +717,7 @@
           <span class="member-badge">Ing. de manufactura</span>
         </div>
         <h3>Josué Ulises Gutiérrez Rodríguez</h3>
-        <a class="cv-btn" href="https://drive.google.com/file/d/130ZYlRsIeTAfhnr1l7F4l0F-7mSYwKji/view?usp=drive_link" target="_blank" rel="noopener">Ver CV técnico ↗</a>
+        <a class="cv-btn" href="https://drive.google.com/file/d/130ZYlRsIeTAfhnr1l7F4l0F-7mSYwKji/view?usp=drive_link" target="_blank" rel="noopener">Ver CV técnico<svg class="cv-icon" viewBox="0 0 12 12" width="12" height="12" fill="none" stroke="currentColor" stroke-width="1.3"><path d="M4.5 1.5H10.5V7.5"/><path d="M10.5 1.5L1.5 10.5"/></svg></a>
       </div>
 
       <div class="card-reveal member-card c-teal">
@@ -722,7 +726,7 @@
           <span class="member-badge">Ing. de análisis de datos y desarrollo de software</span>
         </div>
         <h3>Carlo David Serafín González Pacheco</h3>
-        <a class="cv-btn" href="https://drive.google.com/file/d/1KeXEGCWQBprt5_iR433gfYvhZeAIp4nF/view?usp=drive_link" target="_blank" rel="noopener">Ver CV técnico ↗</a>
+        <a class="cv-btn" href="https://drive.google.com/file/d/1KeXEGCWQBprt5_iR433gfYvhZeAIp4nF/view?usp=drive_link" target="_blank" rel="noopener">Ver CV técnico<svg class="cv-icon" viewBox="0 0 12 12" width="12" height="12" fill="none" stroke="currentColor" stroke-width="1.3"><path d="M4.5 1.5H10.5V7.5"/><path d="M10.5 1.5L1.5 10.5"/></svg></a>
       </div>
 
     </div>
@@ -742,7 +746,7 @@
           <span class="badge">Lean Six Sigma Black Belt</span>
           <span class="badge">SolidWorks CSWA / CSWP</span>
         </div>
-        <a class="cv-btn mentor-cv" href="https://drive.google.com/file/d/1I8RPbkDco-DnOVXhY6fJZOL8M37_beMt/view?usp=drive_link" target="_blank" rel="noopener">Ver CV técnico ↗</a>
+        <a class="cv-btn mentor-cv" href="https://drive.google.com/file/d/1I8RPbkDco-DnOVXhY6fJZOL8M37_beMt/view?usp=drive_link" target="_blank" rel="noopener">Ver CV técnico</a>
       </div>
     </div>
   </div>
@@ -782,7 +786,7 @@
       <div class="eyebrow-tag">Presupuesto</div>
       <h2>Desglose real: temporada Regional</h2>
       <p>Esto es lo que cuesta competir en la etapa Regional, y cuánto necesitamos de patrocinios para lograrlo.</p>
-      <p style="margin-top:10px; font-size:0.9rem; color:var(--muted-dark); font-style:italic;">Presupuesto aproximado partiendo desde cero. Los costos son estimaciones logísticas y de manufactura que pueden variar (hacia arriba o hacia abajo) dependiendo de la sede oficial y cotizaciones finales de proveedores.</p>
+      <p style="margin-top:10px; font-size:0.9rem; color:var(--muted-dark); font-style:italic;">Presupuesto aproximado partiendo desde cero. Los costos son estimaciones logísticas y de manufactura que pueden variar dependiendo de la sede oficial y cotizaciones de proveedores.</p>
     </div>
     <div class="budget-box">
       <div class="budget-summary">
