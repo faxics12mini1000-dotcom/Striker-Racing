@@ -9,9 +9,47 @@
 <meta property="og:title" content="Striker Racing · STEM Racing México">
 <meta property="og:description" content="La escudería de Preparatoria Celta en el Desafío STEM Racing México. Súmate como patrocinador.">
 <meta property="og:type" content="website">
+<meta property="og:url" content="https://striker-racing.vercel.app/">
+<meta property="og:image" content="https://striker-racing.vercel.app/logo.png">
+<meta property="og:image:width" content="321">
+<meta property="og:image:height" content="303">
+<meta property="og:locale" content="es_MX">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Striker Racing · STEM Racing México">
+<meta name="twitter:description" content="La escudería de Preparatoria Celta en el Desafío STEM Racing México. Súmate como patrocinador.">
+<meta name="twitter:image" content="https://striker-racing.vercel.app/logo.png">
 <link rel="icon" href="logo.png">
+<link rel="apple-touch-icon" href="logo.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SportsTeam",
+  "name": "Striker Racing",
+  "sport": "STEM Racing (F1 in Schools)",
+  "url": "https://striker-racing.vercel.app/",
+  "logo": "https://striker-racing.vercel.app/logo.png",
+  "description": "Escudería estudiantil de Preparatoria Celta en el Desafío STEM Racing México, temporada 2026-2027.",
+  "location": {
+    "@type": "Place",
+    "address": {
+      "@type": "PostalAddress",
+      "addressLocality": "Querétaro",
+      "addressCountry": "MX"
+    }
+  },
+  "parentOrganization": {
+    "@type": "EducationalOrganization",
+    "name": "Preparatoria Celta",
+    "address": {
+      "@type": "PostalAddress",
+      "addressLocality": "Querétaro",
+      "addressCountry": "MX"
+    }
+  }
+}
+</script>
 <style>
   :root{
     --navy:#27125F;
@@ -31,20 +69,23 @@
     --white:#FFFFFF;
     --line: rgba(39,18,95,0.14);
     --line-dark: rgba(205,222,239,0.18);
+    --mono:'JetBrains Mono', ui-monospace, 'SFMono-Regular', monospace;
+    --glass: rgba(255,255,255,0.03);
+    --glass-strong: rgba(255,255,255,0.06);
   }
   .blueprint{
-    background-color:var(--paper);
+    background-color:var(--navy-deep);
     background-image:
-      linear-gradient(rgba(32,128,160,0.10) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(32,128,160,0.10) 1px, transparent 1px);
+      linear-gradient(rgba(58,247,178,0.07) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(58,247,178,0.07) 1px, transparent 1px);
     background-size:28px 28px;
   }
   *{box-sizing:border-box; margin:0; padding:0;}
   html{scroll-behavior:smooth;}
   body{
     font-family:'Inter', system-ui, sans-serif;
-    color:var(--ink);
-    background:var(--white);
+    color:var(--ice);
+    background:var(--navy-deep);
     line-height:1.55;
     -webkit-font-smoothing:antialiased;
   }
@@ -53,7 +94,7 @@
     font-family:'Oswald', system-ui, sans-serif;
     text-transform:none;
     letter-spacing:0.01em;
-    color:var(--navy);
+    color:var(--white);
   }
   a{color:inherit;}
   img{max-width:100%; display:block;}
@@ -91,7 +132,7 @@
   }
   .brand-mark{height:32px; width:auto; flex:none; object-fit:contain;}
   footer .brand-mark{height:26px;}
-  footer .brand{display:inline-flex; align-items:center; gap:8px; font-size:1rem; color:var(--navy); margin-bottom:6px;}
+  footer .brand{display:inline-flex; align-items:center; gap:8px; font-size:1rem; color:var(--white); margin-bottom:6px;}
   nav ul{list-style:none; display:flex; gap:28px;}
   nav a{font-size:0.92rem; font-weight:600; color:var(--ice); text-decoration:none; position:relative; padding-bottom:2px;}
   nav a::after{
@@ -168,6 +209,19 @@
   }
   #car3d-wrap:active{cursor:grabbing;}
   #car3d{display:block; width:100%; height:100%; position:relative; z-index:1;}
+  .car3d-fallback{
+    display:none; position:absolute; inset:0; z-index:1;
+    align-items:center; justify-content:center;
+  }
+  .car3d-fallback img{
+    width:42%; max-width:180px; filter:drop-shadow(0 0 30px rgba(58,247,178,0.35));
+    animation:fallback-pulse 3.4s ease-in-out infinite;
+  }
+  @keyframes fallback-pulse{
+    0%,100%{ transform:scale(1); opacity:0.92; }
+    50%{ transform:scale(1.035); opacity:1; }
+  }
+  @media (prefers-reduced-motion:reduce){ .car3d-fallback img{animation:none;} }
   .drag-hint{
     text-align:center; font-size:0.78rem; color:var(--muted-dark); margin-top:6px;
     letter-spacing:0.02em;
@@ -212,7 +266,7 @@
     border-top:1px solid rgba(205,222,239,0.22);
   }
   .stat-strip div{padding:18px 20px 0 0;}
-  .stat-num{font-family:'Oswald'; font-size:2rem; color:var(--mint); font-weight:600;}
+  .stat-num{font-family:var(--mono); font-size:1.9rem; color:var(--mint); font-weight:700;}
   .stat-label{font-size:0.82rem; color:var(--muted-dark); margin-top:2px;}
   @media (max-width:700px){
     .stat-strip{grid-template-columns:repeat(2,1fr); row-gap:22px;}
@@ -221,11 +275,11 @@
   /* ---------- SECTION HEAD ---------- */
   .section-head{max-width:640px; margin-bottom:48px;}
   .eyebrow-tag{
-    display:inline-block; font-size:0.76rem; font-weight:700; letter-spacing:0.08em; text-transform:uppercase;
-    color:var(--teal-deep); margin-bottom:12px;
+    display:inline-block; font-family:var(--mono); font-size:0.76rem; font-weight:700; letter-spacing:0.08em; text-transform:uppercase;
+    color:var(--mint); margin-bottom:12px;
   }
   .section-head h2{font-size:clamp(1.8rem,3.4vw,2.5rem); margin-bottom:14px;}
-  .section-head p{color:var(--muted); font-size:1.05rem;}
+  .section-head p{color:var(--muted-dark); font-size:1.05rem;}
   .section-head.on-dark .eyebrow-tag{color:var(--mint);}
   .section-head.on-dark h2{color:var(--white);}
   .section-head.on-dark p{color:var(--muted-dark);}
@@ -258,32 +312,32 @@
   /* ---------- QUIENES SOMOS ---------- */
   .about-grid{display:grid; grid-template-columns:1.1fr 0.9fr; gap:56px; align-items:start;}
   @media (max-width:800px){ .about-grid{grid-template-columns:1fr;} }
-  .about-grid p{color:var(--muted); margin-bottom:16px;}
+  .about-grid p{color:var(--muted-dark); margin-bottom:16px;}
   .fact-card{
-    background:var(--white); border-left:4px solid var(--teal);
-    padding:22px 24px; border-radius:2px; border-top:1px solid var(--line); border-right:1px solid var(--line); border-bottom:1px solid var(--line);
-    box-shadow:0 2px 14px rgba(39,18,95,0.05);
+    background:var(--glass); border-left:3px solid var(--teal);
+    padding:22px 24px; clip-path:polygon(14px 0, 100% 0, 100% 100%, 0 100%, 0 14px);
+    border-top:1px solid var(--line-dark); border-right:1px solid var(--line-dark); border-bottom:1px solid var(--line-dark);
   }
-  .fact-card h3{font-size:1.05rem; margin-bottom:8px; color:var(--navy);}
-  .fact-card p{color:var(--muted); font-size:0.95rem; margin:0;}
+  .fact-card h3{font-size:1.05rem; margin-bottom:8px; color:var(--white);}
+  .fact-card p{color:var(--muted-dark); font-size:0.95rem; margin:0;}
   .fact-card + .fact-card{margin-top:16px;}
 
   /* ---------- TIMELINE ---------- */
   .timeline{
     display:flex; gap:0; overflow-x:auto; padding-bottom:8px;
-    border-top:1px solid var(--line);
+    border-top:1px solid var(--line-dark);
   }
   .tl-step{
     flex:1 0 220px; padding:28px 24px 0 0; position:relative;
   }
   .tl-step::before{
     content:attr(data-n);
-    display:block; font-family:'Oswald'; font-size:1.6rem; color:var(--electric);
-    margin-bottom:10px; font-weight:600;
+    display:block; font-family:var(--mono); font-size:1.6rem; color:var(--mint);
+    margin-bottom:10px; font-weight:700;
   }
-  .tl-step h3{font-size:1.05rem; margin-bottom:6px;}
-  .tl-step p{color:var(--muted); font-size:0.92rem;}
-  .tl-step + .tl-step{border-left:1px solid var(--line); padding-left:24px;}
+  .tl-step h3{font-size:1.05rem; margin-bottom:6px; color:var(--white);}
+  .tl-step p{color:var(--muted-dark); font-size:0.92rem;}
+  .tl-step + .tl-step{border-left:1px solid var(--line-dark); padding-left:24px;}
 
   /* ---------- EQUIPO ---------- */
   .team-grid{
@@ -291,19 +345,19 @@
     margin-top:8px;
   }
   .member-card{
-    background:var(--white); border:1px solid var(--line); border-radius:10px;
+    background:var(--glass); border:1px solid var(--line-dark);
+    clip-path:polygon(16px 0, 100% 0, 100% 100%, 0 100%, 0 16px);
     padding:26px 24px; position:relative; overflow:hidden;
-    box-shadow:0 3px 16px rgba(39,18,95,0.06);
-    transition:transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+    transition:transform .18s ease, background .18s ease, border-color .18s ease;
     display:flex; flex-direction:column;
   }
   .member-card::before{
-    content:""; position:absolute; top:0; left:0; right:0; height:4px;
+    content:""; position:absolute; top:0; left:0; right:0; height:3px;
     background:var(--accent, var(--teal));
   }
   .member-card:hover{
     transform:translateY(-4px);
-    box-shadow:0 14px 30px rgba(39,18,95,0.14);
+    background:var(--glass-strong);
     border-color:var(--accent, var(--teal));
   }
   .member-card.c-teal{--accent:var(--teal);}
@@ -314,8 +368,8 @@
     width:44px; height:44px; flex:none;
     clip-path:polygon(18% 0, 100% 0, 100% 82%, 82% 100%, 0 100%, 0 18%);
     display:flex; align-items:center; justify-content:center;
-    font-family:'Oswald'; font-weight:700; font-size:1.35rem; color:var(--accent, var(--teal));
-    background:var(--paper); border:1.5px solid var(--accent, var(--teal));
+    font-family:var(--mono); font-weight:700; font-size:1.25rem; color:var(--accent, var(--teal));
+    background:var(--glass-strong); border:1.5px solid var(--accent, var(--teal));
   }
   .member-badge{
     display:inline-block; font-size:0.72rem; font-weight:700; letter-spacing:0.02em;
@@ -364,30 +418,32 @@
 
   /* ---------- PRESUPUESTO ---------- */
   .budget-box{
-    background-color:var(--paper);
-    background-image:linear-gradient(rgba(32,128,160,0.10) 1px, transparent 1px), linear-gradient(90deg, rgba(32,128,160,0.10) 1px, transparent 1px);
+    background-color:var(--glass);
+    background-image:linear-gradient(rgba(58,247,178,0.06) 1px, transparent 1px), linear-gradient(90deg, rgba(58,247,178,0.06) 1px, transparent 1px);
     background-size:28px 28px;
-    border:1px solid var(--line); border-top:3px solid var(--electric); border-radius:4px; padding:36px;
+    border:1px solid var(--line-dark); border-top:3px solid var(--mint); padding:36px;
+    clip-path:polygon(20px 0, 100% 0, 100% 100%, 0 100%, 0 20px);
   }
   @media (max-width:700px){ .budget-box{padding:28px 22px;} }
   .budget-summary{
-    padding-bottom:28px; margin-bottom:8px; border-bottom:1px solid var(--line);
+    padding-bottom:28px; margin-bottom:8px; border-bottom:1px solid var(--line-dark);
   }
-  .budget-figure{font-family:'Oswald'; font-size:2.6rem; color:var(--navy); font-weight:600;}
-  .budget-figure-unit{font-size:0.8rem; color:var(--muted); font-family:'Inter'; font-weight:500; margin-left:6px;}
-  .budget-figure-label{font-size:0.86rem; color:var(--muted); margin-top:4px;}
+  .budget-figure{font-family:var(--mono); font-size:2.4rem; color:var(--white); font-weight:700;}
+  .budget-figure-unit{font-size:0.8rem; color:var(--muted-dark); font-family:'Inter'; font-weight:500; margin-left:6px;}
+  .budget-figure-label{font-size:0.86rem; color:var(--muted-dark); margin-top:4px;}
   .budget-list{list-style:none; margin-top:20px;}
   .budget-list li{
     display:flex; justify-content:space-between; gap:16px; padding:10px 0;
-    border-bottom:1px solid var(--line); font-size:0.94rem; color:var(--muted);
+    border-bottom:1px solid var(--line-dark); font-size:0.94rem; color:var(--muted-dark);
   }
-  .budget-list li b{color:var(--navy);}
-  .budget-list li em{font-style:normal; color:var(--muted); opacity:0.8;}
+  .budget-list li b{color:var(--white);}
+  .budget-list li > b{font-family:var(--mono); font-weight:700;}
+  .budget-list li em{font-style:normal; color:var(--muted-dark); opacity:0.8;}
   .budget-note{
-    margin-top:28px; padding:20px 24px; border-radius:4px; font-size:0.92rem; color:var(--muted);
+    margin-top:28px; padding:20px 24px; font-size:0.92rem; color:var(--muted-dark);
     background:rgba(58,247,178,0.08); border:1px solid var(--teal); border-left:4px solid var(--mint);
   }
-  .budget-note b{color:var(--teal-deep);}
+  .budget-note b{color:var(--mint);}
 
   /* ---------- POR QUÉ PATROCINAR ---------- */
   .why-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:28px; margin-bottom:64px;}
@@ -397,31 +453,32 @@
   .why-item.c-purple{--accent:var(--purple);}
   .why-item.c-electric{--accent:var(--electric);}
   .why-item .why-num{
-    font-family:'Oswald'; font-size:1.5rem; font-weight:600; color:var(--accent, var(--teal)); margin-bottom:10px; display:block;
+    font-family:var(--mono); font-size:1.4rem; font-weight:700; color:var(--accent, var(--teal)); margin-bottom:10px; display:block;
   }
-  .why-item h3{font-size:1.1rem; margin-bottom:8px;}
-  .why-item p{color:var(--muted); font-size:0.92rem;}
+  .why-item h3{font-size:1.1rem; margin-bottom:8px; color:var(--white);}
+  .why-item p{color:var(--muted-dark); font-size:0.92rem;}
 
   /* ---------- TIERS / PRICING ---------- */
   .tiers{display:grid; grid-template-columns:repeat(3,1fr); gap:22px;}
   @media (max-width:800px){ .tiers{grid-template-columns:1fr;} }
   .tier{
-    padding:32px 26px; border-radius:12px; background:var(--white);
-    border:1px solid var(--line); display:flex; flex-direction:column;
+    padding:32px 26px; background:var(--glass);
+    clip-path:polygon(18px 0, 100% 0, 100% 100%, 0 100%, 0 18px);
+    border:1px solid var(--line-dark); display:flex; flex-direction:column;
   }
-  .tier h3{font-size:1.3rem; margin-bottom:4px;}
-  .tier .price{font-family:'Oswald'; font-size:1.55rem; color:var(--teal-deep); margin-bottom:6px;}
-  .tier .price-note{font-size:0.8rem; color:var(--muted); margin-bottom:18px;}
+  .tier h3{font-size:1.3rem; margin-bottom:4px; color:var(--white);}
+  .tier .price{font-family:var(--mono); font-size:1.4rem; color:var(--mint); font-weight:700; margin-bottom:6px;}
+  .tier .price-note{font-size:0.8rem; color:var(--muted-dark); margin-bottom:18px;}
   .tier ul{list-style:none; flex:1; margin-bottom:22px;}
-  .tier li{padding:7px 0; font-size:0.92rem; color:var(--muted); padding-left:18px; position:relative;}
+  .tier li{padding:7px 0; font-size:0.92rem; color:var(--muted-dark); padding-left:18px; position:relative;}
   .tier li::before{content:"▸"; position:absolute; left:0; color:var(--teal);}
   .tier-cta{display:flex; gap:8px; flex-wrap:wrap;}
   .tier-cta a{
     flex:1; text-align:center; font-size:0.82rem; font-weight:600; padding:10px 12px;
-    border-radius:5px; text-decoration:none; border:1px solid var(--line); color:var(--navy);
+    text-decoration:none; border:1px solid var(--line-dark); color:var(--white);
     transition:background .15s ease, border-color .15s ease, color .15s ease;
   }
-  .tier-cta a:hover{border-color:var(--teal); color:var(--teal-deep);}
+  .tier-cta a:hover{border-color:var(--teal); color:var(--mint);}
 
   .tier.featured{
     background:var(--navy); color:var(--white); position:relative;
@@ -460,15 +517,15 @@
 
   /* ---------- FAQ ---------- */
   .faq{max-width:760px; margin-top:56px;}
-  .faq details{border-bottom:1px solid var(--line); padding:16px 0;}
+  .faq details{border-bottom:1px solid var(--line-dark); padding:16px 0;}
   .faq summary{
-    cursor:pointer; font-weight:600; color:var(--navy); font-size:1rem;
+    cursor:pointer; font-weight:600; color:var(--white); font-size:1rem;
     list-style:none; display:flex; justify-content:space-between; align-items:center; gap:16px;
   }
   .faq summary::-webkit-details-marker{display:none;}
-  .faq summary::after{content:"+"; font-size:1.3rem; color:var(--teal-deep); font-weight:400; flex:none;}
+  .faq summary::after{content:"+"; font-size:1.3rem; color:var(--mint); font-weight:400; flex:none;}
   .faq details[open] summary::after{content:"–";}
-  .faq p{color:var(--muted); font-size:0.92rem; margin-top:10px;}
+  .faq p{color:var(--muted-dark); font-size:0.92rem; margin-top:10px;}
 
   /* ---------- CONTACTO ---------- */
   .contact-band{
@@ -487,7 +544,7 @@
   .contact-links a.primary{background:var(--mint); color:var(--navy-deep); border-color:var(--mint);}
   .contact-links a.primary:hover{background:#5cfcc3;}
 
-  footer{padding:28px 0; text-align:center; color:var(--muted); font-size:0.85rem; background:var(--paper);}
+  footer{padding:28px 0; text-align:center; color:var(--muted-dark); font-size:0.85rem; background:var(--navy-deep); border-top:1px solid var(--line-dark);}
 </style>
 </head>
 <body>
@@ -527,8 +584,11 @@
       </div>
     </div>
     <div class="hero-visual">
-      <div id="car3d-wrap"><canvas id="car3d"></canvas></div>
-      <div class="drag-hint">Arrastra para girar el modelo</div>
+      <div id="car3d-wrap">
+        <canvas id="car3d"></canvas>
+        <div class="car3d-fallback" id="car3dFallback"><img src="logo.png" alt="Striker Racing" width="180" height="170"></div>
+      </div>
+      <div class="drag-hint" id="dragHint">Arrastra para girar el modelo</div>
     </div>
   </div>
 </header>
@@ -722,7 +782,7 @@
       <div class="eyebrow-tag">Presupuesto</div>
       <h2>Desglose real: temporada Regional</h2>
       <p>Esto es lo que cuesta competir en la etapa Regional, y cuánto necesitamos de patrocinios para lograrlo.</p>
-      <p style="margin-top:10px; font-size:0.9rem; color:var(--muted); font-style:italic;">Presupuesto aproximado partiendo desde cero. Los costos son estimaciones logísticas y de manufactura que pueden variar (hacia arriba o hacia abajo) dependiendo de la sede oficial y cotizaciones finales de proveedores.</p>
+      <p style="margin-top:10px; font-size:0.9rem; color:var(--muted-dark); font-style:italic;">Presupuesto aproximado partiendo desde cero. Los costos son estimaciones logísticas y de manufactura que pueden variar (hacia arriba o hacia abajo) dependiendo de la sede oficial y cotizaciones finales de proveedores.</p>
     </div>
     <div class="budget-box">
       <div class="budget-summary">
@@ -926,7 +986,16 @@
 (function(){
   var wrap = document.getElementById('car3d-wrap');
   var canvas = document.getElementById('car3d');
-  if(!wrap || !canvas || typeof THREE === 'undefined') return;
+  var fallback = document.getElementById('car3dFallback');
+  var dragHint = document.getElementById('dragHint');
+
+  function showFallback(){
+    if(canvas) canvas.style.display = 'none';
+    if(fallback) fallback.style.display = 'flex';
+    if(dragHint) dragHint.style.display = 'none';
+  }
+
+  if(!wrap || !canvas || typeof THREE === 'undefined'){ showFallback(); return; }
 
   var NAVY = 0x27125F, PURPLE = 0x7138D4, MINT = 0x3AF7B2, ELECTRIC = 0x2020E0, TEAL = 0x2080A0;
 
@@ -935,7 +1004,13 @@
   camera.position.set(4.6, 2.5, 5.4);
   camera.lookAt(0, 0.35, 0);
 
-  var renderer = new THREE.WebGLRenderer({canvas:canvas, antialias:true, alpha:true});
+  var renderer;
+  try{
+    renderer = new THREE.WebGLRenderer({canvas:canvas, antialias:true, alpha:true});
+  }catch(err){
+    showFallback();
+    return;
+  }
   renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
 
   scene.add(new THREE.AmbientLight(0x8899bb, 0.7));
@@ -1000,7 +1075,9 @@
     camera.updateProjectionMatrix();
   }
 
-  var isDragging = false, prevX = 0, targetRotY = carGroup.rotation.y, autoSpeed = 0.0032;
+  var prefersReducedMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var isDragging = false, prevX = 0, targetRotY = carGroup.rotation.y;
+  var autoSpeed = prefersReducedMotion ? 0 : 0.0032;
 
   canvas.addEventListener('pointerdown', function(e){
     isDragging = true; prevX = e.clientX;
