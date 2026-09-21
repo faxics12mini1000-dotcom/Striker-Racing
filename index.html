@@ -216,8 +216,11 @@
   .hud-diagram{width:100%; height:auto; display:block; margin:6px 0 16px;}
   .hud-diagram .cad-line{fill:none; stroke:var(--teal); stroke-width:1;}
   .hud-diagram .cad-fill{fill:rgba(32,128,160,0.14); stroke:var(--mint); stroke-width:1.2;}
-  .hud-diagram .cad-dim{stroke:var(--ice-dim); stroke-width:0.6; stroke-dasharray:3 3;}
+  .hud-diagram .cad-dim{fill:none; stroke:var(--ice-dim); stroke-width:0.6; stroke-dasharray:3 3;}
+  .hud-diagram .cad-dimline{fill:none; stroke:var(--ice-dim); stroke-width:0.6;}
   .hud-diagram .cad-label{font-family:var(--mono); font-size:6px; fill:var(--ice-dim); letter-spacing:0.02em;}
+  .hud-diagram .cad-tag{font-family:var(--mono); font-size:6px; fill:var(--mint); letter-spacing:0.05em; text-transform:uppercase;}
+  .hud-diagram .cad-node{fill:var(--mint);}
   .hud-readout{
     display:grid; grid-template-columns:1fr 1fr; gap:12px 18px;
     border-top:1px solid var(--line); padding-top:14px;
@@ -352,7 +355,7 @@
 
   /* ---------- EQUIPO ---------- */
   .team-grid{
-    display:grid; grid-template-columns:repeat(auto-fit,minmax(250px,1fr)); gap:22px;
+    display:flex; flex-wrap:wrap; justify-content:center; gap:22px;
     margin-top:8px;
   }
   .member-card{
@@ -361,6 +364,7 @@
     padding:26px 24px; position:relative; overflow:hidden;
     transition:transform .18s ease, background .18s ease, border-color .18s ease;
     display:flex; flex-direction:column;
+    flex:1 1 220px; max-width:300px;
   }
   .member-card::before{
     content:""; position:absolute; top:0; left:0; right:0; height:3px;
@@ -503,7 +507,8 @@
 
   .tier.featured{
     background:rgba(58,247,178,0.06); color:var(--ice); position:relative;
-    border:1.5px solid var(--mint);
+    border:2px solid var(--mint);
+    box-shadow:0 0 28px rgba(58,247,178,0.16), inset 0 0 24px rgba(58,247,178,0.05);
   }
   .tier.featured .ribbon{
     position:absolute; top:-1px; right:18px;
@@ -574,7 +579,7 @@
       <h1>Presentando a <em>Striker Racing</em>.</h1>
       <p class="lead">Diseñamos, fabricamos y corremos un auto de Fórmula 1 a escala en el Desafío STEM Racing México (antes F1 in Schools), la iniciativa educativa oficial de la Fórmula 1®. Meta de temporada: destacar en la fase regional y asegurar la clasificación a la Final Nacional de STEM Racing México 2027, con proyección a la Final Mundial FIA.</p>
       <div class="cta-row">
-        <a class="btn" href="#patrocinios">Ver niveles de patrocinio</a>
+        <a class="btn btn-solid" href="#patrocinios">Ver niveles de patrocinio</a>
         <a class="btn" href="#contacto">Contactar al equipo</a>
       </div>
       <div class="stat-strip">
@@ -590,16 +595,71 @@
           <span>FICHA TÉCNICA · MONOPLAZA F1SRMX-01</span>
           <span class="hud-live">ACTIVO</span>
         </div>
-        <svg class="hud-diagram" viewBox="0 0 320 140" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Diagrama esquemático del monoplaza con cotas técnicas">
-          <path class="cad-fill" d="M18 82 L46 82 L58 68 L108 62 L150 58 L214 58 L238 66 L260 82 L296 82 L296 90 L18 90 Z"/>
-          <path class="cad-line" d="M108 62 L100 82"/>
-          <path class="cad-line" d="M214 58 L214 82"/>
-          <circle class="cad-fill" cx="70" cy="94" r="12"/>
-          <circle class="cad-fill" cx="250" cy="94" r="12"/>
-          <line class="cad-dim" x1="18" y1="108" x2="296" y2="108"/>
-          <line class="cad-dim" x1="18" y1="100" x2="18" y2="112"/>
-          <line class="cad-dim" x1="296" y1="100" x2="296" y2="112"/>
-          <text class="cad-label" x="130" y="122">LONGITUD 210.0 mm</text>
+        <svg class="hud-diagram" viewBox="0 0 434 234" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Plano técnico lateral del monoplaza con anatomía reglamentaria y cotas: longitud total 210 mm, batalla 130 mm, altura máxima 65 mm, cámara CO2 diámetro 19 mm">
+
+          <!-- Etiqueta de concepto -->
+          <text class="cad-tag" x="8" y="13">Concepto preliminar v0 · Especificación desarrollo</text>
+
+          <!-- Callout cámara CO2 -->
+          <text class="cad-label" x="250" y="13">CÁMARA CO₂ Ø 19.0 mm</text>
+          <path class="cad-dim" d="M300 17 L322 86"/>
+          <circle class="cad-node" cx="322" cy="88" r="2"/>
+
+          <!-- Silueta del cuerpo (bloque único, esbelto en la sección media) -->
+          <path class="cad-fill" d="M34 130 L34 120 L64 104 L118 90 L160 85 L210 88 L258 93 L292 97 L292 130 Z"/>
+
+          <!-- Cámara trasera cilíndrica del cartucho CO2 -->
+          <rect class="cad-fill" x="284" y="82" width="64" height="36" rx="18"/>
+          <ellipse class="cad-line" cx="346" cy="100" rx="5" ry="18"/>
+          <line class="cad-dimline" x1="346" y1="82" x2="346" y2="118"/>
+          <line class="cad-dimline" x1="343" y1="82" x2="349" y2="82"/>
+          <line class="cad-dimline" x1="343" y1="118" x2="349" y2="118"/>
+
+          <!-- Soporte trasero hacia el alerón -->
+          <rect class="cad-fill" x="345" y="100" width="20" height="18" rx="3"/>
+          <line class="cad-line" x1="352" y1="50" x2="352" y2="100"/>
+          <line class="cad-line" x1="360" y1="50" x2="360" y2="100"/>
+
+          <!-- Alerón trasero elevado, plano fino -->
+          <rect class="cad-fill" x="340" y="45" width="44" height="5"/>
+
+          <!-- Alerón delantero bajo con endplates -->
+          <rect class="cad-fill" x="8" y="105" width="4" height="30"/>
+          <rect class="cad-fill" x="8" y="118" width="50" height="4"/>
+          <rect class="cad-fill" x="54" y="105" width="4" height="30"/>
+
+          <!-- Ruedas con ejes cilíndricos expuestos -->
+          <line class="cad-line" x1="66" y1="140" x2="110" y2="140"/>
+          <circle class="cad-fill" cx="88" cy="140" r="14"/>
+          <circle class="cad-line" cx="88" cy="140" r="5"/>
+          <line class="cad-line" x1="278" y1="140" x2="322" y2="140"/>
+          <circle class="cad-fill" cx="300" cy="140" r="14"/>
+          <circle class="cad-line" cx="300" cy="140" r="5"/>
+
+          <!-- Armellas y línea guía de nylon -->
+          <circle class="cad-line" cx="52" cy="131" r="2.5"/>
+          <circle class="cad-line" cx="270" cy="131" r="2.5"/>
+          <path class="cad-dim" d="M52 131 L52 136 L270 136 L270 131"/>
+          <line class="cad-dim" x1="161" y1="136" x2="161" y2="190"/>
+          <text class="cad-label" x="161" y="200" text-anchor="middle">LÍNEA GUÍA / ARMELLAS</text>
+
+          <!-- Cota: batalla (distancia entre ejes) -->
+          <line class="cad-dimline" x1="88" y1="164" x2="300" y2="164"/>
+          <line class="cad-dimline" x1="88" y1="160" x2="88" y2="168"/>
+          <line class="cad-dimline" x1="300" y1="160" x2="300" y2="168"/>
+          <text class="cad-label" x="194" y="178" text-anchor="middle">BATALLA: 130.0 mm</text>
+
+          <!-- Cota: longitud total -->
+          <line class="cad-dimline" x1="8" y1="214" x2="396" y2="214"/>
+          <line class="cad-dimline" x1="8" y1="210" x2="8" y2="218"/>
+          <line class="cad-dimline" x1="396" y1="210" x2="396" y2="218"/>
+          <text class="cad-label" x="202" y="228" text-anchor="middle">LONGITUD TOTAL: 210.0 mm</text>
+
+          <!-- Cota: altura máxima -->
+          <line class="cad-dimline" x1="412" y1="45" x2="412" y2="154"/>
+          <line class="cad-dimline" x1="408" y1="45" x2="416" y2="45"/>
+          <line class="cad-dimline" x1="408" y1="154" x2="416" y2="154"/>
+          <text class="cad-label" x="424" y="100" text-anchor="middle" transform="rotate(-90 424 100)">ALTURA MÁX: 65.0 mm</text>
         </svg>
         <dl class="hud-readout">
           <div><dt>Longitud total</dt><dd>210.0 mm</dd></div>
