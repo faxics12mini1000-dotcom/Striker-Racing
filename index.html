@@ -52,29 +52,28 @@
 </script>
 <style>
   :root{
-    --purple:#7138D4;
-    --ice:#CDDEEF;
-    --teal:#2080A0;
-    --navy-deep:#071B33;
-    --navy-deep-2:#0A1424;
-    --mint:#3AF7B2;
-    --electric:#2020E0;
-    --surface:#0E223D;
-    --border-fine:#183969;
+    /* Paleta oficial de la escudería */
+    --navy-deep:#071B33;   /* fondo primario */
+    --surface:#0E223D;     /* tarjetas y paneles */
+    --border-fine:#183969; /* bordes */
+    --purple:#7137D4;      /* identidad de marca (morado celta) */
+    --emerald:#12B866;     /* énfasis positivo / acento deportivo */
+    --ice:#CDDEEF;         /* texto y datos */
+    --lime:#C8FF32;        /* detalle mínimo */
 
     --mono:'JetBrains Mono', ui-monospace, 'SFMono-Regular', monospace;
 
-    /* opacities of the palette above only — no new hues */
-    --line: rgba(32,128,160,0.32);
-    --line-soft: rgba(32,128,160,0.16);
+    /* opacidades de la paleta anterior — sin tonos nuevos */
+    --line: #183969;
+    --line-soft: rgba(24,57,105,0.55);
     --ice-dim: rgba(205,222,239,0.62);
-    --card-hover: rgba(32,128,160,0.08);
+    --card-hover: rgba(113,55,212,0.10);
   }
   .blueprint{
     background-color:var(--navy-deep);
     background-image:
-      linear-gradient(rgba(58,247,178,0.07) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(58,247,178,0.07) 1px, transparent 1px);
+      linear-gradient(rgba(24,57,105,0.45) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(24,57,105,0.45) 1px, transparent 1px);
     background-size:28px 28px;
   }
   *{box-sizing:border-box; margin:0; padding:0;}
@@ -131,7 +130,7 @@
   nav ul{list-style:none; display:flex; gap:28px;}
   nav a{font-size:0.92rem; font-weight:600; color:var(--ice); text-decoration:none; position:relative; padding-bottom:2px;}
   nav a::after{
-    content:""; position:absolute; left:0; right:100%; bottom:-3px; height:2px; background:var(--mint);
+    content:""; position:absolute; left:0; right:100%; bottom:-3px; height:2px; background:var(--emerald);
     transition:right .18s ease;
   }
   nav a:hover{color:var(--ice);}
@@ -159,7 +158,7 @@
   .hero{
     position:relative;
     background:
-      radial-gradient(circle at 82% 12%, rgba(32,32,224,0.28) 0%, transparent 45%),
+      radial-gradient(circle at 82% 12%, rgba(113,55,212,0.22) 0%, transparent 45%),
       var(--navy-deep);
     color:var(--ice);
     padding:110px 0 140px;
@@ -170,21 +169,9 @@
     content:"";
     position:absolute; inset:0;
     background-image:
-      linear-gradient(rgba(32,128,160,0.14) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(32,128,160,0.14) 1px, transparent 1px);
+      linear-gradient(rgba(24,57,105,0.5) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(24,57,105,0.5) 1px, transparent 1px);
     background-size:32px 32px;
-    pointer-events:none;
-  }
-  .hero::after{
-    content:"";
-    position:absolute; right:-10%; top:10%;
-    width:60%; height:220%;
-    background:repeating-linear-gradient(
-      100deg,
-      rgba(58,247,178,0.14) 0px, rgba(58,247,178,0.14) 3px,
-      transparent 3px, transparent 60px
-    );
-    transform:rotate(8deg);
     pointer-events:none;
   }
   .hero-grid{
@@ -195,59 +182,52 @@
   .hero-inner{max-width:600px;}
   .hero-visual{position:relative;}
 
-  /* ---------- BLUEPRINT HUD (ficha técnica del monoplaza) ---------- */
+  /* ---------- FICHA TÉCNICA REGLAMENTARIA (paddock spec sheet) ---------- */
   .hud-panel{
-    position:relative; border:1px solid var(--teal);
-    background-color:var(--surface);
-    background-image:
-      linear-gradient(rgba(32,128,160,0.16) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(32,128,160,0.16) 1px, transparent 1px);
-    background-size:18px 18px;
-    clip-path:polygon(24px 0, 100% 0, 100% calc(100% - 24px), calc(100% - 24px) 100%, 0 100%, 0 24px);
-    padding:22px 22px 18px;
+    position:relative;
+    background:var(--surface);
+    border:1px solid var(--border-fine); border-top:3px solid var(--purple);
+    padding:22px 24px 8px;
   }
   .hud-head{
-    display:flex; justify-content:space-between; align-items:center;
-    font-family:var(--mono); font-size:0.72rem; letter-spacing:0.06em; text-transform:uppercase;
-    color:var(--ice-dim); border-bottom:1px solid var(--line); padding-bottom:10px; margin-bottom:14px;
+    display:flex; align-items:flex-start; gap:10px;
+    font-family:var(--mono); font-size:0.72rem; font-weight:500; line-height:1.5;
+    letter-spacing:0.06em; text-transform:uppercase; color:var(--ice);
+    border-bottom:1px solid var(--border-fine); padding-bottom:14px;
   }
-  .hud-head .hud-live{color:var(--mint);}
-  .hud-head .hud-live::before{content:"●"; margin-right:6px; font-size:0.6rem;}
-  .hud-diagram{width:100%; height:auto; display:block; margin:6px 0 16px;}
-  .hud-diagram .cad-line{fill:none; stroke:var(--teal); stroke-width:1;}
-  .hud-diagram .cad-fill{fill:rgba(32,128,160,0.14); stroke:var(--mint); stroke-width:1.2;}
-  .hud-diagram .cad-dim{fill:none; stroke:var(--ice-dim); stroke-width:0.6; stroke-dasharray:3 3;}
-  .hud-diagram .cad-dimline{fill:none; stroke:var(--ice-dim); stroke-width:0.6;}
-  .hud-diagram .cad-label{font-family:var(--mono); font-size:6px; fill:var(--ice-dim); letter-spacing:0.02em;}
-  .hud-diagram .cad-tag{font-family:var(--mono); font-size:6px; fill:var(--mint); letter-spacing:0.05em; text-transform:uppercase;}
-  .hud-diagram .cad-node{fill:var(--mint);}
-  .hud-readout{
-    display:grid; grid-template-columns:1fr 1fr; gap:12px 18px;
-    border-top:1px solid var(--line); padding-top:14px;
+  .hud-head::before{content:""; width:6px; height:6px; flex:none; margin-top:0.5em; background:var(--lime);}
+  .hud-readout{margin:0;}
+  .hud-readout > div{
+    display:flex; justify-content:space-between; align-items:baseline; gap:20px;
+    padding:14px 0; border-bottom:1px solid var(--border-fine);
   }
+  .hud-readout > div:last-child{border-bottom:none;}
   .hud-readout dt{
-    font-family:var(--mono); font-size:0.66rem; color:var(--ice-dim); text-transform:uppercase; letter-spacing:0.04em;
+    font-family:var(--mono); font-size:0.7rem; color:var(--ice-dim); text-transform:uppercase; letter-spacing:0.05em;
   }
-  .hud-readout dd{font-family:var(--mono); font-size:0.94rem; color:var(--mint); font-weight:700; margin-top:2px;}
-  .hud-readout .hud-full{grid-column:1/-1;}
-  @media (max-width:900px){ .hud-panel{max-width:460px; margin:0 auto;} }
+  .hud-readout dd{font-family:var(--mono); font-size:0.94rem; color:var(--ice); font-weight:700; text-align:right;}
+  @media (max-width:900px){ .hud-panel{max-width:520px; margin:0 auto;} }
+  @media (max-width:420px){
+    .hud-readout > div{flex-direction:column; gap:4px;}
+    .hud-readout dd{text-align:left;}
+  }
   .kicker{
     display:inline-flex; align-items:center; gap:8px;
     font-family:var(--mono); font-weight:500; font-size:0.78rem; color:var(--ice);
     text-transform:uppercase; letter-spacing:0.04em;
     margin-bottom:16px; padding:7px 14px; border-radius:0;
-    background:rgba(32,128,160,0.16); border:1px solid var(--teal);
+    background:rgba(113,55,212,0.14); border:1px solid var(--purple);
   }
-  .kicker::before{content:""; width:6px; height:6px; flex:none; background:var(--mint);}
+  .kicker::before{content:""; width:6px; height:6px; flex:none; background:var(--lime);}
   .hero h1{
     font-size:clamp(2.4rem, 5.5vw, 4rem);
     color:var(--ice);
-    line-height:1.04;
+    line-height:1.06;
     margin-bottom:22px;
   }
   .hero h1 em{
     font-style:normal;
-    color:var(--mint);
+    color:var(--emerald);
   }
   .hero p.lead{
     font-size:1.15rem; color:var(--ice); max-width:560px; margin-bottom:36px;
@@ -257,21 +237,21 @@
     display:inline-block; padding:13px 26px;
     clip-path:polygon(10px 0, 100% 0, 100% 100%, calc(100% - 10px) 100%, 0 100%, 0 10px);
     font-family:var(--mono); font-weight:500; font-size:0.86rem; letter-spacing:0.02em; text-transform:uppercase;
-    text-decoration:none; background:transparent; color:var(--mint); border:1px solid var(--mint);
-    transition:background .15s ease, color .15s ease;
+    text-decoration:none; background:transparent; color:var(--ice); border:1px solid var(--purple);
+    transition:background .15s ease, border-color .15s ease;
   }
-  .btn:hover{background:var(--mint); color:var(--navy-deep);}
-  .btn.btn-solid{background:var(--mint); color:var(--navy-deep); border-color:var(--mint);}
-  .btn.btn-solid:hover{background:transparent; color:var(--mint);}
+  .btn:hover{background:var(--purple);}
+  .btn.btn-solid{background:var(--emerald); color:#fff; border-color:var(--emerald); font-weight:700;}
+  .btn.btn-solid:hover{background:var(--emerald); filter:brightness(0.9);}
 
   .stat-strip{
     position:relative; z-index:2;
-    display:grid; grid-template-columns:repeat(4,1fr);
-    gap:0; margin-top:64px; max-width:760px;
+    display:grid; grid-template-columns:repeat(3,1fr);
+    gap:0; margin-top:64px; max-width:600px;
     border-top:1px solid var(--line);
   }
-  .stat-strip div{padding:18px 20px 0 0;}
-  .stat-num{font-family:var(--mono); font-size:1.9rem; color:var(--mint); font-weight:700;}
+  .stat-strip > div{padding:18px 20px 0 0;}
+  .stat-num{font-family:var(--mono); font-size:1.9rem; color:var(--emerald); font-weight:700;}
   .stat-label{font-size:0.82rem; color:var(--ice-dim); margin-top:2px;}
   @media (max-width:700px){
     .stat-strip{grid-template-columns:repeat(2,1fr); row-gap:22px;}
@@ -281,11 +261,11 @@
   .section-head{max-width:640px; margin-bottom:48px;}
   .eyebrow-tag{
     display:inline-block; font-family:var(--mono); font-size:0.76rem; font-weight:700; letter-spacing:0.08em; text-transform:uppercase;
-    color:var(--mint); margin-bottom:12px;
+    color:var(--emerald); margin-bottom:12px;
   }
   .section-head h2{font-size:clamp(1.8rem,3.4vw,2.5rem); margin-bottom:14px;}
   .section-head p{color:var(--ice-dim); font-size:1.05rem;}
-  .section-head.on-dark .eyebrow-tag{color:var(--mint);}
+  .section-head.on-dark .eyebrow-tag{color:var(--emerald);}
   .section-head.on-dark h2{color:var(--ice);}
   .section-head.on-dark p{color:var(--ice-dim);}
   .section-head.center{margin-left:auto; margin-right:auto; text-align:center;}
@@ -296,7 +276,7 @@
     font-family:var(--mono); font-size:0.8rem; font-weight:500; text-decoration:none;
     transition:border-color .15s ease, color .15s ease;
   }
-  .dossier-btn:hover{border-color:var(--mint); color:var(--mint);}
+  .dossier-btn:hover{border-color:var(--emerald); color:var(--emerald);}
 
   /* ---------- MISIÓN / VISIÓN ---------- */
   .mission-band{
@@ -304,23 +284,18 @@
     color:var(--ice); padding:80px 0; position:relative; overflow:hidden;
     border-top:1px solid var(--line); border-bottom:1px solid var(--line);
   }
-  .mission-band::after{
-    content:""; position:absolute; left:-8%; bottom:-30%; width:50%; height:140%;
-    background:repeating-linear-gradient(100deg, rgba(58,247,178,0.10) 0px, rgba(58,247,178,0.10) 2px, transparent 2px, transparent 46px);
-    transform:rotate(-6deg); pointer-events:none;
-  }
   .mission-grid{position:relative; z-index:1; display:grid; grid-template-columns:1fr 1fr; gap:48px;}
   @media (max-width:800px){ .mission-grid{grid-template-columns:1fr; gap:32px;} }
   .mission-item .eyebrow{
     font-size:0.8rem; font-weight:700; letter-spacing:0.06em; text-transform:uppercase;
-    color:var(--mint); margin-bottom:10px;
+    color:var(--emerald); margin-bottom:10px;
   }
   .mission-item h3{color:var(--ice); font-size:1.5rem; margin-bottom:12px;}
   .mission-item p{color:var(--ice); font-size:1rem;}
   .value-row{position:relative; z-index:1; display:flex; gap:10px; flex-wrap:wrap; margin-top:32px;}
   .value-chip{
     font-family:var(--mono); font-size:0.78rem; font-weight:500; padding:7px 14px; border-radius:0;
-    background:transparent; border:1px solid var(--mint); color:var(--ice);
+    background:transparent; border:1px solid var(--border-fine); color:var(--ice);
   }
 
   /* ---------- QUIENES SOMOS ---------- */
@@ -328,7 +303,7 @@
   @media (max-width:800px){ .about-grid{grid-template-columns:1fr;} }
   .about-grid p{color:var(--ice-dim); margin-bottom:16px;}
   .fact-card{
-    background:var(--surface); border-left:3px solid var(--teal);
+    background:var(--surface); border-left:3px solid var(--purple);
     padding:22px 24px; clip-path:polygon(14px 0, 100% 0, 100% 100%, 0 100%, 0 14px);
     border-top:1px solid var(--border-fine); border-right:1px solid var(--border-fine); border-bottom:1px solid var(--border-fine);
   }
@@ -346,7 +321,7 @@
   }
   .tl-step::before{
     content:attr(data-n);
-    display:block; font-family:var(--mono); font-size:1.6rem; color:var(--mint);
+    display:block; font-family:var(--mono); font-size:1.6rem; color:var(--emerald);
     margin-bottom:10px; font-weight:700;
   }
   .tl-step h3{font-size:1.05rem; margin-bottom:6px; color:var(--ice);}
@@ -368,28 +343,25 @@
   }
   .member-card::before{
     content:""; position:absolute; top:0; left:0; right:0; height:3px;
-    background:var(--accent, var(--teal));
+    background:var(--purple);
   }
   .member-card:hover{
     transform:translateY(-4px);
     background:var(--card-hover);
-    border-color:var(--accent, var(--teal));
+    border-color:var(--purple);
   }
-  .member-card.c-teal{--accent:var(--teal);}
-  .member-card.c-purple{--accent:var(--purple);}
-  .member-card.c-electric{--accent:var(--electric);}
   .member-top{display:flex; align-items:center; gap:14px; margin-bottom:16px;}
   .member-number{
     width:44px; height:44px; flex:none;
     clip-path:polygon(18% 0, 100% 0, 100% 82%, 82% 100%, 0 100%, 0 18%);
     display:flex; align-items:center; justify-content:center;
-    font-family:var(--mono); font-weight:700; font-size:1.25rem; color:var(--accent, var(--teal));
-    background:var(--card-hover); border:1.5px solid var(--accent, var(--teal));
+    font-family:var(--mono); font-weight:700; font-size:1.25rem; color:var(--ice);
+    background:var(--card-hover); border:1.5px solid var(--purple);
   }
   .member-badge{
     display:inline-block; font-size:0.72rem; font-weight:700; letter-spacing:0.02em;
     padding:5px 12px; color:var(--ice); line-height:1.3;
-    background:var(--accent, var(--teal));
+    background:var(--purple);
     clip-path:polygon(8px 0, 100% 0, 100% 100%, 0 100%, 0 8px);
   }
   .member-card h3{font-size:1.12rem; margin-bottom:4px; line-height:1.25;}
@@ -398,24 +370,24 @@
     display:inline-flex; align-items:center; gap:8px; align-self:flex-start;
     margin-top:22px; padding:8px 14px; border-radius:0;
     font-family:var(--mono); font-weight:500; font-size:0.8rem; text-decoration:none;
-    background:transparent; color:var(--mint); border:1px solid var(--mint);
+    background:transparent; color:var(--emerald); border:1px solid var(--emerald);
     transition:background .15s ease, color .15s ease;
   }
-  .cv-btn:hover{background:var(--mint); color:var(--navy-deep);}
+  .cv-btn:hover{background:var(--emerald); color:#fff;}
   .cv-icon{flex:none;}
   .mentor-cv{margin-top:18px;}
 
   /* ---------- MENTOR ---------- */
   .mentor-band{background:var(--navy-deep); color:var(--ice); padding:44px 0; position:relative;}
-  .mentor-row{border-left:3px solid var(--mint); padding-left:24px;}
-  .mentor-role{font-size:0.8rem; font-weight:600; color:var(--mint); text-transform:uppercase; letter-spacing:0.04em; margin-bottom:4px;}
+  .mentor-row{border-left:3px solid var(--purple); padding-left:24px;}
+  .mentor-role{font-size:0.8rem; font-weight:600; color:var(--emerald); text-transform:uppercase; letter-spacing:0.04em; margin-bottom:4px;}
   .mentor-row h3{color:var(--ice); font-size:1.3rem; margin-bottom:6px;}
   .mentor-row p{color:var(--ice); font-size:0.94rem; max-width:640px; margin-bottom:14px;}
   .badge-row{display:flex; gap:8px; flex-wrap:wrap;}
   .badge{
     padding:5px 12px; border-radius:0;
     font-family:var(--mono); font-size:0.75rem; font-weight:500; text-transform:uppercase; letter-spacing:0.02em;
-    background:transparent; border:1px solid var(--teal); color:var(--ice);
+    background:transparent; border:1px solid var(--border-fine); color:var(--ice);
   }
 
   /* ---------- CAD / HERRAMIENTAS ---------- */
@@ -428,16 +400,14 @@
   .tool h3{color:var(--ice); font-size:1.1rem; margin-bottom:8px; display:flex; align-items:center; gap:10px;}
   .tool h3 .tag{
     font-family:var(--mono); font-size:0.68rem; font-weight:700; padding:3px 8px; border-radius:0;
-    background:var(--mint); color:var(--navy-deep);
+    background:var(--emerald); color:var(--navy-deep);
   }
   .tool p{color:var(--ice-dim); font-size:0.92rem;}
 
   /* ---------- PRESUPUESTO ---------- */
   .budget-box{
     background-color:var(--surface);
-    background-image:linear-gradient(rgba(58,247,178,0.06) 1px, transparent 1px), linear-gradient(90deg, rgba(58,247,178,0.06) 1px, transparent 1px);
-    background-size:28px 28px;
-    border:1px solid var(--border-fine); border-top:3px solid var(--mint); padding:36px;
+    border:1px solid var(--border-fine); border-top:3px solid var(--purple); padding:36px;
     clip-path:polygon(20px 0, 100% 0, 100% 100%, 0 100%, 0 20px);
   }
   @media (max-width:700px){ .budget-box{padding:28px 22px;} }
@@ -457,19 +427,16 @@
   .budget-list li em{font-style:normal; color:var(--ice-dim); opacity:0.8;}
   .budget-note{
     margin-top:28px; padding:20px 24px; font-size:0.92rem; color:var(--ice-dim);
-    background:rgba(58,247,178,0.08); border:1px solid var(--teal); border-left:4px solid var(--mint);
+    background:rgba(113,55,212,0.10); border:1px solid var(--border-fine); border-left:4px solid var(--purple);
   }
-  .budget-note b{color:var(--mint);}
+  .budget-note b{color:var(--emerald);}
 
   /* ---------- POR QUÉ PATROCINAR ---------- */
   .why-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:28px; margin-bottom:64px;}
   @media (max-width:800px){ .why-grid{grid-template-columns:1fr;} }
-  .why-item{padding-top:20px; border-top:3px solid var(--accent, var(--teal)); position:relative;}
-  .why-item.c-teal{--accent:var(--teal);}
-  .why-item.c-purple{--accent:var(--purple);}
-  .why-item.c-electric{--accent:var(--electric);}
+  .why-item{padding-top:20px; border-top:3px solid var(--purple); position:relative;}
   .why-item .why-num{
-    font-family:var(--mono); font-size:1.4rem; font-weight:700; color:var(--accent, var(--teal)); margin-bottom:10px; display:block;
+    font-family:var(--mono); font-size:1.4rem; font-weight:700; color:var(--emerald); margin-bottom:10px; display:block;
   }
   .why-item h3{font-size:1.1rem; margin-bottom:8px; color:var(--ice);}
   .why-item p{color:var(--ice-dim); font-size:0.92rem;}
@@ -486,16 +453,16 @@
     font-family:var(--mono); font-size:0.7rem; color:var(--ice-dim); text-transform:uppercase; letter-spacing:0.04em; margin-bottom:10px;
   }
   .tier h3{font-size:1.2rem; margin-bottom:4px; color:var(--ice);}
-  .tier .price{font-family:var(--mono); font-size:1.2rem; color:var(--mint); font-weight:700; margin-bottom:6px;}
+  .tier .price{font-family:var(--mono); font-size:1.2rem; color:var(--emerald); font-weight:700; margin-bottom:6px;}
   .tier .price-note{font-size:0.78rem; color:var(--ice-dim); margin-bottom:16px;}
   .tier ul{list-style:none; flex:1; margin-bottom:20px;}
   .tier li{padding:6px 0; font-size:0.88rem; color:var(--ice-dim); padding-left:18px; position:relative;}
-  .tier li::before{content:"▸"; position:absolute; left:0; color:var(--teal);}
+  .tier li::before{content:"▸"; position:absolute; left:0; color:var(--purple);}
   .tier li b{color:var(--ice); font-weight:600;}
   .tier-cta{display:flex; flex-direction:column; gap:8px;}
   .tier-cta a.tier-btn{
     text-align:center; font-family:var(--mono); font-size:0.78rem; font-weight:700; padding:11px 12px;
-    text-decoration:none; background:var(--mint); color:var(--navy-deep);
+    text-decoration:none; background:var(--emerald); color:#fff;
     clip-path:polygon(8px 0, 100% 0, 100% 100%, calc(100% - 8px) 100%, 0 100%, 0 8px);
     transition:opacity .15s ease;
   }
@@ -506,21 +473,21 @@
   .tier-cta a.tier-mail:hover{color:var(--ice);}
 
   .tier.featured{
-    background:rgba(58,247,178,0.06); color:var(--ice); position:relative;
-    border:2px solid var(--mint);
-    box-shadow:0 0 28px rgba(58,247,178,0.16), inset 0 0 24px rgba(58,247,178,0.05);
+    background:rgba(113,55,212,0.10); color:var(--ice); position:relative;
+    border:2px solid var(--purple);
   }
   .tier.featured .ribbon{
     position:absolute; top:-1px; right:18px;
-    background:var(--navy-deep); color:var(--mint);
+    background:var(--navy-deep); color:var(--lime);
     font-family:var(--mono); font-size:0.68rem; font-weight:700; letter-spacing:0.06em; text-transform:uppercase;
-    padding:5px 12px; border:1px solid var(--mint); border-top:none; border-radius:0;
+    padding:5px 12px; border:1px solid var(--purple); border-top:none; border-radius:0;
   }
+  @media (min-width:701px){ .tier.featured{grid-column:1/-1; justify-self:center; width:min(100%, 340px);} }
   .tier.featured h3{color:var(--ice);}
-  .tier.featured .price{color:var(--mint);}
+  .tier.featured .price{color:var(--emerald);}
   .tier.featured .price-note{color:var(--ice-dim);}
   .tier.featured li{color:var(--ice);}
-  .tier.featured li::before{color:var(--mint);}
+  .tier.featured li::before{color:var(--emerald);}
 
   /* ---------- FAQ ---------- */
   .faq{max-width:760px; margin-top:56px;}
@@ -530,7 +497,7 @@
     list-style:none; display:flex; justify-content:space-between; align-items:center; gap:16px;
   }
   .faq summary::-webkit-details-marker{display:none;}
-  .faq summary::after{content:"+"; font-size:1.3rem; color:var(--mint); font-weight:400; flex:none;}
+  .faq summary::after{content:"+"; font-size:1.3rem; color:var(--emerald); font-weight:400; flex:none;}
   .faq details[open] summary::after{content:"–";}
   .faq p{color:var(--ice-dim); font-size:0.92rem; margin-top:10px;}
 
@@ -544,11 +511,11 @@
   .contact-links{display:flex; gap:18px; flex-wrap:wrap;}
   .contact-links a{
     padding:12px 20px; border-radius:0;
-    font-family:var(--mono); font-weight:500; font-size:0.86rem; text-decoration:none; color:var(--mint);
-    border:1px solid var(--mint); background:transparent;
+    font-family:var(--mono); font-weight:500; font-size:0.86rem; text-decoration:none; color:var(--emerald);
+    border:1px solid var(--emerald); background:transparent;
     transition:background .15s ease, color .15s ease;
   }
-  .contact-links a:hover{background:var(--mint); color:var(--navy-deep);}
+  .contact-links a:hover{background:var(--emerald); color:#fff;}
 
   footer{padding:28px 0; text-align:center; color:var(--ice-dim); font-size:0.85rem; background:var(--navy-deep); border-top:1px solid var(--line);}
 </style>
@@ -576,7 +543,7 @@
   <div class="wrap hero-grid">
     <div class="hero-inner">
       <div class="kicker">Categoría de Desarrollo · STEM Racing México 2026–2027 · Preparatoria Celta, Querétaro</div>
-      <h1>Presentando a <em>Striker Racing</em>.</h1>
+      <h1><em>Ingeniería mexicana</em> en la pista de STEM Racing México.</h1>
       <p class="lead">Diseñamos, fabricamos y corremos un auto de Fórmula 1 a escala en el Desafío STEM Racing México (antes F1 in Schools), la iniciativa educativa oficial de la Fórmula 1®. Meta de temporada: destacar en la fase regional y asegurar la clasificación a la Final Nacional de STEM Racing México 2027, con proyección a la Final Mundial FIA.</p>
       <div class="cta-row">
         <a class="btn btn-solid" href="#patrocinios">Ver niveles de patrocinio</a>
@@ -585,88 +552,19 @@
       <div class="stat-strip">
         <div><div class="stat-num">5</div><div class="stat-label">Integrantes</div></div>
         <div><div class="stat-num">$43,500</div><div class="stat-label">MXN + IVA de inscripción</div></div>
-        <div><div class="stat-num">60+</div><div class="stat-label">Países en STEM Racing</div></div>
         <div><div class="stat-num">2027</div><div class="stat-label">Meta: final nacional</div></div>
       </div>
     </div>
     <div class="hero-visual">
       <div class="hud-panel">
-        <div class="hud-head">
-          <span>FICHA TÉCNICA · MONOPLAZA F1SRMX-01</span>
-          <span class="hud-live">ACTIVO</span>
-        </div>
-        <svg class="hud-diagram" viewBox="0 0 434 234" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Plano técnico lateral del monoplaza con anatomía reglamentaria y cotas: longitud total 210 mm, batalla 130 mm, altura máxima 65 mm, cámara CO2 diámetro 19 mm">
-
-          <!-- Etiqueta de concepto -->
-          <text class="cad-tag" x="8" y="13">Concepto preliminar v0 · Especificación desarrollo</text>
-
-          <!-- Callout cámara CO2 -->
-          <text class="cad-label" x="250" y="13">CÁMARA CO₂ Ø 19.0 mm</text>
-          <path class="cad-dim" d="M300 17 L322 86"/>
-          <circle class="cad-node" cx="322" cy="88" r="2"/>
-
-          <!-- Silueta del cuerpo (bloque único, esbelto en la sección media) -->
-          <path class="cad-fill" d="M34 130 L34 120 L64 104 L118 90 L160 85 L210 88 L258 93 L292 97 L292 130 Z"/>
-
-          <!-- Cámara trasera cilíndrica del cartucho CO2 -->
-          <rect class="cad-fill" x="284" y="82" width="64" height="36" rx="18"/>
-          <ellipse class="cad-line" cx="346" cy="100" rx="5" ry="18"/>
-          <line class="cad-dimline" x1="346" y1="82" x2="346" y2="118"/>
-          <line class="cad-dimline" x1="343" y1="82" x2="349" y2="82"/>
-          <line class="cad-dimline" x1="343" y1="118" x2="349" y2="118"/>
-
-          <!-- Soporte trasero hacia el alerón -->
-          <rect class="cad-fill" x="345" y="100" width="20" height="18" rx="3"/>
-          <line class="cad-line" x1="352" y1="50" x2="352" y2="100"/>
-          <line class="cad-line" x1="360" y1="50" x2="360" y2="100"/>
-
-          <!-- Alerón trasero elevado, plano fino -->
-          <rect class="cad-fill" x="340" y="45" width="44" height="5"/>
-
-          <!-- Alerón delantero bajo con endplates -->
-          <rect class="cad-fill" x="8" y="105" width="4" height="30"/>
-          <rect class="cad-fill" x="8" y="118" width="50" height="4"/>
-          <rect class="cad-fill" x="54" y="105" width="4" height="30"/>
-
-          <!-- Ruedas con ejes cilíndricos expuestos -->
-          <line class="cad-line" x1="66" y1="140" x2="110" y2="140"/>
-          <circle class="cad-fill" cx="88" cy="140" r="14"/>
-          <circle class="cad-line" cx="88" cy="140" r="5"/>
-          <line class="cad-line" x1="278" y1="140" x2="322" y2="140"/>
-          <circle class="cad-fill" cx="300" cy="140" r="14"/>
-          <circle class="cad-line" cx="300" cy="140" r="5"/>
-
-          <!-- Armellas y línea guía de nylon -->
-          <circle class="cad-line" cx="52" cy="131" r="2.5"/>
-          <circle class="cad-line" cx="270" cy="131" r="2.5"/>
-          <path class="cad-dim" d="M52 131 L52 136 L270 136 L270 131"/>
-          <line class="cad-dim" x1="161" y1="136" x2="161" y2="190"/>
-          <text class="cad-label" x="161" y="200" text-anchor="middle">LÍNEA GUÍA / ARMELLAS</text>
-
-          <!-- Cota: batalla (distancia entre ejes) -->
-          <line class="cad-dimline" x1="88" y1="164" x2="300" y2="164"/>
-          <line class="cad-dimline" x1="88" y1="160" x2="88" y2="168"/>
-          <line class="cad-dimline" x1="300" y1="160" x2="300" y2="168"/>
-          <text class="cad-label" x="194" y="178" text-anchor="middle">BATALLA: 130.0 mm</text>
-
-          <!-- Cota: longitud total -->
-          <line class="cad-dimline" x1="8" y1="214" x2="396" y2="214"/>
-          <line class="cad-dimline" x1="8" y1="210" x2="8" y2="218"/>
-          <line class="cad-dimline" x1="396" y1="210" x2="396" y2="218"/>
-          <text class="cad-label" x="202" y="228" text-anchor="middle">LONGITUD TOTAL: 210.0 mm</text>
-
-          <!-- Cota: altura máxima -->
-          <line class="cad-dimline" x1="412" y1="45" x2="412" y2="154"/>
-          <line class="cad-dimline" x1="408" y1="45" x2="416" y2="45"/>
-          <line class="cad-dimline" x1="408" y1="154" x2="416" y2="154"/>
-          <text class="cad-label" x="424" y="100" text-anchor="middle" transform="rotate(-90 424 100)">ALTURA MÁX: 65.0 mm</text>
-        </svg>
+        <div class="hud-head">Especificaciones técnicas reglamentarias · Categoría Desarrollo</div>
         <dl class="hud-readout">
-          <div><dt>Longitud total</dt><dd>210.0 mm</dd></div>
-          <div><dt>Peso mín. reglamentario</dt><dd>50.0 g</dd></div>
-          <div><dt>Impulsión</dt><dd>Cartucho CO₂</dd></div>
-          <div><dt>Tiempo de pista objetivo</dt><dd>&lt; 1.050 s</dd></div>
-          <div class="hud-full"><dt>Sistema de telemetría</dt><dd>ACTIVO / ENLACE QUERÉTARO</dd></div>
+          <div><dt>Longitud reglamentaria</dt><dd>210.0 mm</dd></div>
+          <div><dt>Peso mínimo</dt><dd>50.0 g</dd></div>
+          <div><dt>Propulsión</dt><dd>Cartucho CO₂ comprimido (8 g)</dd></div>
+          <div><dt>Batalla reglamentaria</dt><dd>130.0 mm</dd></div>
+          <div><dt>Software de diseño</dt><dd>Autodesk Fusion 360</dd></div>
+          <div><dt>Validación de fluidos</dt><dd>Ansys Student CFD</dd></div>
         </dl>
       </div>
     </div>
@@ -678,7 +576,7 @@
     <div class="section-head">
       <div class="eyebrow-tag">El proyecto</div>
       <h2>Qué es el Desafío STEM Racing</h2>
-      <p>No es un club escolar más: es una competencia internacional avalada por la Fórmula 1® donde actuamos como una escudería real, de principio a fin.</p>
+      <p>Es una competencia internacional avalada por la Fórmula 1® donde actuamos como una escudería real, de principio a fin.</p>
     </div>
     <div class="about-grid">
       <div>
@@ -692,7 +590,7 @@
         </div>
         <div class="fact-card">
           <h3>Por qué importa</h3>
-          <p>STEM Racing es la competencia de ingeniería escolar más exigente del país: involucra más de 200 horas de modelado CAD, validación aerodinámica en CFD y maquinado milimétrico en CNC.</p>
+          <p>El reto integra modelado CAD, validación aerodinámica en CFD y manufactura de precisión en CNC, todo bajo un reglamento técnico oficial.</p>
         </div>
       </div>
     </div>
@@ -755,12 +653,12 @@
     <div class="section-head">
       <div class="eyebrow-tag">El equipo</div>
       <h2>Ficha técnica de la escudería</h2>
-      <p>Cinco integrantes, cinco frentes de trabajo. Credenciales duras, no relleno.</p>
+      <p>Cinco integrantes, cinco frentes de trabajo.</p>
     </div>
 
     <div class="team-grid">
 
-      <div class="card-reveal member-card c-electric">
+      <div class="card-reveal member-card">
         <div class="member-top">
           <div class="member-number">01</div>
           <span class="member-badge">Dirección de Escudería &amp; Diseño CAD</span>
@@ -769,7 +667,7 @@
         <a class="cv-btn" href="https://drive.google.com/file/d/1vVcseQcXGQWL2v5xiMk1wLopQhp4DP7s/view?usp=drive_link" target="_blank" rel="noopener">Ver CV técnico<svg class="cv-icon" viewBox="0 0 12 12" width="12" height="12" fill="none" stroke="currentColor" stroke-width="1.3"><path d="M4.5 1.5H10.5V7.5"/><path d="M10.5 1.5L1.5 10.5"/></svg></a>
       </div>
 
-      <div class="card-reveal member-card c-teal">
+      <div class="card-reveal member-card">
         <div class="member-top">
           <div class="member-number">02</div>
           <span class="member-badge">Dirección de Operaciones &amp; Finanzas</span>
@@ -778,7 +676,7 @@
         <a class="cv-btn" href="https://drive.google.com/file/d/1i_IsFwTlzdV9ORZlZnu82A09VdbjMjcI/view?usp=drive_link" target="_blank" rel="noopener">Ver CV técnico<svg class="cv-icon" viewBox="0 0 12 12" width="12" height="12" fill="none" stroke="currentColor" stroke-width="1.3"><path d="M4.5 1.5H10.5V7.5"/><path d="M10.5 1.5L1.5 10.5"/></svg></a>
       </div>
 
-      <div class="card-reveal member-card c-purple">
+      <div class="card-reveal member-card">
         <div class="member-top">
           <div class="member-number">03</div>
           <span class="member-badge">Dirección Creativa &amp; Marca</span>
@@ -787,7 +685,7 @@
         <a class="cv-btn" href="https://drive.google.com/file/d/1qccW8wV871Jfrt4iiXEZVuGmmoWDLGpF/view?usp=drive_link" target="_blank" rel="noopener">Ver CV técnico<svg class="cv-icon" viewBox="0 0 12 12" width="12" height="12" fill="none" stroke="currentColor" stroke-width="1.3"><path d="M4.5 1.5H10.5V7.5"/><path d="M10.5 1.5L1.5 10.5"/></svg></a>
       </div>
 
-      <div class="card-reveal member-card c-electric">
+      <div class="card-reveal member-card">
         <div class="member-top">
           <div class="member-number">04</div>
           <span class="member-badge">Responsable de Manufactura &amp; Prototipado</span>
@@ -796,7 +694,7 @@
         <a class="cv-btn" href="https://drive.google.com/file/d/130ZYlRsIeTAfhnr1l7F4l0F-7mSYwKji/view?usp=drive_link" target="_blank" rel="noopener">Ver CV técnico<svg class="cv-icon" viewBox="0 0 12 12" width="12" height="12" fill="none" stroke="currentColor" stroke-width="1.3"><path d="M4.5 1.5H10.5V7.5"/><path d="M10.5 1.5L1.5 10.5"/></svg></a>
       </div>
 
-      <div class="card-reveal member-card c-teal">
+      <div class="card-reveal member-card">
         <div class="member-top">
           <div class="member-number">05</div>
           <span class="member-badge">Chief Technology Officer (CTO) &amp; Análisis CFD</span>
@@ -894,21 +792,21 @@
       <div class="eyebrow-tag">Patrocinios</div>
       <h2>¿Por qué invertir en Striker Racing?</h2>
       <p>Exposición directa de marca en un entorno tecnológico, preuniversitario y de alto rendimiento.</p>
-      <a class="dossier-btn" href="#contacto">Descargar Dossier Ejecutivo (PDF)<svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.3"><path d="M6 1v7M6 8L3 5M6 8l3-3"/><path d="M1.5 10h9"/></svg></a>
+      <a class="dossier-btn" href="#contacto">Solicitar dossier ejecutivo</a>
     </div>
 
     <div class="why-grid">
-      <div class="why-item c-teal">
+      <div class="why-item">
         <span class="why-num">01</span>
         <h3>Visibilidad con propósito</h3>
-        <p>Tu logo no va en un evento cualquiera: va en un proyecto real de ingeniería, seguido por la comunidad de Preparatoria Celta y por STEM Racing México durante toda la temporada.</p>
+        <p>Tu logo va en un proyecto real de ingeniería, respaldado por la comunidad de Preparatoria Celta y presente en la competencia de STEM Racing México durante la temporada.</p>
       </div>
-      <div class="why-item c-purple">
+      <div class="why-item">
         <span class="why-num">02</span>
         <h3>Alineación con innovación</h3>
         <p>Asocias tu marca con ciencia, tecnología e ingeniería aplicada: el mismo terreno donde compites por talento y clientes.</p>
       </div>
-      <div class="why-item c-electric">
+      <div class="why-item">
         <span class="why-num">03</span>
         <h3>Acceso a talento joven</h3>
         <p>Conoces de primera mano a cinco estudiantes que ya construyen, programan y gestionan proyectos reales antes de entrar a la universidad.</p>
