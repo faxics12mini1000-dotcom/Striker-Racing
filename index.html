@@ -22,8 +22,12 @@
 <link rel="apple-touch-icon" href="logo.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
-<script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.5.0/model-viewer.min.js"></script>
-<script nomodule src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.5.0/model-viewer-legacy.js"></script>
+<script type="importmap">
+{"imports":{
+  "three":"https://unpkg.com/three@0.160.0/build/three.module.js",
+  "three/addons/":"https://unpkg.com/three@0.160.0/examples/jsm/"
+}}
+</script>
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -203,26 +207,32 @@
   .model-stage{
     position:relative; aspect-ratio:16/11; margin:16px 0 4px;
     background:
-      radial-gradient(circle at 50% 38%, rgba(113,55,212,0.16) 0%, transparent 65%),
+      radial-gradient(circle at 50% 46%, rgba(24,57,105,0.55) 0%, transparent 68%),
       var(--navy-deep);
     border:1px solid var(--border-fine);
   }
-  .model-stage model-viewer{
-    width:100%; height:100%;
-    --poster-color:transparent;
-    background-color:transparent;
+  .model-stage canvas{
+    width:100% !important; height:100% !important; display:block; cursor:grab; touch-action:none;
+    opacity:0; transition:opacity .5s ease;
   }
+  .model-stage.is-ready canvas{opacity:1;}
+  .model-stage canvas:active{cursor:grabbing;}
   .model-stage .model-tag{
     position:absolute; top:10px; left:10px; z-index:2; pointer-events:none;
     font-family:var(--mono); font-size:0.64rem; letter-spacing:0.06em; text-transform:uppercase;
+    color:var(--ice-dim); background:rgba(7,27,51,0.7); padding:4px 8px; border:1px solid var(--border-fine);
+  }
+  .model-stage .model-hint{
+    position:absolute; bottom:10px; right:10px; z-index:2; pointer-events:none;
+    font-family:var(--mono); font-size:0.62rem; letter-spacing:0.04em;
     color:var(--ice-dim); background:rgba(7,27,51,0.7); padding:4px 8px; border:1px solid var(--border-fine);
   }
   .model-fallback{
     display:none; position:absolute; inset:0; align-items:center; justify-content:center; text-align:center;
     padding:20px; font-family:var(--mono); font-size:0.78rem; color:var(--ice-dim);
   }
-  .no-model-viewer .model-fallback{display:flex;}
-  .no-model-viewer model-viewer{display:none;}
+  .no-3d .model-fallback{display:flex;}
+  .no-3d canvas, .no-3d .model-hint{display:none;}
   .hud-readout{margin:0;}
   .hud-readout > div{
     display:flex; justify-content:space-between; align-items:baseline; gap:20px;
@@ -585,29 +595,10 @@
     <div class="hero-visual">
       <div class="hud-panel">
         <div class="hud-head">Especificaciones técnicas reglamentarias · Categoría Desarrollo</div>
-        <div class="model-stage" id="modelStage">
-          <span class="model-tag">Modelo 3D · vista de referencia</span>
-          <model-viewer
-            id="carViewer"
-            src="car.glb"
-            alt="Modelo 3D del monoplaza de Striker Racing en color morado de marca"
-            camera-controls
-            disable-zoom
-            interaction-prompt="none"
-            auto-rotate
-            rotation-per-second="16deg"
-            camera-orbit="25deg 75deg 80%"
-            field-of-view="28deg"
-            min-camera-orbit="auto 35deg auto"
-            max-camera-orbit="auto 100deg auto"
-            environment-image="neutral"
-            exposure="1.1"
-            shadow-intensity="1"
-            shadow-softness="0.85"
-            loading="eager"
-            reveal="auto">
-          </model-viewer>
-          <div class="model-fallback">Tu navegador no puede mostrar el modelo 3D interactivo.<br>Actualízalo o consulta la ficha técnica de abajo.</div>
+        <div class="model-stage" id="modelStage" aria-label="Modelo 3D del monoplaza con librea de Striker Racing">
+          <span class="model-tag">Modelo 3D · librea Striker Racing</span>
+          <span class="model-hint">Arrastra para girar</span>
+          <div class="model-fallback">Tu navegador no puede mostrar el modelo 3D interactivo.<br>Consulta la ficha técnica de abajo.</div>
         </div>
         <dl class="hud-readout">
           <div><dt>Longitud reglamentaria</dt><dd>210.0 mm</dd></div>
@@ -986,36 +977,166 @@
   Preparatoria Celta, Querétaro · STEM Racing México, temporada 2026–2027
 </footer>
 
-<script>
-(function(){
-  // Aplica el morado de marca al monoplaza y da soporte a navegadores sin <model-viewer>.
+<script type="module">
+(async function(){
+  // Visor 3D del monoplaza con librea de marca (degradado nariz→chasis→alerón, sin necesitar UVs).
   var stage = document.getElementById('modelStage');
-  var viewer = document.getElementById('carViewer');
-  if(!stage || !viewer) return;
+  if(!stage) return;
+  function fail(){ stage.classList.add('no-3d'); }
 
-  function paintCar(){
-    try{
-      var materials = viewer.model && viewer.model.materials;
-      if(!materials || !materials.length) return;
-      materials.forEach(function(mat){
-        mat.pbrMetallicRoughness.setBaseColorFactor([0.443, 0.216, 0.831, 1]); // #7137D4
-        mat.pbrMetallicRoughness.setMetallicFactor(0.35);
-        mat.pbrMetallicRoughness.setRoughnessFactor(0.3);
-      });
-    }catch(e){ /* si la API cambia, el modelo se muestra en su color original */ }
-  }
-  viewer.addEventListener('load', paintCar);
-  viewer.addEventListener('error', function(){ stage.classList.add('no-model-viewer'); });
+  try{
+    var testCanvas = document.createElement('canvas');
+    var gl = testCanvas.getContext('webgl') || testCanvas.getContext('experimental-webgl');
+    if(!gl) return fail();
+  }catch(e){ return fail(); }
 
-  customElements.whenDefined('model-viewer').then(function(){
-    if(!viewer.model && typeof viewer.getBoundingClientRect === 'function'){
-      // ya cargado o cargando; nada más que hacer aquí
+  var THREE, GLTFLoaderMod, OrbitControlsMod, RoomEnvMod;
+  try{
+    THREE = await import('three');
+    GLTFLoaderMod = await import('three/addons/loaders/GLTFLoader.js');
+    OrbitControlsMod = await import('three/addons/controls/OrbitControls.js');
+    try{ RoomEnvMod = await import('three/addons/environments/RoomEnvironment.js'); }catch(e){ RoomEnvMod = null; }
+  }catch(e){ return fail(); }
+
+  try{
+    initViewer(THREE, GLTFLoaderMod.GLTFLoader, OrbitControlsMod.OrbitControls, RoomEnvMod && RoomEnvMod.RoomEnvironment);
+  }catch(e){ fail(); }
+
+  function initViewer(THREE, GLTFLoader, OrbitControls, RoomEnvironment){
+    var scene = new THREE.Scene();
+    var camera = new THREE.PerspectiveCamera(30, 1, 1, 5000);
+
+    var renderer = new THREE.WebGLRenderer({ antialias:true, alpha:true });
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+    if('outputColorSpace' in renderer) renderer.outputColorSpace = THREE.SRGBColorSpace;
+    stage.appendChild(renderer.domElement);
+
+    // Entorno de iluminación (IBL) para que el acabado metálico/clearcoat no se vea negro.
+    if(RoomEnvironment){
+      try{
+        var pmrem = new THREE.PMREMGenerator(renderer);
+        scene.environment = pmrem.fromScene(new RoomEnvironment(), 0.04).texture;
+        pmrem.dispose();
+      }catch(e){ /* sin entorno, se usan solo las luces directas */ }
     }
-  }).catch(function(){ stage.classList.add('no-model-viewer'); });
 
-  setTimeout(function(){
-    if(!customElements.get('model-viewer')) stage.classList.add('no-model-viewer');
-  }, 4000);
+    scene.add(new THREE.HemisphereLight(0xCDDEEF, 0x071B33, 1.5));
+    var key = new THREE.DirectionalLight(0xffffff, 2.1);
+    key.position.set(4, 6, 5);
+    scene.add(key);
+    var fillLight = new THREE.DirectionalLight(0x7137D4, 0.55);
+    fillLight.position.set(-5, 2, -3);
+    scene.add(fillLight);
+    var rimLight = new THREE.DirectionalLight(0x12B866, 0.7);
+    rimLight.position.set(-2, 3, 6);
+    scene.add(rimLight);
+
+    var group = new THREE.Group();
+    scene.add(group);
+
+    var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    var controls = new OrbitControls(camera, renderer.domElement);
+    controls.enableDamping = true;
+    controls.dampingFactor = 0.08;
+    controls.enablePan = false;
+    controls.enableZoom = false; // evita "secuestrar" el scroll de la página
+    controls.minPolarAngle = THREE.MathUtils.degToRad(15);
+    controls.maxPolarAngle = THREE.MathUtils.degToRad(150);
+    controls.autoRotate = !reduceMotion;
+    controls.autoRotateSpeed = 1.3;
+    controls.rotateSpeed = 0.85;
+
+    new GLTFLoader().load('car.glb', function(gltf){
+      var model = gltf.scene;
+      var box = new THREE.Box3().setFromObject(model);
+      var size = box.getSize(new THREE.Vector3());
+      var center = box.getCenter(new THREE.Vector3());
+      var maxDim = Math.max(size.x, size.y, size.z) || 1;
+
+      model.position.sub(center); // centra el auto en el origen para orbitar limpio (solo afecta el nodo, no los vértices)
+
+      // El shader lee position.x en espacio LOCAL de cada malla (sin el offset de recentrado), así que
+      // usamos los límites originales de la caja, no los ajustados por "center".
+      var minX = box.min.x;
+      var maxX = box.max.x;
+
+      var liveryMaterial = new THREE.MeshPhysicalMaterial({
+        color: 0xffffff, metalness:0.25, roughness:0.38, clearcoat:0.6, clearcoatRoughness:0.25,
+        side: THREE.DoubleSide // el STL de origen trae normales/orientación poco fiables
+      });
+      liveryMaterial.onBeforeCompile = function(shader){
+        shader.uniforms.uMinX = { value: minX };
+        shader.uniforms.uMaxX = { value: maxX };
+        shader.uniforms.cNose = { value: new THREE.Color(0x7137D4) }; // morado celta
+        shader.uniforms.cBody = { value: new THREE.Color(0x183969) }; // navy claro de marca (border-fine), con más contraste contra el fondo
+        shader.uniforms.cTail = { value: new THREE.Color(0x12B866) }; // esmeralda
+        shader.uniforms.cLine = { value: new THREE.Color(0xC8FF32) }; // filete limón
+        shader.vertexShader = 'varying float vLocalX;\n' + shader.vertexShader.replace(
+          '#include <begin_vertex>',
+          '#include <begin_vertex>\n  vLocalX = position.x;'
+        );
+        shader.fragmentShader = 'varying float vLocalX;\nuniform float uMinX;\nuniform float uMaxX;\nuniform vec3 cNose;\nuniform vec3 cBody;\nuniform vec3 cTail;\nuniform vec3 cLine;\n' + shader.fragmentShader.replace(
+          '#include <color_fragment>',
+          '#include <color_fragment>\n' +
+          '  float t = clamp((vLocalX - uMinX) / max(uMaxX - uMinX, 0.0001), 0.0, 1.0);\n' +
+          '  vec3 livery = mix(cNose, cBody, smoothstep(0.10, 0.20, t));\n' +
+          '  livery = mix(livery, cTail, smoothstep(0.82, 0.92, t));\n' +
+          '  float seam = min(abs(t - 0.16), abs(t - 0.87));\n' +
+          '  float stripe = 1.0 - smoothstep(0.0, 0.010, seam);\n' +
+          '  livery = mix(livery, cLine, stripe);\n' +
+          '  diffuseColor.rgb = livery;\n'
+        );
+      };
+
+      model.traverse(function(obj){
+        if(obj.isMesh){
+          // El STL de origen no trae normales: las calculamos para que la iluminación funcione.
+          if(!obj.geometry.attributes.normal) obj.geometry.computeVertexNormals();
+          obj.material = liveryMaterial;
+        }
+      });
+      group.add(model);
+
+      // Distancia necesaria para que la esfera envolvente del modelo quepa en el FOV, con margen.
+      var sphereRadius = size.length() / 2;
+      var halfFov = THREE.MathUtils.degToRad(camera.fov / 2);
+      var dist = (sphereRadius / Math.sin(halfFov)) * 1.08;
+      var az = THREE.MathUtils.degToRad(35);
+      var el = THREE.MathUtils.degToRad(20);
+      camera.position.set(
+        dist * Math.cos(el) * Math.sin(az),
+        dist * Math.sin(el),
+        dist * Math.cos(el) * Math.cos(az)
+      );
+      camera.near = Math.max(dist * 0.05, 0.1);
+      camera.far = dist * 20;
+      camera.updateProjectionMatrix();
+      controls.target.set(0, 0, 0);
+      controls.minDistance = dist * 0.45;
+      controls.maxDistance = dist * 2.2;
+      controls.update();
+
+      stage.classList.add('is-ready');
+    }, undefined, function(){ fail(); });
+
+    function resize(){
+      var w = stage.clientWidth, h = stage.clientHeight;
+      if(!w || !h) return;
+      camera.aspect = w / h;
+      camera.updateProjectionMatrix();
+      renderer.setSize(w, h, false);
+    }
+    if('ResizeObserver' in window){ new ResizeObserver(resize).observe(stage); }
+    else{ window.addEventListener('resize', resize); }
+    resize();
+
+    (function animate(){
+      requestAnimationFrame(animate);
+      controls.update();
+      renderer.render(scene, camera);
+    })();
+  }
 })();
 </script>
 
