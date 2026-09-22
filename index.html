@@ -53,7 +53,8 @@
       "addressLocality": "Querétaro",
       "addressCountry": "MX"
     }
-  }
+  },
+  "sameAs": ["https://www.instagram.com/striker.racing_mx/"]
 }
 </script>
 <style>
@@ -570,6 +571,12 @@
   .contact-links a:hover{background:var(--emerald); color:#fff;}
 
   footer{padding:28px 0; text-align:center; color:var(--ice-dim); font-size:0.85rem; background:var(--navy-deep); border-top:1px solid var(--line);}
+  .footer-social{margin-top:12px;}
+  .social-link{
+    color:var(--purple); text-decoration:none; font-weight:500;
+    border-bottom:1px solid transparent; transition:border-color .15s ease, color .15s ease;
+  }
+  .social-link:hover{color:var(--emerald); border-color:var(--emerald);}
 </style>
 </head>
 <body>
@@ -883,7 +890,7 @@
         <div class="price-note">MXN</div>
         <ul>
           <li><b>Uniforme:</b> logotipo en cuadrante inferior de espalda (lower back)</li>
-          <li><b>Presencia:</b> mención perimetral en Pit Display (carpa) y redes sociales</li>
+          <li><b>Presencia:</b> mención perimetral en Pit Display (carpa) y en redes sociales, difundida en la cuenta oficial de Instagram <a href="https://instagram.com/striker.racing_mx" target="_blank" rel="noopener" class="social-link">@striker.racing_mx</a></li>
         </ul>
         <div class="tier-cta">
           <a class="tier-btn" href="https://wa.me/525511839779?text=Hola%2C%20nos%20interesa%20sumarnos%20a%20Striker%20Racing%20como%20patrocinador%20nivel%20Colaborador." target="_blank" rel="noopener">WhatsApp</a>
@@ -967,6 +974,7 @@
       <a href="https://wa.me/525511839779?text=Hola%2C%20me%20comunico%20para%20conocer%20la%20propuesta%20de%20patrocinio%20de%20Striker%20Racing." target="_blank" rel="noopener">WhatsApp directo</a>
       <a href="mailto:strikerracingf1@gmail.com?subject=Patrocinio%20Striker%20Racing">strikerracingf1@gmail.com</a>
       <a href="tel:+525511839779">(+52) 55 1183 9779 · Patrocinios</a>
+      <a href="https://instagram.com/striker.racing_mx" target="_blank" rel="noopener" class="social-link">Instagram: @striker.racing_mx</a>
     </div>
   </div>
 </section>
@@ -977,6 +985,9 @@
     STRIKER RACING
   </div>
   Preparatoria Celta, Querétaro · STEM Racing México, temporada 2026–2027
+  <div class="footer-social">
+    <a href="https://instagram.com/striker.racing_mx" target="_blank" rel="noopener" class="social-link">Instagram: @striker.racing_mx</a>
+  </div>
 </footer>
 
 <script type="module">
@@ -1228,7 +1239,7 @@
           shader.uniforms.cAccent = { value: new THREE.Color(0x7138D4) }; // morado celta (nariz, franja lateral)
           shader.uniforms.cSpeed = { value: new THREE.Color(0x12B866) }; // verde esmeralda (flaps/endplates de alerones)
           shader.uniforms.cTire = { value: new THREE.Color(0x11161B) }; // negro mate puro (caucho del neumático)
-          shader.uniforms.cRim = { value: new THREE.Color(0x282F38) }; // grafito / titanio oscuro automotriz (cubo del rin)
+          shader.uniforms.cRim = { value: new THREE.Color(0x2B323B) }; // grafito/titanio técnico automotriz (cubo del rin)
           shader.vertexShader = 'uniform mat4 uToModelSpace;\nvarying vec3 vModelPos;\n' + shader.vertexShader.replace(
             '#include <begin_vertex>',
             '#include <begin_vertex>\n  vModelPos = (uToModelSpace * vec4(transformed, 1.0)).xyz;'
@@ -1253,7 +1264,7 @@
               // Franja deportiva morado celta a lo largo de pontones laterales / cubierta superior,
               // SOLO entre ejes (nunca sobre las llantas ni sobre nariz/alerón). Trazo nítido y delgado,
               // ceñido al lateral central del monoplaza (sin invadir el suelo ni las llantas).
-              '  float sideStripeSpan = smoothstep(0.25, 0.27, t) * (1.0 - smoothstep(0.58, 0.60, t));\n' +
+              '  float sideStripeSpan = smoothstep(0.24, 0.26, t) * (1.0 - smoothstep(0.60, 0.62, t));\n' +
               '  float sideStripeEdge = smoothstep(0.44, 0.48, edge) * (1.0 - smoothstep(0.52, 0.58, edge));\n' +
               '  float sideStripeMask = sideStripeSpan * sideStripeEdge;\n' +
               '  livery = mix(livery, cAccent, sideStripeMask);\n' +
@@ -1264,7 +1275,7 @@
               // El alerón delantero es más angosto que el trasero (su borde lateral real llega a
               // edge~0.6, no ~0.85), así que su banda de verde usa un umbral más bajo para no quedar
               // invisible.
-              '  float frontWingSide = smoothstep(0.40, 0.52, edge);\n' +
+              '  float frontWingSide = smoothstep(0.48, 0.58, edge);\n' +
               '  float rearWingSide = smoothstep(0.55, 0.78, edge);\n' +
               '  float wingMask = frontWingBand * frontWingSide + rearWingBand * rearWingSide;\n' +
               '  livery = mix(livery, cSpeed, wingMask);\n' +
@@ -1276,7 +1287,7 @@
               '  vec2 wheelC = mix(uFrontWheel.xy, uRearWheel.xy, step(0.5, t));\n' +
               '  float wheelR = mix(uFrontWheel.z, uRearWheel.z, step(0.5, t));\n' +
               '  float wheelRad = length(vec2(vModelPos.x, vModelPos.z) - wheelC) / max(wheelR, 0.0001);\n' +
-              '  float rimFactor = 1.0 - smoothstep(0.15, 0.35, wheelRad);\n' + // 1 = cubo central, 0 = neumático
+              '  float rimFactor = 1.0 - smoothstep(0.18, 0.36, wheelRad);\n' + // 1 = cubo/tuerca central, 0 = neumático (concentra el metal, evita la plasta circular)
               '  vec3 wheelColor = mix(cTire, cRim, rimFactor);\n' +
               '  livery = mix(livery, wheelColor, wheelMask);\n' +
               '  diffuseColor.rgb = livery;\n'
@@ -1284,7 +1295,7 @@
             .replace(
               '#include <roughnessmap_fragment>',
               '#include <roughnessmap_fragment>\n' +
-              '  float wheelRough = mix(0.95, 0.40, rimFactor);\n' + // neumático mate puro / rin grafito semi-mate
+              '  float wheelRough = mix(0.95, 0.38, rimFactor);\n' + // neumático mate puro / rin grafito técnico semi-mate
               '  roughnessFactor = mix(roughnessFactor, wheelRough, wheelMask);\n'
             )
             .replace(
