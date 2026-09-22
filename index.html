@@ -1028,10 +1028,13 @@
     var key = new THREE.DirectionalLight(0xffffff, 1.35); // luz principal
     key.position.set(4, 6, 5);
     scene.add(key);
-    var fillLight = new THREE.DirectionalLight(0x7137D4, 0.2); // relleno frontal suave, del lado opuesto a la principal
+    // Luces de relleno/contorno NEUTRAS (blanco frío): con clearcoat, cualquier luz de color aquí
+    // se refleja como una mancha de ese color sobre TODA la carrocería metálica, no solo en los
+    // acentos definidos por el shader -- por eso se evita tintar estas luces de morado/verde.
+    var fillLight = new THREE.DirectionalLight(0xBFD4FF, 0.2); // relleno frontal suave, del lado opuesto a la principal
     fillLight.position.set(-4, 2.5, 3);
     scene.add(fillLight);
-    var rimLight = new THREE.DirectionalLight(0x12B866, 0.4); // rim light DETRÁS del auto, marca el contorno
+    var rimLight = new THREE.DirectionalLight(0xE8F2FF, 0.4); // rim light DETRÁS del auto, marca el contorno
     rimLight.position.set(-2, 4, -6);
     scene.add(rimLight);
 
@@ -1132,16 +1135,15 @@
         if(obj.isMesh){ obj.geometry.computeBoundingBox(); obj.geometry.computeBoundingSphere(); }
       });
 
-      // Caja en espacio LOCAL del archivo (antes de reorientar el nodo). Medido sobre el .glb:
-      // eje X = longitud (nariz→cola, 298mm de span) — ya correcto, coincide con el degradado de librea.
-      // eje Y = ancho lateral (eje de giro real de las llantas, 116mm de span) — quedó apuntando "arriba".
-      // eje Z = altura real del auto (61mm de span) — quedó apuntando "de frente/fondo".
-      // El shader de la librea lee `position.x/y/z` en este espacio LOCAL (no cambia aunque rotemos
-      // el nodo `model` más abajo), así que estos límites se calculan ANTES de la reorientación.
+      // Caja en el espacio LOCAL original del .glb (antes de reorientar `model`, con su matriz aún
+      // en identidad): eje X = longitud (nariz→cola), eje Y = ancho lateral, eje Z = altura real.
+      // Esta caja es el marco de referencia FIJO para pintar la librea -- ver toModelSpace abajo,
+      // que ubica a cada sub-malla (carrocería, llantas, alerón, cada una con su propio origen
+      // local en el .glb) dentro de este mismo marco, sin importar el giro idle del auto.
       var localBox = new THREE.Box3().setFromObject(model);
-      var minX = localBox.min.x, maxX = localBox.max.x; // longitud
-      var minY = localBox.min.y, maxY = localBox.max.y; // ancho lateral
-      var minZ = localBox.min.z, maxZ = localBox.max.z; // altura real
+      var lMinX = localBox.min.x, lMaxX = localBox.max.x; // longitud
+      var lMinY = localBox.min.y, lMaxY = localBox.max.y; // ancho lateral
+      var lMinZ = localBox.min.z, lMaxZ = localBox.max.z; // altura real
 
       // Reorienta el auto para que descanse horizontal sobre sus 4 ruedas: la altura real (Z local)
       // pasa a ser "arriba" (Y de three.js) y el ancho (Y local) pasa a ser el eje lateral (Z de
@@ -1163,69 +1165,79 @@
       var center = box.getCenter(new THREE.Vector3());
 
       model.position.sub(center); // centra el auto en el origen para orbitar/girar limpio
+      model.updateMatrixWorld(true); // refresca matrixWorld ya centrado, antes de derivar toModelSpace por sub-malla
 
-      var liveryMaterial = new THREE.MeshPhysicalMaterial({
-        color: 0xffffff, metalness:0.6, roughness:0.3, clearcoat:0.18, clearcoatRoughness:0.35,
-        side: THREE.DoubleSide // el STL de origen trae normales/orientación poco fiables
-      });
-      liveryMaterial.onBeforeCompile = function(shader){
-        shader.uniforms.uMinX = { value: minX };
-        shader.uniforms.uMaxX = { value: maxX };
-        shader.uniforms.uMinY = { value: minY };
-        shader.uniforms.uMaxY = { value: maxY };
-        shader.uniforms.uMinZ = { value: minZ };
-        shader.uniforms.uMaxZ = { value: maxZ };
-        shader.uniforms.cBody = { value: new THREE.Color(0x0A1424) }; // navy profundo (carrocería, color base)
-        shader.uniforms.cAccent = { value: new THREE.Color(0x7137D4) }; // morado celta (exclusivo de la nariz frontal)
-        shader.uniforms.cSpeed = { value: new THREE.Color(0x12B866) }; // verde esmeralda (trazos finos, endplates del alerón)
-        shader.uniforms.cTire = { value: new THREE.Color(0x11161B) }; // negro mate puro (neumáticos y tren de rodaje)
-        shader.vertexShader = 'varying float vLocalX;\nvarying float vLocalY;\nvarying float vLocalZ;\n' + shader.vertexShader.replace(
-          '#include <begin_vertex>',
-          '#include <begin_vertex>\n  vLocalX = position.x;\n  vLocalY = position.y;\n  vLocalZ = position.z;'
-        );
-        shader.fragmentShader = 'varying float vLocalX;\nvarying float vLocalY;\nvarying float vLocalZ;\nuniform float uMinX;\nuniform float uMaxX;\nuniform float uMinY;\nuniform float uMaxY;\nuniform float uMinZ;\nuniform float uMaxZ;\nuniform vec3 cBody;\nuniform vec3 cAccent;\nuniform vec3 cSpeed;\nuniform vec3 cTire;\n' + shader.fragmentShader
-          .replace(
-            '#include <color_fragment>',
-            '#include <color_fragment>\n' +
-            '  float t = clamp((vLocalX - uMinX) / max(uMaxX - uMinX, 0.0001), 0.0, 1.0);\n' + // 0 nariz -> 1 cola
-            '  float h = clamp((vLocalZ - uMinZ) / max(uMaxZ - uMinZ, 0.0001), 0.0, 1.0);\n' + // 0 piso -> 1 techo
-            '  float edge = abs((vLocalY - uMinY) / max(uMaxY - uMinY, 0.0001) - 0.5) * 2.0;\n' + // 0 centro -> 1 borde lateral
-            // Llantas: identificadas por su posición real a lo largo del auto (eje delantero y trasero)
-            // combinada con estar hacia el borde lateral — así se pintan completas sin importar la
-            // altura visible desde la cámara (a diferencia de un simple corte por altura).
-            '  float frontAxle = smoothstep(0.16, 0.20, t) * (1.0 - smoothstep(0.30, 0.34, t));\n' +
-            '  float rearAxle = smoothstep(0.76, 0.80, t) * (1.0 - smoothstep(0.92, 0.96, t));\n' +
-            '  float wheelEdge = smoothstep(0.30, 0.55, edge);\n' +
-            '  float wheelMask = clamp((frontAxle + rearAxle) * wheelEdge, 0.0, 1.0);\n' +
-            '  vec3 livery = cBody;\n' +
-            '  float noseMask = 1.0 - smoothstep(0.0, 0.12, t);\n' + // punta de la nariz, único lugar con acento morado
-            '  livery = mix(livery, cAccent, noseMask);\n' +
-            // Trazos finos de velocidad: confinados a los endplates del alerón trasero (franja
-            // angosta en t, y solo cerca del borde lateral -- no cruza el centro de la cola).
-            '  float endplateBand = smoothstep(0.88, 0.91, t) * (1.0 - smoothstep(0.94, 0.97, t));\n' +
-            '  float endplateSide = smoothstep(0.35, 0.65, edge);\n' +
-            '  float endplateMask = endplateBand * endplateSide;\n' +
-            '  livery = mix(livery, cSpeed, endplateMask);\n' +
-            '  livery = mix(livery, cTire, wheelMask);\n' + // llantas siempre mate oscuro, tiene prioridad sobre nariz/cola
-            '  diffuseColor.rgb = livery;\n'
-          )
-          .replace(
-            '#include <roughnessmap_fragment>',
-            '#include <roughnessmap_fragment>\n' +
-            '  roughnessFactor = mix(roughnessFactor, 0.95, wheelMask);\n' // llantas: negro mate puro
-          )
-          .replace(
-            '#include <metalnessmap_fragment>',
-            '#include <metalnessmap_fragment>\n' +
-            '  metalnessFactor = mix(metalnessFactor, 0.05, wheelMask);\n'
+      // Crea un material de librea POR sub-malla: cada uno recibe `toModelSpace`, la matriz que
+      // convierte sus vértices (en el espacio local de ESA malla) al marco fijo de `localBox`.
+      // `toModelSpace = model.matrixWorld^-1 * obj.matrixWorld` cancela algebraicamente tanto la
+      // matriz de `model` (rotación/centrado) como la de sus ancestros -- incluido `group`, cuyo
+      // giro idle (`group.rotation.y`) cambia cada frame -- así que el resultado es estable aunque
+      // el auto esté girando, y corrige el desalineamiento entre piezas con distinto origen local.
+      function makeLiveryMaterial(toModelSpace){
+        var mat = new THREE.MeshPhysicalMaterial({
+          color: 0x0F2547, metalness:0.65, roughness:0.28, clearcoat:0.4, clearcoatRoughness:0.2,
+          side: THREE.DoubleSide // el STL de origen trae normales/orientación poco fiables
+        });
+        mat.onBeforeCompile = function(shader){
+          shader.uniforms.uToModelSpace = { value: toModelSpace };
+          shader.uniforms.uMinX = { value: lMinX };
+          shader.uniforms.uMaxX = { value: lMaxX };
+          shader.uniforms.uMinY = { value: lMinY };
+          shader.uniforms.uMaxY = { value: lMaxY };
+          shader.uniforms.cBody = { value: new THREE.Color(0x0F2547) }; // azul rey / navy profundo (carrocería, color base único)
+          shader.uniforms.cAccent = { value: new THREE.Color(0x7138D4) }; // morado celta (exclusivo del 10% delantero de la nariz)
+          shader.uniforms.cSpeed = { value: new THREE.Color(0x12B866) }; // verde esmeralda (trazo fino en extremos de endplates traseros)
+          shader.uniforms.cTire = { value: new THREE.Color(0x11161B) }; // negro mate puro (neumáticos y tren de rodaje)
+          shader.vertexShader = 'uniform mat4 uToModelSpace;\nvarying vec3 vModelPos;\n' + shader.vertexShader.replace(
+            '#include <begin_vertex>',
+            '#include <begin_vertex>\n  vModelPos = (uToModelSpace * vec4(transformed, 1.0)).xyz;'
           );
-      };
+          shader.fragmentShader = 'varying vec3 vModelPos;\nuniform float uMinX;\nuniform float uMaxX;\nuniform float uMinY;\nuniform float uMaxY;\nuniform vec3 cBody;\nuniform vec3 cAccent;\nuniform vec3 cSpeed;\nuniform vec3 cTire;\n' + shader.fragmentShader
+            .replace(
+              '#include <color_fragment>',
+              '#include <color_fragment>\n' +
+              '  float t = clamp((uMaxX - vModelPos.x) / max(uMaxX - uMinX, 0.0001), 0.0, 1.0);\n' + // 0 nariz -> 1 cola
+              '  float edge = abs((vModelPos.y - uMinY) / max(uMaxY - uMinY, 0.0001) - 0.5) * 2.0;\n' + // 0 centro -> 1 borde lateral
+              // Llantas: identificadas por su posición real a lo largo del auto (eje delantero y trasero)
+              // combinada con estar hacia el borde lateral — así se pintan completas sin importar la
+              // altura visible desde la cámara (a diferencia de un simple corte por altura).
+              '  float frontAxle = smoothstep(0.16, 0.20, t) * (1.0 - smoothstep(0.30, 0.34, t));\n' +
+              '  float rearAxle = smoothstep(0.76, 0.80, t) * (1.0 - smoothstep(0.92, 0.96, t));\n' +
+              '  float wheelEdge = smoothstep(0.30, 0.55, edge);\n' +
+              '  float wheelMask = clamp((frontAxle + rearAxle) * wheelEdge, 0.0, 1.0);\n' +
+              '  vec3 livery = cBody;\n' + // pintura sólida uniforme: sin degradados ni parches en el resto del chasis
+              '  float noseMask = 1.0 - smoothstep(0.085, 0.10, t);\n' + // SOLO el 10% delantero de la punta (t < 0.10)
+              '  livery = mix(livery, cAccent, noseMask);\n' +
+              // Trazo fino de verde esmeralda: SOLO en los extremos laterales de los endplates
+              // traseros (t > 0.90), nunca cruza el centro de la cola.
+              '  float endplateBand = smoothstep(0.88, 0.90, t);\n' +
+              '  float endplateSide = smoothstep(0.55, 0.78, edge);\n' +
+              '  float endplateMask = endplateBand * endplateSide;\n' +
+              '  livery = mix(livery, cSpeed, endplateMask);\n' +
+              '  livery = mix(livery, cTire, wheelMask);\n' + // llantas siempre mate oscuro, tiene prioridad sobre nariz/cola
+              '  diffuseColor.rgb = livery;\n'
+            )
+            .replace(
+              '#include <roughnessmap_fragment>',
+              '#include <roughnessmap_fragment>\n' +
+              '  roughnessFactor = mix(roughnessFactor, 0.95, wheelMask);\n' // llantas: negro mate puro
+            )
+            .replace(
+              '#include <metalnessmap_fragment>',
+              '#include <metalnessmap_fragment>\n' +
+              '  metalnessFactor = mix(metalnessFactor, 0.05, wheelMask);\n'
+            );
+        };
+        return mat;
+      }
 
+      var toModel = new THREE.Matrix4();
       model.traverse(function(obj){
         if(obj.isMesh){
           // El STL de origen no trae normales: las calculamos para que la iluminación funcione.
           if(!obj.geometry.attributes.normal) obj.geometry.computeVertexNormals();
-          obj.material = liveryMaterial;
+          toModel.copy(model.matrixWorld).invert().multiply(obj.matrixWorld);
+          obj.material = makeLiveryMaterial(toModel.clone());
         }
       });
       group.add(model);
@@ -1252,7 +1264,7 @@
         });
       });
       var az = THREE.MathUtils.degToRad(35);
-      var el = THREE.MathUtils.degToRad(20);
+      var el = THREE.MathUtils.degToRad(26); // 3/4 superior deportivo: se ven ancho, cabina y 4 ruedas al girar
       camera.position.set(Math.sin(az) * Math.cos(el), Math.sin(el), Math.cos(az) * Math.cos(el));
       controls.target.set(0, 0, 0);
       applyFit();
