@@ -1228,7 +1228,7 @@
           shader.uniforms.cAccent = { value: new THREE.Color(0x7138D4) }; // morado celta (nariz, franja lateral)
           shader.uniforms.cSpeed = { value: new THREE.Color(0x12B866) }; // verde esmeralda (flaps/endplates de alerones)
           shader.uniforms.cTire = { value: new THREE.Color(0x11161B) }; // negro mate puro (caucho del neumático)
-          shader.uniforms.cRim = { value: new THREE.Color(0xC5CBD3) }; // plateado metálico automotriz (disco del rin)
+          shader.uniforms.cRim = { value: new THREE.Color(0x282F38) }; // grafito / titanio oscuro automotriz (cubo del rin)
           shader.vertexShader = 'uniform mat4 uToModelSpace;\nvarying vec3 vModelPos;\n' + shader.vertexShader.replace(
             '#include <begin_vertex>',
             '#include <begin_vertex>\n  vModelPos = (uToModelSpace * vec4(transformed, 1.0)).xyz;'
@@ -1251,9 +1251,10 @@
               '  float noseMask = 1.0 - smoothstep(0.02, 0.035, t);\n' + // punta delantera, se corta justo antes de la llanta
               '  livery = mix(livery, cAccent, noseMask);\n' +
               // Franja deportiva morado celta a lo largo de pontones laterales / cubierta superior,
-              // SOLO entre ejes (nunca sobre las llantas ni sobre nariz/alerón).
-              '  float sideStripeSpan = smoothstep(0.21, 0.24, t) * (1.0 - smoothstep(0.63, 0.66, t));\n' +
-              '  float sideStripeEdge = smoothstep(0.42, 0.48, edge) * (1.0 - smoothstep(0.54, 0.60, edge));\n' +
+              // SOLO entre ejes (nunca sobre las llantas ni sobre nariz/alerón). Trazo nítido y delgado,
+              // ceñido al lateral central del monoplaza (sin invadir el suelo ni las llantas).
+              '  float sideStripeSpan = smoothstep(0.25, 0.27, t) * (1.0 - smoothstep(0.58, 0.60, t));\n' +
+              '  float sideStripeEdge = smoothstep(0.44, 0.48, edge) * (1.0 - smoothstep(0.52, 0.58, edge));\n' +
               '  float sideStripeMask = sideStripeSpan * sideStripeEdge;\n' +
               '  livery = mix(livery, cAccent, sideStripeMask);\n' +
               // Trazo nítido de verde esmeralda en los extremos laterales de los endplates, delanteros
@@ -1269,12 +1270,13 @@
               '  livery = mix(livery, cSpeed, wingMask);\n' +
               // Llantas: SIEMPRE tienen prioridad final sobre nariz/franja/alerones. Dentro de la llanta,
               // la distancia radial al centro medido de cada eje (plano X-Z, el plano de giro real de la
-              // rueda) separa el rin metálico (radio pequeño, centro) del neumático de caucho (radio
-              // grande, banda exterior) con un corte nítido de competición.
+              // rueda) separa el rin metálico (radio pequeño, solo cubo central y zona de tuerca/eje) del
+              // neumático de caucho negro mate (radio grande, banda exterior) con un corte nítido de
+              // competición -- así el rin gana profundidad mecánica en vez de verse como un disco plano.
               '  vec2 wheelC = mix(uFrontWheel.xy, uRearWheel.xy, step(0.5, t));\n' +
               '  float wheelR = mix(uFrontWheel.z, uRearWheel.z, step(0.5, t));\n' +
               '  float wheelRad = length(vec2(vModelPos.x, vModelPos.z) - wheelC) / max(wheelR, 0.0001);\n' +
-              '  float rimFactor = 1.0 - smoothstep(0.40, 0.52, wheelRad);\n' + // 1 = centro del rin, 0 = neumático
+              '  float rimFactor = 1.0 - smoothstep(0.15, 0.35, wheelRad);\n' + // 1 = cubo central, 0 = neumático
               '  vec3 wheelColor = mix(cTire, cRim, rimFactor);\n' +
               '  livery = mix(livery, wheelColor, wheelMask);\n' +
               '  diffuseColor.rgb = livery;\n'
@@ -1282,13 +1284,13 @@
             .replace(
               '#include <roughnessmap_fragment>',
               '#include <roughnessmap_fragment>\n' +
-              '  float wheelRough = mix(0.95, 0.22, rimFactor);\n' + // neumático mate puro / rin pulido
+              '  float wheelRough = mix(0.95, 0.40, rimFactor);\n' + // neumático mate puro / rin grafito semi-mate
               '  roughnessFactor = mix(roughnessFactor, wheelRough, wheelMask);\n'
             )
             .replace(
               '#include <metalnessmap_fragment>',
               '#include <metalnessmap_fragment>\n' +
-              '  float wheelMetal = mix(0.05, 0.85, rimFactor);\n' + // neumático no metálico / rin metálico automotriz
+              '  float wheelMetal = mix(0.05, 0.70, rimFactor);\n' + // neumático no metálico / rin metálico automotriz
               '  metalnessFactor = mix(metalnessFactor, wheelMetal, wheelMask);\n'
             );
         };
