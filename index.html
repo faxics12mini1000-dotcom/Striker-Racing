@@ -213,7 +213,7 @@
   }
   .model-stage canvas{
     width:100% !important; height:100% !important; display:block; cursor:grab; touch-action:none;
-    opacity:0; transition:opacity .5s ease;
+    opacity:0; transition:opacity .4s ease;
   }
   .model-stage.is-ready canvas{opacity:1;}
   .model-stage canvas:active{cursor:grabbing;}
@@ -226,13 +226,28 @@
     position:absolute; bottom:10px; right:10px; z-index:2; pointer-events:none;
     font-family:var(--mono); font-size:0.62rem; letter-spacing:0.04em;
     color:var(--ice-dim); background:rgba(7,27,51,0.7); padding:4px 8px; border:1px solid var(--border-fine);
+    opacity:0; transition:opacity .3s ease .15s;
   }
+  .model-stage.is-ready .model-hint{opacity:1;}
+  .model-loader{
+    position:absolute; inset:0; z-index:3;
+    display:flex; align-items:center; justify-content:center;
+    transition:opacity .3s ease; pointer-events:none;
+  }
+  .model-loader .model-spinner{
+    width:32px; height:32px; border-radius:50%;
+    border:2px solid var(--border-fine); border-top-color:var(--emerald);
+    animation:model-spin .8s linear infinite;
+  }
+  .model-stage.is-ready .model-loader{opacity:0;}
+  @media (prefers-reduced-motion:reduce){ .model-loader .model-spinner{animation-duration:1.6s;} }
+  @keyframes model-spin{ to{ transform:rotate(360deg); } }
   .model-fallback{
     display:none; position:absolute; inset:0; align-items:center; justify-content:center; text-align:center;
     padding:20px; font-family:var(--mono); font-size:0.78rem; color:var(--ice-dim);
   }
   .no-3d .model-fallback{display:flex;}
-  .no-3d canvas, .no-3d .model-hint{display:none;}
+  .no-3d canvas, .no-3d .model-hint, .no-3d .model-loader{display:none;}
   .hud-readout{margin:0;}
   .hud-readout > div{
     display:flex; justify-content:space-between; align-items:baseline; gap:20px;
@@ -598,6 +613,7 @@
         <div class="model-stage" id="modelStage" aria-label="Modelo 3D del monoplaza con librea de Striker Racing">
           <span class="model-tag">Modelo 3D · librea Striker Racing</span>
           <span class="model-hint">Arrastra para girar</span>
+          <div class="model-loader" aria-hidden="true"><span class="model-spinner"></span></div>
           <div class="model-fallback">Tu navegador no puede mostrar el modelo 3D interactivo.<br>Consulta la ficha técnica de abajo.</div>
         </div>
         <dl class="hud-readout">
@@ -1020,15 +1036,15 @@
       }catch(e){ /* sin entorno, se usan solo las luces directas */ }
     }
 
-    scene.add(new THREE.HemisphereLight(0xCDDEEF, 0x071B33, 1.5));
-    var key = new THREE.DirectionalLight(0xffffff, 2.1);
+    scene.add(new THREE.HemisphereLight(0xCDDEEF, 0x071B33, 1.5)); // ambiental suave
+    var key = new THREE.DirectionalLight(0xffffff, 2.1); // luz principal
     key.position.set(4, 6, 5);
     scene.add(key);
-    var fillLight = new THREE.DirectionalLight(0x7137D4, 0.55);
-    fillLight.position.set(-5, 2, -3);
+    var fillLight = new THREE.DirectionalLight(0x7137D4, 0.4); // relleno frontal suave, del lado opuesto a la principal
+    fillLight.position.set(-4, 2.5, 3);
     scene.add(fillLight);
-    var rimLight = new THREE.DirectionalLight(0x12B866, 0.7);
-    rimLight.position.set(-2, 3, 6);
+    var rimLight = new THREE.DirectionalLight(0x12B866, 0.9); // rim light DETRÁS del auto, marca el contorno
+    rimLight.position.set(-2, 4, -6);
     scene.add(rimLight);
 
     var group = new THREE.Group();
@@ -1043,50 +1059,141 @@
     controls.enableZoom = false; // evita "secuestrar" el scroll de la página
     controls.minPolarAngle = THREE.MathUtils.degToRad(15);
     controls.maxPolarAngle = THREE.MathUtils.degToRad(150);
-    controls.autoRotate = !reduceMotion;
-    controls.autoRotateSpeed = 1.3;
     controls.rotateSpeed = 0.85;
+    // three.js gira (2*PI/60)*autoRotateSpeed radianes por segundo (independiente del framerate si
+    // se le pasa deltaTime a controls.update()). Calibrado para ~0.15 rad/s.
+    controls.autoRotateSpeed = 0.15 / (2 * Math.PI / 60);
+    controls.autoRotate = false; // el auto-giro idle se maneja a mano para poder pausar/retomar
+
+    var idleRotateAllowed = !reduceMotion;
+    var resumeTimer = null;
+    var RESUME_DELAY_MS = 2500;
+
+    controls.addEventListener('start', function(){
+      idleRotateAllowed = false;
+      if(resumeTimer){ clearTimeout(resumeTimer); resumeTimer = null; }
+    });
+    controls.addEventListener('end', function(){
+      if(reduceMotion) return;
+      resumeTimer = setTimeout(function(){ idleRotateAllowed = true; resumeTimer = null; }, RESUME_DELAY_MS);
+    });
+
+    // --- Encuadre: ajusta la DISTANCIA de la cámara (no solo el FOV/aspect) para que el auto
+    // llene ~75% del canvas sin importar el ángulo de órbita actual ni el tamaño del contenedor.
+    var fitCorners = null; // 8 esquinas del bounding box, ya centrado en el origen
+    var worldUp = new THREE.Vector3(0, 1, 0);
+    var FIT_MARGIN = 1.3; // >1 dorado de margen; ~1.3 deja al auto llenando ~75-80% del cuadro
+
+    function computeFitDistance(){
+      var dir = new THREE.Vector3().subVectors(camera.position, controls.target);
+      if(dir.lengthSq() < 1e-8) dir.set(0, 0, 1);
+      dir.normalize();
+      var right = new THREE.Vector3().crossVectors(worldUp, dir);
+      if(right.lengthSq() < 1e-8) right.set(1, 0, 0); else right.normalize();
+      var up = new THREE.Vector3().crossVectors(dir, right).normalize();
+
+      var maxH = 0, maxV = 0;
+      for(var i = 0; i < fitCorners.length; i++){
+        var c = fitCorners[i];
+        var h = Math.abs(c.dot(right));
+        var v = Math.abs(c.dot(up));
+        if(h > maxH) maxH = h;
+        if(v > maxV) maxV = v;
+      }
+      var vFov = THREE.MathUtils.degToRad(camera.fov / 2);
+      var hFov = Math.atan(Math.tan(vFov) * camera.aspect);
+      var distV = maxV / Math.tan(vFov);
+      var distH = maxH / Math.tan(hFov);
+      return Math.max(distV, distH) * FIT_MARGIN;
+    }
+
+    function applyFit(){
+      if(!fitCorners) return;
+      var dist = computeFitDistance();
+      var dir = new THREE.Vector3().subVectors(camera.position, controls.target);
+      if(dir.lengthSq() < 1e-8) dir.set(0, 0, 1);
+      dir.normalize();
+      camera.position.copy(dir.multiplyScalar(dist).add(controls.target));
+      camera.near = Math.max(dist * 0.04, 0.05);
+      camera.far = dist * 20;
+      camera.updateProjectionMatrix();
+    }
+
+    function makeContactShadowTexture(){
+      var c = document.createElement('canvas');
+      c.width = c.height = 256;
+      var ctx = c.getContext('2d');
+      var g = ctx.createRadialGradient(128, 128, 0, 128, 128, 128);
+      g.addColorStop(0, 'rgba(0,0,0,0.55)');
+      g.addColorStop(0.55, 'rgba(0,0,0,0.28)');
+      g.addColorStop(1, 'rgba(0,0,0,0)');
+      ctx.fillStyle = g;
+      ctx.fillRect(0, 0, 256, 256);
+      return new THREE.CanvasTexture(c);
+    }
 
     new GLTFLoader().load('car.glb', function(gltf){
       var model = gltf.scene;
+
+      // El .glb trae en los accessors un bounding box cacheado que quedó desalineado del eje
+      // real de los vértices (metadata vieja de antes de la conversión Z-up -> Y-up). GLTFLoader
+      // usa esa caja tal cual si existe, así que la recalculamos desde el buffer real para que el
+      // encuadre de la cámara parta de las dimensiones correctas.
+      model.traverse(function(obj){
+        if(obj.isMesh){ obj.geometry.computeBoundingBox(); obj.geometry.computeBoundingSphere(); }
+      });
+
       var box = new THREE.Box3().setFromObject(model);
       var size = box.getSize(new THREE.Vector3());
       var center = box.getCenter(new THREE.Vector3());
-      var maxDim = Math.max(size.x, size.y, size.z) || 1;
 
       model.position.sub(center); // centra el auto en el origen para orbitar limpio (solo afecta el nodo, no los vértices)
 
-      // El shader lee position.x en espacio LOCAL de cada malla (sin el offset de recentrado), así que
-      // usamos los límites originales de la caja, no los ajustados por "center".
-      var minX = box.min.x;
-      var maxX = box.max.x;
+      // El shader lee position.x/y en espacio LOCAL de cada malla (sin el offset de recentrado), así
+      // que usamos los límites originales de la caja, no los ajustados por "center".
+      var minX = box.min.x, maxX = box.max.x;
+      var minY = box.min.y, maxY = box.max.y;
 
       var liveryMaterial = new THREE.MeshPhysicalMaterial({
-        color: 0xffffff, metalness:0.25, roughness:0.38, clearcoat:0.6, clearcoatRoughness:0.25,
+        color: 0xffffff, metalness:0.6, roughness:0.35, clearcoat:0.35, clearcoatRoughness:0.25,
         side: THREE.DoubleSide // el STL de origen trae normales/orientación poco fiables
       });
       liveryMaterial.onBeforeCompile = function(shader){
         shader.uniforms.uMinX = { value: minX };
         shader.uniforms.uMaxX = { value: maxX };
+        shader.uniforms.uMinY = { value: minY };
+        shader.uniforms.uMaxY = { value: maxY };
         shader.uniforms.cNose = { value: new THREE.Color(0x7137D4) }; // morado celta
         shader.uniforms.cBody = { value: new THREE.Color(0x183969) }; // navy claro de marca (border-fine), con más contraste contra el fondo
         shader.uniforms.cTail = { value: new THREE.Color(0x12B866) }; // esmeralda
         shader.uniforms.cLine = { value: new THREE.Color(0xC8FF32) }; // filete limón
-        shader.vertexShader = 'varying float vLocalX;\n' + shader.vertexShader.replace(
+        shader.vertexShader = 'varying float vLocalX;\nvarying float vLocalY;\n' + shader.vertexShader.replace(
           '#include <begin_vertex>',
-          '#include <begin_vertex>\n  vLocalX = position.x;'
+          '#include <begin_vertex>\n  vLocalX = position.x;\n  vLocalY = position.y;'
         );
-        shader.fragmentShader = 'varying float vLocalX;\nuniform float uMinX;\nuniform float uMaxX;\nuniform vec3 cNose;\nuniform vec3 cBody;\nuniform vec3 cTail;\nuniform vec3 cLine;\n' + shader.fragmentShader.replace(
-          '#include <color_fragment>',
-          '#include <color_fragment>\n' +
-          '  float t = clamp((vLocalX - uMinX) / max(uMaxX - uMinX, 0.0001), 0.0, 1.0);\n' +
-          '  vec3 livery = mix(cNose, cBody, smoothstep(0.10, 0.20, t));\n' +
-          '  livery = mix(livery, cTail, smoothstep(0.82, 0.92, t));\n' +
-          '  float seam = min(abs(t - 0.16), abs(t - 0.87));\n' +
-          '  float stripe = 1.0 - smoothstep(0.0, 0.010, seam);\n' +
-          '  livery = mix(livery, cLine, stripe);\n' +
-          '  diffuseColor.rgb = livery;\n'
-        );
+        shader.fragmentShader = 'varying float vLocalX;\nvarying float vLocalY;\nuniform float uMinX;\nuniform float uMaxX;\nuniform float uMinY;\nuniform float uMaxY;\nuniform vec3 cNose;\nuniform vec3 cBody;\nuniform vec3 cTail;\nuniform vec3 cLine;\n' + shader.fragmentShader
+          .replace(
+            '#include <color_fragment>',
+            '#include <color_fragment>\n' +
+            '  float t = clamp((vLocalX - uMinX) / max(uMaxX - uMinX, 0.0001), 0.0, 1.0);\n' +
+            '  vec3 livery = mix(cNose, cBody, smoothstep(0.10, 0.20, t));\n' +
+            '  livery = mix(livery, cTail, smoothstep(0.82, 0.92, t));\n' +
+            '  float seam = min(abs(t - 0.16), abs(t - 0.87));\n' +
+            '  float stripe = 1.0 - smoothstep(0.0, 0.010, seam);\n' +
+            '  livery = mix(livery, cLine, stripe);\n' +
+            '  diffuseColor.rgb = livery;\n'
+          )
+          .replace(
+            '#include <roughnessmap_fragment>',
+            '#include <roughnessmap_fragment>\n' +
+            '  float wheelT = 1.0 - smoothstep(uMinY, uMinY + (uMaxY - uMinY) * 0.32, vLocalY);\n' +
+            '  roughnessFactor = mix(roughnessFactor, 0.9, wheelT);\n' // llantas/tren bajo: acabado mate
+          )
+          .replace(
+            '#include <metalnessmap_fragment>',
+            '#include <metalnessmap_fragment>\n' +
+            '  metalnessFactor = mix(metalnessFactor, 0.05, wheelT);\n'
+          );
       };
 
       model.traverse(function(obj){
@@ -1098,25 +1205,35 @@
       });
       group.add(model);
 
-      // Distancia necesaria para que la esfera envolvente del modelo quepa en el FOV, con margen.
-      var sphereRadius = size.length() / 2;
-      var halfFov = THREE.MathUtils.degToRad(camera.fov / 2);
-      var dist = (sphereRadius / Math.sin(halfFov)) * 1.08;
+      // Sombra de contacto: plano con textura de degradado radial, apoyado justo bajo el auto,
+      // para que no se vea flotando.
+      var shadowTex = makeContactShadowTexture();
+      var shadowGeo = new THREE.PlaneGeometry(size.x * 1.3, size.z * 1.8);
+      var shadowMat = new THREE.MeshBasicMaterial({ map: shadowTex, transparent:true, opacity:0.8, depthWrite:false, toneMapped:false });
+      var shadowMesh = new THREE.Mesh(shadowGeo, shadowMat);
+      shadowMesh.rotation.x = -Math.PI / 2;
+      shadowMesh.position.y = -size.y / 2 + 0.01;
+      shadowMesh.renderOrder = -1;
+      group.add(shadowMesh);
+
+      // Encuadre inicial: vista de 3/4 clásica, y a partir de aquí el loop de animación mantiene
+      // el ~75% de llenado sin importar hacia dónde se orbite ni el resize del contenedor.
+      fitCorners = [];
+      [-1, 1].forEach(function(sx){
+        [-1, 1].forEach(function(sy){
+          [-1, 1].forEach(function(sz){
+            fitCorners.push(new THREE.Vector3(sx * size.x / 2, sy * size.y / 2, sz * size.z / 2));
+          });
+        });
+      });
       var az = THREE.MathUtils.degToRad(35);
       var el = THREE.MathUtils.degToRad(20);
-      camera.position.set(
-        dist * Math.cos(el) * Math.sin(az),
-        dist * Math.sin(el),
-        dist * Math.cos(el) * Math.cos(az)
-      );
-      camera.near = Math.max(dist * 0.05, 0.1);
-      camera.far = dist * 20;
-      camera.updateProjectionMatrix();
+      camera.position.set(Math.sin(az) * Math.cos(el), Math.sin(el), Math.cos(az) * Math.cos(el));
       controls.target.set(0, 0, 0);
-      controls.minDistance = dist * 0.45;
-      controls.maxDistance = dist * 2.2;
+      applyFit();
       controls.update();
 
+      idleRotateAllowed = !reduceMotion;
       stage.classList.add('is-ready');
     }, undefined, function(){ fail(); });
 
@@ -1131,9 +1248,15 @@
     else{ window.addEventListener('resize', resize); }
     resize();
 
+    var clock = new THREE.Clock();
     (function animate(){
       requestAnimationFrame(animate);
-      controls.update();
+      // Se limita el delta para que un frame retrasado (pestaña en segundo plano, hitch del navegador)
+      // no produzca un salto grande en el auto-giro.
+      var delta = Math.min(clock.getDelta(), 1 / 30);
+      controls.autoRotate = idleRotateAllowed;
+      controls.update(delta);
+      applyFit(); // recalcula la distancia para el ángulo/aspect actuales: mantiene el llenado del cuadro
       renderer.render(scene, camera);
     })();
   }
