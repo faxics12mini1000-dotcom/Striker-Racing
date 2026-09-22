@@ -1147,8 +1147,10 @@
 
       // Reorienta el auto para que descanse horizontal sobre sus 4 ruedas: la altura real (Z local)
       // pasa a ser "arriba" (Y de three.js) y el ancho (Y local) pasa a ser el eje lateral (Z de
-      // three.js). Rotación de -90° en X intercambia Y/Z sin tocar la longitud (X).
-      model.rotation.x = -Math.PI / 2;
+      // three.js). Rotación de +90° en X intercambia Y/Z sin tocar la longitud (X) -- con -90° el
+      // piso (plano liso) quedaba arriba y la cabina/cockpit abajo (auto "de cabeza"); +90° es el
+      // sentido que deja el piso abajo y la carrocería arriba.
+      model.rotation.x = Math.PI / 2;
       model.updateMatrixWorld(true);
 
       // El modelo quedaba con la nariz apuntando lejos de la cámara (alerón/cola hacia el frente).
