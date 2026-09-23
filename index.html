@@ -324,6 +324,24 @@
     .hud-readout > div{flex-direction:column; gap:4px;}
     .hud-readout dd{text-align:left;}
   }
+  .brand-link{display:inline-flex; text-decoration:none; color:inherit;}
+  nav a.brand-link{padding-bottom:0;}
+  nav a.brand-link::after{display:none;}
+  .hud-ref{
+    margin:10px 0 0; font-family:var(--mono); font-size:0.68rem; letter-spacing:0.03em; line-height:1.5; color:var(--ice-dim);
+  }
+  .hud-disclaimer{margin:14px 0 0; font-size:0.7rem; line-height:1.5; color:var(--ice-dim);}
+  .model-stage .model-tag{max-width:calc(100% - 20px);}
+  .hud-top-btn{
+    position:fixed; bottom:24px; right:24px; z-index:40; cursor:pointer;
+    font-family:var(--mono); font-size:0.75rem; color:var(--emerald);
+    border:1px solid var(--border-fine); background:rgba(7,27,51,0.85);
+    -webkit-backdrop-filter:blur(8px); backdrop-filter:blur(8px); padding:10px 14px;
+    opacity:0; pointer-events:none; transition:opacity .25s ease;
+  }
+  .hud-top-btn.is-visible{opacity:1; pointer-events:auto;}
+  .hud-top-btn:hover{border-color:var(--emerald);}
+  .btn:active, .profile-btn:active, .tier-btn:active, .dossier-btn:active, .hud-top-btn:active{transform:translateY(1px) scale(0.99);}
   .kicker{
     display:inline-flex; align-items:center; gap:8px;
     font-family:var(--mono); font-weight:500; font-size:0.78rem; color:var(--ice);
@@ -782,10 +800,12 @@
 <a class="skip-link" href="#main">Saltar al contenido</a>
 <nav>
   <div class="wrap">
-    <div class="brand">
-      <img class="brand-mark" src="logo-64.webp" width="34" height="32" alt="Striker Racing">
-      STRIKER RACING
-    </div>
+    <a href="#" id="brandHome" class="brand-link" aria-label="Inicio">
+      <div class="brand">
+        <img class="brand-mark" src="logo-64.webp" width="34" height="32" alt="Striker Racing">
+        STRIKER RACING
+      </div>
+    </a>
     <ul id="navList">
       <li><a href="#proyecto">El proyecto</a></li>
       <li><a href="#equipo">Equipo</a></li>
@@ -828,19 +848,21 @@
         <div class="hud-head">Reglamento técnico de la categoría</div>
         <div class="model-stage" id="modelStage" aria-label="Modelo 3D de referencia con librea de Striker Racing">
           <img class="model-poster" src="car-poster.webp" width="800" height="550" alt="Vista de referencia del monoplaza de Striker Racing, librea azul y verde" loading="eager" fetchpriority="high">
-          <span class="model-tag">Modelo de referencia · Diseño propio en desarrollo</span>
+          <span class="model-tag">BENCHMARK AERODINÁMICO // REF. CONCEPTUAL F1</span>
           <span class="model-hint">Arrastra para girar</span>
           <div class="model-loader" aria-hidden="true"><span class="model-spinner"></span></div>
           <div class="model-fallback">Tu navegador no puede mostrar el modelo 3D interactivo.<br>Consulta la ficha técnica de abajo.</div>
         </div>
+        <p class="hud-ref">Silueta conceptual F1 (Inspiración AMR) · Modelo propio en desarrollo CAD</p>
         <dl class="hud-readout">
-          <div><dt>Longitud reglamentaria</dt><dd>210.0 mm</dd></div>
-          <div><dt>Peso mínimo</dt><dd>50.0 g</dd></div>
-          <div><dt>Propulsión</dt><dd>Cartucho CO₂ comprimido (8 g)</dd></div>
+          <div><dt>Longitud permitida</dt><dd>170.0 – 210.0 mm</dd></div>
+          <div><dt>Masa mínima reglamentaria</dt><dd>50.0 g (sin cartucho)</dd></div>
+          <div><dt>Propulsión</dt><dd>Cartucho 8g CO₂ · Pista 20m</dd></div>
           <div><dt>Batalla reglamentaria</dt><dd>130.0 mm</dd></div>
           <div><dt>Software de diseño</dt><dd>Autodesk Fusion 360</dd></div>
           <div><dt>Validación de fluidos</dt><dd>Ansys Student CFD</dd></div>
         </dl>
+        <p class="hud-disclaimer">*Geometría 3D de referencia aerodinámica. El monoplaza oficial Striker Racing se modela bajo normativa técnica en Autodesk Fusion.</p>
       </div>
     </div>
   </div>
@@ -1915,6 +1937,20 @@
       navToggle.setAttribute('aria-expanded', 'false');
     }
   });
+  function closeNav(){
+    navList.classList.remove('open');
+    navToggle.setAttribute('aria-expanded', 'false');
+  }
+  document.getElementById('brandHome').addEventListener('click', function(e){
+    e.preventDefault();
+    closeNav();
+    window.scrollTo({top:0, behavior:'smooth'});
+  });
+  var backToTop = document.getElementById('backToTop');
+  function updateBackToTop(){ backToTop.classList.toggle('is-visible', window.scrollY > 400); }
+  window.addEventListener('scroll', updateBackToTop, {passive:true});
+  updateBackToTop();
+  backToTop.addEventListener('click', function(){ window.scrollTo({top:0, behavior:'smooth'}); });
 </script>
 
 <script id="site-config">
@@ -2368,6 +2404,8 @@
   }
 })();
 </script>
+
+<button id="backToTop" class="hud-top-btn" aria-label="Volver arriba">&#9650; TOP</button>
 
 </body>
 </html>
