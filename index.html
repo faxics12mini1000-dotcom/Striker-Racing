@@ -3,11 +3,24 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Striker Racing · STEM Racing México 2027</title>
-<meta name="description" content="Striker Racing es la escudería de Preparatoria Celta en el Desafío STEM Racing México. Cinco estudiantes diseñando y compitiendo con un auto de Fórmula 1 a escala. Súmate como patrocinador.">
+<script>
+  // Detecta soporte real antes de que el CSS decida ocultar contenido para animarlo: así,
+  // sin JS (o si falla a medio cargar), las secciones .reveal/.card-reveal quedan visibles
+  // desde el primer render en vez de atoradas en opacity:0 (ver reglas .js.has-io en <style>).
+  (function(){
+    var c = document.documentElement.classList;
+    c.add('js');
+    if('IntersectionObserver' in window) c.add('has-io');
+  })();
+</script>
+<title>Striker Racing · STEM Racing México, temporada 2026–2027</title>
+<meta name="description" content="Striker Racing es la escudería de Preparatoria Celta en el Desafío STEM Racing México, temporada 2026–2027. Cinco estudiantes diseñando y compitiendo con un auto de Fórmula 1 a escala. Súmate como patrocinador.">
 <meta name="theme-color" content="#071B33">
-<meta property="og:title" content="Striker Racing · STEM Racing México">
-<meta property="og:description" content="La escudería de Preparatoria Celta en el Desafío STEM Racing México. Súmate como patrocinador.">
+<link rel="alternate" hreflang="es-mx" href="https://striker-racing.vercel.app/">
+<link rel="alternate" hreflang="en" href="https://striker-racing.vercel.app/en/">
+<link rel="alternate" hreflang="x-default" href="https://striker-racing.vercel.app/">
+<meta property="og:title" content="Striker Racing · STEM Racing México, temporada 2026–2027">
+<meta property="og:description" content="La escudería de Preparatoria Celta en el Desafío STEM Racing México, temporada 2026–2027. Súmate como patrocinador.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://striker-racing.vercel.app/">
 <meta property="og:image" content="https://striker-racing.vercel.app/og-preview.png">
@@ -15,17 +28,18 @@
 <meta property="og:image:height" content="630">
 <meta property="og:locale" content="es_MX">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Striker Racing · STEM Racing México">
-<meta name="twitter:description" content="La escudería de Preparatoria Celta en el Desafío STEM Racing México. Súmate como patrocinador.">
+<meta name="twitter:title" content="Striker Racing · STEM Racing México, temporada 2026–2027">
+<meta name="twitter:description" content="La escudería de Preparatoria Celta en el Desafío STEM Racing México, temporada 2026–2027. Súmate como patrocinador.">
 <meta name="twitter:image" content="https://striker-racing.vercel.app/og-preview.png">
 <link rel="icon" href="logo.png">
 <link rel="apple-touch-icon" href="logo.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
 <script type="importmap">
 {"imports":{
-  "three":"https://unpkg.com/three@0.160.0/build/three.module.js",
-  "three/addons/":"https://unpkg.com/three@0.160.0/examples/jsm/"
+  "three":"./vendor/three/build/three.module.min.js",
+  "three/addons/":"./vendor/three/examples/jsm/"
 }}
 </script>
 <script type="application/ld+json">
@@ -36,7 +50,8 @@
   "sport": "STEM Racing (F1 in Schools)",
   "url": "https://striker-racing.vercel.app/",
   "logo": "https://striker-racing.vercel.app/logo.png",
-  "description": "Escudería estudiantil de Preparatoria Celta en el Desafío STEM Racing México. Meta de temporada: destacar en la fase regional y asegurar la clasificación a la Final Nacional STEM Racing México 2027, con proyección a la Final Mundial FIA.",
+  "image": "https://striker-racing.vercel.app/og-preview.png",
+  "description": "Escudería estudiantil de Preparatoria Celta en el Desafío STEM Racing México, temporada 2026–2027. Meta de temporada: destacar en la fase regional y asegurar la clasificación a la Final Nacional STEM Racing México 2027, con proyección a la Final Mundial FIA.",
   "location": {
     "@type": "Place",
     "address": {
@@ -44,6 +59,10 @@
       "addressLocality": "Querétaro",
       "addressCountry": "MX"
     }
+  },
+  "memberOf": {
+    "@type": "SportsOrganization",
+    "name": "STEM Racing México"
   },
   "parentOrganization": {
     "@type": "EducationalOrganization",
@@ -54,16 +73,29 @@
       "addressCountry": "MX"
     }
   },
+  "coach": {
+    "@type": "Person",
+    "name": "Alejandro Félix Barajas",
+    "jobTitle": "Mentor técnico"
+  },
+  "athlete": [
+    {"@type":"Person","name":"Ariadna Mejía Hernández"},
+    {"@type":"Person","name":"Unai Bozalongo Valiente"},
+    {"@type":"Person","name":"María Fernanda Escobar López"},
+    {"@type":"Person","name":"Josué Ulises Gutiérrez Rodríguez"},
+    {"@type":"Person","name":"Carlo David Serafín González Pacheco"}
+  ],
   "sameAs": ["https://www.instagram.com/striker.racing_mx/"]
 }
 </script>
 <style>
   :root{
-    /* Paleta oficial de la escudería */
+    /* Paleta oficial de la escudería — solo azul y verde, sin morado */
     --navy-deep:#071B33;   /* fondo primario */
     --surface:#0E223D;     /* tarjetas y paneles */
     --border-fine:#183969; /* bordes */
-    --purple:#7137D4;      /* identidad de marca (morado celta) */
+    --blue-accent:#2A6DF5; /* identidad de marca (azul de acento) — bordes / iconografía */
+    --blue-accent-deep:#1F56C9; /* variante oscura para texto en blanco sobre fondo azul (AA) */
     --emerald:#12B866;     /* énfasis positivo / acento deportivo */
     --ice:#CDDEEF;         /* texto y datos */
     --lime:#C8FF32;        /* detalle mínimo */
@@ -74,8 +106,16 @@
     --line: #183969;
     --line-soft: rgba(24,57,105,0.55);
     --ice-dim: rgba(205,222,239,0.62);
-    --card-hover: rgba(113,55,212,0.10);
+    --card-hover: rgba(42,109,245,0.12);
+    --focus-ring: #7FB8FF;
   }
+  :focus-visible{outline:2px solid var(--focus-ring); outline-offset:2px;}
+  .skip-link{
+    position:absolute; left:12px; top:-48px; z-index:100;
+    background:var(--emerald); color:#04150C; font-family:var(--mono); font-weight:700;
+    font-size:0.85rem; padding:10px 16px; text-decoration:none; transition:top .15s ease;
+  }
+  .skip-link:focus{top:12px;}
   .blueprint{
     background-color:var(--navy-deep);
     background-image:
@@ -106,15 +146,17 @@
   section[id]{scroll-margin-top:76px;}
   @media (max-width:700px){ section{padding:56px 0;} }
 
-  /* ---------- SCROLL REVEAL ---------- */
-  .reveal{opacity:0; transform:translateY(18px); transition:opacity .7s ease, transform .7s ease;}
-  .reveal.in-view{opacity:1; transform:translateY(0);}
-  @media (prefers-reduced-motion:reduce){ .reveal{opacity:1; transform:none; transition:none;} }
-
-  /* ---------- STAGGERED CARD REVEAL ---------- */
-  .card-reveal{opacity:0; transform:translateY(26px); transition:opacity .6s ease, transform .6s ease;}
-  .card-reveal.in-view{opacity:1; transform:translateY(0);}
-  @media (prefers-reduced-motion:reduce){ .card-reveal{opacity:1; transform:none; transition:none;} }
+  /* ---------- SCROLL REVEAL ----------
+     Visible por default (sin pantallas vacías si JS falla o tarda). Solo se oculta para animar
+     cuando el navegador confirmó JS + IntersectionObserver (clases añadidas en <head>). */
+  .reveal, .card-reveal{opacity:1; transform:none;}
+  .js.has-io .reveal{opacity:0; transform:translateY(12px); transition:opacity .4s ease, transform .4s ease;}
+  .js.has-io .reveal.in-view{opacity:1; transform:translateY(0);}
+  .js.has-io .card-reveal{opacity:0; transform:translateY(16px); transition:opacity .35s ease, transform .35s ease;}
+  .js.has-io .card-reveal.in-view{opacity:1; transform:translateY(0);}
+  @media (prefers-reduced-motion:reduce){
+    .js.has-io .reveal, .js.has-io .card-reveal{opacity:1; transform:none; transition:none;}
+  }
 
   /* ---------- NAV ---------- */
   nav{
@@ -142,6 +184,11 @@
   }
   nav a:hover{color:var(--ice);}
   nav a:hover::after{right:0;}
+  nav a.lang-link{
+    padding:4px 9px; border:1px solid var(--line); font-family:var(--mono); font-size:0.78rem;
+  }
+  nav a.lang-link::after{display:none;}
+  nav a.lang-link:hover{border-color:var(--emerald); color:var(--emerald);}
   .nav-toggle{display:none; background:none; border:none; cursor:pointer; padding:6px;}
   .nav-toggle span, .nav-toggle span::before, .nav-toggle span::after{
     content:""; display:block; width:22px; height:2px; background:var(--ice); position:relative; transition:transform .15s ease;
@@ -164,9 +211,7 @@
   /* ---------- HERO ---------- */
   .hero{
     position:relative;
-    background:
-      radial-gradient(circle at 82% 12%, rgba(113,55,212,0.22) 0%, transparent 45%),
-      var(--navy-deep);
+    background:var(--navy-deep);
     color:var(--ice);
     padding:110px 0 140px;
     overflow:hidden;
@@ -193,7 +238,7 @@
   .hud-panel{
     position:relative;
     background:var(--surface);
-    border:1px solid var(--border-fine); border-top:3px solid var(--purple);
+    border:1px solid var(--border-fine); border-top:3px solid var(--blue-accent);
     padding:22px 24px 8px;
   }
   .hud-head{
@@ -207,10 +252,13 @@
   /* ---------- VISOR 3D DEL MONOPLAZA ---------- */
   .model-stage{
     position:relative; aspect-ratio:16/11; margin:16px 0 4px;
-    background:
-      radial-gradient(circle at 50% 46%, rgba(24,57,105,0.55) 0%, transparent 68%),
-      var(--navy-deep);
+    background-color:var(--navy-deep);
+    background-image:
+      linear-gradient(rgba(24,57,105,0.5) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(24,57,105,0.5) 1px, transparent 1px);
+    background-size:24px 24px;
     border:1px solid var(--border-fine);
+    overflow:hidden;
   }
   .model-stage canvas{
     width:100% !important; height:100% !important; display:block; cursor:grab; touch-action:none;
@@ -218,6 +266,12 @@
   }
   .model-stage.is-ready canvas{opacity:1;}
   .model-stage canvas:active{cursor:grabbing;}
+  .model-poster{
+    position:absolute; inset:0; z-index:1; width:100%; height:100%; object-fit:cover; object-position:center;
+    opacity:1; transition:opacity .35s ease;
+  }
+  .model-stage.is-ready .model-poster{opacity:0; pointer-events:none;}
+  .no-3d .model-poster{opacity:1;}
   .model-stage .model-tag{
     position:absolute; top:10px; left:10px; z-index:2; pointer-events:none;
     font-family:var(--mono); font-size:0.64rem; letter-spacing:0.06em; text-transform:uppercase;
@@ -244,8 +298,8 @@
   @media (prefers-reduced-motion:reduce){ .model-loader .model-spinner{animation-duration:1.6s;} }
   @keyframes model-spin{ to{ transform:rotate(360deg); } }
   .model-fallback{
-    display:none; position:absolute; inset:0; align-items:center; justify-content:center; text-align:center;
-    padding:20px; font-family:var(--mono); font-size:0.78rem; color:var(--ice-dim);
+    display:none; position:absolute; inset:0; z-index:2; align-items:center; justify-content:center; text-align:center;
+    padding:20px; font-family:var(--mono); font-size:0.78rem; color:var(--ice); background:rgba(7,27,51,0.72);
   }
   .no-3d .model-fallback{display:flex;}
   .no-3d canvas, .no-3d .model-hint, .no-3d .model-loader{display:none;}
@@ -269,7 +323,7 @@
     font-family:var(--mono); font-weight:500; font-size:0.78rem; color:var(--ice);
     text-transform:uppercase; letter-spacing:0.04em;
     margin-bottom:16px; padding:7px 14px; border-radius:0;
-    background:rgba(113,55,212,0.14); border:1px solid var(--purple);
+    background:rgba(113,55,212,0.14); border:1px solid var(--blue-accent);
   }
   .kicker::before{content:""; width:6px; height:6px; flex:none; background:var(--lime);}
   .hero h1{
@@ -290,25 +344,33 @@
     display:inline-block; padding:13px 26px;
     clip-path:polygon(10px 0, 100% 0, 100% 100%, calc(100% - 10px) 100%, 0 100%, 0 10px);
     font-family:var(--mono); font-weight:500; font-size:0.86rem; letter-spacing:0.02em; text-transform:uppercase;
-    text-decoration:none; background:transparent; color:var(--ice); border:1px solid var(--purple);
+    text-decoration:none; background:transparent; color:var(--ice); border:1px solid var(--blue-accent);
     transition:background .15s ease, border-color .15s ease;
   }
-  .btn:hover{background:var(--purple);}
+  .btn:hover{background:var(--blue-accent-deep); border-color:var(--blue-accent-deep); color:#fff;}
   .btn.btn-solid{background:var(--emerald); color:#fff; border-color:var(--emerald); font-weight:700;}
   .btn.btn-solid:hover{background:var(--emerald); filter:brightness(0.9);}
 
   .stat-strip{
     position:relative; z-index:2;
-    display:grid; grid-template-columns:repeat(3,1fr);
-    gap:0; margin-top:64px; max-width:600px;
+    display:grid; grid-template-columns:repeat(2,1fr);
+    gap:0; margin-top:64px; max-width:340px;
     border-top:1px solid var(--line);
   }
   .stat-strip > div{padding:18px 20px 0 0;}
   .stat-num{font-family:var(--mono); font-size:1.9rem; color:var(--emerald); font-weight:700;}
   .stat-label{font-size:0.82rem; color:var(--ice-dim); margin-top:2px;}
-  @media (max-width:700px){
-    .stat-strip{grid-template-columns:repeat(2,1fr); row-gap:22px;}
+
+  /* ---------- BARRA DE META DE RECAUDACIÓN (hero) ---------- */
+  .funding-bar{position:relative; z-index:2; margin-top:28px; max-width:420px;}
+  .funding-bar-head{
+    display:flex; justify-content:space-between; align-items:baseline; gap:12px;
+    margin-bottom:8px; font-size:0.82rem; color:var(--ice-dim);
   }
+  .funding-bar-head b{font-family:var(--mono); color:var(--ice); font-weight:700; font-size:0.9rem;}
+  .funding-track{height:10px; background:var(--surface); border:1px solid var(--border-fine);}
+  .funding-fill{height:100%; background:var(--emerald);}
+  .funding-caption{margin-top:8px; font-size:0.8rem; color:var(--ice-dim);}
 
   /* ---------- SECTION HEAD ---------- */
   .section-head{max-width:640px; margin-bottom:48px;}
@@ -356,7 +418,7 @@
   @media (max-width:800px){ .about-grid{grid-template-columns:1fr;} }
   .about-grid p{color:var(--ice-dim); margin-bottom:16px;}
   .fact-card{
-    background:var(--surface); border-left:3px solid var(--purple);
+    background:var(--surface); border-left:3px solid var(--blue-accent);
     padding:22px 24px; clip-path:polygon(14px 0, 100% 0, 100% 100%, 0 100%, 0 14px);
     border-top:1px solid var(--border-fine); border-right:1px solid var(--border-fine); border-bottom:1px solid var(--border-fine);
   }
@@ -380,28 +442,56 @@
   .tl-step h3{font-size:1.05rem; margin-bottom:6px; color:var(--ice);}
   .tl-step p{color:var(--ice-dim); font-size:0.92rem;}
   .tl-step + .tl-step{border-left:1px solid var(--line); padding-left:24px;}
+  /* <768px: timeline vertical con línea conectora, en vez de scroll horizontal */
+  @media (max-width:768px){
+    .timeline{display:block; overflow-x:visible; border-top:none;}
+    .tl-step{
+      flex:none; padding:0 0 28px 28px; margin-left:9px;
+      border-left:2px solid var(--line) !important;
+    }
+    .tl-step:last-child{padding-bottom:2px;}
+    .tl-step::before{
+      position:absolute; left:-9px; top:0; transform:translateX(-50%);
+      width:18px; height:18px; margin:0; font-size:0; line-height:0;
+      background:var(--navy-deep); border:2px solid var(--emerald); border-radius:50%;
+    }
+    .tl-step h3, .tl-step p{margin-left:6px;}
+  }
 
   /* ---------- EQUIPO ---------- */
   .team-grid{
-    display:flex; flex-wrap:wrap; justify-content:center; gap:22px;
-    margin-top:8px;
+    display:grid; grid-template-columns:repeat(5, 1fr); gap:20px;
+    margin-top:8px; align-items:stretch;
+  }
+  @media (max-width:900px){
+    .team-grid{display:flex; flex-wrap:wrap; justify-content:center; align-items:stretch;}
+    .team-grid .member-card{flex:1 1 30%; min-width:230px; max-width:320px;}
+  }
+  @media (max-width:600px){
+    .team-grid .member-card{flex:1 1 100%; max-width:420px;}
   }
   .member-card{
     background:var(--surface); border:1px solid var(--border-fine);
     clip-path:polygon(16px 0, 100% 0, 100% 100%, 0 100%, 0 16px);
     padding:26px 24px; position:relative; overflow:hidden;
     transition:transform .18s ease, background .18s ease, border-color .18s ease;
-    display:flex; flex-direction:column;
-    flex:1 1 220px; max-width:300px;
+    display:flex; flex-direction:column; height:100%;
   }
   .member-card::before{
     content:""; position:absolute; top:0; left:0; right:0; height:3px;
-    background:var(--purple);
+    background:var(--blue-accent);
   }
   .member-card:hover{
     transform:translateY(-4px);
     background:var(--card-hover);
-    border-color:var(--purple);
+    border-color:var(--blue-accent);
+  }
+  .member-avatar{
+    width:56px; height:56px; flex:none; margin-bottom:16px;
+    display:flex; align-items:center; justify-content:center;
+    font-family:var(--mono); font-weight:700; font-size:1.1rem; letter-spacing:0.02em;
+    color:var(--ice); background:var(--navy-deep);
+    border:1.5px solid var(--border-fine); border-radius:50%;
   }
   .member-top{display:flex; align-items:center; gap:14px; margin-bottom:16px;}
   .member-number{
@@ -409,30 +499,83 @@
     clip-path:polygon(18% 0, 100% 0, 100% 82%, 82% 100%, 0 100%, 0 18%);
     display:flex; align-items:center; justify-content:center;
     font-family:var(--mono); font-weight:700; font-size:1.25rem; color:var(--ice);
-    background:var(--card-hover); border:1.5px solid var(--purple);
+    background:var(--card-hover); border:1.5px solid var(--blue-accent);
   }
   .member-badge{
     display:inline-block; font-size:0.72rem; font-weight:700; letter-spacing:0.02em;
-    padding:5px 12px; color:var(--ice); line-height:1.3;
-    background:var(--purple);
+    padding:5px 12px; color:#fff; line-height:1.3;
+    background:var(--blue-accent-deep);
     clip-path:polygon(8px 0, 100% 0, 100% 100%, 0 100%, 0 8px);
   }
   .member-card h3{font-size:1.12rem; margin-bottom:4px; line-height:1.25;}
-  /* ---------- CV BUTTON ---------- */
-  .cv-btn{
-    display:inline-flex; align-items:center; gap:8px; align-self:flex-start;
-    margin-top:22px; padding:8px 14px; border-radius:0;
+  .member-card .member-more{margin-top:auto; padding-top:22px; align-self:flex-start;}
+  /* ---------- PERFIL (botón + <dialog>) ---------- */
+  .profile-btn{
+    display:inline-flex; align-items:center; gap:8px;
+    padding:9px 16px; border-radius:0; cursor:pointer;
     font-family:var(--mono); font-weight:500; font-size:0.8rem; text-decoration:none;
-    background:transparent; color:var(--emerald); border:1px solid var(--emerald);
-    transition:background .15s ease, color .15s ease;
+    background:transparent; color:var(--ice); border:1px solid var(--line);
+    transition:border-color .15s ease, color .15s ease;
   }
-  .cv-btn:hover{background:var(--emerald); color:#fff;}
+  .profile-btn:hover{border-color:var(--emerald); color:var(--emerald);}
+  .mentor-profile{margin-top:18px;}
+  dialog.profile-dialog{
+    max-width:560px; width:calc(100% - 40px); padding:0; color:var(--ice);
+    background:var(--surface); border:1px solid var(--border-fine); border-top:3px solid var(--blue-accent);
+  }
+  dialog.profile-dialog::backdrop{background:rgba(3,12,24,0.7);}
+  .profile-dialog-inner{padding:30px 28px;}
+  .profile-dialog-head{display:flex; justify-content:space-between; align-items:flex-start; gap:16px; margin-bottom:6px;}
+  .profile-dialog-head h3{font-size:1.3rem;}
+  .profile-close{
+    flex:none; width:32px; height:32px; display:flex; align-items:center; justify-content:center;
+    background:transparent; border:1px solid var(--line); color:var(--ice); cursor:pointer; font-size:1.1rem; line-height:1;
+  }
+  .profile-close:hover{border-color:var(--emerald); color:var(--emerald);}
+  .profile-role{font-family:var(--mono); font-size:0.78rem; color:var(--emerald); text-transform:uppercase; letter-spacing:0.04em; margin-bottom:18px;}
+  .profile-dialog h4{font-size:0.85rem; text-transform:uppercase; letter-spacing:0.04em; color:var(--ice-dim); margin:18px 0 8px;}
+  .profile-dialog ul{list-style:none; padding:0; margin:0;}
+  .profile-dialog ul li{padding:5px 0 5px 18px; position:relative; font-size:0.94rem; color:var(--ice);}
+  .profile-dialog ul li::before{content:"▸"; position:absolute; left:0; color:var(--blue-accent);}
+  .profile-tools{display:flex; flex-wrap:wrap; gap:8px;}
+  .profile-tools span{
+    font-family:var(--mono); font-size:0.74rem; padding:5px 10px; border:1px solid var(--border-fine); color:var(--ice-dim);
+  }
+
+  /* ---------- CONFIGURADOR DE LOGO ---------- */
+  dialog.configurator-dialog{ max-width:820px; }
+  .configurator-note{ font-size:0.88rem; color:var(--ice-dim); margin-bottom:20px; }
+  .configurator-grid{ display:grid; grid-template-columns:1fr 1fr; gap:24px; align-items:start; }
+  @media (max-width:640px){ .configurator-grid{ grid-template-columns:1fr; } }
+  .configurator-field{ display:flex; flex-direction:column; gap:6px; margin-bottom:16px; font-size:0.86rem; color:var(--ice-dim); }
+  .configurator-field select, .configurator-field input[type="file"]{
+    font-family:'Inter', sans-serif; font-size:0.9rem; color:var(--ice);
+    background:var(--navy-deep); border:1px solid var(--border-fine); padding:9px 10px;
+  }
+  .configurator-hint{
+    font-size:0.82rem; color:var(--ice-dim); background:rgba(42,109,245,0.10);
+    border:1px solid var(--border-fine); border-left:3px solid var(--blue-accent); padding:10px 12px; margin-bottom:16px;
+  }
+  #cfgDownloadBtn{ width:100%; text-align:center; }
+  #cfgDownloadBtn:disabled{ opacity:0.45; cursor:not-allowed; }
+  .configurator-stage-wrap .model-stage{ margin:0; }
+  .configurator-stage .model-fallback{ display:none; }
+  .configurator-stage.no-3d .model-fallback{ display:flex; }
+  .configurator-stage.no-3d .model-loader{ display:none; }
+  /* ---------- CV BUTTON (secundario, dentro del perfil) ---------- */
+  .cv-btn{
+    display:inline-flex; align-items:center; gap:8px;
+    margin-top:20px; padding:8px 14px; border-radius:0;
+    font-family:var(--mono); font-weight:500; font-size:0.8rem; text-decoration:none;
+    background:transparent; color:var(--ice-dim); border:1px solid var(--line);
+    transition:background .15s ease, color .15s ease, border-color .15s ease;
+  }
+  .cv-btn:hover{border-color:var(--emerald); color:var(--emerald);}
   .cv-icon{flex:none;}
-  .mentor-cv{margin-top:18px;}
 
   /* ---------- MENTOR ---------- */
   .mentor-band{background:var(--navy-deep); color:var(--ice); padding:44px 0; position:relative;}
-  .mentor-row{border-left:3px solid var(--purple); padding-left:24px;}
+  .mentor-row{border-left:3px solid var(--blue-accent); padding-left:24px;}
   .mentor-role{font-size:0.8rem; font-weight:600; color:var(--emerald); text-transform:uppercase; letter-spacing:0.04em; margin-bottom:4px;}
   .mentor-row h3{color:var(--ice); font-size:1.3rem; margin-bottom:6px;}
   .mentor-row p{color:var(--ice); font-size:0.94rem; max-width:640px; margin-bottom:14px;}
@@ -460,16 +603,21 @@
   /* ---------- PRESUPUESTO ---------- */
   .budget-box{
     background-color:var(--surface);
-    border:1px solid var(--border-fine); border-top:3px solid var(--purple); padding:36px;
+    border:1px solid var(--border-fine); border-top:3px solid var(--blue-accent); padding:36px;
     clip-path:polygon(20px 0, 100% 0, 100% 100%, 0 100%, 0 20px);
   }
   @media (max-width:700px){ .budget-box{padding:28px 22px;} }
   .budget-summary{
+    display:grid; grid-template-columns:1fr 1fr; gap:28px;
     padding-bottom:28px; margin-bottom:8px; border-bottom:1px solid var(--line);
   }
+  @media (max-width:700px){ .budget-summary{grid-template-columns:1fr; gap:22px;} }
   .budget-figure{font-family:var(--mono); font-size:2.4rem; color:var(--ice); font-weight:700;}
   .budget-figure-unit{font-size:0.8rem; color:var(--ice-dim); font-family:'Inter'; font-weight:500; margin-left:6px;}
   .budget-figure-label{font-size:0.86rem; color:var(--ice-dim); margin-top:4px;}
+  .budget-ask{padding-left:28px; border-left:1px solid var(--line);}
+  @media (max-width:700px){ .budget-ask{padding-left:0; border-left:none; padding-top:22px; border-top:1px solid var(--line);} }
+  .budget-ask .funding-bar-head{color:var(--ice-dim);}
   .budget-list{list-style:none; margin-top:20px;}
   .budget-list li{
     display:flex; justify-content:space-between; gap:16px; padding:10px 0;
@@ -480,19 +628,40 @@
   .budget-list li em{font-style:normal; color:var(--ice-dim); opacity:0.8;}
   .budget-note{
     margin-top:28px; padding:20px 24px; font-size:0.92rem; color:var(--ice-dim);
-    background:rgba(113,55,212,0.10); border:1px solid var(--border-fine); border-left:4px solid var(--purple);
+    background:rgba(113,55,212,0.10); border:1px solid var(--border-fine); border-left:4px solid var(--blue-accent);
   }
   .budget-note b{color:var(--emerald);}
 
   /* ---------- POR QUÉ PATROCINAR ---------- */
   .why-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:28px; margin-bottom:64px;}
   @media (max-width:800px){ .why-grid{grid-template-columns:1fr;} }
-  .why-item{padding-top:20px; border-top:3px solid var(--purple); position:relative;}
+  .why-item{padding-top:20px; border-top:3px solid var(--blue-accent); position:relative;}
   .why-item .why-num{
     font-family:var(--mono); font-size:1.4rem; font-weight:700; color:var(--emerald); margin-bottom:10px; display:block;
   }
   .why-item h3{font-size:1.1rem; margin-bottom:8px; color:var(--ice);}
   .why-item p{color:var(--ice-dim); font-size:0.92rem;}
+
+  /* ---------- DIAGRAMA DE ZONAS DE LOGO ---------- */
+  .zone-diagram{margin:0 0 40px; padding:22px 24px; background:var(--surface); border:1px solid var(--border-fine);}
+  .zone-diagram-caption{
+    font-family:var(--mono); font-size:0.76rem; color:var(--ice-dim); text-transform:uppercase;
+    letter-spacing:0.03em; margin-bottom:14px; text-align:center;
+  }
+  .zone-diagram svg{width:100%; height:auto; display:block; max-width:560px; margin:0 auto;}
+  .zone-caption{font-family:var(--mono); font-size:9px; fill:var(--ice-dim); letter-spacing:0.04em;}
+  .zone-base{fill:none; stroke:var(--border-fine); stroke-width:2;}
+  .zone-wheel{fill:var(--navy-deep); stroke:var(--border-fine); stroke-width:2;}
+  .zone-shape{
+    fill:rgba(42,109,245,0.16); stroke:var(--blue-accent); stroke-width:1.5;
+    cursor:pointer; transition:fill .15s ease, stroke .15s ease, fill-opacity .15s ease;
+  }
+  .zone-shape.zone-hot{fill:var(--emerald); fill-opacity:0.85; stroke:var(--emerald);}
+  .zone-diagram-cta{
+    display:flex; flex-wrap:wrap; align-items:center; justify-content:center; gap:14px;
+    margin-top:20px; padding-top:20px; border-top:1px solid var(--border-fine); text-align:center;
+  }
+  .zone-diagram-cta span{font-size:0.86rem; color:var(--ice-dim);}
 
   /* ---------- TIERS / PRICING ---------- */
   .tiers{display:grid; grid-template-columns:repeat(4,1fr); gap:16px;}
@@ -509,11 +678,11 @@
   .tier h3{font-size:1.2rem; margin-bottom:4px; color:var(--ice);}
   .tier .price{font-family:var(--mono); font-size:1.2rem; color:var(--emerald); font-weight:700; margin-bottom:6px;}
   .tier .price-note{font-size:0.78rem; color:var(--ice-dim); margin-bottom:16px;}
-  .tier ul{list-style:none; flex:1; margin-bottom:20px;}
+  .tier ul{list-style:none; margin:0;}
   .tier li{padding:6px 0; font-size:0.88rem; color:var(--ice-dim); padding-left:18px; position:relative;}
-  .tier li::before{content:"▸"; position:absolute; left:0; color:var(--purple);}
+  .tier li::before{content:"▸"; position:absolute; left:0; color:var(--blue-accent);}
   .tier li b{color:var(--ice); font-weight:600;}
-  .tier-cta{display:flex; flex-direction:column; gap:8px;}
+  .tier-cta{display:flex; flex-direction:column; gap:8px; margin-top:auto; padding-top:20px;}
   .tier-cta a.tier-btn{
     text-align:center; font-family:var(--mono); font-size:0.78rem; font-weight:700; padding:11px 12px;
     text-decoration:none; background:var(--emerald); color:#fff;
@@ -528,13 +697,13 @@
 
   .tier.featured{
     background:rgba(18,184,102,0.08); color:var(--ice); position:relative;
-    border:2px solid var(--emerald);
+    border:2px solid var(--emerald); padding-top:44px;
   }
   .tier.featured .ribbon{
-    position:absolute; top:-1px; right:18px;
-    background:var(--navy-deep); color:var(--emerald);
+    position:absolute; top:0; left:0; right:0;
+    background:var(--emerald); color:#04150C; text-align:center;
     font-family:var(--mono); font-size:0.68rem; font-weight:700; letter-spacing:0.06em; text-transform:uppercase;
-    padding:5px 12px; border:1px solid var(--emerald); border-top:none; border-radius:0;
+    padding:6px 12px; border-radius:0;
   }
   .tier.featured h3{color:var(--ice);}
   .tier.featured .price{color:var(--emerald);}
@@ -543,7 +712,8 @@
   .tier.featured li::before{color:var(--emerald);}
 
   /* ---------- FAQ ---------- */
-  .faq{max-width:760px; margin-top:56px;}
+  .faq{max-width:none; margin-top:32px;}
+  .faq-title{font-size:1.3rem; margin-bottom:20px;}
   .faq details{border-bottom:1px solid var(--line); padding:16px 0;}
   .faq summary{
     cursor:pointer; font-weight:600; color:var(--ice); font-size:1rem;
@@ -561,19 +731,41 @@
   }
   .contact-band h2{color:var(--ice); font-size:clamp(1.8rem,3.6vw,2.6rem); margin-bottom:16px;}
   .contact-band p{color:var(--ice); max-width:520px; margin-bottom:32px; font-size:1.05rem;}
-  .contact-links{display:flex; gap:18px; flex-wrap:wrap;}
-  .contact-links a{
-    padding:12px 20px; border-radius:0;
-    font-family:var(--mono); font-weight:500; font-size:0.86rem; text-decoration:none; color:var(--emerald);
-    border:1px solid var(--emerald); background:transparent;
-    transition:background .15s ease, color .15s ease;
+  .contact-links{display:flex; gap:16px; flex-wrap:wrap; align-items:center;}
+  .contact-links a.contact-primary{
+    padding:15px 28px; border-radius:0;
+    font-family:var(--mono); font-weight:700; font-size:0.92rem; text-decoration:none; color:#04150C;
+    background:var(--emerald); border:1px solid var(--emerald);
+    transition:filter .15s ease;
   }
-  .contact-links a:hover{background:var(--emerald); color:#fff;}
+  .contact-links a.contact-primary:hover{filter:brightness(0.9);}
+  .contact-links a.contact-secondary{
+    padding:13px 22px; border-radius:0;
+    font-family:var(--mono); font-weight:500; font-size:0.86rem; text-decoration:none; color:var(--ice);
+    border:1px solid var(--line); background:transparent;
+    transition:border-color .15s ease, color .15s ease;
+  }
+  .contact-links a.contact-secondary:hover{border-color:var(--emerald); color:var(--emerald);}
+  .contact-meta{margin-top:22px; font-size:0.88rem; color:var(--ice-dim);}
+  .contact-meta .social-link{color:var(--ice-dim); text-decoration:underline;}
+  .contact-meta .social-link:hover{color:var(--emerald);}
 
-  footer{padding:28px 0; text-align:center; color:var(--ice-dim); font-size:0.85rem; background:var(--navy-deep); border-top:1px solid var(--line);}
-  .footer-social{margin-top:12px;}
+  footer{padding:52px 0 26px; color:var(--ice-dim); font-size:0.9rem; background:var(--navy-deep); border-top:1px solid var(--line);}
+  .footer-grid{display:grid; grid-template-columns:1.3fr 1fr 1fr; gap:32px; text-align:left;}
+  @media (max-width:700px){ .footer-grid{grid-template-columns:1fr; gap:28px;} }
+  .footer-col h4{font-family:var(--mono); font-size:0.74rem; text-transform:uppercase; letter-spacing:0.05em; color:var(--ice); margin-bottom:14px;}
+  .footer-col p{font-size:0.88rem; color:var(--ice-dim);}
+  .footer-col ul{list-style:none;}
+  .footer-col li{margin-bottom:8px;}
+  .footer-col a{color:var(--ice-dim); text-decoration:none; font-size:0.9rem;}
+  .footer-col a:hover{color:var(--emerald);}
+  .footer-bottom{
+    margin-top:36px; padding-top:20px; border-top:1px solid var(--line);
+    font-size:0.82rem; color:var(--ice-dim);
+    display:flex; flex-wrap:wrap; gap:12px; justify-content:space-between; align-items:center;
+  }
   .social-link{
-    color:var(--purple); text-decoration:none; font-weight:500;
+    color:var(--ice-dim); text-decoration:none; font-weight:500;
     border-bottom:1px solid transparent; transition:border-color .15s ease, color .15s ease;
   }
   .social-link:hover{color:var(--emerald); border-color:var(--emerald);}
@@ -581,6 +773,7 @@
 </head>
 <body>
 
+<a class="skip-link" href="#main">Saltar al contenido</a>
 <nav>
   <div class="wrap">
     <div class="brand">
@@ -591,8 +784,10 @@
       <li><a href="#proyecto">El proyecto</a></li>
       <li><a href="#equipo">Equipo</a></li>
       <li><a href="#herramientas">Herramientas</a></li>
+      <li><a href="#presupuesto">Presupuesto</a></li>
       <li><a href="#patrocinios">Patrocinios</a></li>
       <li><a href="#contacto">Contacto</a></li>
+      <li><a href="en/" class="lang-link" hreflang="en" lang="en">EN</a></li>
     </ul>
     <button class="nav-toggle" id="navToggle" aria-label="Abrir menú" aria-expanded="false" aria-controls="navList"><span></span></button>
   </div>
@@ -602,7 +797,7 @@
   <div class="wrap hero-grid">
     <div class="hero-inner">
       <div class="kicker">Categoría de Desarrollo · STEM Racing México 2026–2027 · Preparatoria Celta, Querétaro</div>
-      <h1><em>Ingeniería mexicana</em> en la pista de STEM Racing México.</h1>
+      <h1 id="main"><em>Ingeniería mexicana</em> en la pista de STEM Racing México.</h1>
       <p class="lead">Diseñamos, fabricamos y corremos un auto de Fórmula 1 a escala en el Desafío STEM Racing México (antes F1 in Schools), la iniciativa educativa oficial de la Fórmula 1®. Meta de temporada: destacar en la fase regional y asegurar la clasificación a la Final Nacional de STEM Racing México 2027, con proyección a la Final Mundial FIA.</p>
       <div class="cta-row">
         <a class="btn btn-solid" href="#patrocinios">Ver niveles de patrocinio</a>
@@ -610,15 +805,23 @@
       </div>
       <div class="stat-strip">
         <div><div class="stat-num">5</div><div class="stat-label">Integrantes</div></div>
-        <div><div class="stat-num">$43,500</div><div class="stat-label">MXN + IVA de inscripción</div></div>
         <div><div class="stat-num">2027</div><div class="stat-label">Meta: final nacional</div></div>
+      </div>
+      <div class="funding-bar" aria-label="Progreso de recaudación de la temporada">
+        <div class="funding-bar-head">
+          <span>Meta de patrocinio de temporada</span>
+          <b><span data-funding="recaudado">$0</span> / <span data-funding="meta">$65,450</span> MXN</b>
+        </div>
+        <div class="funding-track"><div class="funding-fill" data-funding="fill" style="width:0%"></div></div>
+        <div class="funding-caption">Ver desglose completo en <a href="#presupuesto" style="color:var(--emerald);">Presupuesto</a>.</div>
       </div>
     </div>
     <div class="hero-visual">
       <div class="hud-panel">
-        <div class="hud-head">Especificaciones técnicas reglamentarias · Categoría Desarrollo</div>
-        <div class="model-stage" id="modelStage" aria-label="Modelo 3D del monoplaza con librea de Striker Racing">
-          <span class="model-tag">Modelo 3D · librea Striker Racing</span>
+        <div class="hud-head">Reglamento técnico de la categoría</div>
+        <div class="model-stage" id="modelStage" aria-label="Modelo 3D de referencia con librea de Striker Racing">
+          <img class="model-poster" src="car-poster.webp" width="800" height="550" alt="Vista de referencia del monoplaza de Striker Racing, librea azul y verde" loading="eager" fetchpriority="high">
+          <span class="model-tag">Modelo de referencia · Diseño propio en desarrollo</span>
           <span class="model-hint">Arrastra para girar</span>
           <div class="model-loader" aria-hidden="true"><span class="model-spinner"></span></div>
           <div class="model-fallback">Tu navegador no puede mostrar el modelo 3D interactivo.<br>Consulta la ficha técnica de abajo.</div>
@@ -672,8 +875,8 @@
       </div>
       <div class="mission-item">
         <div class="eyebrow">Visión</div>
-        <h3>Querétaro en la final mundial.</h3>
-        <p>Meta de temporada: destacar en la fase regional y asegurar la clasificación a la Final Nacional de STEM Racing México 2027, con proyección a la Final Mundial FIA.</p>
+        <h3>Una escudería que se sostiene temporada tras temporada.</h3>
+        <p>Consolidar a Striker Racing como referente de Preparatoria Celta en STEM Racing México, con una base técnica y de gestión que se transmita a las siguientes generaciones del equipo y abra el camino a la Final Mundial FIA.</p>
       </div>
     </div>
     <div class="value-row">
@@ -724,52 +927,152 @@
     <div class="team-grid">
 
       <div class="card-reveal member-card">
+        <div class="member-avatar">AM</div>
         <div class="member-top">
           <div class="member-number">01</div>
           <span class="member-badge">Dirección de Escudería &amp; Diseño CAD</span>
         </div>
         <h3>Ariadna Mejía Hernández</h3>
-        <a class="cv-btn" href="https://drive.google.com/file/d/1vVcseQcXGQWL2v5xiMk1wLopQhp4DP7s/view?usp=drive_link" target="_blank" rel="noopener">Ver CV técnico<svg class="cv-icon" viewBox="0 0 12 12" width="12" height="12" fill="none" stroke="currentColor" stroke-width="1.3"><path d="M4.5 1.5H10.5V7.5"/><path d="M10.5 1.5L1.5 10.5"/></svg></a>
+        <button class="profile-btn member-more" type="button" data-open="dlg-member-1">Ver perfil completo</button>
       </div>
 
       <div class="card-reveal member-card">
+        <div class="member-avatar">UB</div>
         <div class="member-top">
           <div class="member-number">02</div>
           <span class="member-badge">Dirección de Operaciones &amp; Finanzas</span>
         </div>
         <h3>Unai Bozalongo Valiente</h3>
-        <a class="cv-btn" href="https://drive.google.com/file/d/1i_IsFwTlzdV9ORZlZnu82A09VdbjMjcI/view?usp=drive_link" target="_blank" rel="noopener">Ver CV técnico<svg class="cv-icon" viewBox="0 0 12 12" width="12" height="12" fill="none" stroke="currentColor" stroke-width="1.3"><path d="M4.5 1.5H10.5V7.5"/><path d="M10.5 1.5L1.5 10.5"/></svg></a>
+        <button class="profile-btn member-more" type="button" data-open="dlg-member-2">Ver perfil completo</button>
       </div>
 
       <div class="card-reveal member-card">
+        <div class="member-avatar">ME</div>
         <div class="member-top">
           <div class="member-number">03</div>
           <span class="member-badge">Dirección Creativa &amp; Marca</span>
         </div>
         <h3>María Fernanda Escobar López</h3>
-        <a class="cv-btn" href="https://drive.google.com/file/d/1qccW8wV871Jfrt4iiXEZVuGmmoWDLGpF/view?usp=drive_link" target="_blank" rel="noopener">Ver CV técnico<svg class="cv-icon" viewBox="0 0 12 12" width="12" height="12" fill="none" stroke="currentColor" stroke-width="1.3"><path d="M4.5 1.5H10.5V7.5"/><path d="M10.5 1.5L1.5 10.5"/></svg></a>
+        <button class="profile-btn member-more" type="button" data-open="dlg-member-3">Ver perfil completo</button>
       </div>
 
       <div class="card-reveal member-card">
+        <div class="member-avatar">JG</div>
         <div class="member-top">
           <div class="member-number">04</div>
           <span class="member-badge">Responsable de Manufactura &amp; Prototipado</span>
         </div>
         <h3>Josué Ulises Gutiérrez Rodríguez</h3>
-        <a class="cv-btn" href="https://drive.google.com/file/d/130ZYlRsIeTAfhnr1l7F4l0F-7mSYwKji/view?usp=drive_link" target="_blank" rel="noopener">Ver CV técnico<svg class="cv-icon" viewBox="0 0 12 12" width="12" height="12" fill="none" stroke="currentColor" stroke-width="1.3"><path d="M4.5 1.5H10.5V7.5"/><path d="M10.5 1.5L1.5 10.5"/></svg></a>
+        <button class="profile-btn member-more" type="button" data-open="dlg-member-4">Ver perfil completo</button>
       </div>
 
       <div class="card-reveal member-card">
+        <div class="member-avatar">CG</div>
         <div class="member-top">
           <div class="member-number">05</div>
           <span class="member-badge">Chief Technology Officer (CTO) &amp; Análisis CFD</span>
         </div>
         <h3>Carlo David Serafín González Pacheco</h3>
-        <a class="cv-btn" href="https://drive.google.com/file/d/1KeXEGCWQBprt5_iR433gfYvhZeAIp4nF/view?usp=drive_link" target="_blank" rel="noopener">Ver CV técnico<svg class="cv-icon" viewBox="0 0 12 12" width="12" height="12" fill="none" stroke="currentColor" stroke-width="1.3"><path d="M4.5 1.5H10.5V7.5"/><path d="M10.5 1.5L1.5 10.5"/></svg></a>
+        <button class="profile-btn member-more" type="button" data-open="dlg-member-5">Ver perfil completo</button>
       </div>
 
     </div>
   </div>
+
+  <dialog class="profile-dialog" id="dlg-member-1">
+    <div class="profile-dialog-inner">
+      <div class="profile-dialog-head">
+        <h3>Ariadna Mejía Hernández</h3>
+        <button class="profile-close" type="button" data-close aria-label="Cerrar perfil">✕</button>
+      </div>
+      <div class="profile-role">Dirección de Escudería &amp; Diseño CAD</div>
+      <h4>Responsabilidades</h4>
+      <ul>
+        <li>Liderazgo general del equipo y cumplimiento del reglamento técnico ante STEM Racing México</li>
+        <li>Planeación del cronograma de temporada (inscripción, capacitación, regional, nacional)</li>
+        <li>Diseño y modelado CAD del monoplaza, pieza por pieza</li>
+      </ul>
+      <h4>Herramientas</h4>
+      <div class="profile-tools"><span>Autodesk Fusion</span><span>Gestión de proyecto</span></div>
+      <a class="cv-btn" href="https://drive.google.com/file/d/1vVcseQcXGQWL2v5xiMk1wLopQhp4DP7s/view?usp=drive_link" target="_blank" rel="noopener">Ver CV técnico (Drive)<svg class="cv-icon" viewBox="0 0 12 12" width="12" height="12" fill="none" stroke="currentColor" stroke-width="1.3"><path d="M4.5 1.5H10.5V7.5"/><path d="M10.5 1.5L1.5 10.5"/></svg></a>
+    </div>
+  </dialog>
+
+  <dialog class="profile-dialog" id="dlg-member-2">
+    <div class="profile-dialog-inner">
+      <div class="profile-dialog-head">
+        <h3>Unai Bozalongo Valiente</h3>
+        <button class="profile-close" type="button" data-close aria-label="Cerrar perfil">✕</button>
+      </div>
+      <div class="profile-role">Dirección de Operaciones &amp; Finanzas</div>
+      <h4>Responsabilidades</h4>
+      <ul>
+        <li>Control de presupuesto y seguimiento de gastos de la temporada</li>
+        <li>Relación con patrocinadores: seguimiento de aportaciones y reportes de avance</li>
+        <li>Logística de viáticos, inscripción y trámites administrativos del equipo</li>
+      </ul>
+      <h4>Herramientas</h4>
+      <div class="profile-tools"><span>Control financiero</span><span>Coordinación de patrocinios</span></div>
+      <a class="cv-btn" href="https://drive.google.com/file/d/1i_IsFwTlzdV9ORZlZnu82A09VdbjMjcI/view?usp=drive_link" target="_blank" rel="noopener">Ver CV técnico (Drive)<svg class="cv-icon" viewBox="0 0 12 12" width="12" height="12" fill="none" stroke="currentColor" stroke-width="1.3"><path d="M4.5 1.5H10.5V7.5"/><path d="M10.5 1.5L1.5 10.5"/></svg></a>
+    </div>
+  </dialog>
+
+  <dialog class="profile-dialog" id="dlg-member-3">
+    <div class="profile-dialog-inner">
+      <div class="profile-dialog-head">
+        <h3>María Fernanda Escobar López</h3>
+        <button class="profile-close" type="button" data-close aria-label="Cerrar perfil">✕</button>
+      </div>
+      <div class="profile-role">Dirección Creativa &amp; Marca</div>
+      <h4>Responsabilidades</h4>
+      <ul>
+        <li>Identidad visual de la escudería: librea, pit display y uniformes</li>
+        <li>Presencia en redes sociales y comunicación con la comunidad de Preparatoria Celta</li>
+        <li>Producción de material gráfico para jueces y patrocinadores</li>
+      </ul>
+      <h4>Herramientas</h4>
+      <div class="profile-tools"><span>Diseño gráfico</span><span>Redes sociales</span></div>
+      <a class="cv-btn" href="https://drive.google.com/file/d/1qccW8wV871Jfrt4iiXEZVuGmmoWDLGpF/view?usp=drive_link" target="_blank" rel="noopener">Ver CV técnico (Drive)<svg class="cv-icon" viewBox="0 0 12 12" width="12" height="12" fill="none" stroke="currentColor" stroke-width="1.3"><path d="M4.5 1.5H10.5V7.5"/><path d="M10.5 1.5L1.5 10.5"/></svg></a>
+    </div>
+  </dialog>
+
+  <dialog class="profile-dialog" id="dlg-member-4">
+    <div class="profile-dialog-inner">
+      <div class="profile-dialog-head">
+        <h3>Josué Ulises Gutiérrez Rodríguez</h3>
+        <button class="profile-close" type="button" data-close aria-label="Cerrar perfil">✕</button>
+      </div>
+      <div class="profile-role">Responsable de Manufactura &amp; Prototipado</div>
+      <h4>Responsabilidades</h4>
+      <ul>
+        <li>Manufactura del chasis: maquinado CNC e impresión 3D de piezas</li>
+        <li>Ensamblaje y control de calidad dimensional contra el reglamento técnico</li>
+        <li>Preparación de cada prototipo para las pruebas en pista</li>
+      </ul>
+      <h4>Herramientas</h4>
+      <div class="profile-tools"><span>CNC</span><span>Impresión 3D</span><span>Fusion CAM</span></div>
+      <a class="cv-btn" href="https://drive.google.com/file/d/130ZYlRsIeTAfhnr1l7F4l0F-7mSYwKji/view?usp=drive_link" target="_blank" rel="noopener">Ver CV técnico (Drive)<svg class="cv-icon" viewBox="0 0 12 12" width="12" height="12" fill="none" stroke="currentColor" stroke-width="1.3"><path d="M4.5 1.5H10.5V7.5"/><path d="M10.5 1.5L1.5 10.5"/></svg></a>
+    </div>
+  </dialog>
+
+  <dialog class="profile-dialog" id="dlg-member-5">
+    <div class="profile-dialog-inner">
+      <div class="profile-dialog-head">
+        <h3>Carlo David Serafín González Pacheco</h3>
+        <button class="profile-close" type="button" data-close aria-label="Cerrar perfil">✕</button>
+      </div>
+      <div class="profile-role">Chief Technology Officer (CTO) &amp; Análisis CFD</div>
+      <h4>Responsabilidades</h4>
+      <ul>
+        <li>Simulación y validación aerodinámica del monoplaza en CFD</li>
+        <li>Integración técnica entre diseño CAD, manufactura y reglamento</li>
+        <li>Desarrollo del sitio y la memoria técnica de la escudería</li>
+      </ul>
+      <h4>Herramientas</h4>
+      <div class="profile-tools"><span>Ansys Student / Discovery CFD</span><span>Autodesk Fusion</span></div>
+      <a class="cv-btn" href="https://drive.google.com/file/d/1KeXEGCWQBprt5_iR433gfYvhZeAIp4nF/view?usp=drive_link" target="_blank" rel="noopener">Ver CV técnico (Drive)<svg class="cv-icon" viewBox="0 0 12 12" width="12" height="12" fill="none" stroke="currentColor" stroke-width="1.3"><path d="M4.5 1.5H10.5V7.5"/><path d="M10.5 1.5L1.5 10.5"/></svg></a>
+    </div>
+  </dialog>
 </section>
 
 <div class="mentor-band reveal">
@@ -785,10 +1088,29 @@
           <span class="badge">Lean Six Sigma Black Belt</span>
           <span class="badge">SolidWorks CSWA / CSWP</span>
         </div>
-        <a class="cv-btn mentor-cv" href="https://drive.google.com/file/d/1I8RPbkDco-DnOVXhY6fJZOL8M37_beMt/view?usp=drive_link" target="_blank" rel="noopener">Ver CV técnico</a>
+        <button class="profile-btn mentor-profile" type="button" data-open="dlg-mentor">Ver perfil completo</button>
       </div>
     </div>
   </div>
+
+  <dialog class="profile-dialog" id="dlg-mentor">
+    <div class="profile-dialog-inner">
+      <div class="profile-dialog-head">
+        <h3>Alejandro Félix Barajas</h3>
+        <button class="profile-close" type="button" data-close aria-label="Cerrar perfil">✕</button>
+      </div>
+      <div class="profile-role">Mentor Oficial · Respaldo Institucional Colegio Celta</div>
+      <h4>Responsabilidades</h4>
+      <ul>
+        <li>Asesoría técnica oficial de Striker Racing ante STEM Racing México</li>
+        <li>Supervisión de diseño CAD, manufactura y cumplimiento del reglamento técnico</li>
+        <li>Vínculo institucional entre el equipo y Colegio Celta Internacional</li>
+      </ul>
+      <h4>Herramientas</h4>
+      <div class="profile-tools"><span>SolidWorks</span><span>CAD / Robótica (docencia)</span><span>Lean Six Sigma</span></div>
+      <a class="cv-btn" href="https://drive.google.com/file/d/1I8RPbkDco-DnOVXhY6fJZOL8M37_beMt/view?usp=drive_link" target="_blank" rel="noopener">Ver CV técnico (Drive)<svg class="cv-icon" viewBox="0 0 12 12" width="12" height="12" fill="none" stroke="currentColor" stroke-width="1.3"><path d="M4.5 1.5H10.5V7.5"/><path d="M10.5 1.5L1.5 10.5"/></svg></a>
+    </div>
+  </dialog>
 </div>
 
 <section id="herramientas" class="tools-band reveal">
@@ -800,7 +1122,7 @@
     </div>
     <div class="tool-grid">
       <div class="tool">
-        <h3>Autodesk Fusion</h3>
+        <h3>Autodesk Fusion <span class="tag">Gratis</span></h3>
         <p>Socio oficial de CAD/CAM/CAE de STEM Racing. Aquí modelamos el auto pieza por pieza y preparamos las trayectorias de maquinado.</p>
       </div>
       <div class="tool">
@@ -812,7 +1134,7 @@
         <p>Las simulaciones de CFD exigen equipos con buena capacidad gráfica: es una de las áreas donde el apoyo de un patrocinador acelera directamente nuestro trabajo.</p>
       </div>
       <div class="tool">
-        <h3>Kit oficial F1SRMX</h3>
+        <h3>Kit oficial STEM Racing México</h3>
         <p>Bloques de material para el chasis, tanques de CO₂, ruedas, ejes y armellas, provisto al pagar la inscripción de la temporada.</p>
       </div>
     </div>
@@ -832,6 +1154,14 @@
         <div>
           <div class="budget-figure">$65,450.00<span class="budget-figure-unit">MXN</span></div>
           <div class="budget-figure-label">Costo total estimado de la temporada Regional</div>
+        </div>
+        <div class="budget-ask">
+          <div class="funding-bar-head">
+            <span>Buscamos en patrocinios</span>
+            <b><span data-funding="recaudado">$0</span> / <span data-funding="meta">$65,450</span> MXN</b>
+          </div>
+          <div class="funding-track"><div class="funding-fill" data-funding="fill" style="width:0%"></div></div>
+          <div class="funding-caption">Efectivo o en especie (materiales, maquinado, equipo, transporte). Ver niveles en <a href="#patrocinios" style="color:var(--emerald);">Patrocinios</a>.</div>
         </div>
       </div>
       <ul class="budget-list">
@@ -857,7 +1187,7 @@
       <div class="eyebrow-tag">Patrocinios</div>
       <h2>¿Por qué invertir en Striker Racing?</h2>
       <p>Exposición directa de marca en un entorno tecnológico, preuniversitario y de alto rendimiento.</p>
-      <a class="dossier-btn" href="#contacto">Solicitar dossier ejecutivo</a>
+      <a class="dossier-btn" href="https://wa.me/525511839779?text=Hola%2C%20me%20interesa%20el%20dossier%20ejecutivo%20de%20patrocinio%20de%20Striker%20Racing%2C%20%C2%BFme%20lo%20pueden%20compartir%3F" target="_blank" rel="noopener">Solicitar dossier ejecutivo</a>
     </div>
 
     <div class="why-grid">
@@ -879,28 +1209,55 @@
     </div>
 
     <div class="section-head">
-      <h2 style="font-size:1.5rem;">Elige tu nivel de patrocinio</h2>
+      <h3 style="font-size:1.5rem; margin-bottom:14px;">Elige tu nivel de patrocinio</h3>
+    </div>
+
+    <div class="zone-diagram card-reveal">
+      <div class="zone-diagram-caption">Zonas de logo — pasa el cursor, toca o navega con teclado cada nivel para ver dónde va tu marca</div>
+      <svg viewBox="0 0 560 190" role="img" aria-label="Diagrama de zonas de logo disponibles en el auto (vista lateral) y en el uniforme (frente y espalda)">
+        <text x="14" y="20" class="zone-caption">AUTO · VISTA LATERAL</text>
+        <rect class="zone-base" x="60" y="95" width="160" height="30" rx="6"/>
+        <polygon class="zone-base" points="20,110 60,95 60,125"/>
+        <circle class="zone-wheel" cx="80" cy="132" r="13"/>
+        <circle class="zone-wheel" cx="200" cy="132" r="13"/>
+        <polygon class="zone-shape" data-zone="nose" points="24,110 60,98 60,122"/>
+        <rect class="zone-shape" data-zone="side-pontoon" x="95" y="97" width="65" height="26"/>
+        <rect class="zone-shape" data-zone="rear-wing" x="218" y="86" width="10" height="52"/>
+
+        <text x="330" y="20" class="zone-caption">UNIFORME · FRENTE / ESPALDA</text>
+        <rect class="zone-base" x="330" y="40" width="66" height="112" rx="10"/>
+        <rect class="zone-base" x="308" y="46" width="18" height="46" rx="6"/>
+        <rect class="zone-base" x="450" y="40" width="66" height="112" rx="10"/>
+        <rect class="zone-shape" data-zone="front-chest" x="345" y="58" width="36" height="28"/>
+        <rect class="zone-shape" data-zone="sleeve" x="308" y="46" width="18" height="46" rx="6"/>
+        <rect class="zone-shape" data-zone="upper-back" x="460" y="50" width="46" height="34"/>
+        <rect class="zone-shape" data-zone="lower-back" x="460" y="112" width="46" height="30"/>
+      </svg>
+      <div class="zone-diagram-cta">
+        <button class="profile-btn" type="button" data-open="dlg-configurator">Probar el configurador de logo</button>
+        <span>Sube tu logo y ve cómo se vería en el auto 3D.</span>
+      </div>
     </div>
 
     <div class="tiers">
-      <div class="card-reveal tier">
-        <div class="tier-cupo">Cupo abierto</div>
+      <div class="card-reveal tier" data-zones="lower-back">
+        <div class="tier-cupo" data-config="sponsorTiers.0.availability">5 de 5 espacios disponibles</div>
         <h3>Colaborador</h3>
-        <div class="price">$1,500–3,000</div>
+        <div class="price">$1,500–2,999</div>
         <div class="price-note">MXN</div>
         <ul>
           <li><b>Uniforme:</b> logotipo en cuadrante inferior de espalda (lower back)</li>
-          <li><b>Presencia:</b> mención perimetral en Pit Display (carpa) y en redes sociales, difundida en la cuenta oficial de Instagram <a href="https://instagram.com/striker.racing_mx" target="_blank" rel="noopener" class="social-link">@striker.racing_mx</a></li>
+          <li><b>Presencia:</b> mención perimetral en Pit Display (carpa) y en redes sociales del equipo</li>
         </ul>
         <div class="tier-cta">
           <a class="tier-btn" href="https://wa.me/525511839779?text=Hola%2C%20nos%20interesa%20sumarnos%20a%20Striker%20Racing%20como%20patrocinador%20nivel%20Colaborador." target="_blank" rel="noopener">WhatsApp</a>
-          <a class="tier-mail" href="mailto:strikerracingf1@gmail.com?subject=Patrocinio%20Striker%20Racing%3A%20Nivel%20Colaborador">Correo institucional</a>
+          <a class="tier-mail" href="mailto:strikerracingf1@gmail.com?subject=Patrocinio%20Striker%20Racing%3A%20Nivel%20Colaborador">Correo</a>
         </div>
       </div>
-      <div class="card-reveal tier">
-        <div class="tier-cupo">Cupo abierto</div>
+      <div class="card-reveal tier" data-zones="upper-back">
+        <div class="tier-cupo" data-config="sponsorTiers.1.availability">5 de 5 espacios disponibles</div>
         <h3>Impulsor</h3>
-        <div class="price">$3,000–6,000</div>
+        <div class="price">$3,000–5,999</div>
         <div class="price-note">MXN</div>
         <ul>
           <li><b>Uniforme:</b> logotipo en omóplatos / espalda alta (upper back, mayor visibilidad)</li>
@@ -908,14 +1265,14 @@
         </ul>
         <div class="tier-cta">
           <a class="tier-btn" href="https://wa.me/525511839779?text=Hola%2C%20nos%20interesa%20sumarnos%20a%20Striker%20Racing%20como%20patrocinador%20nivel%20Impulsor." target="_blank" rel="noopener">WhatsApp</a>
-          <a class="tier-mail" href="mailto:strikerracingf1@gmail.com?subject=Patrocinio%20Striker%20Racing%3A%20Nivel%20Impulsor">Correo institucional</a>
+          <a class="tier-mail" href="mailto:strikerracingf1@gmail.com?subject=Patrocinio%20Striker%20Racing%3A%20Nivel%20Impulsor">Correo</a>
         </div>
       </div>
-      <div class="card-reveal tier">
-        <div class="tier-cupo">Cupo abierto</div>
+      <div class="card-reveal tier" data-zones="sleeve,side-pontoon">
+        <div class="tier-cupo" data-config="sponsorTiers.2.availability">3 de 4 espacios disponibles</div>
         <h3>Aliado Técnico</h3>
-        <div class="price">$6,000–10,000</div>
-        <div class="price-note">MXN · acepta equivalencia 100% en especie</div>
+        <div class="price">$6,000–9,999</div>
+        <div class="price-note">MXN</div>
         <ul>
           <li><b>Uniforme:</b> espacio exclusivo en manga izquierda o derecha (brazo)</li>
           <li><b>Auto:</b> logotipo en laterales del chasis y alerón trasero</li>
@@ -923,15 +1280,15 @@
         </ul>
         <div class="tier-cta">
           <a class="tier-btn" href="https://wa.me/525511839779?text=Hola%2C%20nos%20interesa%20sumarnos%20a%20Striker%20Racing%20como%20Aliado%20T%C3%A9cnico." target="_blank" rel="noopener">WhatsApp</a>
-          <a class="tier-mail" href="mailto:strikerracingf1@gmail.com?subject=Patrocinio%20Striker%20Racing%3A%20Nivel%20Aliado%20T%C3%A9cnico">Correo institucional</a>
+          <a class="tier-mail" href="mailto:strikerracingf1@gmail.com?subject=Patrocinio%20Striker%20Racing%3A%20Nivel%20Aliado%20T%C3%A9cnico">Correo</a>
         </div>
       </div>
-      <div class="card-reveal tier featured">
-        <span class="ribbon">Alianza Personalizada</span>
-        <div class="tier-cupo">Esquema abierto y negociable a la medida de tu empresa</div>
+      <div class="card-reveal tier featured" data-zones="front-chest,nose">
+        <span class="ribbon">Personalizado</span>
+        <div class="tier-cupo" data-config="sponsorTiers.3.availability">Cupo único · alianza personalizada</div>
         <h3>Partner Estratégico</h3>
         <div class="price">$10,000+</div>
-        <div class="price-note">MXN · alianza a la medida</div>
+        <div class="price-note">MXN</div>
         <ul>
           <li><b>Uniforme:</b> patrocinador central en el pecho (front) y dorsal principal</li>
           <li><b>Auto:</b> nariz / trompa frontal, con opción a dos espacios principales según propuesta</li>
@@ -940,11 +1297,12 @@
         </ul>
         <div class="tier-cta">
           <a class="tier-btn" href="https://wa.me/525511839779?text=Hola%2C%20queremos%20evaluar%20una%20alianza%20personalizada%20como%20Partner%20Estrat%C3%A9gico%20con%20Striker%20Racing." target="_blank" rel="noopener">WhatsApp</a>
-          <a class="tier-mail" href="mailto:strikerracingf1@gmail.com?subject=Patrocinio%20Striker%20Racing%3A%20Partner%20Estrat%C3%A9gico">Correo institucional</a>
+          <a class="tier-mail" href="mailto:strikerracingf1@gmail.com?subject=Patrocinio%20Striker%20Racing%3A%20Partner%20Estrat%C3%A9gico">Correo</a>
         </div>
       </div>
     </div>
 
+    <h3 class="faq-title">Preguntas frecuentes</h3>
     <div class="faq">
       <details>
         <summary>¿El patrocinio puede ser en especie y no en efectivo?</summary>
@@ -964,6 +1322,50 @@
       </details>
     </div>
   </div>
+
+  <dialog class="profile-dialog configurator-dialog" id="dlg-configurator">
+    <div class="profile-dialog-inner">
+      <div class="profile-dialog-head">
+        <h3>Configurador de logo</h3>
+        <button class="profile-close" type="button" data-close aria-label="Cerrar configurador">✕</button>
+      </div>
+      <p class="configurator-note">Sube tu logo, elige nivel y zona, y velo como decal sobre el auto 3D. El archivo se procesa solo en tu navegador: nunca se sube a ningún servidor (ver <a href="privacidad.html" style="color:var(--emerald);">aviso de privacidad</a>).</p>
+
+      <div class="configurator-grid">
+        <div class="configurator-controls">
+          <label class="configurator-field">
+            <span>1. Tu logo (PNG o JPG, fondo transparente recomendado)</span>
+            <input type="file" id="cfgLogoInput" accept="image/png,image/jpeg,image/webp,image/svg+xml">
+          </label>
+          <label class="configurator-field">
+            <span>2. Nivel de patrocinio</span>
+            <select id="cfgTierSelect">
+              <option value="colaborador" data-zone="nose">Colaborador (uniforme: lower back)</option>
+              <option value="impulsor" data-zone="nose">Impulsor (uniforme: upper back)</option>
+              <option value="aliado-tecnico" data-zone="side-pontoon">Aliado Técnico (auto: lateral del chasis)</option>
+              <option value="partner" data-zone="nose">Partner Estratégico (auto: nariz)</option>
+            </select>
+          </label>
+          <label class="configurator-field">
+            <span>3. Zona en el auto 3D</span>
+            <select id="cfgZoneSelect">
+              <option value="nose">Nariz</option>
+              <option value="side-pontoon">Lateral del chasis</option>
+              <option value="rear-wing">Alerón trasero</option>
+            </select>
+          </label>
+          <p class="configurator-hint" id="cfgUniformHint" hidden>Este nivel coloca tu logo en el uniforme, no en el auto. Aquí puedes previsualizar tamaño y color sobre el chasis como referencia.</p>
+          <button class="btn btn-solid" type="button" id="cfgDownloadBtn" disabled>Descargar vista previa (PNG)</button>
+        </div>
+        <div class="configurator-stage-wrap">
+          <div class="model-stage configurator-stage" id="cfgStage" aria-label="Vista previa del logo sobre el modelo 3D del auto">
+            <div class="model-loader" aria-hidden="true"><span class="model-spinner"></span></div>
+            <div class="model-fallback">Tu navegador no puede mostrar el modelo 3D interactivo.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </dialog>
 </section>
 
 <section id="contacto" class="contact-band reveal">
@@ -971,28 +1373,54 @@
     <h2>¿Te interesa patrocinarnos?</h2>
     <p>Escríbenos y platicamos los detalles: niveles, tiempos y cómo se usa tu aportación.</p>
     <div class="contact-links">
-      <a href="https://wa.me/525511839779?text=Hola%2C%20me%20comunico%20para%20conocer%20la%20propuesta%20de%20patrocinio%20de%20Striker%20Racing." target="_blank" rel="noopener">WhatsApp directo</a>
-      <a href="mailto:strikerracingf1@gmail.com?subject=Patrocinio%20Striker%20Racing">strikerracingf1@gmail.com</a>
-      <a href="tel:+525511839779">(+52) 55 1183 9779 · Patrocinios</a>
-      <a href="https://instagram.com/striker.racing_mx" target="_blank" rel="noopener" class="social-link">Instagram: @striker.racing_mx</a>
+      <a class="contact-primary" href="https://wa.me/525511839779?text=Hola%2C%20me%20comunico%20para%20conocer%20la%20propuesta%20de%20patrocinio%20de%20Striker%20Racing." target="_blank" rel="noopener">WhatsApp directo · (+52) 55 1183 9779</a>
+      <a class="contact-secondary" href="mailto:strikerracingf1@gmail.com?subject=Patrocinio%20Striker%20Racing">strikerracingf1@gmail.com</a>
     </div>
+    <div class="contact-meta">Instagram: <a href="https://instagram.com/striker.racing_mx" target="_blank" rel="noopener" class="social-link">@striker.racing_mx</a></div>
   </div>
 </section>
 
 <footer>
-  <div class="brand">
-    <img class="brand-mark" src="logo.png" alt="Striker Racing">
-    STRIKER RACING
-  </div>
-  Preparatoria Celta, Querétaro · STEM Racing México, temporada 2026–2027
-  <div class="footer-social">
-    <a href="https://instagram.com/striker.racing_mx" target="_blank" rel="noopener" class="social-link">Instagram: @striker.racing_mx</a>
+  <div class="wrap">
+    <div class="footer-grid">
+      <div class="footer-col">
+        <div class="brand">
+          <img class="brand-mark" src="logo.png" alt="Striker Racing">
+          STRIKER RACING
+        </div>
+        <p>Preparatoria Celta, Querétaro · STEM Racing México, temporada 2026–2027.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Secciones</h4>
+        <ul>
+          <li><a href="#proyecto">El proyecto</a></li>
+          <li><a href="#equipo">Equipo</a></li>
+          <li><a href="#herramientas">Herramientas</a></li>
+          <li><a href="#presupuesto">Presupuesto</a></li>
+          <li><a href="#patrocinios">Patrocinios</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Contacto</h4>
+        <ul>
+          <li><a href="mailto:strikerracingf1@gmail.com">strikerracingf1@gmail.com</a></li>
+          <li><a href="https://instagram.com/striker.racing_mx" target="_blank" rel="noopener" class="social-link">Instagram: @striker.racing_mx</a></li>
+          <li><a href="privacidad.html">Aviso de privacidad</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026–2027 Striker Racing</span>
+      <span>Sitio desarrollado por el equipo</span>
+    </div>
   </div>
 </footer>
 
 <script type="module">
-(async function(){
+(function(){
   // Visor 3D del monoplaza con librea de marca (degradado nariz→chasis→alerón, sin necesitar UVs).
+  // Perf: three.js + el .glb solo se descargan cuando el visor está por entrar en viewport (ver
+  // bootWhenNear más abajo) -- hasta entonces se muestra el poster estático (car-poster.webp).
   var stage = document.getElementById('modelStage');
   if(!stage) return;
   function fail(){ stage.classList.add('no-3d'); }
@@ -1003,24 +1431,44 @@
     if(!gl) return fail();
   }catch(e){ return fail(); }
 
-  var THREE, GLTFLoaderMod, OrbitControlsMod, RoomEnvMod;
-  try{
-    THREE = await import('three');
-    GLTFLoaderMod = await import('three/addons/loaders/GLTFLoader.js');
-    OrbitControlsMod = await import('three/addons/controls/OrbitControls.js');
-    try{ RoomEnvMod = await import('three/addons/environments/RoomEnvironment.js'); }catch(e){ RoomEnvMod = null; }
-  }catch(e){ return fail(); }
+  var booted = false;
+  function bootWhenNear(){
+    if(booted) return;
+    booted = true;
+    boot();
+  }
+  if('IntersectionObserver' in window){
+    var bootIO = new IntersectionObserver(function(entries){
+      entries.forEach(function(entry){
+        if(entry.isIntersecting){ bootIO.disconnect(); bootWhenNear(); }
+      });
+    }, { rootMargin:'200px 0px' });
+    bootIO.observe(stage);
+  }else{
+    bootWhenNear(); // sin IntersectionObserver, se carga de inmediato (mejor que quedarse sin visor)
+  }
 
-  try{
-    initViewer(THREE, GLTFLoaderMod.GLTFLoader, OrbitControlsMod.OrbitControls, RoomEnvMod && RoomEnvMod.RoomEnvironment);
-  }catch(e){ fail(); }
+  async function boot(){
+    var THREE, GLTFLoaderMod, OrbitControlsMod, RoomEnvMod, MeshoptMod;
+    try{
+      THREE = await import('three');
+      GLTFLoaderMod = await import('three/addons/loaders/GLTFLoader.js');
+      OrbitControlsMod = await import('three/addons/controls/OrbitControls.js');
+      try{ RoomEnvMod = await import('three/addons/environments/RoomEnvironment.js'); }catch(e){ RoomEnvMod = null; }
+      try{ MeshoptMod = await import('three/addons/libs/meshopt_decoder.module.js'); }catch(e){ MeshoptMod = null; }
+    }catch(e){ return fail(); }
 
-  function initViewer(THREE, GLTFLoader, OrbitControls, RoomEnvironment){
+    try{
+      initViewer(THREE, GLTFLoaderMod.GLTFLoader, OrbitControlsMod.OrbitControls, RoomEnvMod && RoomEnvMod.RoomEnvironment, MeshoptMod && MeshoptMod.MeshoptDecoder);
+    }catch(e){ fail(); }
+  }
+
+  function initViewer(THREE, GLTFLoader, OrbitControls, RoomEnvironment, MeshoptDecoder){
     var scene = new THREE.Scene();
     var camera = new THREE.PerspectiveCamera(30, 1, 1, 5000);
 
     var renderer = new THREE.WebGLRenderer({ antialias:true, alpha:true });
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.5)); // tope 1.5: ahorra fillrate en pantallas retina/4K
     if('outputColorSpace' in renderer) renderer.outputColorSpace = THREE.SRGBColorSpace;
     stage.appendChild(renderer.domElement);
 
@@ -1041,7 +1489,7 @@
     scene.add(key);
     // Luces de relleno/contorno NEUTRAS (blanco frío): con clearcoat, cualquier luz de color aquí
     // se refleja como una mancha de ese color sobre TODA la carrocería metálica, no solo en los
-    // acentos definidos por el shader -- por eso se evita tintar estas luces de morado/verde.
+    // acentos definidos por el shader -- por eso se evita tintar estas luces de azul/verde.
     var fillLight = new THREE.DirectionalLight(0xBFD4FF, 0.2); // relleno frontal suave, del lado opuesto a la principal
     fillLight.position.set(-4, 2.5, 3);
     scene.add(fillLight);
@@ -1135,7 +1583,9 @@
       return new THREE.CanvasTexture(c);
     }
 
-    new GLTFLoader().load('car.glb', function(gltf){
+    var loader = new GLTFLoader();
+    if(MeshoptDecoder) loader.setMeshoptDecoder(MeshoptDecoder); // car.glb va comprimido con EXT_meshopt_compression
+    loader.load('car.glb', function(gltf){
       var model = gltf.scene;
 
       // El .glb trae en los accessors un bounding box cacheado que quedó desalineado del eje
@@ -1236,7 +1686,7 @@
           shader.uniforms.uFrontWheel = { value: new THREE.Vector3(frontWheelGeom.cx, frontWheelGeom.cz, frontWheelGeom.r) };
           shader.uniforms.uRearWheel = { value: new THREE.Vector3(rearWheelGeom.cx, rearWheelGeom.cz, rearWheelGeom.r) };
           shader.uniforms.cBody = { value: new THREE.Color(0x0F2547) }; // azul rey / navy profundo (carrocería, color base único)
-          shader.uniforms.cAccent = { value: new THREE.Color(0x7138D4) }; // morado celta (nariz, franja lateral)
+          shader.uniforms.cAccent = { value: new THREE.Color(0x2A6DF5) }; // azul de acento (nariz, franja lateral)
           shader.uniforms.cSpeed = { value: new THREE.Color(0x12B866) }; // verde esmeralda (flaps/endplates de alerones)
           shader.uniforms.cTire = { value: new THREE.Color(0x11161B) }; // negro mate puro (caucho del neumático)
           shader.uniforms.cRim = { value: new THREE.Color(0x2B323B) }; // grafito/titanio técnico automotriz (cubo del rin)
@@ -1261,7 +1711,7 @@
               '  vec3 livery = cBody;\n' + // pintura sólida uniforme: sin degradados ni parches en el resto del chasis
               '  float noseMask = 1.0 - smoothstep(0.02, 0.035, t);\n' + // punta delantera, se corta justo antes de la llanta
               '  livery = mix(livery, cAccent, noseMask);\n' +
-              // Franja deportiva morado celta a lo largo de pontones laterales / cubierta superior,
+              // Franja deportiva azul de acento a lo largo de pontones laterales / cubierta superior,
               // SOLO entre ejes (nunca sobre las llantas ni sobre nariz/alerón). Trazo nítido y delgado,
               // ceñido al lateral central del monoplaza (sin invadir el suelo ni las llantas).
               '  float sideStripeSpan = smoothstep(0.24, 0.26, t) * (1.0 - smoothstep(0.60, 0.62, t));\n' +
@@ -1349,7 +1799,46 @@
 
       idleRotateAllowed = !reduceMotion;
       stage.classList.add('is-ready');
+      needsRender = true;
+      startLoop();
+
+      // Expone lo necesario para el configurador de logo (ver <script id="configuratorScript">
+      // más abajo): se activa solo si el visitante abre el configurador, así que no cuesta nada
+      // si nunca se usa.
+      stage.dispatchEvent(new CustomEvent('striker:viewer-ready', {
+        detail: { THREE:THREE, scene:scene, camera:camera, renderer:renderer, group:group, model:model, requestRender:requestRender }
+      }));
     }, undefined, function(){ fail(); });
+
+    // ---------- RENDER ON-DEMAND + PAUSA FUERA DE VIEWPORT / PESTAÑA OCULTA ----------
+    // El giro idle es continuo mientras el visor es visible y con motion permitido (needsRender se
+    // marca cada frame); en reduced-motion o si el usuario no interactúa, el loop se detiene solo
+    // (no vuelve a pedir rAF) hasta el próximo evento real (orbit, resize, cambio de visibilidad).
+    var inViewport = true; // el bootstrap solo llega aquí cuando el stage ya está cerca del viewport
+    var pageVisible = document.visibilityState !== 'hidden';
+    var rafId = null;
+    var framePending = false; // true entre el requestAnimationFrame() y el momento en que tick() arranca
+    var needsRender = true;
+    var clock = new THREE.Clock();
+
+    // OrbitControls dispara 'change' de forma SÍNCRONA dentro de su propio update() (ver
+    // OrbitControls.js) -- incluido cuando `applyFit()` reposiciona la cámara cada frame para
+    // mantener el encuadre. Sin la guarda de `framePending`, ese 'change' reentraría a
+    // startLoop() DURANTE el propio tick() y, sumado al re-encolado de más abajo, duplicaba el
+    // requestAnimationFrame en cada frame (explosión exponencial de callbacks -> pestaña colgada).
+    function requestRender(){ needsRender = true; startLoop(); }
+    controls.addEventListener('change', requestRender);
+
+    function startLoop(){
+      if(framePending || !inViewport || !pageVisible) return;
+      framePending = true;
+      clock.getDelta(); // descarta el tiempo acumulado mientras estuvo pausado
+      rafId = requestAnimationFrame(tick);
+    }
+    function stopLoop(){
+      if(rafId != null){ cancelAnimationFrame(rafId); rafId = null; }
+      framePending = false;
+    }
 
     function resize(){
       var w = stage.clientWidth, h = stage.clientHeight;
@@ -1357,22 +1846,48 @@
       camera.aspect = w / h;
       camera.updateProjectionMatrix();
       renderer.setSize(w, h, false);
+      requestRender();
     }
     if('ResizeObserver' in window){ new ResizeObserver(resize).observe(stage); }
     else{ window.addEventListener('resize', resize); }
     resize();
 
-    var clock = new THREE.Clock();
-    (function animate(){
-      requestAnimationFrame(animate);
-      // Se limita el delta para que un frame retrasado (pestaña en segundo plano, hitch del navegador)
-      // no produzca un salto grande en el auto-giro.
+    function tick(){
+      rafId = null;
+      framePending = false; // este frame ya llegó; cualquier re-encolado de aquí en adelante es nuevo
+      // Se limita el delta para que un frame retrasado (pestaña en segundo plano, hitch del
+      // navegador) no produzca un salto grande en el auto-giro.
       var delta = Math.min(clock.getDelta(), 1 / 30);
-      if(idleRotateAllowed) group.rotation.y += delta * IDLE_SPIN_SPEED; // plataforma giratoria: gira el auto, no la cámara
-      controls.update(delta);
-      applyFit(); // recalcula la distancia para el ángulo/aspect actuales: mantiene el llenado del cuadro
-      renderer.render(scene, camera);
-    })();
+      var stillAnimating = false;
+      if(idleRotateAllowed){
+        group.rotation.y += delta * IDLE_SPIN_SPEED; // plataforma giratoria: gira el auto, no la cámara
+        needsRender = true;
+        stillAnimating = true;
+      }
+      // controls.update() puede disparar 'change' (ver comentario arriba de requestRender): si lo
+      // hace, startLoop() ya deja framePending=true aquí mismo, así que el startLoop() de abajo
+      // (guardado por framePending) no vuelve a encolar un segundo requestAnimationFrame.
+      if(controls.update(delta)){ needsRender = true; stillAnimating = true; }
+      if(needsRender){
+        applyFit(); // recalcula la distancia para el ángulo/aspect actuales: mantiene el llenado del cuadro
+        renderer.render(scene, camera);
+        needsRender = false;
+      }
+      if(stillAnimating) startLoop(); // giro continuo o damping asentando: se re-encola solo (una vez)
+    }
+
+    if('IntersectionObserver' in window){
+      new IntersectionObserver(function(entries){
+        entries.forEach(function(entry){
+          inViewport = entry.isIntersecting;
+          if(inViewport) requestRender(); else stopLoop();
+        });
+      }, { threshold:0.01 }).observe(stage);
+    }
+    document.addEventListener('visibilitychange', function(){
+      pageVisible = document.visibilityState !== 'hidden';
+      if(pageVisible) requestRender(); else stopLoop();
+    });
   }
 })();
 </script>
@@ -1390,6 +1905,90 @@
       navToggle.setAttribute('aria-expanded', 'false');
     }
   });
+</script>
+
+<script id="site-config">
+  // Fuente única de verdad para cifras que cambian durante la temporada (meta de recaudación,
+  // disponibilidad de cupos por nivel). Editar aquí en vez de buscar los números en el HTML.
+  window.STRIKER_CONFIG = {
+    funding: { meta: 65450, recaudado: 0, currency: 'MXN' },
+    sponsorTiers: [
+      { id:'colaborador', availability:'5 de 5 espacios disponibles' },
+      { id:'impulsor', availability:'5 de 5 espacios disponibles' },
+      { id:'aliado-tecnico', availability:'3 de 4 espacios disponibles' },
+      { id:'partner', availability:'Cupo único · alianza personalizada' }
+    ]
+  };
+</script>
+
+<script>
+(function(){
+  // ---------- HIDRATA TEXTO DESDE window.STRIKER_CONFIG ----------
+  // El HTML ya trae el valor por default visible sin JS; este script solo lo sincroniza si el
+  // objeto de configuración cambia (ver <script id="site-config">).
+  var cfg = window.STRIKER_CONFIG;
+  if(cfg){
+    document.querySelectorAll('[data-config]').forEach(function(el){
+      var path = el.getAttribute('data-config').split('.');
+      var val = cfg;
+      for(var i = 0; i < path.length; i++){ val = val && val[path[i]]; }
+      if(val != null) el.textContent = val;
+    });
+
+    if(cfg.funding){
+      var fmt = new Intl.NumberFormat('es-MX', { maximumFractionDigits:0 });
+      var meta = cfg.funding.meta || 0;
+      var recaudado = cfg.funding.recaudado || 0;
+      var pct = meta > 0 ? Math.min(100, Math.round((recaudado / meta) * 100)) : 0;
+      document.querySelectorAll('[data-funding="meta"]').forEach(function(el){ el.textContent = '$' + fmt.format(meta); });
+      document.querySelectorAll('[data-funding="recaudado"]').forEach(function(el){ el.textContent = '$' + fmt.format(recaudado); });
+      document.querySelectorAll('[data-funding="fill"]').forEach(function(el){ el.style.width = pct + '%'; });
+    }
+  }
+
+  // ---------- PERFILES: botones que abren <dialog> ----------
+  document.querySelectorAll('[data-open]').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var dlg = document.getElementById(btn.getAttribute('data-open'));
+      if(dlg && typeof dlg.showModal === 'function') dlg.showModal();
+    });
+  });
+  document.querySelectorAll('dialog.profile-dialog').forEach(function(dlg){
+    dlg.querySelectorAll('[data-close]').forEach(function(btn){
+      btn.addEventListener('click', function(){ dlg.close(); });
+    });
+    // Cerrar al hacer click sobre el ::backdrop (fuera de la tarjeta de contenido).
+    dlg.addEventListener('click', function(e){
+      if(e.target === dlg) dlg.close();
+    });
+  });
+
+  // ---------- DIAGRAMA DE ZONAS: resalta al hover/foco de un nivel de patrocinio ----------
+  var tiers = document.querySelectorAll('.tier[data-zones]');
+  function zoneEls(names){
+    var sel = names.split(',').map(function(z){ return '.zone-shape[data-zone="' + z.trim() + '"]'; }).join(',');
+    return document.querySelectorAll(sel);
+  }
+  tiers.forEach(function(tier){
+    var zones = zoneEls(tier.getAttribute('data-zones'));
+    function on(){ zones.forEach(function(z){ z.classList.add('zone-hot'); }); }
+    function off(){ zones.forEach(function(z){ z.classList.remove('zone-hot'); }); }
+    tier.addEventListener('mouseenter', on);
+    tier.addEventListener('mouseleave', off);
+    tier.addEventListener('focusin', on);
+    tier.addEventListener('focusout', off);
+  });
+  // Tocar/clic directo en una zona del diagrama también la resalta (selección persistente).
+  document.querySelectorAll('.zone-shape').forEach(function(shape){
+    shape.setAttribute('tabindex', '0');
+    shape.setAttribute('role', 'button');
+    function toggle(){ shape.classList.toggle('zone-hot'); }
+    shape.addEventListener('click', toggle);
+    shape.addEventListener('keydown', function(e){
+      if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); toggle(); }
+    });
+  });
+})();
 </script>
 
 <script>
@@ -1427,6 +2026,335 @@
     }, {threshold:0.15, rootMargin:'0px 0px -40px 0px'});
     cards.forEach(function(el){ io.observe(el); });
   });
+})();
+</script>
+
+<script type="module">
+(function(){
+  // Configurador de logo (EXTRA): decal del logo del visitante sobre el auto 3D. Todo el
+  // procesamiento ocurre en el navegador -- el archivo nunca se sube a un servidor (ver
+  // privacidad.html). Carga three.js/GLB de forma perezosa, solo la primera vez que se abre el
+  // diálogo, igual que el visor del hero.
+  var openBtn = document.querySelector('[data-open="dlg-configurator"]');
+  var dialog = document.getElementById('dlg-configurator');
+  if(!openBtn || !dialog) return;
+
+  var stage = document.getElementById('cfgStage');
+  var fileInput = document.getElementById('cfgLogoInput');
+  var tierSelect = document.getElementById('cfgTierSelect');
+  var zoneSelect = document.getElementById('cfgZoneSelect');
+  var uniformHint = document.getElementById('cfgUniformHint');
+  var downloadBtn = document.getElementById('cfgDownloadBtn');
+
+  var started = false;
+  openBtn.addEventListener('click', function(){
+    if(started) return;
+    started = true;
+    boot().catch(function(){ stage.classList.add('no-3d'); });
+  });
+
+  function syncUniformHint(){
+    var opt = tierSelect.options[tierSelect.selectedIndex];
+    var isAutoTier = opt.value === 'aliado-tecnico' || opt.value === 'partner';
+    uniformHint.hidden = isAutoTier;
+    zoneSelect.value = opt.getAttribute('data-zone');
+  }
+  tierSelect.addEventListener('change', function(){
+    syncUniformHint();
+    zoneSelect.dispatchEvent(new Event('change'));
+  });
+  syncUniformHint();
+
+  async function boot(){
+    var THREE = await import('three');
+    var { GLTFLoader } = await import('three/addons/loaders/GLTFLoader.js');
+    var { OrbitControls } = await import('three/addons/controls/OrbitControls.js');
+    var RoomEnvironment = null;
+    try{ RoomEnvironment = (await import('three/addons/environments/RoomEnvironment.js')).RoomEnvironment; }catch(e){}
+    var MeshoptDecoder = null;
+    try{ MeshoptDecoder = (await import('three/addons/libs/meshopt_decoder.module.js')).MeshoptDecoder; }catch(e){}
+
+    var testCanvas = document.createElement('canvas');
+    if(!(testCanvas.getContext('webgl') || testCanvas.getContext('experimental-webgl'))){
+      stage.classList.add('no-3d');
+      return;
+    }
+
+    var scene = new THREE.Scene();
+    var camera = new THREE.PerspectiveCamera(32, 1, 1, 5000);
+    var renderer = new THREE.WebGLRenderer({ antialias:true, alpha:true, preserveDrawingBuffer:true });
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.5));
+    if('outputColorSpace' in renderer) renderer.outputColorSpace = THREE.SRGBColorSpace;
+    stage.appendChild(renderer.domElement);
+
+    if(RoomEnvironment){
+      try{
+        var pmrem = new THREE.PMREMGenerator(renderer);
+        scene.environment = pmrem.fromScene(new RoomEnvironment(), 0.04).texture;
+        pmrem.dispose();
+      }catch(e){}
+    }
+    scene.add(new THREE.HemisphereLight(0xCDDEEF, 0x071B33, 1.1));
+    var key = new THREE.DirectionalLight(0xffffff, 1.35);
+    key.position.set(4, 6, 5);
+    scene.add(key);
+    var fillLight = new THREE.DirectionalLight(0xBFD4FF, 0.25);
+    fillLight.position.set(-4, 2.5, 3);
+    scene.add(fillLight);
+
+    var controls = new OrbitControls(camera, renderer.domElement);
+    controls.enableDamping = true;
+    controls.dampingFactor = 0.08;
+    // minDistance/maxDistance se fijan más abajo, relativos al tamaño real del modelo (una vez
+    // calculado `dist`): car.glb no está modelado en metros, así que un límite fijo tipo "20"
+    // podía quedar más cerca que el near-plane calculado para ese mismo `dist` y dejar la cámara
+    // recortando el auto entero (pantalla en blanco al exportar el PNG).
+
+    // Material de librea: misma técnica que el visor del hero (pintura procedural por posición de
+    // vértice, sin depender de UVs). Ver index.html/#modelStage para los comentarios extensos del
+    // porqué de cada máscara; aquí se mantiene idéntico para que el color coincida.
+    function makeLiveryMaterial(toModelSpace, bounds, wheels){
+      var mat = new THREE.MeshPhysicalMaterial({ color:0x0F2547, metalness:0.65, roughness:0.28, clearcoat:0.4, clearcoatRoughness:0.2, side:THREE.DoubleSide });
+      mat.onBeforeCompile = function(shader){
+        shader.uniforms.uToModelSpace = { value: toModelSpace };
+        shader.uniforms.uMinX = { value: bounds.minX }; shader.uniforms.uMaxX = { value: bounds.maxX };
+        shader.uniforms.uMinY = { value: bounds.minY }; shader.uniforms.uMaxY = { value: bounds.maxY };
+        shader.uniforms.uFrontWheel = { value: new THREE.Vector3(wheels.front.cx, wheels.front.cz, wheels.front.r) };
+        shader.uniforms.uRearWheel = { value: new THREE.Vector3(wheels.rear.cx, wheels.rear.cz, wheels.rear.r) };
+        shader.uniforms.cBody = { value: new THREE.Color(0x0F2547) };
+        shader.uniforms.cAccent = { value: new THREE.Color(0x2A6DF5) };
+        shader.uniforms.cSpeed = { value: new THREE.Color(0x12B866) };
+        shader.uniforms.cTire = { value: new THREE.Color(0x11161B) };
+        shader.uniforms.cRim = { value: new THREE.Color(0x2B323B) };
+        shader.vertexShader = 'uniform mat4 uToModelSpace;\nvarying vec3 vModelPos;\n' + shader.vertexShader.replace(
+          '#include <begin_vertex>', '#include <begin_vertex>\n  vModelPos = (uToModelSpace * vec4(transformed, 1.0)).xyz;'
+        );
+        shader.fragmentShader = 'varying vec3 vModelPos;\nuniform float uMinX;\nuniform float uMaxX;\nuniform float uMinY;\nuniform float uMaxY;\nuniform vec3 uFrontWheel;\nuniform vec3 uRearWheel;\nuniform vec3 cBody;\nuniform vec3 cAccent;\nuniform vec3 cSpeed;\nuniform vec3 cTire;\nuniform vec3 cRim;\n' + shader.fragmentShader
+          .replace('#include <color_fragment>',
+            '#include <color_fragment>\n' +
+            '  float t = clamp((uMaxX - vModelPos.x) / max(uMaxX - uMinX, 0.0001), 0.0, 1.0);\n' +
+            '  float edge = abs((vModelPos.y - uMinY) / max(uMaxY - uMinY, 0.0001) - 0.5) * 2.0;\n' +
+            '  float frontAxle = smoothstep(0.025, 0.045, t) * (1.0 - smoothstep(0.195, 0.215, t));\n' +
+            '  float rearAxle = smoothstep(0.665, 0.685, t) * (1.0 - smoothstep(0.815, 0.835, t));\n' +
+            '  float wheelEdge = smoothstep(0.30, 0.55, edge);\n' +
+            '  float wheelMask = clamp((frontAxle + rearAxle) * wheelEdge, 0.0, 1.0);\n' +
+            '  vec3 livery = cBody;\n' +
+            '  float noseMask = 1.0 - smoothstep(0.02, 0.035, t);\n' +
+            '  livery = mix(livery, cAccent, noseMask);\n' +
+            '  float sideStripeSpan = smoothstep(0.24, 0.26, t) * (1.0 - smoothstep(0.60, 0.62, t));\n' +
+            '  float sideStripeEdge = smoothstep(0.44, 0.48, edge) * (1.0 - smoothstep(0.52, 0.58, edge));\n' +
+            '  livery = mix(livery, cAccent, sideStripeSpan * sideStripeEdge);\n' +
+            '  float frontWingBand = 1.0 - smoothstep(0.012, 0.022, t);\n' +
+            '  float rearWingBand = smoothstep(0.88, 0.90, t);\n' +
+            '  float frontWingSide = smoothstep(0.48, 0.58, edge);\n' +
+            '  float rearWingSide = smoothstep(0.55, 0.78, edge);\n' +
+            '  float wingMask = frontWingBand * frontWingSide + rearWingBand * rearWingSide;\n' +
+            '  livery = mix(livery, cSpeed, wingMask);\n' +
+            '  vec2 wheelC = mix(uFrontWheel.xy, uRearWheel.xy, step(0.5, t));\n' +
+            '  float wheelR = mix(uFrontWheel.z, uRearWheel.z, step(0.5, t));\n' +
+            '  float wheelRad = length(vec2(vModelPos.x, vModelPos.z) - wheelC) / max(wheelR, 0.0001);\n' +
+            '  float rimFactor = 1.0 - smoothstep(0.18, 0.36, wheelRad);\n' +
+            '  vec3 wheelColor = mix(cTire, cRim, rimFactor);\n' +
+            '  livery = mix(livery, wheelColor, wheelMask);\n' +
+            '  diffuseColor.rgb = livery;\n'
+          )
+          .replace('#include <roughnessmap_fragment>', '#include <roughnessmap_fragment>\n  float wheelRough = mix(0.95, 0.38, rimFactor);\n  roughnessFactor = mix(roughnessFactor, wheelRough, wheelMask);\n')
+          .replace('#include <metalnessmap_fragment>', '#include <metalnessmap_fragment>\n  float wheelMetal = mix(0.05, 0.70, rimFactor);\n  metalnessFactor = mix(metalnessFactor, wheelMetal, wheelMask);\n');
+      };
+      return mat;
+    }
+
+    var decalMesh = null;
+    var modelRef = null, boundsRef = null;
+
+    // Posición aproximada del decal por zona, en el espacio LOCAL original del .glb (mismo marco
+    // que usa el shader de arriba: X=longitud nariz(max)->cola(min), Y=lateral, Z=altura). No es
+    // un raycast conformado a la superficie (ver nota en el módulo del hero sobre por qué):
+    // una placa plana ligeramente fuera de la carrocería es visualmente suficiente aquí y muchísimo
+    // más robusta que proyectar un DecalGeometry sobre una malla sin UVs fiables.
+    var ZONES = {
+      'nose': { t:0.04, edge:0, height:0.32, face:'x' },
+      'side-pontoon': { t:0.42, edge:1, height:0.5, face:'y' },
+      'rear-wing': { t:0.93, edge:0.75, height:0.85, face:'y' },
+    };
+
+    function zoneLocalPosition(zoneKey){
+      var z = ZONES[zoneKey] || ZONES.nose;
+      var b = boundsRef;
+      var centerY = (b.minY + b.maxY) / 2;
+      var x = b.maxX - z.t * (b.maxX - b.minX);
+      var y = centerY + z.edge * (b.maxY - centerY);
+      var h = b.minZ + z.height * (b.maxZ - b.minZ);
+      var marginX = 0.04 * (b.maxX - b.minX);
+      var marginY = 0.04 * (b.maxY - b.minY);
+      if(z.face === 'x') x += marginX; else y += marginY;
+      return { pos: new THREE.Vector3(x, y, h), face: z.face };
+    }
+
+    function placeDecal(zoneKey){
+      if(!decalMesh || !boundsRef) return;
+      var z = zoneLocalPosition(zoneKey);
+      decalMesh.position.copy(z.pos);
+      decalMesh.rotation.set(0, 0, 0);
+      if(z.face === 'x') decalMesh.rotation.y = -Math.PI / 2;
+      else decalMesh.rotation.x = Math.PI / 2;
+    }
+
+    var loader = new GLTFLoader();
+    if(MeshoptDecoder) loader.setMeshoptDecoder(MeshoptDecoder);
+    loader.load('car.glb', function(gltf){
+      var model = gltf.scene;
+      model.traverse(function(obj){ if(obj.isMesh){ obj.geometry.computeBoundingBox(); obj.geometry.computeBoundingSphere(); } });
+
+      var localBox = new THREE.Box3().setFromObject(model);
+      var bounds = { minX:localBox.min.x, maxX:localBox.max.x, minY:localBox.min.y, maxY:localBox.max.y, minZ:localBox.min.z, maxZ:localBox.max.z };
+
+      var scanMat = new THREE.Matrix4(), scanV = new THREE.Vector3();
+      var frontB = { minX:Infinity, maxX:-Infinity, minZ:Infinity, maxZ:-Infinity };
+      var rearB = { minX:Infinity, maxX:-Infinity, minZ:Infinity, maxZ:-Infinity };
+      model.traverse(function(obj){
+        if(!obj.isMesh) return;
+        scanMat.copy(model.matrixWorld).invert().multiply(obj.matrixWorld);
+        var pos = obj.geometry.attributes.position;
+        for(var i = 0; i < pos.count; i++){
+          scanV.fromBufferAttribute(pos, i).applyMatrix4(scanMat);
+          var vt = (bounds.maxX - scanV.x) / (bounds.maxX - bounds.minX);
+          var vEdge = Math.abs((scanV.y - bounds.minY) / (bounds.maxY - bounds.minY) - 0.5) * 2.0;
+          if(vEdge < 0.35) continue;
+          var b = vt > 0.03 && vt < 0.20 ? frontB : (vt > 0.665 && vt < 0.835 ? rearB : null);
+          if(!b) continue;
+          if(scanV.x < b.minX) b.minX = scanV.x; if(scanV.x > b.maxX) b.maxX = scanV.x;
+          if(scanV.z < b.minZ) b.minZ = scanV.z; if(scanV.z > b.maxZ) b.maxZ = scanV.z;
+        }
+      });
+      function wheelFrom(b){
+        if(!isFinite(b.minX)) return { cx:0, cz:(bounds.minZ+bounds.maxZ)/2, r:Math.max((bounds.maxZ-bounds.minZ)/2,1) };
+        return { cx:(b.minX+b.maxX)/2, cz:(b.minZ+b.maxZ)/2, r:Math.max(b.maxX-b.minX, b.maxZ-b.minZ)/2 };
+      }
+      var wheels = { front: wheelFrom(frontB), rear: wheelFrom(rearB) };
+
+      model.rotation.x = Math.PI / 2;
+      model.updateMatrixWorld(true);
+      model.rotateOnWorldAxis(new THREE.Vector3(0,1,0), Math.PI);
+      model.updateMatrixWorld(true);
+
+      var box = new THREE.Box3().setFromObject(model);
+      var size = box.getSize(new THREE.Vector3());
+      var center = box.getCenter(new THREE.Vector3());
+      model.position.sub(center);
+      model.updateMatrixWorld(true);
+
+      var toModel = new THREE.Matrix4();
+      model.traverse(function(obj){
+        if(obj.isMesh){
+          if(!obj.geometry.attributes.normal) obj.geometry.computeVertexNormals();
+          toModel.copy(model.matrixWorld).invert().multiply(obj.matrixWorld);
+          obj.material = makeLiveryMaterial(toModel.clone(), bounds, wheels);
+        }
+      });
+      scene.add(model);
+      modelRef = model;
+      boundsRef = bounds;
+
+      // Placa del decal (oculta hasta que se suba un logo): child de `model`, así hereda el
+      // recentrado/reorientación automáticamente y no hay que recalcular su posición por frame.
+      var decalGeo = new THREE.PlaneGeometry(size.x * 0.16, size.x * 0.16);
+      // DoubleSide: el usuario orbita libremente la cámara, así que el decal debe verse desde
+      // cualquier ángulo. Con textura + DoubleSide, three.js no voltea el mapeo UV de la cara
+      // trasera, así que visto desde "atrás" el logo puede leerse en espejo -- limitación conocida
+      // de esta vista previa aproximada (ver TODO-EQUIPO.md), no crítica para el propósito de la
+      // herramienta (mostrar tamaño/color/ubicación relativa del logo, no un render final).
+      var decalMat = new THREE.MeshBasicMaterial({ transparent:true, opacity:0, depthWrite:false, toneMapped:false, side:THREE.DoubleSide });
+      decalMesh = new THREE.Mesh(decalGeo, decalMat);
+      decalMesh.renderOrder = 2;
+      model.add(decalMesh);
+      placeDecal(zoneSelect.value);
+
+      var fitCorners = [];
+      [-1,1].forEach(function(sx){ [-1,1].forEach(function(sy){ [-1,1].forEach(function(sz){
+        fitCorners.push(new THREE.Vector3(sx*size.x/2, sy*size.y/2, sz*size.z/2));
+      });});});
+      var az = THREE.MathUtils.degToRad(35), el = THREE.MathUtils.degToRad(22);
+      var dir = new THREE.Vector3(Math.sin(az)*Math.cos(el), Math.sin(el), Math.cos(az)*Math.cos(el));
+      var vFov = THREE.MathUtils.degToRad(camera.fov/2);
+      var maxH = 0, maxV = 0;
+      var right = new THREE.Vector3().crossVectors(new THREE.Vector3(0,1,0), dir).normalize();
+      var up = new THREE.Vector3().crossVectors(dir, right).normalize();
+      fitCorners.forEach(function(c){ maxH = Math.max(maxH, Math.abs(c.dot(right))); maxV = Math.max(maxV, Math.abs(c.dot(up))); });
+      var hFov = Math.atan(Math.tan(vFov) * (stage.clientWidth / Math.max(stage.clientHeight,1)));
+      var dist = Math.max(maxV/Math.tan(vFov), maxH/Math.tan(hFov)) * 1.5;
+      camera.position.copy(dir.multiplyScalar(dist));
+      camera.near = Math.max(dist*0.04, 0.05); camera.far = dist*20;
+      camera.updateProjectionMatrix();
+      controls.minDistance = dist * 0.3;
+      controls.maxDistance = dist * 3;
+      controls.target.set(0,0,0);
+      controls.update();
+
+      stage.classList.add('is-ready');
+      renderOnce();
+    }, undefined, function(){ stage.classList.add('no-3d'); });
+
+    function resize(){
+      var w = stage.clientWidth, h = stage.clientHeight;
+      if(!w || !h) return;
+      camera.aspect = w/h; camera.updateProjectionMatrix();
+      renderer.setSize(w, h, false);
+      renderOnce();
+    }
+    if('ResizeObserver' in window) new ResizeObserver(resize).observe(stage);
+    resize();
+
+    var needsRender = true;
+    function renderOnce(){ needsRender = true; }
+    controls.addEventListener('change', renderOnce);
+    (function loop(){
+      requestAnimationFrame(loop);
+      if(dialog.open && needsRender){
+        controls.update();
+        renderer.render(scene, camera);
+        needsRender = false;
+      }
+    })();
+
+    zoneSelect.addEventListener('change', function(){ placeDecal(zoneSelect.value); renderOnce(); });
+
+    fileInput.addEventListener('change', function(){
+      var file = fileInput.files && fileInput.files[0];
+      if(!file) return;
+      var img = new Image();
+      img.onload = function(){
+        var tex = new THREE.Texture(img);
+        tex.needsUpdate = true;
+        if('colorSpace' in tex) tex.colorSpace = THREE.SRGBColorSpace;
+        if(decalMesh){
+          var aspect = img.naturalWidth / img.naturalHeight;
+          var baseSize = boundsRef ? (boundsRef.maxX - boundsRef.minX) * 0.16 : 1;
+          decalMesh.geometry.dispose();
+          decalMesh.geometry = new THREE.PlaneGeometry(baseSize * Math.max(aspect,1), baseSize / Math.max(aspect,1));
+          decalMesh.material.map = tex;
+          decalMesh.material.opacity = 1;
+          decalMesh.material.needsUpdate = true;
+        }
+        downloadBtn.disabled = false;
+        renderOnce();
+        URL.revokeObjectURL(img.src);
+      };
+      img.src = URL.createObjectURL(file);
+    });
+
+    downloadBtn.addEventListener('click', function(){
+      controls.update();
+      renderer.render(scene, camera);
+      var url = renderer.domElement.toDataURL('image/png');
+      var a = document.createElement('a');
+      a.href = url;
+      a.download = 'striker-racing-configurador.png';
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+    });
+  }
 })();
 </script>
 
