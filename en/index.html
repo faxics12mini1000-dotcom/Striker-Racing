@@ -33,9 +33,9 @@
 <meta name="twitter:image" content="https://striker-racing.vercel.app/og-preview.png">
 <link rel="icon" href="../logo.png">
 <link rel="apple-touch-icon" href="../logo.png">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<link rel="preload" href="../fonts/inter-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="../fonts/oswald-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="../fonts/jetbrains-mono-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
 <script type="importmap">
 {"imports":{
   "three":"../vendor/three/build/three.module.min.js",
@@ -89,6 +89,9 @@
 }
 </script>
 <style>
+  @font-face{font-family:'Inter'; font-style:normal; font-weight:100 900; font-display:swap; src:url(../fonts/inter-latin-wght-normal.woff2) format('woff2-variations'), url(../fonts/inter-latin-wght-normal.woff2) format('woff2'); unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+2000-206F,U+2074,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;}
+  @font-face{font-family:'Oswald'; font-style:normal; font-weight:200 700; font-display:swap; src:url(../fonts/oswald-latin-wght-normal.woff2) format('woff2-variations'), url(../fonts/oswald-latin-wght-normal.woff2) format('woff2'); unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+2000-206F,U+2074,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;}
+  @font-face{font-family:'JetBrains Mono'; font-style:normal; font-weight:100 800; font-display:swap; src:url(../fonts/jetbrains-mono-latin-wght-normal.woff2) format('woff2-variations'), url(../fonts/jetbrains-mono-latin-wght-normal.woff2) format('woff2'); unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+2000-206F,U+2074,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;}
   :root{
     /* Paleta oficial de la escudería — solo azul y verde, sin morado */
     --navy-deep:#071B33;   /* fondo primario */
@@ -143,6 +146,8 @@
   img{max-width:100%; display:block;}
   .wrap{max-width:1120px; margin:0 auto; padding:0 24px;}
   section{padding:88px 0;}
+  /* Las secciones bajo el fold no se estilan/layoutean hasta acercarse al viewport (Style & Layout era ~6s en móvil con CPU x4). */
+  section:not(.hero), .mission-band, .mentor-band, footer{content-visibility:auto; contain-intrinsic-size:auto 800px;}
   section[id]{scroll-margin-top:76px;}
   @media (max-width:700px){ section{padding:56px 0;} }
 
@@ -287,13 +292,14 @@
   .model-loader{
     position:absolute; inset:0; z-index:3;
     display:flex; align-items:center; justify-content:center;
-    transition:opacity .3s ease; pointer-events:none;
+    opacity:0; transition:opacity .3s ease; pointer-events:none;
   }
+  .model-stage.is-loading .model-loader{opacity:1;}
   .model-loader .model-spinner{
     width:32px; height:32px; border-radius:50%;
     border:2px solid var(--border-fine); border-top-color:var(--emerald);
-    animation:model-spin .8s linear infinite;
   }
+  .model-stage.is-loading .model-loader .model-spinner{animation:model-spin .8s linear infinite;}
   .model-stage.is-ready .model-loader{opacity:0;}
   @media (prefers-reduced-motion:reduce){ .model-loader .model-spinner{animation-duration:1.6s;} }
   @keyframes model-spin{ to{ transform:rotate(360deg); } }
@@ -753,7 +759,7 @@
   footer{padding:52px 0 26px; color:var(--ice-dim); font-size:0.9rem; background:var(--navy-deep); border-top:1px solid var(--line);}
   .footer-grid{display:grid; grid-template-columns:1.3fr 1fr 1fr; gap:32px; text-align:left;}
   @media (max-width:700px){ .footer-grid{grid-template-columns:1fr; gap:28px;} }
-  .footer-col h4{font-family:var(--mono); font-size:0.74rem; text-transform:uppercase; letter-spacing:0.05em; color:var(--ice); margin-bottom:14px;}
+  .footer-col .footer-heading{font-family:var(--mono); font-size:0.74rem; text-transform:uppercase; letter-spacing:0.05em; color:var(--ice); margin-bottom:14px;}
   .footer-col p{font-size:0.88rem; color:var(--ice-dim);}
   .footer-col ul{list-style:none;}
   .footer-col li{margin-bottom:8px;}
@@ -777,7 +783,7 @@
 <nav>
   <div class="wrap">
     <div class="brand">
-      <img class="brand-mark" src="../logo.png" alt="Striker Racing">
+      <img class="brand-mark" src="../logo-64.webp" width="34" height="32" alt="Striker Racing">
       STRIKER RACING
     </div>
     <ul id="navList">
@@ -793,11 +799,12 @@
   </div>
 </nav>
 
+<main id="main" tabindex="-1">
 <header class="hero">
   <div class="wrap hero-grid">
     <div class="hero-inner">
       <div class="kicker">Development Category · STEM Racing Mexico 2026–2027 · Preparatoria Celta, Querétaro</div>
-      <h1 id="main"><em>Mexican engineering</em> on the STEM Racing Mexico track.</h1>
+      <h1><em>Mexican engineering</em> on the STEM Racing Mexico track.</h1>
       <p class="lead">We design, build and race a scale Formula 1 car in the STEM Racing Mexico challenge (formerly F1 in Schools), Formula 1®'s official educational initiative. Season goal: stand out at the regional stage and secure qualification for the STEM Racing Mexico 2027 National Final, with a path to the FIA World Final.</p>
       <div class="cta-row">
         <a class="btn btn-solid" href="#sponsorship">View sponsorship tiers</a>
@@ -1220,18 +1227,18 @@
         <polygon class="zone-base" points="20,110 60,95 60,125"/>
         <circle class="zone-wheel" cx="80" cy="132" r="13"/>
         <circle class="zone-wheel" cx="200" cy="132" r="13"/>
-        <polygon class="zone-shape" data-zone="nose" points="24,110 60,98 60,122"/>
-        <rect class="zone-shape" data-zone="side-pontoon" x="95" y="97" width="65" height="26"/>
-        <rect class="zone-shape" data-zone="rear-wing" x="218" y="86" width="10" height="52"/>
+        <polygon class="zone-shape" data-zone="nose" aria-label="Car zone: nose" aria-pressed="false" points="24,110 60,98 60,122"/>
+        <rect class="zone-shape" data-zone="side-pontoon" aria-label="Car zone: chassis side" aria-pressed="false" x="95" y="97" width="65" height="26"/>
+        <rect class="zone-shape" data-zone="rear-wing" aria-label="Car zone: rear wing" aria-pressed="false" x="218" y="86" width="10" height="52"/>
 
         <text x="330" y="20" class="zone-caption">UNIFORM · FRONT / BACK</text>
         <rect class="zone-base" x="330" y="40" width="66" height="112" rx="10"/>
         <rect class="zone-base" x="308" y="46" width="18" height="46" rx="6"/>
         <rect class="zone-base" x="450" y="40" width="66" height="112" rx="10"/>
-        <rect class="zone-shape" data-zone="front-chest" x="345" y="58" width="36" height="28"/>
-        <rect class="zone-shape" data-zone="sleeve" x="308" y="46" width="18" height="46" rx="6"/>
-        <rect class="zone-shape" data-zone="upper-back" x="460" y="50" width="46" height="34"/>
-        <rect class="zone-shape" data-zone="lower-back" x="460" y="112" width="46" height="30"/>
+        <rect class="zone-shape" data-zone="front-chest" aria-label="Uniform zone: chest" aria-pressed="false" x="345" y="58" width="36" height="28"/>
+        <rect class="zone-shape" data-zone="sleeve" aria-label="Uniform zone: sleeve" aria-pressed="false" x="308" y="46" width="18" height="46" rx="6"/>
+        <rect class="zone-shape" data-zone="upper-back" aria-label="Uniform zone: upper back" aria-pressed="false" x="460" y="50" width="46" height="34"/>
+        <rect class="zone-shape" data-zone="lower-back" aria-label="Uniform zone: lower back" aria-pressed="false" x="460" y="112" width="46" height="30"/>
       </svg>
       <div class="zone-diagram-cta">
         <button class="profile-btn" type="button" data-open="dlg-configurator">Try the logo configurator</button>
@@ -1380,18 +1387,20 @@
   </div>
 </section>
 
+</main>
+
 <footer>
   <div class="wrap">
     <div class="footer-grid">
       <div class="footer-col">
         <div class="brand">
-          <img class="brand-mark" src="../logo.png" alt="Striker Racing">
+          <img class="brand-mark" src="../logo-64.webp" width="34" height="32" alt="Striker Racing">
           STRIKER RACING
         </div>
         <p>Preparatoria Celta, Querétaro · STEM Racing Mexico, 2026–2027 season.</p>
       </div>
       <div class="footer-col">
-        <h4>Sections</h4>
+        <h3 class="footer-heading">Sections</h3>
         <ul>
           <li><a href="#project">The project</a></li>
           <li><a href="#team">Team</a></li>
@@ -1401,7 +1410,7 @@
         </ul>
       </div>
       <div class="footer-col">
-        <h4>Contact</h4>
+        <h3 class="footer-heading">Contact</h3>
         <ul>
           <li><a href="mailto:strikerracingf1@gmail.com">strikerracingf1@gmail.com</a></li>
           <li><a href="https://instagram.com/striker.racing_mx" target="_blank" rel="noopener" class="social-link">Instagram: @striker.racing_mx</a></li>
@@ -1449,6 +1458,7 @@
   }
 
   async function boot(){
+    stage.classList.add('is-loading');
     var THREE, GLTFLoaderMod, OrbitControlsMod, RoomEnvMod, MeshoptMod;
     try{
       THREE = await import('three');
@@ -1982,7 +1992,7 @@
   document.querySelectorAll('.zone-shape').forEach(function(shape){
     shape.setAttribute('tabindex', '0');
     shape.setAttribute('role', 'button');
-    function toggle(){ shape.classList.toggle('zone-hot'); }
+    function toggle(){ shape.setAttribute('aria-pressed', shape.classList.toggle('zone-hot') ? 'true' : 'false'); }
     shape.addEventListener('click', toggle);
     shape.addEventListener('keydown', function(e){
       if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); toggle(); }
@@ -2050,6 +2060,7 @@
   openBtn.addEventListener('click', function(){
     if(started) return;
     started = true;
+    stage.classList.add('is-loading');
     boot().catch(function(){ stage.classList.add('no-3d'); });
   });
 

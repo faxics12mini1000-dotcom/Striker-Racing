@@ -7,9 +7,13 @@
 <meta name="description" content="Aviso de privacidad del sitio de Striker Racing, escudería de Preparatoria Celta en STEM Racing México.">
 <meta name="robots" content="noindex">
 <link rel="icon" href="logo.png">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<link rel="preload" href="fonts/inter-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="fonts/oswald-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="fonts/jetbrains-mono-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
 <style>
+  @font-face{font-family:'Inter'; font-style:normal; font-weight:100 900; font-display:swap; src:url(fonts/inter-latin-wght-normal.woff2) format('woff2-variations'), url(fonts/inter-latin-wght-normal.woff2) format('woff2'); unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+2000-206F,U+2074,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;}
+  @font-face{font-family:'Oswald'; font-style:normal; font-weight:200 700; font-display:swap; src:url(fonts/oswald-latin-wght-normal.woff2) format('woff2-variations'), url(fonts/oswald-latin-wght-normal.woff2) format('woff2'); unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+2000-206F,U+2074,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;}
+  @font-face{font-family:'JetBrains Mono'; font-style:normal; font-weight:100 800; font-display:swap; src:url(fonts/jetbrains-mono-latin-wght-normal.woff2) format('woff2-variations'), url(fonts/jetbrains-mono-latin-wght-normal.woff2) format('woff2'); unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+2000-206F,U+2074,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;}
   :root{
     --navy-deep:#071B33; --surface:#0E223D; --border-fine:#183969;
     --blue-accent:#2A6DF5; --emerald:#12B866; --ice:#CDDEEF;
@@ -41,7 +45,7 @@
 </style>
 </head>
 <body>
-<div class="wrap">
+<main class="wrap">
   <a class="back-link" href="index.html">&larr; Volver al sitio de Striker Racing</a>
   <h1>Aviso de privacidad</h1>
   <div class="updated">Última actualización: septiembre de 2026</div>
@@ -60,7 +64,7 @@
   <p>El configurador de patrocinio (sección Patrocinios) procesa la imagen que subas <strong>únicamente en tu navegador</strong>: el archivo nunca se envía a un servidor ni se almacena por el equipo. Al cerrar o recargar la página, la imagen se pierde.</p>
 
   <h2>Cookies y analítica</h2>
-  <p>Este sitio no usa cookies de rastreo ni herramientas de analítica de terceros. Las fuentes tipográficas se cargan desde Google Fonts, que puede registrar la solicitud según su propia política de privacidad.</p>
+  <p>Este sitio no usa cookies de rastreo ni herramientas de analítica de terceros. Las fuentes tipográficas se sirven desde el propio sitio, sin llamadas a terceros.</p>
 
   <h2>Tus derechos</h2>
   <p>Puedes pedirnos en cualquier momento que eliminemos una conversación o correo que nos hayas enviado, escribiendo a <a href="mailto:strikerracingf1@gmail.com">strikerracingf1@gmail.com</a>.</p>
@@ -68,6 +72,6 @@
   <div class="note">
     Este aviso cubre lo que el sitio web hace hoy. Para el tratamiento de datos de patrocinadores dentro de convenios formales (facturación, contratos), aplica lo acordado directamente con el respaldo institucional de Preparatoria Celta.
   </div>
-</div>
+</main>
 </body>
 </html>
