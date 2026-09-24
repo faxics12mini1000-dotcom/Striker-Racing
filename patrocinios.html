@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script>
+  (function(){
+    var c = document.documentElement.classList;
+    c.add('js');
+    if('IntersectionObserver' in window) c.add('has-io');
+  })();
+</script>
+<title>Inversión &amp; Patrocinios · Sala 03 · Striker Racing</title>
+<meta name="description" content="Presupuesto transparente de la temporada Regional ($65,450 MXN), cuatro niveles de patrocinio con cupos reales, diagrama de zonas de logo y configurador 3D. Solicita el dossier de Striker Racing por WhatsApp.">
+<meta name="theme-color" content="#040B14">
+<link rel="canonical" href="https://striker-racing.vercel.app/patrocinios.html">
+<link rel="alternate" hreflang="es-mx" href="https://striker-racing.vercel.app/patrocinios.html">
+<link rel="alternate" hreflang="en" href="https://striker-racing.vercel.app/en/patrocinios.html">
+<link rel="alternate" hreflang="x-default" href="https://striker-racing.vercel.app/patrocinios.html">
+<meta property="og:title" content="Inversión &amp; Patrocinios · Striker Racing">
+<meta property="og:description" content="Presupuesto de temporada, niveles de patrocinio y configurador 3D de logos. Súmate a Striker Racing.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://striker-racing.vercel.app/patrocinios.html">
+<meta property="og:image" content="https://striker-racing.vercel.app/og-preview.png">
+<meta property="og:locale" content="es_MX">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="logo.png">
+<link rel="apple-touch-icon" href="logo.png">
+<link rel="preload" href="fonts/inter-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="fonts/oswald-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="fonts/jetbrains-mono-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<script type="importmap">
+{"imports":{
+  "three":"./vendor/three/build/three.module.min.js",
+  "three/addons/":"./vendor/three/examples/jsm/"
+}}
+</script>
+<link rel="stylesheet" href="css/site.css">
+<link rel="stylesheet" href="css/gallery.css">
+</head>
+<body>
+
+<a class="skip-link" href="#main">Saltar al contenido</a>
+<nav class="cockpit" aria-label="Navegación principal">
+  <div class="cockpit-bar">
+    <a href="./" id="brandHome" class="brand-link" aria-label="Striker Racing, inicio">
+      <span class="brand"><img class="brand-mark" src="logo-64.webp" width="34" height="32" alt="">STRIKER RACING</span>
+    </a>
+    <button class="nav-toggle" id="navToggle" type="button" aria-label="Abrir menú" data-label-open="Abrir menú" data-label-close="Cerrar menú" aria-expanded="false" aria-controls="navPanel"><span></span></button>
+    <div class="nav-panel" id="navPanel">
+      <ul class="cockpit-links">
+        <li><a href="./"><span aria-hidden="true">[ </span>01 // Auto<span aria-hidden="true"> ]</span></a></li>
+        <li><a href="equipo.html"><span aria-hidden="true">[ </span>02 // Escudería<span aria-hidden="true"> ]</span></a></li>
+        <li><a href="patrocinios.html" aria-current="page"><span aria-hidden="true">[ </span>03 // Patrocinios<span aria-hidden="true"> ]</span></a></li>
+      </ul>
+      <div class="cockpit-actions">
+        <div class="lang-switch" role="group" aria-label="Idioma">
+          <a href="patrocinios.html" aria-current="true" lang="es" hreflang="es-mx">ES</a><span aria-hidden="true">|</span><a href="en/patrocinios.html" lang="en" hreflang="en">EN</a>
+        </div>
+        <a class="dossier-cta" href="https://wa.me/525511839779?text=Hola%2C%20me%20interesa%20el%20dossier%20ejecutivo%20de%20patrocinio%20de%20Striker%20Racing%2C%20%C2%BFme%20lo%20pueden%20compartir%3F" target="_blank" rel="noopener"><span aria-hidden="true">[ </span>Solicitar Dossier<span aria-hidden="true"> ]</span></a>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<main id="main" tabindex="-1">
+
+<header class="room-head">
+  <span class="stage-word" aria-hidden="true">INVERSIÓN</span>
+  <div class="wrap room-head-inner">
+    <div class="room-tag micro">Sala 03 // Inversión &amp; Patrocinios</div>
+    <h1>¿Por qué invertir<br>en <em>Striker Racing</em>?</h1>
+    <p class="hero-lead">Exposición directa de marca en un entorno tecnológico, preuniversitario y de alto rendimiento.</p>
+    <div class="cta-row">
+      <a class="btn btn-solid" href="https://wa.me/525511839779?text=Hola%2C%20me%20interesa%20el%20dossier%20ejecutivo%20de%20patrocinio%20de%20Striker%20Racing%2C%20%C2%BFme%20lo%20pueden%20compartir%3F" target="_blank" rel="noopener">Solicitar dossier ejecutivo</a>
+      <a class="btn" href="#niveles">Ver niveles</a>
+    </div>
+  </div>
+</header>
+
+<section id="presupuesto" class="reveal">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="eyebrow-tag">Presupuesto</div>
+      <h2>Desglose real: temporada Regional</h2>
+      <p>Esto es lo que cuesta competir en la etapa Regional, y cuánto necesitamos de patrocinios para lograrlo.</p>
+      <p style="margin-top:10px; font-size:0.9rem; color:var(--ice-dim); font-style:italic;">Presupuesto aproximado partiendo desde cero. Los costos son estimaciones logísticas y de manufactura que pueden variar dependiendo de la sede oficial y cotizaciones de proveedores.</p>
+    </div>
+    <div class="budget-box">
+      <div class="budget-summary">
+        <div>
+          <div class="budget-figure">$65,450.00<span class="budget-figure-unit">MXN</span></div>
+          <div class="budget-figure-label micro">Costo total estimado de la temporada Regional</div>
+        </div>
+        <div class="budget-ask">
+          <div class="funding-bar-head">
+            <span>Meta de fondeo en patrocinios</span>
+            <b><span data-funding="recaudado">$0</span> / <span data-funding="meta">$65,450</span> MXN</b>
+          </div>
+          <div class="funding-track" role="img" aria-label="Progreso de recaudación de la temporada"><div class="funding-fill" data-funding="fill" style="width:0%"></div></div>
+          <div class="funding-caption">Efectivo o en especie (materiales, maquinado, equipo, transporte). Ver niveles en <a href="#niveles" style="color:var(--emerald);">Niveles de patrocinio</a>.</div>
+        </div>
+      </div>
+      <ul class="budget-list">
+        <li><span><b>1.</b> Inscripción y licencias oficiales <em>($43,500 + IVA reglamentario · 1 cuota)</em></span> <b>$50,460.00</b><i class="bar" style="--w:77.1%" aria-hidden="true"></i></li>
+        <li><span><b>2.</b> Manufactura e impresión (CNC / 3D) <em>(2 unidades a $2,000 c/u)</em></span> <b>$4,000.00</b><i class="bar" style="--w:6.1%" aria-hidden="true"></i></li>
+        <li><span><b>3.</b> Uniformes oficiales del equipo <em>(6 piezas a $750 c/u)</em></span> <b>$4,500.00</b><i class="bar" style="--w:6.9%" aria-hidden="true"></i></li>
+        <li><span><b>4.</b> Pit Display y stand <em>(9 piezas de cartelería y lonas a $110 c/u)</em></span> <b>$990.00</b><i class="bar" style="--w:1.5%" aria-hidden="true"></i></li>
+        <li><span><b>5.</b> Viáticos regionales (transporte y alimentos)</span> <b>$5,500.00</b><i class="bar" style="--w:8.4%" aria-hidden="true"></i></li>
+      </ul>
+      <div class="budget-note">
+        <b>Aceptamos patrocinio en especie:</b> materiales de manufactura, maquinado CNC, impresión 3D, uniformes, equipo de cómputo o transporte. Toda aportación en especie se cuantifica y se acredita en el nivel de patrocinio equivalente (Colaborador, Impulsor, Aliado Técnico o Partner Estratégico).
+      </div>
+      <div class="budget-note" style="margin-top:14px;">
+        <b>Esquema comercial:</b> Esquema de patrocinio comercial y publicitario con emisión de factura deducible bajo el régimen aplicable para empresas aliadas, coordinado a través del respaldo institucional correspondiente.
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="niveles" class="blueprint reveal">
+  <div class="wrap">
+    <div class="why-grid">
+      <div class="why-item">
+        <span class="why-num">01</span>
+        <h3>Visibilidad con propósito</h3>
+        <p>Tu logo va en un proyecto real de ingeniería, respaldado por la comunidad de Preparatoria Celta y presente en la competencia de STEM Racing México durante la temporada.</p>
+      </div>
+      <div class="why-item">
+        <span class="why-num">02</span>
+        <h3>Alineación con innovación</h3>
+        <p>Asocias tu marca con ciencia, tecnología e ingeniería aplicada: el mismo terreno donde compites por talento y clientes.</p>
+      </div>
+      <div class="why-item">
+        <span class="why-num">03</span>
+        <h3>Acceso a talento joven</h3>
+        <p>Conoces de primera mano a cinco estudiantes que ya construyen, programan y gestionan proyectos reales antes de entrar a la universidad.</p>
+      </div>
+    </div>
+
+    <div class="section-head">
+      <div class="eyebrow-tag">Niveles de patrocinio</div>
+      <h2>Elige tu nivel</h2>
+    </div>
+
+    <div class="zone-diagram card-reveal">
+      <div class="zone-diagram-caption">Zonas de logo — pasa el cursor, toca o navega con teclado cada nivel para ver dónde va tu marca</div>
+      <svg viewBox="0 0 560 190" role="img" aria-label="Diagrama de zonas de logo disponibles en el auto (vista lateral) y en el uniforme (frente y espalda)">
+        <text x="14" y="20" class="zone-caption">AUTO · VISTA LATERAL</text>
+        <rect class="zone-base" x="60" y="95" width="160" height="30" rx="6"/>
+        <polygon class="zone-base" points="20,110 60,95 60,125"/>
+        <circle class="zone-wheel" cx="80" cy="132" r="13"/>
+        <circle class="zone-wheel" cx="200" cy="132" r="13"/>
+        <polygon class="zone-shape" data-zone="nose" aria-label="Zona del auto: nariz" aria-pressed="false" points="24,110 60,98 60,122"/>
+        <rect class="zone-shape" data-zone="side-pontoon" aria-label="Zona del auto: lateral del chasis" aria-pressed="false" x="95" y="97" width="65" height="26"/>
+        <rect class="zone-shape" data-zone="rear-wing" aria-label="Zona del auto: alerón trasero" aria-pressed="false" x="218" y="86" width="10" height="52"/>
+
+        <text x="330" y="20" class="zone-caption">UNIFORME · FRENTE / ESPALDA</text>
+        <rect class="zone-base" x="330" y="40" width="66" height="112" rx="10"/>
+        <rect class="zone-base" x="308" y="46" width="18" height="46" rx="6"/>
+        <rect class="zone-base" x="450" y="40" width="66" height="112" rx="10"/>
+        <rect class="zone-shape" data-zone="front-chest" aria-label="Zona del uniforme: pecho" aria-pressed="false" x="345" y="58" width="36" height="28"/>
+        <rect class="zone-shape" data-zone="sleeve" aria-label="Zona del uniforme: manga" aria-pressed="false" x="308" y="46" width="18" height="46" rx="6"/>
+        <rect class="zone-shape" data-zone="upper-back" aria-label="Zona del uniforme: espalda alta" aria-pressed="false" x="460" y="50" width="46" height="34"/>
+        <rect class="zone-shape" data-zone="lower-back" aria-label="Zona del uniforme: espalda baja" aria-pressed="false" x="460" y="112" width="46" height="30"/>
+      </svg>
+      <div class="zone-diagram-cta">
+        <button class="profile-btn" type="button" data-open="dlg-configurator">Probar el configurador de logo</button>
+        <span>Sube tu logo y ve cómo se vería en el auto 3D.</span>
+      </div>
+    </div>
+
+    <div class="tiers">
+      <div class="card-reveal tier" data-zones="lower-back">
+        <div class="tier-cupo" data-config="sponsorTiers.0.availability">5 de 5 espacios disponibles</div>
+        <h3>Colaborador</h3>
+        <div class="price">$1,500–2,999</div>
+        <div class="price-note">MXN</div>
+        <ul>
+          <li><b>Uniforme:</b> logotipo en cuadrante inferior de espalda (lower back)</li>
+          <li><b>Presencia:</b> mención perimetral en Pit Display (carpa) y en redes sociales del equipo</li>
+        </ul>
+        <div class="tier-cta">
+          <a class="tier-btn" href="https://wa.me/525511839779?text=Hola%2C%20me%20interesa%20el%20dossier%20de%20patrocinio%20nivel%20Colaborador%20de%20Striker%20Racing%2C%20%C2%BFme%20lo%20pueden%20compartir%3F" target="_blank" rel="noopener">Solicitar dossier · WhatsApp</a>
+          <a class="tier-mail" href="mailto:strikerracingf1@gmail.com?subject=Patrocinio%20Striker%20Racing%3A%20Nivel%20Colaborador">Correo</a>
+        </div>
+      </div>
+      <div class="card-reveal tier" data-zones="upper-back">
+        <div class="tier-cupo" data-config="sponsorTiers.1.availability">5 de 5 espacios disponibles</div>
+        <h3>Impulsor</h3>
+        <div class="price">$3,000–5,999</div>
+        <div class="price-note">MXN</div>
+        <ul>
+          <li><b>Uniforme:</b> logotipo en omóplatos / espalda alta (upper back, mayor visibilidad)</li>
+          <li><b>Presencia:</b> Pit Display destacado y agradecimiento en memoria técnica</li>
+        </ul>
+        <div class="tier-cta">
+          <a class="tier-btn" href="https://wa.me/525511839779?text=Hola%2C%20me%20interesa%20el%20dossier%20de%20patrocinio%20nivel%20Impulsor%20de%20Striker%20Racing%2C%20%C2%BFme%20lo%20pueden%20compartir%3F" target="_blank" rel="noopener">Solicitar dossier · WhatsApp</a>
+          <a class="tier-mail" href="mailto:strikerracingf1@gmail.com?subject=Patrocinio%20Striker%20Racing%3A%20Nivel%20Impulsor">Correo</a>
+        </div>
+      </div>
+      <div class="card-reveal tier" data-zones="sleeve,side-pontoon">
+        <div class="tier-cupo" data-config="sponsorTiers.2.availability">3 de 4 espacios disponibles</div>
+        <h3>Aliado Técnico</h3>
+        <div class="price">$6,000–9,999</div>
+        <div class="price-note">MXN</div>
+        <ul>
+          <li><b>Uniforme:</b> espacio exclusivo en manga izquierda o derecha (brazo)</li>
+          <li><b>Auto:</b> logotipo en laterales del chasis y alerón trasero</li>
+          <li>Acepta equivalencia 100% en especie: maquinado CNC o materiales de prototipo</li>
+        </ul>
+        <div class="tier-cta">
+          <a class="tier-btn" href="https://wa.me/525511839779?text=Hola%2C%20me%20interesa%20el%20dossier%20de%20patrocinio%20nivel%20Aliado%20T%C3%A9cnico%20de%20Striker%20Racing%2C%20%C2%BFme%20lo%20pueden%20compartir%3F" target="_blank" rel="noopener">Solicitar dossier · WhatsApp</a>
+          <a class="tier-mail" href="mailto:strikerracingf1@gmail.com?subject=Patrocinio%20Striker%20Racing%3A%20Nivel%20Aliado%20T%C3%A9cnico">Correo</a>
+        </div>
+      </div>
+      <div class="card-reveal tier featured" data-zones="front-chest,nose">
+        <span class="ribbon">Personalizado</span>
+        <div class="tier-cupo" data-config="sponsorTiers.3.availability">Cupo único · alianza personalizada</div>
+        <h3>Partner Estratégico</h3>
+        <div class="price">$10,000+</div>
+        <div class="price-note">MXN</div>
+        <ul>
+          <li><b>Uniforme:</b> patrocinador central en el pecho (front) y dorsal principal</li>
+          <li><b>Auto:</b> nariz / trompa frontal, con opción a dos espacios principales según propuesta</li>
+          <li><b>Activación y merch:</b> integración de marca en libretas y plumas oficiales del equipo</li>
+          <li>Distribución de flyers corporativos en el Pit Display y co-branding total</li>
+        </ul>
+        <div class="tier-cta">
+          <a class="tier-btn" href="https://wa.me/525511839779?text=Hola%2C%20me%20interesa%20el%20dossier%20de%20patrocinio%20nivel%20Partner%20Estrat%C3%A9gico%20de%20Striker%20Racing%2C%20%C2%BFme%20lo%20pueden%20compartir%3F" target="_blank" rel="noopener">Solicitar dossier · WhatsApp</a>
+          <a class="tier-mail" href="mailto:strikerracingf1@gmail.com?subject=Patrocinio%20Striker%20Racing%3A%20Partner%20Estrat%C3%A9gico">Correo</a>
+        </div>
+      </div>
+    </div>
+
+    <h3 class="faq-title">Preguntas frecuentes</h3>
+    <div class="faq">
+      <details>
+        <summary>¿El patrocinio puede ser en especie y no en efectivo?</summary>
+        <p>Sí. Materiales de manufactura, equipo de cómputo, diseño, impresión o transporte cuentan como aportación y se reconocen en el nivel equivalente.</p>
+      </details>
+      <details>
+        <summary>¿Cómo sabré en qué se usó mi aportación?</summary>
+        <p>Enviamos un reporte breve después de cada etapa (regional y nacional) con avances del auto, resultados y fotos del pit display con tu marca.</p>
+      </details>
+      <details>
+        <summary>¿Puedo patrocinar solo una parte del proceso, no la temporada completa?</summary>
+        <p>Sí, los niveles son flexibles. Podemos ajustar los beneficios a una aportación puntual, por ejemplo solo para viáticos de la final nacional.</p>
+      </details>
+      <details>
+        <summary>¿El patrocinio es deducible de impuestos?</summary>
+        <p>Manejamos un esquema de patrocinio comercial y publicitario con emisión de factura deducible bajo el régimen aplicable para empresas aliadas, coordinado a través del respaldo institucional correspondiente.</p>
+      </details>
+    </div>
+  </div>
+
+  <dialog class="profile-dialog configurator-dialog" id="dlg-configurator">
+    <div class="profile-dialog-inner">
+      <div class="profile-dialog-head">
+        <h3>Configurador de logo</h3>
+        <button class="profile-close" type="button" data-close aria-label="Cerrar configurador">✕</button>
+      </div>
+      <p class="configurator-note">Sube tu logo, elige nivel y zona, y velo como decal sobre el auto 3D. El archivo se procesa solo en tu navegador: nunca se sube a ningún servidor (ver <a href="privacidad.html" style="color:var(--emerald);">aviso de privacidad</a>).</p>
+
+      <div class="configurator-grid">
+        <div class="configurator-controls">
+          <label class="configurator-field">
+            <span>1. Tu logo (PNG o JPG, fondo transparente recomendado)</span>
+            <input type="file" id="cfgLogoInput" accept="image/png,image/jpeg,image/webp,image/svg+xml">
+          </label>
+          <label class="configurator-field">
+            <span>2. Nivel de patrocinio</span>
+            <select id="cfgTierSelect">
+              <option value="colaborador" data-zone="nose">Colaborador (uniforme: lower back)</option>
+              <option value="impulsor" data-zone="nose">Impulsor (uniforme: upper back)</option>
+              <option value="aliado-tecnico" data-zone="side-pontoon">Aliado Técnico (auto: lateral del chasis)</option>
+              <option value="partner" data-zone="nose">Partner Estratégico (auto: nariz)</option>
+            </select>
+          </label>
+          <label class="configurator-field">
+            <span>3. Zona en el auto 3D</span>
+            <select id="cfgZoneSelect">
+              <option value="nose">Nariz</option>
+              <option value="side-pontoon">Lateral del chasis</option>
+              <option value="rear-wing">Alerón trasero</option>
+            </select>
+          </label>
+          <p class="configurator-hint" id="cfgUniformHint" hidden>Este nivel coloca tu logo en el uniforme, no en el auto. Aquí puedes previsualizar tamaño y color sobre el chasis como referencia.</p>
+          <button class="btn btn-solid" type="button" id="cfgDownloadBtn" disabled>Descargar vista previa (PNG)</button>
+        </div>
+        <div class="configurator-stage-wrap">
+          <div class="model-stage configurator-stage" id="cfgStage" aria-label="Vista previa del logo sobre el modelo 3D del auto">
+            <div class="model-loader" aria-hidden="true"><span class="model-spinner"></span></div>
+            <div class="model-fallback">Tu navegador no puede mostrar el modelo 3D interactivo.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </dialog>
+</section>
+
+<section id="contacto" class="contact-band reveal">
+  <div class="wrap">
+    <h2>¿Te interesa patrocinarnos?</h2>
+    <p>Escríbenos y platicamos los detalles: niveles, tiempos y cómo se usa tu aportación.</p>
+    <div class="contact-links">
+      <a class="contact-primary" href="https://wa.me/525511839779?text=Hola%2C%20me%20comunico%20para%20conocer%20la%20propuesta%20de%20patrocinio%20de%20Striker%20Racing." target="_blank" rel="noopener">WhatsApp directo · (+52) 55 1183 9779</a>
+      <a class="contact-secondary" href="mailto:strikerracingf1@gmail.com?subject=Patrocinio%20Striker%20Racing">strikerracingf1@gmail.com</a>
+    </div>
+    <div class="contact-meta">Instagram: <a href="https://instagram.com/striker.racing_mx" target="_blank" rel="noopener" class="social-link">@striker.racing_mx</a></div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="footer-grid">
+      <div class="footer-col">
+        <div class="brand"><img class="brand-mark" src="logo-64.webp" width="34" height="32" alt="">STRIKER RACING</div>
+        <p>Preparatoria Celta, Querétaro · STEM Racing México, temporada 2026–2027.</p>
+      </div>
+      <div class="footer-col">
+        <h3 class="footer-heading">Salas</h3>
+        <ul>
+          <li><a href="./">01 // Auto</a></li>
+          <li><a href="equipo.html">02 // Escudería</a></li>
+          <li><a href="patrocinios.html">03 // Patrocinios</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h3 class="footer-heading">Contacto</h3>
+        <ul>
+          <li><a href="mailto:strikerracingf1@gmail.com">strikerracingf1@gmail.com</a></li>
+          <li><a href="https://instagram.com/striker.racing_mx" target="_blank" rel="noopener" class="social-link">Instagram: @striker.racing_mx</a></li>
+          <li><a href="privacidad.html">Aviso de privacidad</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026–2027 Striker Racing</span>
+      <span>Sitio desarrollado por el equipo</span>
+    </div>
+  </div>
+</footer>
+
+<button id="backToTop" class="hud-top-btn" type="button" aria-label="Volver arriba">&#9650; TOP</button>
+
+<script src="js/config.js" defer></script>
+<script src="js/site.js" defer></script>
+<script type="module" src="js/configurator.js"></script>
+</body>
+</html>

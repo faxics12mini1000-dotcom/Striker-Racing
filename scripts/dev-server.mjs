@@ -19,7 +19,7 @@ const root = process.argv[3] ? path.resolve(process.argv[3]) : defaultRoot;
 const types = {
   '.html':'text/html; charset=utf-8', '.js':'text/javascript; charset=utf-8', '.mjs':'text/javascript; charset=utf-8',
   '.css':'text/css; charset=utf-8', '.json':'application/json; charset=utf-8', '.glb':'model/gltf-binary',
-  '.png':'image/png', '.webp':'image/webp', '.svg':'image/svg+xml', '.ico':'image/x-icon',
+  '.png':'image/png', '.jpg':'image/jpeg', '.jpeg':'image/jpeg', '.pdf':'application/pdf', '.webp':'image/webp', '.svg':'image/svg+xml', '.ico':'image/x-icon',
 };
 const compressible = new Set(['.html', '.js', '.mjs', '.css', '.json', '.svg']);
 
