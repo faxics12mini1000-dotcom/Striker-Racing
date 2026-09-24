@@ -67,7 +67,7 @@
     // Ambiente casi apagado (el IBL también se atenúa en makeLiveryMaterial) para que el contraste
     // lo den solo dos luces de firma: un key cenital blanco frío que recorta la arista superior del
     // chasis y un rim trasero cian/menta que perfila el alerón trasero.
-    scene.add(new THREE.HemisphereLight(0x9DB8D6, 0x040B14, 0.32));
+    scene.add(new THREE.HemisphereLight(0x9DB8D6, 0x071B33, 0.32));
     var key = new THREE.DirectionalLight(0xEAF4FF, 2.6); // key cenital, blanco frío
     key.position.set(0.6, 10, 1.4);
     scene.add(key);

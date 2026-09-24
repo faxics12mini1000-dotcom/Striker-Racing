@@ -35,6 +35,28 @@
     });
   }
 
+  // Resalta en el navbar la sección visible (solo en la página principal, donde los enlaces son anclas).
+  if('IntersectionObserver' in window){
+    var spyLinks = {};
+    document.querySelectorAll('.cockpit-links a[href^="#"]').forEach(function(a){ spyLinks[a.getAttribute('href').slice(1)] = a; });
+    var spyIds = Object.keys(spyLinks);
+    if(spyIds.length){
+      var spy = new IntersectionObserver(function(entries){
+        entries.forEach(function(entry){
+          var a = spyLinks[entry.target.id];
+          if(!a) return;
+          if(entry.isIntersecting){
+            Object.keys(spyLinks).forEach(function(k){ spyLinks[k].removeAttribute('aria-current'); });
+            a.setAttribute('aria-current', 'location');
+          }else if(a.getAttribute('aria-current') === 'location'){
+            a.removeAttribute('aria-current');
+          }
+        });
+      }, { rootMargin: '-45% 0px -50% 0px' });
+      spyIds.forEach(function(id){ var el = document.getElementById(id); if(el) spy.observe(el); });
+    }
+  }
+
   // ---------- VOLVER ARRIBA ----------
   var backToTop = document.getElementById('backToTop');
   if(backToTop){
