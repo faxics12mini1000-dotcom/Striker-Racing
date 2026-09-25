@@ -129,6 +129,9 @@
       });
     }, { threshold: 0.12, rootMargin: '0px 0px -60px 0px' });
     document.querySelectorAll('.reveal').forEach(function(el){ io.observe(el); });
+    document.querySelectorAll('.card-reveal').forEach(function(el){
+      if(!el.closest('.pass-grid, .tiers')) io.observe(el);
+    });
 
     var STAGGER_MS = 90;
     document.querySelectorAll('.pass-grid, .tiers').forEach(function(group){

@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://striker-racing.vercel.app/sitemap.xml

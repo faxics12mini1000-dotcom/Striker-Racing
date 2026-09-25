@@ -90,7 +90,7 @@ section{padding:104px 0;}
   .nav-panel{
     display:none; position:absolute; top:100%; left:0; right:0;
     flex-direction:column; gap:20px; padding:12px 24px 24px;
-    background:rgba(7,27,51,0.62);
+    background:rgba(7,27,51,0.97);
     -webkit-backdrop-filter:blur(12px); backdrop-filter:blur(12px);
     border-bottom:1px solid var(--border-fine);
   }
@@ -139,7 +139,7 @@ section{padding:104px 0;}
 @media (max-width:960px){ .hero-main{grid-template-columns:1fr;} }
 .gallery-hero .wrap.hero-frame{padding-bottom:72px; position:relative; z-index:2;}
 .hero-main .model-stage{
-  margin:0; aspect-ratio:16/11; border:none; border-right:1px solid var(--border-fine);
+  margin:0; aspect-ratio:auto; align-self:stretch; min-height:440px; border:none; border-right:1px solid var(--border-fine);
   background-color:var(--surface);
   background-image:
     linear-gradient(var(--grid-line) 1px, transparent 1px),
@@ -147,7 +147,7 @@ section{padding:104px 0;}
   background-size:32px 32px;
 }
 @media (max-width:960px){
-  .hero-main .model-stage{border-right:none; border-bottom:1px solid var(--border-fine); aspect-ratio:4/3;}
+  .hero-main .model-stage{border-right:none; border-bottom:1px solid var(--border-fine); aspect-ratio:4/3; min-height:0;}
 }
 /* Viñeta de estudio: penumbra en los bordes, escultura al centro */
 .model-stage::after{
@@ -176,6 +176,7 @@ section{padding:104px 0;}
 @media (max-width:960px){
   .cotas{display:grid; grid-template-columns:repeat(2,1fr);}
   .cota:nth-child(odd){border-right:1px solid var(--border-fine);}
+  .cota:last-child:nth-child(odd){grid-column:1 / -1; border-right:none;}
 }
 @media (max-width:520px){
   .cotas{grid-template-columns:1fr;}
@@ -211,7 +212,7 @@ section{padding:104px 0;}
 .tl-step.is-goal::before{color:var(--emerald);}
 @media (max-width:768px){
   .tl-step{border-left:1px solid var(--border-fine) !important;}
-  .tl-step::before{background:var(--navy-deep);}
+  .tl-step::before{background:var(--navy-deep); font-size:0; line-height:0; margin:0;}
 }
 
 /* ---------- Puertas de sala ---------- */
@@ -364,7 +365,7 @@ dialog.cv-dialog::backdrop{background:rgba(7,27,51,0.82); -webkit-backdrop-filte
 .faq details{border-bottom:1px solid var(--border-fine);}
 .faq-title{text-transform:uppercase; font-weight:600;}
 
-dialog.profile-dialog{background:var(--surface); border:1px solid var(--border-fine); border-top:1px solid var(--border-fine);}
+dialog.profile-dialog{margin:auto; max-height:calc(100vh - 32px); overflow:auto; background:var(--surface); border:1px solid var(--border-fine); border-top:1px solid var(--border-fine);}
 dialog.profile-dialog::backdrop{background:rgba(7,27,51,0.82); -webkit-backdrop-filter:blur(6px); backdrop-filter:blur(6px);}
 .profile-close, .profile-btn{border-color:var(--border-fine);}
 .configurator-field select, .configurator-field input[type="file"]{background:var(--navy-deep); border-color:var(--border-fine);}
@@ -380,7 +381,9 @@ dialog.profile-dialog::backdrop{background:rgba(7,27,51,0.82); -webkit-backdrop-
 footer{background:var(--navy-deep); border-top:1px solid var(--border-fine);}
 footer .brand{font-size:1rem; margin-bottom:10px;}
 footer .brand-mark{height:26px;}
-.footer-grid{grid-template-columns:1.3fr 1fr 1fr;}
+.footer-grid{grid-template-columns:minmax(0,1.3fr) minmax(0,1fr) minmax(0,1fr);}
+@media (max-width:700px){ .footer-grid{grid-template-columns:1fr;} }
+.footer-col a{overflow-wrap:anywhere;}
 .footer-col .footer-heading{font-family:'Inter', system-ui, sans-serif; font-weight:600; letter-spacing:0.12em; font-size:0.68rem; color:var(--emerald);}
 .footer-bottom{border-top-color:var(--border-fine);}
 

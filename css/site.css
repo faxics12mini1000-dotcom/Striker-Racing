@@ -2,12 +2,13 @@
   @font-face{font-family:'Oswald'; font-style:normal; font-weight:200 700; font-display:swap; src:url(../fonts/oswald-latin-wght-normal.woff2) format('woff2-variations'), url(../fonts/oswald-latin-wght-normal.woff2) format('woff2'); unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+2000-206F,U+2074,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;}
   @font-face{font-family:'JetBrains Mono'; font-style:normal; font-weight:100 800; font-display:swap; src:url(../fonts/jetbrains-mono-latin-wght-normal.woff2) format('woff2-variations'), url(../fonts/jetbrains-mono-latin-wght-normal.woff2) format('woff2'); unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+2000-206F,U+2074,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;}
   :root{
-    /* Paleta oficial de la escudería — solo azul y verde, sin morado */
+    /* Paleta oficial de la escudería — navy + morado celta */
     --navy-deep:#071B33;   /* fondo primario */
     --surface:#0E223D;     /* tarjetas y paneles */
     --border-fine:#183969; /* bordes */
-    --blue-accent:#2A6DF5; /* identidad de marca (azul de acento) — bordes / iconografía */
-    --blue-accent-deep:#1F56C9; /* variante oscura para texto en blanco sobre fondo azul (AA) */
+    --purple:#7137D4;      /* morado celta oficial — identidad de marca */
+    --blue-accent:#7137D4; /* identidad de marca (morado celta) — bordes / iconografía */
+    --blue-accent-deep:#5A2BA8; /* variante oscura para texto en blanco sobre fondo morado (AA) */
     --emerald:#12B866;     /* énfasis positivo / acento deportivo */
     --ice:#CDDEEF;         /* texto y datos */
     --lime:#C8FF32;        /* detalle mínimo */
@@ -18,8 +19,8 @@
     --line: #183969;
     --line-soft: rgba(24,57,105,0.55);
     --ice-dim: rgba(205,222,239,0.62);
-    --card-hover: rgba(42,109,245,0.12);
-    --focus-ring: #7FB8FF;
+    --card-hover: rgba(113,55,212,0.12);
+    --focus-ring: #B79CF0;
   }
   :focus-visible{outline:2px solid var(--focus-ring); outline-offset:2px;}
   .skip-link{
@@ -55,8 +56,8 @@
   img{max-width:100%; display:block;}
   .wrap{max-width:1120px; margin:0 auto; padding:0 24px;}
   section{padding:88px 0;}
-  /* Las secciones bajo el fold no se estilan/layoutean hasta acercarse al viewport (Style & Layout era ~6s en móvil con CPU x4). */
-  section:not(.hero), .mission-band, .mentor-band, footer{content-visibility:auto; contain-intrinsic-size:auto 800px;}
+  /* Solo el footer usa content-visibility: en secciones con tamaño estimado los enlaces ancla (#equipo, #presupuesto…) aterrizaban lejos del destino. */
+  footer{content-visibility:auto; contain-intrinsic-size:auto 400px;}
   section[id]{scroll-margin-top:76px;}
   @media (max-width:700px){ section{padding:56px 0;} }
 
@@ -290,7 +291,7 @@
     background:var(--navy-deep); border:1px solid var(--border-fine); padding:9px 10px;
   }
   .configurator-hint{
-    font-size:0.82rem; color:var(--ice-dim); background:rgba(42,109,245,0.10);
+    font-size:0.82rem; color:var(--ice-dim); background:rgba(113,55,212,0.10);
     border:1px solid var(--border-fine); border-left:3px solid var(--blue-accent); padding:10px 12px; margin-bottom:16px;
   }
   #cfgDownloadBtn{ width:100%; text-align:center; }
@@ -366,7 +367,7 @@
   .zone-base{fill:none; stroke:var(--border-fine); stroke-width:2;}
   .zone-wheel{fill:var(--navy-deep); stroke:var(--border-fine); stroke-width:2;}
   .zone-shape{
-    fill:rgba(42,109,245,0.16); stroke:var(--blue-accent); stroke-width:1.5;
+    fill:rgba(113,55,212,0.16); stroke:var(--blue-accent); stroke-width:1.5;
     cursor:pointer; transition:fill .15s ease, stroke .15s ease, fill-opacity .15s ease;
   }
   .zone-shape.zone-hot{fill:var(--emerald); fill-opacity:0.85; stroke:var(--emerald);}

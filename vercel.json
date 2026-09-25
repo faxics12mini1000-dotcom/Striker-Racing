@@ -1,4 +1,26 @@
 {
+  "redirects": [
+    {
+      "source": "/equipo.html",
+      "destination": "/#equipo",
+      "permanent": true
+    },
+    {
+      "source": "/patrocinios.html",
+      "destination": "/#patrocinios",
+      "permanent": true
+    },
+    {
+      "source": "/en/equipo.html",
+      "destination": "/en/#team",
+      "permanent": true
+    },
+    {
+      "source": "/en/patrocinios.html",
+      "destination": "/en/#sponsorship",
+      "permanent": true
+    }
+  ],
   "headers": [
     {
       "source": "/fonts/(.*)",

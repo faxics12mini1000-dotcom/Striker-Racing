@@ -8,10 +8,10 @@ diseño/copy que se tomaron por default y conviene revisar.
 
 - [ ] **Fotos del equipo**: se dejaron monogramas de iniciales (placeholder) en las tarjetas de
       `#equipo`, listos para sustituirse por foto. Cuando haya fotos, reemplazar el bloque
-      `.member-avatar` de cada integrante (y del mentor) por `<img>`.
-- [ ] **Meta de recaudación real**: la barra de progreso del hero lee de un objeto de
-      configuración (`window.STRIKER_CONFIG.funding`, ver `<script id="site-config">` en
-      `index.html`). Se dejó `meta: 65450` (el presupuesto total calculado en `#presupuesto`) y
+      `.pass-photo` de cada integrante (y del mentor) por `<img>`.
+- [ ] **Meta de recaudación real**: la barra de progreso de `#presupuesto` lee de un objeto de
+      configuración (`window.STRIKER_CONFIG.funding`, ver `js/config.js`). Se dejó `meta: 65450`
+      (el presupuesto total calculado en `#presupuesto`) y
       `recaudado: 0` porque no hay cifra real de lo ya recaudado. Actualizar `recaudado` en cuanto
       se tenga un monto verificado.
 - [ ] **Disponibilidad de cupos por nivel de patrocinio**: se reemplazó "Cupo abierto" (igual en
@@ -37,6 +37,24 @@ diseño/copy que se tomaron por default y conviene revisar.
 - [ ] **og-preview.png**: regenerada en la nueva paleta (azul/verde, sin morado) con un script en
       `scripts/`, pero sigue siendo un layout genérico de marca — no una fotografía real del auto
       terminado. Sustituir cuando haya una fotografía o render final del monoplaza pintado.
+
+## Auditoría del 24-sep-2026 (comparación commit 8a506d2 vs. HEAD)
+
+Corregido:
+- `/en/`: los 5 scripts se cargaban con ruta relativa incorrecta (404) -> sin visor 3D, sin menú, sin revelado de secciones.
+- Visor 3D del hero: no llenaba su contenedor (`aspect-ratio` en item de grid) y dejaba un hueco vacío bajo el auto.
+- Diagrama de zonas de logo: nunca aparecía (`.card-reveal` fuera de `.pass-grid`/`.tiers` no se observaba) y ocultaba el botón del configurador.
+- Enlaces ancla del menú (#equipo, #presupuesto…) aterrizaban lejos del destino por `content-visibility:auto` (bug ya presente en 8a506d2). Se quitó de las secciones.
+- Móvil: el footer en 3 columnas desbordaba el ancho (scroll horizontal); marcadores del timeline con número encimado; menú desplegable translúcido.
+- Diálogos (configurador) pegados a la esquina superior izquierda (faltaba `margin:auto`).
+- `equipo.html` y `patrocinios.html` (y `/en/`) duplicaban secciones de `index.html` y nada enlazaba a ellas: se eliminaron y `vercel.json` las redirige a `/#equipo` y `/#patrocinios`. Recuperables desde git (commit 5e195da).
+- Se agregaron `robots.txt` y `sitemap.xml`.
+
+Diferencias de diseño respecto a 8a506d2 que conviene que el equipo confirme:
+- El hero ya no muestra "5 integrantes / 2027" ni la barra de meta de patrocinio (esta queda solo en `#presupuesto`).
+- Los modales de perfil por integrante se sustituyeron por el visor de credenciales (PDF).
+- El menú perdió "Herramientas" y "Contacto" (el CTA "Solicitar Dossier" cubre el contacto).
+- Rendimiento: 8a506d2 inlineaba CSS/JS; ahora son archivos externos (más peticiones). En pruebas locales con throttling el LCP es ruidoso (2.6–8 s en ambas versiones); medir en PageSpeed sobre el deploy real.
 
 ## Decisiones tomadas por default (documentadas para que el equipo las pueda revertir)
 
