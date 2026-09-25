@@ -5,7 +5,7 @@ window.STRIKER_CONFIG = {
   sponsorTiers: [
     { id: 'colaborador', availability: { es: '5 de 5 espacios disponibles', en: '5 of 5 spots available' } },
     { id: 'impulsor', availability: { es: '5 de 5 espacios disponibles', en: '5 of 5 spots available' } },
-    { id: 'aliado-tecnico', availability: { es: '3 de 4 espacios disponibles', en: '3 of 4 spots available' } },
+    { id: 'aliado-tecnico', availability: { es: '4 de 4 espacios disponibles', en: '4 of 4 spots available' } },
     { id: 'partner', availability: { es: 'Cupo único · alianza personalizada', en: 'Single spot · custom partnership' } }
   ]
 };
