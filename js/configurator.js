@@ -63,7 +63,7 @@
         pmrem.dispose();
       }catch(e){}
     }
-    scene.add(new THREE.HemisphereLight(0xCDDEEF, 0x27125F, 1.1));
+    scene.add(new THREE.HemisphereLight(0xCDDEEF, 0x071B33, 1.1));
     var key = new THREE.DirectionalLight(0xffffff, 1.35);
     key.position.set(4, 6, 5);
     scene.add(key);
@@ -83,14 +83,14 @@
     // vértice, sin depender de UVs). Ver js/viewer.js para los comentarios extensos del
     // porqué de cada máscara; aquí se mantiene idéntico para que el color coincida.
     function makeLiveryMaterial(toModelSpace, bounds, wheels){
-      var mat = new THREE.MeshPhysicalMaterial({ color:0x27125F, metalness:0.65, roughness:0.28, clearcoat:0.4, clearcoatRoughness:0.2, side:THREE.DoubleSide });
+      var mat = new THREE.MeshPhysicalMaterial({ color:0x0F2547, metalness:0.65, roughness:0.28, clearcoat:0.4, clearcoatRoughness:0.2, side:THREE.DoubleSide });
       mat.onBeforeCompile = function(shader){
         shader.uniforms.uToModelSpace = { value: toModelSpace };
         shader.uniforms.uMinX = { value: bounds.minX }; shader.uniforms.uMaxX = { value: bounds.maxX };
         shader.uniforms.uMinY = { value: bounds.minY }; shader.uniforms.uMaxY = { value: bounds.maxY };
         shader.uniforms.uFrontWheel = { value: new THREE.Vector3(wheels.front.cx, wheels.front.cz, wheels.front.r) };
         shader.uniforms.uRearWheel = { value: new THREE.Vector3(wheels.rear.cx, wheels.rear.cz, wheels.rear.r) };
-        shader.uniforms.cBody = { value: new THREE.Color(0x27125F) };
+        shader.uniforms.cBody = { value: new THREE.Color(0x0F2547) };
         shader.uniforms.cAccent = { value: new THREE.Color(0x7138D4) };
         shader.uniforms.cSpeed = { value: new THREE.Color(0x3AF7B2) };
         shader.uniforms.cTire = { value: new THREE.Color(0x11161B) };

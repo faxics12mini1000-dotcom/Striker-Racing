@@ -67,7 +67,7 @@
     // Ambiente casi apagado (el IBL también se atenúa en makeLiveryMaterial) para que el contraste
     // lo den solo dos luces de firma: un key cenital blanco frío que recorta la arista superior del
     // chasis y un rim trasero cian/menta que perfila el alerón trasero.
-    scene.add(new THREE.HemisphereLight(0x9DB8D6, 0x27125F, 0.32));
+    scene.add(new THREE.HemisphereLight(0x9DB8D6, 0x071B33, 0.32));
     var key = new THREE.DirectionalLight(0xEAF4FF, 2.6); // key cenital, blanco frío
     key.position.set(0.6, 10, 1.4);
     scene.add(key);
@@ -255,7 +255,7 @@
       // el auto esté girando, y corrige el desalineamiento entre piezas con distinto origen local.
       function makeLiveryMaterial(toModelSpace){
         var mat = new THREE.MeshPhysicalMaterial({
-          color: 0x27125F, metalness:0.65, roughness:0.28, clearcoat:0.4, clearcoatRoughness:0.2,
+          color: 0x0F2547, metalness:0.65, roughness:0.28, clearcoat:0.4, clearcoatRoughness:0.2,
           side: THREE.DoubleSide // el STL de origen trae normales/orientación poco fiables
         });
         mat.envMapIntensity = 0.3; // penumbra: el entorno solo aporta un reflejo tenue
@@ -267,7 +267,7 @@
           shader.uniforms.uMaxY = { value: lMaxY };
           shader.uniforms.uFrontWheel = { value: new THREE.Vector3(frontWheelGeom.cx, frontWheelGeom.cz, frontWheelGeom.r) };
           shader.uniforms.uRearWheel = { value: new THREE.Vector3(rearWheelGeom.cx, rearWheelGeom.cz, rearWheelGeom.r) };
-          shader.uniforms.cBody = { value: new THREE.Color(0x27125F) }; // índigo profundo (carrocería, color base único)
+          shader.uniforms.cBody = { value: new THREE.Color(0x0F2547) }; // azul marino profundo (carrocería, color base único)
           shader.uniforms.cAccent = { value: new THREE.Color(0x7138D4) }; // morado celta de acento (nariz, franja lateral)
           shader.uniforms.cSpeed = { value: new THREE.Color(0x3AF7B2) }; // verde menta neón (flaps/endplates de alerones)
           shader.uniforms.cTire = { value: new THREE.Color(0x11161B) }; // negro mate puro (caucho del neumático)

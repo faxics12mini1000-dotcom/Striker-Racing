@@ -2,23 +2,23 @@
   @font-face{font-family:'Oswald'; font-style:normal; font-weight:200 700; font-display:swap; src:url(../fonts/oswald-latin-wght-normal.woff2) format('woff2-variations'), url(../fonts/oswald-latin-wght-normal.woff2) format('woff2'); unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+2000-206F,U+2074,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;}
   @font-face{font-family:'JetBrains Mono'; font-style:normal; font-weight:100 800; font-display:swap; src:url(../fonts/jetbrains-mono-latin-wght-normal.woff2) format('woff2-variations'), url(../fonts/jetbrains-mono-latin-wght-normal.woff2) format('woff2'); unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+2000-206F,U+2074,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;}
   :root{
-    /* 6 Colores Oficiales de la escudería */
-    --indigo:#27125F;        /* Fondo primario del sitio y monocasco */
-    --navy-deep:#27125F;
-    --purple:#7138D4;        /* Identidad Celta, badges de rol, números, acentos */
+    /* Lienzo Dominante: Azul Marino Motorsport */
+    --indigo:#071B33;        /* Fondo primario elegante del sitio */
+    --navy-deep:#071B33;
+    --purple:#7138D4;        /* Morado Celta: identidad de marca, badges de rol, números, acentos */
     --teal:#2080A0;          /* Cuadrículas blueprint/CAD, cotas técnicas, CFD */
     --electric:#2020E0;      /* Líneas secundarias, divisores, acento de timeline */
     --mint:#3AF7B2;          /* Botones de acción (CTA), acentos de velocidad */
     --ice:#CDDEEF;           /* Tipografía principal, cifras numéricas, telemetría */
 
-    /* Derivados técnicos sobre índigo — tintes armónicos, no colores nuevos */
-    --surface:#311A72;             /* fondo de tarjetas y paneles */
-    --surface-2:#3B2386;           /* hover en tarjetas */
+    /* Derivados técnicos sobre el azul marino — tintes armónicos, no colores nuevos */
+    --surface:#0E223D;             /* fondo de tarjetas, paneles HUD y visor */
+    --surface-2:#142F54;           /* hover interactivo en tarjetas */
     --purple-deep:#5A2CAA;         /* variante oscura de --purple, texto blanco AA */
-    --border-fine: rgba(205,222,239,0.18); /* borde fino técnico, derivado de --ice */
+    --border-fine:#183969;         /* bordes y retícula CAD nítida */
     --line: rgba(205,222,239,0.14);
-    --grid-line: rgba(32,128,160,0.28);    /* cuadrícula blueprint en teal */
-    --ice-dim: rgba(205,222,239,0.75);
+    --grid-line: rgba(24,57,105,0.6);      /* cuadrícula técnica sutil */
+    --ice-dim: rgba(205,222,239,0.72);
     --card-hover: rgba(113,56,212,0.12);   /* wash morado para hover, derivado de --purple */
     --focus-ring: var(--mint);
 
@@ -163,7 +163,7 @@
     transition:background .15s ease, border-color .15s ease;
   }
   .btn:hover{background:var(--purple-deep); border-color:var(--purple-deep); color:#fff;}
-  .btn.btn-solid{background:var(--mint); color:var(--indigo); border-color:var(--mint); font-weight:700;}
+  .btn.btn-solid{background:var(--mint); color:#04150C; border-color:var(--mint); font-weight:700;}
   .btn.btn-solid:hover{background:var(--mint); filter:brightness(0.9);}
 
   /* ---------- BARRA DE META DE RECAUDACIÓN (hero) ---------- */
