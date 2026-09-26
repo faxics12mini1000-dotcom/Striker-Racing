@@ -91,8 +91,8 @@
         shader.uniforms.uFrontWheel = { value: new THREE.Vector3(wheels.front.cx, wheels.front.cz, wheels.front.r) };
         shader.uniforms.uRearWheel = { value: new THREE.Vector3(wheels.rear.cx, wheels.rear.cz, wheels.rear.r) };
         shader.uniforms.cBody = { value: new THREE.Color(0x0F2547) };
-        shader.uniforms.cAccent = { value: new THREE.Color(0x7138D4) };
-        shader.uniforms.cSpeed = { value: new THREE.Color(0x3AF7B2) };
+        shader.uniforms.cAccent = { value: new THREE.Color(0x7137D4) };
+        shader.uniforms.cSpeed = { value: new THREE.Color(0x12B866) };
         shader.uniforms.cTire = { value: new THREE.Color(0x11161B) };
         shader.uniforms.cRim = { value: new THREE.Color(0x2B323B) };
         shader.vertexShader = 'uniform mat4 uToModelSpace;\nvarying vec3 vModelPos;\n' + shader.vertexShader.replace(

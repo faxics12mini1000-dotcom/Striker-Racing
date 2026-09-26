@@ -268,8 +268,8 @@
           shader.uniforms.uFrontWheel = { value: new THREE.Vector3(frontWheelGeom.cx, frontWheelGeom.cz, frontWheelGeom.r) };
           shader.uniforms.uRearWheel = { value: new THREE.Vector3(rearWheelGeom.cx, rearWheelGeom.cz, rearWheelGeom.r) };
           shader.uniforms.cBody = { value: new THREE.Color(0x0F2547) }; // azul marino profundo (carrocería, color base único)
-          shader.uniforms.cAccent = { value: new THREE.Color(0x7138D4) }; // morado celta de acento (nariz, franja lateral)
-          shader.uniforms.cSpeed = { value: new THREE.Color(0x3AF7B2) }; // verde menta neón (flaps/endplates de alerones)
+          shader.uniforms.cAccent = { value: new THREE.Color(0x7137D4) }; // morado celta de acento (nariz, franja lateral)
+          shader.uniforms.cSpeed = { value: new THREE.Color(0x12B866) }; // verde esmeralda deportivo (flaps/endplates de alerones)
           shader.uniforms.cTire = { value: new THREE.Color(0x11161B) }; // negro mate puro (caucho del neumático)
           shader.uniforms.cRim = { value: new THREE.Color(0x2B323B) }; // grafito/titanio técnico automotriz (cubo del rin)
           shader.vertexShader = 'uniform mat4 uToModelSpace;\nvarying vec3 vModelPos;\n' + shader.vertexShader.replace(
