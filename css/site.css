@@ -6,6 +6,7 @@
     --navy-deep:#071B33;       /* 1. Fondo/base principal */
     --emerald:#12B866;         /* 2. Acento principal deportivo / CTAs / velocidad */
     --purple:#7137D4;          /* 3. Acento secundario / identidad Celta / badges de rol */
+    --purple-text:#B79CF0;     /* Lavanda de alto contraste para textos pequeños sobre navy (WCAG AA) */
     --border-fine:#183969;     /* 4. Azul marino: estructura / bordes / retícula CAD */
     --line:#183969;
     --lime:#C8FF32;            /* 5. Limón: detalle puntual / dots de status / acento mínimo */
@@ -113,12 +114,12 @@
   .model-stage .model-tag{
     position:absolute; top:10px; left:10px; z-index:2; pointer-events:none;
     font-family:var(--mono); font-size:0.64rem; letter-spacing:0.06em; text-transform:uppercase;
-    color:var(--ice-dim); background:rgba(39,18,95,0.7); padding:4px 8px; border:1px solid var(--border-fine);
+    color:var(--ice-dim); background:rgba(7,27,51,0.7); padding:4px 8px; border:1px solid var(--border-fine);
   }
   .model-stage .model-hint{
     position:absolute; bottom:10px; right:10px; z-index:2; pointer-events:none;
     font-family:var(--mono); font-size:0.62rem; letter-spacing:0.04em;
-    color:var(--ice-dim); background:rgba(39,18,95,0.7); padding:4px 8px; border:1px solid var(--border-fine);
+    color:var(--ice-dim); background:rgba(7,27,51,0.7); padding:4px 8px; border:1px solid var(--border-fine);
     opacity:0; transition:opacity .3s ease .15s;
   }
   .model-stage.is-ready .model-hint{opacity:1;}
@@ -138,14 +139,14 @@
   @keyframes model-spin{ to{ transform:rotate(360deg); } }
   .model-fallback{
     display:none; position:absolute; inset:0; z-index:2; align-items:center; justify-content:center; text-align:center;
-    padding:20px; font-family:var(--mono); font-size:0.78rem; color:var(--ice); background:rgba(39,18,95,0.72);
+    padding:20px; font-family:var(--mono); font-size:0.78rem; color:var(--ice); background:rgba(7,27,51,0.85);
   }
   .no-3d .model-fallback{display:flex;}
   .no-3d canvas, .no-3d .model-hint, .no-3d .model-loader{display:none;}
   .hud-top-btn{
     position:fixed; bottom:24px; right:24px; z-index:40; cursor:pointer;
     font-family:var(--mono); font-size:0.75rem; color:var(--emerald);
-    border:1px solid var(--border-fine); background:rgba(39,18,95,0.85);
+    border:1px solid var(--border-fine); background:rgba(7,27,51,0.85);
     -webkit-backdrop-filter:blur(8px); backdrop-filter:blur(8px); padding:10px 14px;
     opacity:0; pointer-events:none; transition:opacity .25s ease;
   }
@@ -178,11 +179,11 @@
   .section-head{max-width:640px; margin-bottom:48px;}
   .eyebrow-tag{
     display:inline-block; font-family:var(--mono); font-size:0.76rem; font-weight:700; letter-spacing:0.08em; text-transform:uppercase;
-    color:var(--purple); margin-bottom:12px;
+    color:var(--purple-text); margin-bottom:12px;
   }
   .section-head h2{font-size:clamp(1.8rem,3.4vw,2.5rem); margin-bottom:14px;}
   .section-head p{color:var(--ice-dim); font-size:1.05rem;}
-  .section-head.on-dark .eyebrow-tag{color:var(--purple);}
+  .section-head.on-dark .eyebrow-tag{color:var(--purple-text);}
   .section-head.on-dark h2{color:var(--ice);}
   .section-head.on-dark p{color:var(--ice-dim);}
   .section-head.center{margin-left:auto; margin-right:auto; text-align:center;}
@@ -271,7 +272,7 @@
     max-width:560px; width:calc(100% - 40px); padding:0; color:var(--ice);
     background:var(--surface); border:1px solid var(--border-fine); border-top:3px solid var(--purple);
   }
-  dialog.profile-dialog::backdrop{background:rgba(15,7,38,0.7);}
+  dialog.profile-dialog::backdrop{background:rgba(4,11,20,0.85);}
   .profile-dialog-inner{padding:30px 28px;}
   .profile-dialog-head{display:flex; justify-content:space-between; align-items:flex-start; gap:16px; margin-bottom:6px;}
   .profile-dialog-head h3{font-size:1.3rem;}
@@ -367,7 +368,7 @@
   .zone-base{fill:none; stroke:var(--border-fine); stroke-width:2;}
   .zone-wheel{fill:var(--navy-deep); stroke:var(--border-fine); stroke-width:2;}
   .zone-shape{
-    fill:rgba(113,56,212,0.16); stroke:var(--purple); stroke-width:1.5;
+    fill:rgba(113,55,212,0.16); stroke:var(--purple); stroke-width:1.5;
     cursor:pointer; transition:fill .15s ease, stroke .15s ease, fill-opacity .15s ease;
   }
   .zone-shape.zone-hot{fill:var(--emerald); fill-opacity:0.85; stroke:var(--emerald);}

@@ -10,27 +10,13 @@
 <link rel="preload" href="fonts/inter-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="fonts/oswald-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="fonts/jetbrains-mono-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="css/site.css">
 <style>
-  @font-face{font-family:'Inter'; font-style:normal; font-weight:100 900; font-display:swap; src:url(fonts/inter-latin-wght-normal.woff2) format('woff2-variations'), url(fonts/inter-latin-wght-normal.woff2) format('woff2'); unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+2000-206F,U+2074,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;}
-  @font-face{font-family:'Oswald'; font-style:normal; font-weight:200 700; font-display:swap; src:url(fonts/oswald-latin-wght-normal.woff2) format('woff2-variations'), url(fonts/oswald-latin-wght-normal.woff2) format('woff2'); unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+2000-206F,U+2074,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;}
-  @font-face{font-family:'JetBrains Mono'; font-style:normal; font-weight:100 800; font-display:swap; src:url(fonts/jetbrains-mono-latin-wght-normal.woff2) format('woff2-variations'), url(fonts/jetbrains-mono-latin-wght-normal.woff2) format('woff2'); unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+2000-206F,U+2074,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;}
-  :root{
-    --navy-deep:#071B33; --surface:#0E223D; --border-fine:#183969;
-    --blue-accent:#7137D4; --emerald:#12B866; --ice:#CDDEEF;
-    --ice-dim: rgba(205,222,239,0.62); --mono:'JetBrains Mono', ui-monospace, monospace;
-    --focus-ring:#B79CF0;
-  }
-  *{box-sizing:border-box; margin:0; padding:0;}
-  :focus-visible{outline:2px solid var(--focus-ring); outline-offset:2px;}
-  body{
-    font-family:'Inter', system-ui, sans-serif; background:var(--navy-deep); color:var(--ice);
-    line-height:1.6; -webkit-font-smoothing:antialiased;
-  }
-  .wrap{max-width:760px; margin:0 auto; padding:56px 24px 80px;}
+  .privacy-wrap{max-width:760px; margin:0 auto; padding:56px 24px 80px;}
   a{color:var(--emerald);}
-  h1{font-family:'Oswald', sans-serif; font-size:clamp(1.8rem,4vw,2.4rem); margin-bottom:8px;}
+  h1{font-size:clamp(1.8rem,4vw,2.4rem); margin-bottom:8px;}
   .updated{font-family:var(--mono); font-size:0.8rem; color:var(--ice-dim); margin-bottom:36px;}
-  h2{font-family:'Oswald', sans-serif; font-size:1.2rem; margin:32px 0 12px; color:var(--ice);}
+  h2{font-size:1.2rem; margin:32px 0 12px;}
   p, li{color:var(--ice-dim); font-size:0.98rem; margin-bottom:12px;}
   ul{padding-left:20px;}
   .back-link{
@@ -40,12 +26,12 @@
   .back-link:hover{color:var(--emerald); border-color:var(--emerald);}
   .note{
     margin-top:40px; padding:18px 20px; background:var(--surface); border:1px solid var(--border-fine);
-    border-left:4px solid var(--blue-accent); font-size:0.9rem; color:var(--ice-dim);
+    border-left:4px solid var(--purple); font-size:0.9rem; color:var(--ice-dim);
   }
 </style>
 </head>
 <body>
-<main class="wrap">
+<main class="privacy-wrap">
   <a class="back-link" href="index.html">&larr; Volver al sitio de Striker Racing</a>
   <h1>Aviso de privacidad</h1>
   <div class="updated">Última actualización: septiembre de 2026</div>

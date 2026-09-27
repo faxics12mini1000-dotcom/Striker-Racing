@@ -11,6 +11,7 @@ button, input, select, textarea { font: inherit; }
   --navy-deep:#071B33;       /* 1. Fondo/base principal */
   --emerald:#12B866;         /* 2. Acento principal deportivo / CTAs / velocidad */
   --purple:#7137D4;          /* 3. Acento secundario / identidad Celta / badges de rol */
+  --purple-text:#B79CF0;     /* Lavanda de alto contraste para textos pequeños sobre navy (WCAG AA) */
   --border-fine:#183969;     /* 4. Azul marino: estructura / bordes / retícula CAD */
   --line:#183969;
   --lime:#C8FF32;            /* 5. Limón: detalle puntual / dots de status / acento mínimo */
@@ -41,7 +42,7 @@ section{padding:104px 0;}
 }
 .micro{
   font-family:'Inter', system-ui, sans-serif; font-size:0.75rem; font-weight:600;
-  letter-spacing:0.12em; text-transform:uppercase; color:var(--purple); line-height:1.4;
+  letter-spacing:0.12em; text-transform:uppercase; color:var(--purple-text); line-height:1.4;
 }
 .big-num{
   font-family:var(--mono); font-size:clamp(2.5rem, 5vw, 4.5rem); font-weight:700;
@@ -56,13 +57,13 @@ section{padding:104px 0;}
 .btn.btn-solid{background:var(--emerald); color:#04150C; border-color:var(--emerald);}
 .btn.btn-solid:hover{filter:brightness(1.1);}
 .dossier-btn{border-color:var(--border-fine);}
-.hud-top-btn{border-color:var(--border-fine); background:rgba(39,18,95,0.85);}
+.hud-top-btn{border-color:var(--border-fine); background:rgba(7,27,51,0.85);}
 
 /* ---------- Navbar cockpit ---------- */
 .cockpit{position:sticky; top:0; z-index:60; border-bottom:1px solid var(--border-fine);}
 .cockpit::before{
   content:""; position:absolute; inset:0; z-index:-1;
-  background:rgba(39,18,95,0.8);
+  background:rgba(7,27,51,0.85);
   -webkit-backdrop-filter:blur(12px); backdrop-filter:blur(12px);
 }
 .cockpit-bar{
@@ -108,7 +109,7 @@ section{padding:104px 0;}
   .nav-panel{
     display:none; position:absolute; top:100%; left:0; right:0;
     flex-direction:column; gap:20px; padding:12px 24px 24px;
-    background:rgba(39,18,95,0.97);
+    background:rgba(7,27,51,0.98);
     -webkit-backdrop-filter:blur(12px); backdrop-filter:blur(12px);
     border-bottom:1px solid var(--border-fine);
   }
@@ -170,11 +171,11 @@ section{padding:104px 0;}
 /* Viñeta de estudio: penumbra en los bordes, escultura al centro */
 .model-stage::after{
   content:""; position:absolute; inset:0; z-index:2; pointer-events:none;
-  background:radial-gradient(ellipse at 50% 46%, transparent 42%, rgba(39,18,95,0.82) 100%);
+  background:radial-gradient(ellipse at 50% 46%, transparent 42%, rgba(7,27,51,0.82) 100%);
 }
 .model-stage .model-tag, .model-stage .model-hint, .model-stage .model-fallback{z-index:3;}
-.model-stage .model-tag{background:rgba(39,18,95,0.75); border-color:var(--border-fine);}
-.model-stage .model-hint{background:rgba(39,18,95,0.75); border-color:var(--border-fine);}
+.model-stage .model-tag{background:rgba(7,27,51,0.75); border-color:var(--border-fine);}
+.model-stage .model-hint{background:rgba(7,27,51,0.75); border-color:var(--border-fine);}
 .model-stage canvas{position:relative; z-index:1;}
 .model-poster{object-fit:cover;}
 
@@ -182,7 +183,7 @@ section{padding:104px 0;}
   background:var(--surface); border:none; border-top:none; padding:0; display:flex; flex-direction:column;
 }
 .hud-head{
-  padding:18px 24px; border-bottom:1px solid var(--border-fine); color:var(--purple);
+  padding:18px 24px; border-bottom:1px solid var(--border-fine); color:var(--purple-text);
   font-family:'Inter', system-ui, sans-serif; font-weight:600; font-size:0.75rem; letter-spacing:0.12em;
 }
 .cotas{margin:0; flex:1;}
@@ -333,7 +334,7 @@ dialog.cv-dialog{
   background:var(--navy-deep); border:1px solid var(--border-fine);
 }
 dialog.cv-dialog[open]{display:flex; flex-direction:column;}
-dialog.cv-dialog::backdrop{background:rgba(15,7,38,0.82); -webkit-backdrop-filter:blur(6px); backdrop-filter:blur(6px);}
+dialog.cv-dialog::backdrop{background:rgba(4,11,20,0.85); -webkit-backdrop-filter:blur(6px); backdrop-filter:blur(6px);}
 .cv-dialog-head{
   flex:none; display:flex; align-items:center; justify-content:space-between; gap:16px;
   padding:14px 20px; border-bottom:1px solid var(--border-fine); background:var(--surface);
@@ -396,7 +397,7 @@ dialog.cv-dialog::backdrop{background:rgba(15,7,38,0.82); -webkit-backdrop-filte
 .faq-title{text-transform:uppercase; font-weight:600;}
 
 dialog.profile-dialog{margin:auto; max-height:calc(100vh - 32px); overflow:auto; background:var(--surface); border:1px solid var(--border-fine); border-top:1px solid var(--border-fine);}
-dialog.profile-dialog::backdrop{background:rgba(15,7,38,0.82); -webkit-backdrop-filter:blur(6px); backdrop-filter:blur(6px);}
+dialog.profile-dialog::backdrop{background:rgba(4,11,20,0.85); -webkit-backdrop-filter:blur(6px); backdrop-filter:blur(6px);}
 .profile-close, .profile-btn{border-color:var(--border-fine);}
 .configurator-field select, .configurator-field input[type="file"]{background:var(--navy-deep); border-color:var(--border-fine);}
 .configurator-hint{border-color:var(--border-fine); border-left-color:var(--emerald); background:rgba(18,184,102,0.06);}
