@@ -89,6 +89,7 @@
 </script>
 <link rel="stylesheet" href="../css/site.css">
 <link rel="stylesheet" href="../css/gallery.css">
+<link rel="stylesheet" href="/despiece/sr26-despiece.css">
 </head>
 <body>
 
@@ -157,6 +158,45 @@
     </div>
   </div>
 </header>
+
+<!-- Scroll-driven 3D exploded view of the SR-26 (not in the menu) -->
+<section class="sr-despiece" id="despiece" aria-label="Exploded view of the Striker Racing car, part by part">
+  <div class="sr-stage">
+    <div class="sr-canvas"></div>
+    <header class="sr-top">
+      <img class="sr-logo" src="/logo-64.webp" width="34" height="32" alt="">
+      <div><b>Striker Racing</b><span>Car prototype · exploded view</span></div>
+      <span class="sr-chip"></span>
+    </header>
+    <div class="sr-title on">
+      <h2><em>SR-26,</em> part by part.</h2>
+      <p>STEM Racing Mexico prototype</p>
+      <small>Scroll to take it apart ↓</small>
+    </div>
+    <div class="sr-dims"></div>
+    <svg class="sr-lines" aria-hidden="true"></svg>
+    <div class="sr-card" aria-live="polite"></div>
+    <div class="sr-table"></div>
+    <div class="sr-bar">
+      <div class="sr-bar-label">Assembled car</div>
+      <div class="sr-track"><div class="sr-bar-fill"></div><div class="sr-ticks"></div></div>
+      <span class="sr-credit">Visual prototype · dimensions taken from the 3D model</span>
+    </div>
+    <div class="sr-fallback">
+      <div><img src="/car-poster.webp" alt="Striker Racing car" width="400" height="275" style="max-width:100%;height:auto"><p>Your browser can't display the 3D model. These are the SR-26 parts: body, sidepods, nose, wings, halo, helmet, CO₂ cartridge, wheels, axles and tether guides.</p></div>
+    </div>
+  </div>
+</section>
+<script type="module">
+(function(){
+  var sec = document.getElementById('despiece'), nav = document.querySelector('.cockpit');
+  if (nav && 'ResizeObserver' in window) new ResizeObserver(function(){ sec.style.setProperty('--sr-nav', nav.offsetHeight + 'px'); }).observe(nav);
+  var go = function(){ import('/despiece/sr26-despiece.js').then(function(m){ m.initDespiece(sec, { glb:'/despiece/sr26.glb', logo:'/logo.png', clase:'entry', lang:'en' }); }).catch(function(){ sec.classList.add('no-3d'); }); };
+  if ('IntersectionObserver' in window) new IntersectionObserver(function(es, io){ if (es[0].isIntersecting) { io.disconnect(); go(); } }, { rootMargin:'600px' }).observe(sec);
+  else go();
+})();
+</script>
+
 
 <section id="manifesto" class="reveal">
   <div class="wrap manifesto-grid">
@@ -239,21 +279,25 @@
 
 <section id="team" class="blueprint">
   <div class="wrap">
-    <div class="section-head">
-      <div class="eyebrow-tag">The team</div>
+    <div class="team-head">
+      <div class="eyebrow-tag">Preparatoria Celta · Querétaro</div>
       <h2>Five members.<br>Five fronts of work.</h2>
-      <p>The team's spec sheet: official role, hard skills and tools for each member, plus their full technical credential in the viewer.</p>
-    </div>
-    <div class="team-group">
-      <figure>
-        <img src="team/grupo.webp" width="750" height="482" loading="lazy" decoding="async" alt="Striker Racing team members with their mentor, Preparatoria Celta">
-        <figcaption>Striker Racing · Preparatoria Celta, Querétaro</figcaption>
-      </figure>
       <div class="team-group-text">
         <p>We design a CO₂-powered car using professional engineering tools (CAD, CAM, CFD) under a strict technical regulation.</p>
         <p>We run the team like a real company: managing budget, brand identity and business plans, aiming to represent Mexico at the world final.</p>
       </div>
     </div>
+    <figure class="team-photo">
+      <img src="team/grupo.webp" width="750" height="482" loading="lazy" decoding="async" alt="Striker Racing team members with their mentor, Preparatoria Celta">
+      <figcaption>Striker Racing · Preparatoria Celta, Querétaro</figcaption>
+    </figure>
+    <dl class="team-stats" aria-label="Team facts">
+        <div class="team-stat"><dt>Members</dt><dd>5</dd></div>
+        <div class="team-stat"><dt>Certified mentor</dt><dd>1</dd></div>
+        <div class="team-stat"><dt>Category</dt><dd>Development</dd></div>
+        <div class="team-stat"><dt>Season</dt><dd>2026–27</dd></div>
+    </dl>
+    <p class="team-cards-intro">The team's spec sheet: official role, hard skills and tools for each member, plus their full technical credential in the viewer.</p>
     <div class="pass-grid">
 
       <article class="card-reveal paddock-pass">
@@ -321,7 +365,7 @@
           <li>Preparing prototypes for on-track testing</li>
         </ul>
         <div class="pass-chips"><span>CNC</span><span>3D printing</span><span>Fusion CAM</span></div>
-        <div class="pass-foot"><button class="cv-view-btn" type="button" data-file="../cv/ulises-gutierrez.pdf" data-name="Josué Ulises Gutiérrez Rodríguez">View Technical Credential</button></div>
+        <div class="pass-foot"><button class="cv-view-btn" type="button" data-file="../cv/ulises-gutierrez.jpg" data-name="Josué Ulises Gutiérrez Rodríguez">View Technical Credential</button></div>
       </article>
 
       <article class="card-reveal paddock-pass">

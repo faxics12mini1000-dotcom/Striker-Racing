@@ -1,0 +1,81 @@
+/* Striker Racing · SR-26 · despiece guiado por scroll.
+   Usa las variables del sitio (--navy-deep, --surface, --line, --ice, --emerald, --purple-text, --mono) con respaldo propio. */
+.sr-despiece{
+  --sr-nav:65px;                          /* alto de la barra .cockpit (64 + 1 de borde); el script lo vuelve a medir */
+  --sr-navy:var(--navy-deep,#071B33); --sr-surface:var(--surface,#0E223D); --sr-line:var(--line,#183969);
+  --sr-ice:var(--ice,#CDDEEF); --sr-dim:var(--ice-dim,rgba(205,222,239,.72)); --sr-em:var(--emerald,#12B866);
+  --sr-pt:var(--purple-text,#B79CF0); --sr-lime:var(--lime,#C8FF32); --sr-steel:#9DB8D6; --sr-bad:#FF8A5C;
+  --sr-mono:var(--mono,'JetBrains Mono',ui-monospace,monospace);
+  --sr-head:'Oswald',system-ui,sans-serif; --sr-body:'Inter',system-ui,sans-serif;
+  position:relative; padding:0; height:calc(100vh * 10); height:calc(100svh * 10); background:var(--sr-navy); color:var(--sr-ice);
+}
+section.sr-despiece[id]{scroll-margin-top:var(--sr-nav)}   /* gana a section[id]{scroll-margin-top:76px} del sitio */
+.sr-stage{position:sticky; top:var(--sr-nav); height:calc(100vh - var(--sr-nav)); height:calc(100svh - var(--sr-nav)); overflow:hidden;
+  background:var(--sr-navy); border-block:1px solid var(--sr-line)}
+.sr-canvas,.sr-canvas canvas{position:absolute; inset:0; width:100%; height:100%; display:block}
+.sr-stage>*:not(.sr-canvas){position:absolute}
+.sr-stage>.sr-top,.sr-stage>.sr-bar,.sr-stage>.sr-title,.sr-stage>.sr-card,.sr-stage>.sr-table,.sr-stage>.sr-dims{pointer-events:none}
+
+.sr-top{left:max(16px,4vw); right:max(16px,4vw); top:14px; display:flex; align-items:center; gap:12px}
+.sr-logo{width:30px; height:auto}
+.sr-top b{display:block; font:600 15px/1 var(--sr-head); letter-spacing:.07em; text-transform:uppercase}
+.sr-top span{display:block; margin-top:3px; font:400 10px/1.2 var(--sr-mono); letter-spacing:.08em; color:var(--sr-steel); text-transform:none}
+.sr-top .sr-chip{margin-left:auto; padding:6px 10px; border:1px solid var(--sr-line); background:rgba(7,27,51,.8); font:400 10px/1 var(--sr-mono); letter-spacing:.06em; color:var(--sr-dim); margin-top:0}
+
+.sr-title{left:max(16px,4vw); bottom:86px; max-width:min(640px,calc(100% - 32px)); opacity:0; transform:translateY(10px); transition:opacity .4s, transform .4s}
+.sr-title.on{opacity:1; transform:none}
+.sr-title h2{margin:0; font:600 clamp(40px,6.4vw,84px)/.95 var(--sr-head); text-transform:uppercase; letter-spacing:.005em}
+.sr-title h2 em{font-style:normal; color:var(--purple,#7137D4)}
+.sr-title p{margin:12px 0 0; font:500 12px/1.4 var(--sr-mono); letter-spacing:.14em; text-transform:uppercase; color:var(--sr-em)}
+.sr-title small{display:block; margin-top:8px; font:400 12px/1.4 var(--sr-mono); color:var(--sr-steel)}
+
+.sr-card{left:max(16px,4vw); bottom:78px; width:min(390px,calc(100% - 32px)); padding:18px 20px 16px; background:var(--sr-surface); border:1px solid var(--sr-line); opacity:0; transform:translateY(8px); transition:opacity .3s, transform .3s}
+.sr-card.on{opacity:1; transform:none}
+.sr-kick{display:flex; align-items:center; gap:10px; font:400 10.5px/1 var(--sr-mono); letter-spacing:.14em; text-transform:uppercase; color:var(--sr-pt)}
+.sr-ph{padding:2px 5px; border:1px solid var(--sr-lime); color:var(--sr-lime); font-size:9px; letter-spacing:.1em}
+.sr-card h3{margin:10px 0 6px; font:600 clamp(28px,3.4vw,38px)/1 var(--sr-head); text-transform:uppercase; letter-spacing:.015em; color:var(--sr-em)}
+.sr-meta{font:500 11.5px/1.4 var(--sr-mono); color:var(--sr-ice)}
+.sr-card p{margin:10px 0 0; font:400 13px/1.55 var(--sr-body); color:var(--sr-dim)}
+
+.sr-table{right:max(16px,4vw); top:68px; width:min(460px,calc(100% - 32px)); padding:18px 20px 14px; background:var(--sr-surface); border:1px solid var(--sr-line); opacity:0; transform:translateY(8px); transition:opacity .35s, transform .35s}
+.sr-table.on{opacity:1; transform:none}
+.sr-table h3{margin:0; font:600 24px/1 var(--sr-head); text-transform:uppercase; letter-spacing:.03em}
+.sr-sub{margin:6px 0 12px; font:400 11px/1.4 var(--sr-mono); color:var(--sr-em)}
+.sr-rows{display:grid; grid-template-columns:1fr auto auto auto; gap:6px 14px; font:400 11.5px/1.35 var(--sr-mono); border-top:1px solid var(--sr-line); padding-top:10px}
+.sr-rows span{min-width:0}
+.sr-rows .v{text-align:right; color:var(--sr-ice)} .sr-rows .l{text-align:right; color:var(--sr-steel)}
+.sr-rows .s{text-align:right; min-width:7.5ch} .s.ok{color:var(--sr-em)} .s.bad{color:var(--sr-bad)} .s.pend{color:var(--sr-lime)}
+.sr-note{margin:12px 0 0; font:400 11px/1.45 var(--sr-body); color:var(--sr-steel)}
+
+.sr-dims{inset:0; overflow:hidden}
+.sr-dim{position:absolute; left:0; top:0; padding:3px 7px; border:1px solid var(--sr-em); background:rgba(7,27,51,.88); font:500 11px/1.2 var(--sr-mono); letter-spacing:.06em; color:var(--sr-ice); white-space:nowrap; opacity:0; transition:opacity .25s}
+.sr-lines{inset:0; width:100%; height:100%; pointer-events:none}
+.sr-lines path{fill:none; stroke:var(--sr-em); stroke-width:1.2}
+.sr-lines circle{fill:var(--sr-em)}
+
+.sr-bar{left:0; right:0; bottom:0; padding:12px max(16px,4vw) 14px; display:grid; grid-template-columns:auto 1fr auto; gap:18px; align-items:center; background:rgba(7,27,51,.92); border-top:1px solid var(--sr-line)}
+.sr-bar-label{min-width:15ch; font:500 10.5px/1 var(--sr-mono); letter-spacing:.14em; text-transform:uppercase; color:var(--sr-ice)}
+.sr-track{position:relative; height:2px; background:var(--sr-line); pointer-events:none}
+.sr-bar-fill{position:absolute; inset:0; background:var(--sr-em); transform-origin:left; transform:scaleX(0)}
+.sr-ticks{position:absolute; left:0; right:0; top:-8px; height:18px}
+.sr-tick{all:unset; position:absolute; top:0; width:18px; height:18px; margin-left:-9px; cursor:pointer; pointer-events:auto}
+.sr-tick::after{content:""; position:absolute; left:6px; top:6px; width:6px; height:6px; background:var(--sr-navy); border:1px solid var(--sr-steel)}
+.sr-tick:hover::after,.sr-tick:focus-visible::after{background:var(--sr-em); border-color:var(--sr-em)}
+.sr-tick:focus-visible{outline:2px solid var(--sr-em); outline-offset:1px}
+.sr-credit{font:400 10px/1.2 var(--sr-mono); color:var(--sr-steel); text-align:right}
+
+.sr-fallback{display:none; inset:0; place-items:center; text-align:center; padding:24px; font:400 14px/1.5 var(--sr-body); color:var(--sr-dim)}
+.sr-despiece.no-3d{height:auto}
+.sr-despiece.no-3d .sr-stage{position:relative; top:auto; height:auto; min-height:320px}
+.sr-despiece.no-3d .sr-fallback{display:grid; position:relative}
+.sr-despiece.no-3d :is(.sr-title,.sr-card,.sr-table,.sr-dims,.sr-lines,.sr-bar){display:none}
+
+@media (max-width:720px){
+  .sr-credit{display:none} .sr-bar{grid-template-columns:auto 1fr; gap:12px}
+  .sr-bar-label{min-width:12ch; font-size:10px}
+  .sr-card{left:16px; right:16px; width:auto; bottom:62px; padding:14px 16px 12px} .sr-card h3{font-size:26px; margin:8px 0 4px} .sr-card p{font-size:12.5px; margin-top:8px}
+  .sr-table{left:16px; right:16px; top:auto; bottom:62px; width:auto; max-height:62%; overflow:auto; padding:14px 16px 12px}
+  .sr-rows{grid-template-columns:1fr auto auto; font-size:11px} .sr-rows .l{display:none}
+  .sr-title{bottom:72px} .sr-top .sr-chip{display:none}
+}
+@media (prefers-reduced-motion:reduce){.sr-card,.sr-table,.sr-title,.sr-dim{transition:none}}
