@@ -22,7 +22,7 @@ export const CONFIG = {
 /* Librea con la paleta del sitio. Sin degradados: un color plano por pieza. */
 const C = { navy:'#071B33', surface:'#0E223D', line:'#183969', ice:'#CDDEEF', steel:'#9DB8D6',
             emerald:'#12B866', purple:'#7137D4', purpleDeep:'#5A2BA8', lime:'#C8FF32', tire:'#0A1424', dark:'#22385C' };
-const LIVERY = {
+export const LIVERY = {
   '01':C.purple, '02':C.purpleDeep, '03':C.purpleDeep, '04':C.ice,
   '05':C.emerald, '06':C.emerald, '07':C.ice, '08':C.ice,
   '09':C.emerald, '10':C.ice, '11':C.ice, '12':C.purple,
