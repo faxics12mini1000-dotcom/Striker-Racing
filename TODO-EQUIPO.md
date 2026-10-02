@@ -14,18 +14,14 @@ diseño/copy que se tomaron por default y conviene revisar.
       (el presupuesto total calculado en `#presupuesto`) y
       `recaudado: 0` porque no hay cifra real de lo ya recaudado. Actualizar `recaudado` en cuanto
       se tenga un monto verificado.
-- [ ] **Disponibilidad de cupos por nivel de patrocinio**: se reemplazó "Cupo abierto" (igual en
-      los 4 niveles, no aportaba información) por un contador de disponibilidad por zona, leído
-      también de `window.STRIKER_CONFIG.sponsorTiers[].availability` (texto libre, ej. "3 de 5
-      espacios disponibles"). Se dejaron valores de ejemplo razonables; confirmar cupos reales por
-      nivel (uniforme y auto tienen espacio físico limitado).
-- [ ] **Dossier ejecutivo**: el CTA "Solicitar dossier ejecutivo" abre WhatsApp con un mensaje
+- [ ] **Cupos por nivel**: se quitaron los contadores de cupos (eran valores de ejemplo, no decisión del equipo). Si se
+      definen cupos reales por nivel, agregarlos de nuevo.
+- [ ] **Material de patrocinio**: el CTA "Escríbenos" abre WhatsApp con un mensaje
       prellenado pidiéndolo; no existe todavía un PDF de dossier adjuntable. Si se genera un PDF,
       se puede enlazar directamente en vez de pedirlo por WhatsApp.
 - [ ] **Página /privacidad.html**: se creó como placeholder de aviso de privacidad con la
       información de contacto ya conocida (correo, WhatsApp) y sin recopilación de datos personal
-      más allá de lo que el visitante decide enviar por correo/WhatsApp/el configurador (que no
-      sube nada a servidor). Debe revisarla alguien con criterio legal antes de tratarla como
+      más allá de lo que el visitante decide enviar por correo/WhatsApp. Debe revisarla alguien con criterio legal antes de tratarla como
       aviso de privacidad definitivo.
 - [ ] **Traducción /en**: hecha por el asistente (no es traducción profesional certificada).
       Conviene que alguien bilingüe del equipo la revise antes de compartirla con patrocinios
@@ -53,7 +49,7 @@ Corregido:
 Diferencias de diseño respecto a 8a506d2 que conviene que el equipo confirme:
 - El hero ya no muestra "5 integrantes / 2027" ni la barra de meta de patrocinio (esta queda solo en `#presupuesto`).
 - Los modales de perfil por integrante se sustituyeron por el visor de credenciales (PDF).
-- El menú perdió "Herramientas" y "Contacto" (el CTA "Solicitar Dossier" cubre el contacto).
+- El menú perdió "Herramientas" y "Contacto" (el CTA "Escríbenos" cubre el contacto).
 - Rendimiento: 8a506d2 inlineaba CSS/JS; ahora son archivos externos (más peticiones). En pruebas locales con throttling el LCP es ruidoso (2.6–8 s en ambas versiones); medir en PageSpeed sobre el deploy real.
 
 ## Decisiones tomadas por default (documentadas para que el equipo las pueda revertir)
@@ -97,11 +93,8 @@ Diferencias de diseño respecto a 8a506d2 que conviene que el equipo confirme:
 - **Regenerar `car-poster.webp`** si cambia el modelo/librea: abrir el sitio, capturar el canvas
   del visor (necesita `preserveDrawingBuffer:true` temporal en el renderer) como PNG con alpha y
   correr `node scripts/generate-poster.mjs <captura.png>`.
-- **Configurador de logo**: la placa del decal usa `DoubleSide`, así que visto desde el lado
-  "trasero" el logo puede verse en espejo, y la posición por zona es aproximada (plano flotante
-  cerca de la superficie, no un decal proyectado). Sirve para tamaño/color/ubicación relativa, no
-  como render final. Para niveles solo de uniforme (Colaborador/Impulsor) no hay modelo 3D de
-  uniforme: se previsualiza sobre el auto como referencia.
+- **Niveles de patrocinio**: precios y beneficios siguen el folleto del equipo (Folleto_STEM_racing.pdf). El configurador de logo y el
+  diagrama de zonas se quitaron por ahora (usaban el auto anterior). Fecha límite en la web: 23 de noviembre.
 - **Visor 3D en pestañas ocultas**: el loop de render se pausa con la pestaña oculta y fuera de
   viewport (intencional). En herramientas de automatización que reportan
   `document.visibilityState === "hidden"` permanente, el visor no arrancará.
