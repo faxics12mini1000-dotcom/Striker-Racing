@@ -88,10 +88,18 @@ Diferencias de diseño respecto a 8a506d2 que conviene que el equipo confirme:
 
 ## Notas técnicas para quien mantenga el sitio
 
-- **Visor 3D (mantenimiento)**: las páginas `/auto/` y `/en/car/` cargan un bundle único con hash (`js/dist/`). Si se toca `js/viewer.js`,
-  `js/car-look.js` o el modelo, correr en este orden: `npm run bake:glb` (solo si cambió el GLB: hornea normales), `npm run build:viewer`
-  (empaqueta y estampa los hashes en el HTML), y con `node scripts/dev-server.mjs` activo `node scripts/generate-poster.mjs`
-  (regenera `assets/img/car-poster-{desktop,mobile}.webp` capturando el visor real). El entorno de luz se rehace con `npm run bake:env`.
+- **Visor 3D (mantenimiento)**: `/auto/` y `/en/car/` cargan un cargador mínimo (`js/stage.js`, 1.4 KB) y, solo cuando toca, el visor (`js/viewer.js`),
+  ambos con hash en `js/dist/`. Si se toca `js/viewer.js`, `js/stage.js`, `js/car-look.js` o el modelo, correr en este orden: `npm run bake:glb`
+  (solo si cambió el GLB: hornea normales), `npm run build:viewer` (empaqueta y estampa los hashes en el HTML) y, con
+  `node scripts/dev-server.mjs` activo, `node scripts/generate-poster.mjs` (regenera los tres posters `assets/img/car-poster-{desktop,tablet,phone}.webp`
+  capturando el visor real). El entorno de luz se rehace con `npm run bake:env`. `npm run measure:viewer` mide el arranque.
+- **Video de Fusion para el teléfono (hueco listo, falta el video)**: en pantallas ≤ 560 px el sitio muestra el póster y, si existe el video,
+  lo reproduce solo con wifi (donde el navegador informa el tipo de red; en iPhone solo al tocar "Ver video"); "Explorar en 3D" carga el visor.
+  Sin video, el teléfono carga el 3D como siempre. Con ahorro de datos o 2G, en cualquier pantalla, se muestra el póster y un botón "Ver en 3D".
+  Para activarlo: guardar `assets/video/sr26-phone.mp4` (y, opcional, `sr26-phone.webm`), correr `npm run build:viewer` y hacer commit. Especificaciones:
+  animación de despiece de 5 a 8 s en bucle sin corte, **vertical 4:5 (720×900)**, **sin audio**, fondo liso `#0E223D` (el del visor), el auto centrado y con aire
+  arriba y abajo; MP4 H.264 ≤ 1 MB y WebM VP9 ≤ 700 KB. Ejemplo: `ffmpeg -i render.mov -an -vf scale=720:900 -c:v libx264 -crf 28 -pix_fmt yuv420p -movflags +faststart sr26-phone.mp4`
+  y `ffmpeg -i render.mov -an -vf scale=720:900 -c:v libvpx-vp9 -crf 38 -b:v 0 sr26-phone.webm`.
 - **Niveles de patrocinio**: precios y beneficios siguen el folleto del equipo (Folleto_STEM_racing.pdf). El configurador de logo y el
   diagrama de zonas se quitaron por ahora (usaban el auto anterior). Fecha límite en la web: 23 de noviembre.
 - **Visor 3D en pestañas ocultas**: el loop de render se pausa con la pestaña oculta y fuera de

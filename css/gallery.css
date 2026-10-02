@@ -628,3 +628,19 @@ html,body{overflow-x:clip;}
 @media (max-width:520px){ .car-tip{font-size:0.6rem;} }
 @media (prefers-reduced-motion:reduce){ .car-tip{transition:none;} }
 .model-stage.no-3d .car-ctl, .model-stage.is-lost .car-ctl, .model-stage.no-3d .car-tip{display:none;}
+
+/* Hueco para el video de Fusion (js/stage.js): póster por defecto en teléfono/ahorro de datos, video con wifi o al tocar, 3D al pedirlo */
+.model-video{position:absolute; inset:0; z-index:1; width:100%; height:100%; object-fit:cover; opacity:0; transition:opacity .4s ease; cursor:pointer;}
+.model-video.is-on{opacity:1;}
+.car-cta{position:absolute; left:12px; right:12px; bottom:12px; z-index:4; display:flex; flex-wrap:wrap; justify-content:center; gap:8px;}
+.car-cta[hidden]{display:none;}
+.car-cta-btn{
+  appearance:none; cursor:pointer; height:40px; padding:0 18px; color:var(--ice); background:rgba(7,27,51,0.86); border:1px solid var(--border-fine);
+  font-family:var(--mono); font-size:0.7rem; letter-spacing:0.07em; text-transform:uppercase; backdrop-filter:blur(6px);
+}
+.car-cta-btn:hover{border-color:var(--emerald); color:var(--emerald);}
+.car-cta-btn.is-primary{background:var(--emerald); border-color:var(--emerald); color:var(--navy-deep);}
+.car-cta-btn.is-primary:hover{background:var(--ice); border-color:var(--ice); color:var(--navy-deep);}
+.car-cta-btn:focus-visible{outline:2px solid var(--lime); outline-offset:2px;}
+.model-stage.is-idle .model-hint{display:none;}
+@media (prefers-reduced-motion:reduce){ .model-video{transition:none;} }

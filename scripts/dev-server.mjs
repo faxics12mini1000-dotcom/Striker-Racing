@@ -19,7 +19,7 @@ const root = process.argv[3] ? path.resolve(process.argv[3]) : defaultRoot;
 const types = {
   '.html':'text/html; charset=utf-8', '.js':'text/javascript; charset=utf-8', '.mjs':'text/javascript; charset=utf-8',
   '.css':'text/css; charset=utf-8', '.json':'application/json; charset=utf-8', '.glb':'model/gltf-binary',
-  '.png':'image/png', '.jpg':'image/jpeg', '.jpeg':'image/jpeg', '.pdf':'application/pdf', '.webp':'image/webp', '.svg':'image/svg+xml', '.ico':'image/x-icon',
+  '.png':'image/png', '.mp4':'video/mp4', '.webm':'video/webm', '.jpg':'image/jpeg', '.jpeg':'image/jpeg', '.pdf':'application/pdf', '.webp':'image/webp', '.svg':'image/svg+xml', '.ico':'image/x-icon',
 };
 const compressible = new Set(['.html', '.js', '.mjs', '.css', '.json', '.svg']);
 
@@ -35,7 +35,7 @@ http.createServer(async (req, res) => {
     var ext = path.extname(filePath);
     var headers = { 'Content-Type': types[ext] || 'application/octet-stream' };
     if(useCache){
-      if(urlPath.startsWith('/fonts/') || urlPath.startsWith('/vendor/') || urlPath.startsWith('/js/dist/') || urlPath.startsWith('/assets/models/')) headers['Cache-Control'] = 'public, max-age=31536000, immutable';
+      if(urlPath.startsWith('/fonts/') || urlPath.startsWith('/vendor/') || urlPath.startsWith('/js/dist/') || urlPath.startsWith('/assets/models/') || urlPath.startsWith('/assets/video/')) headers['Cache-Control'] = 'public, max-age=31536000, immutable';
       else if(['.glb', '.webp', '.png'].includes(ext)) headers['Cache-Control'] = 'public, max-age=604800';
     }
     if(compressible.has(ext) && /\bgzip\b/.test(req.headers['accept-encoding'] || '')){

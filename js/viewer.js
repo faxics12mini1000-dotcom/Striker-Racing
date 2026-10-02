@@ -4,13 +4,13 @@ import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { MeshoptDecoder } from 'three/addons/libs/meshopt_decoder.module.js';
 import * as Look from './car-look.js';
 
-(function(){
+/* js/stage.js decide cuándo cargar este módulo (póster, video o 3D, según pantalla y conexión) y llama a mount(stage). */
+export function mount(stage){
   // Visor 3D del monoplaza SR-26 (assets/models/sr26.glb) en /auto/: gira solo, se arma y se desarma en bucle,
   // y se puede arrastrar para girar o mover el control para ver el despiece. NO secuestra el scroll de la página.
-  // Carga: este bundle se pide con modulepreload y el GLB con preload; al terminar de pintar el poster (idéntico al primer
-  // cuadro del visor) se descargan/parsean en paralelo el GLB, el entorno horneado y el logo, y el canvas se funde sobre el poster.
-  var stage = document.getElementById('modelStage');
-  if(!stage) return;
+  // Carga: este bundle se pide con modulepreload y el GLB con preload (solo en pantallas > 560 px y sin ahorro de datos); al terminar de
+  // pintar el poster (idéntico al primer cuadro del visor) se descargan/parsean en paralelo el GLB, el entorno horneado y el logo,
+  // y el canvas se funde sobre el poster.
   function fail(){ stage.classList.add('no-3d'); }
   var EN = (document.documentElement.lang || 'es').slice(0, 2) === 'en';
   var TXT = EN
@@ -46,28 +46,6 @@ import * as Look from './car-look.js';
     if(p <= progress) return;
     progress = Math.min(1, p);
     if(barFill) barFill.style.transform = 'scaleX(' + progress.toFixed(3) + ')';
-  }
-
-  var booted = false;
-  function afterFirstPaint(fn){
-    function go(){ requestAnimationFrame(function(){ setTimeout(fn, 0); }); }
-    if(document.readyState !== 'loading') go(); else document.addEventListener('DOMContentLoaded', go, { once:true });
-  }
-  function start(){
-    if(booted) return;
-    booted = true;
-    afterFirstPaint(boot);
-  }
-  // Carga anticipada: arranca cuando el visor está a menos de 600 px de entrar (en /auto/ ya está a la vista y arranca de inmediato)
-  if('IntersectionObserver' in window){
-    var bootIO = new IntersectionObserver(function(entries){
-      entries.forEach(function(entry){
-        if(entry.isIntersecting){ bootIO.disconnect(); start(); }
-      });
-    }, { rootMargin:'600px 0px' });
-    bootIO.observe(stage);
-  }else{
-    start();
   }
 
   function fetchGlb(url, onProgress){
@@ -517,6 +495,7 @@ import * as Look from './car-look.js';
         setProgress(1);
         stage.classList.remove('is-loading');
         stage.classList.add('is-ready');
+        stage.dispatchEvent(new CustomEvent('sr26-ready'));   // js/stage.js retira el video/CTA si los había
         needsRender = true;
         startLoop();
       };
@@ -801,4 +780,5 @@ import * as Look from './car-look.js';
       if(pageVisible) requestRender(); else stopLoop();
     });
   }
-})();
+  boot();
+}
