@@ -43,18 +43,18 @@ export const EXPLODE_STEPS = 5;
 const PAINT = new Set(['01','02','03','04','05','06','07','08','09','10','11','12','24']);
 const WHEEL = /^1[6-9]$/;
 
-export function lookRenderer(renderer) {
+export function lookRenderer(renderer, shadows = true) {
   renderer.toneMapping = THREE.ACESFilmicToneMapping; renderer.toneMappingExposure = .92;
-  renderer.shadowMap.enabled = true; renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+  renderer.shadowMap.enabled = shadows; renderer.shadowMap.type = THREE.PCFShadowMap;
 }
 export function lookEnvironment(renderer, scene) {
   try { const pm = new THREE.PMREMGenerator(renderer); scene.environment = pm.fromScene(new RoomEnvironment(), .04).texture; pm.dispose(); } catch (e) { /* sin entorno: quedan las luces directas */ }
 }
 /* u = unidades de escena por mm (0.001 en el hero, que trabaja en metros). */
-export function lookLights(scene, u = 1) {
+export function lookLights(scene, u = 1, shadows = true) {
   scene.add(new THREE.HemisphereLight(0xcfe0f5, 0x1a2a52, .5));
   const key = new THREE.DirectionalLight(0xf2f6ff, 1.7); key.position.set(160 * u, 340 * u, 220 * u);
-  key.castShadow = true; key.shadow.mapSize.set(2048, 2048); key.shadow.bias = -.0004; key.shadow.normalBias = .5 * u; key.shadow.radius = 4;
+  key.castShadow = shadows; key.shadow.mapSize.set(1024, 1024); key.shadow.bias = -.0004; key.shadow.normalBias = .5 * u; key.shadow.radius = 3;
   Object.assign(key.shadow.camera, { left: -230 * u, right: 230 * u, top: 230 * u, bottom: -230 * u, near: 20 * u, far: 900 * u });
   scene.add(key);
   const rim = new THREE.DirectionalLight(0xcddeef, 1.2); rim.position.set(-260 * u, 140 * u, -240 * u); scene.add(rim);

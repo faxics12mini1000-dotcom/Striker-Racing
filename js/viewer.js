@@ -23,8 +23,8 @@
 
   var booted = false;
   function whenIdle(fn){
-    function go(){ if('requestIdleCallback' in window) requestIdleCallback(fn, { timeout:1500 }); else setTimeout(fn, 300); }
-    if(document.readyState === 'complete') go(); else window.addEventListener('load', go, { once:true });
+    function go(){ if('requestIdleCallback' in window) requestIdleCallback(fn, { timeout:600 }); else setTimeout(fn, 100); }
+    if(document.readyState !== 'loading') go(); else document.addEventListener('DOMContentLoaded', go, { once:true });
   }
   function bootWhenNear(){
     if(booted) return;
@@ -46,11 +46,14 @@
     stage.classList.add('is-loading');
     var THREE, GLTFLoaderMod, OrbitControlsMod, MeshoptMod, Look;
     try{
-      THREE = await import('three');
-      GLTFLoaderMod = await import('three/addons/loaders/GLTFLoader.js');
-      OrbitControlsMod = await import('three/addons/controls/OrbitControls.js');
-      try{ MeshoptMod = await import('three/addons/libs/meshopt_decoder.module.js'); }catch(e){ MeshoptMod = null; }
-      Look = await import('./car-look.js');
+      var mods = await Promise.all([
+        import('three'),
+        import('three/addons/loaders/GLTFLoader.js'),
+        import('three/addons/controls/OrbitControls.js'),
+        import('three/addons/libs/meshopt_decoder.module.js').catch(function(){ return null; }),
+        import('./car-look.js')
+      ]);
+      THREE = mods[0]; GLTFLoaderMod = mods[1]; OrbitControlsMod = mods[2]; MeshoptMod = mods[3]; Look = mods[4];
     }catch(e){ return fail(); }
 
     try{
@@ -63,15 +66,19 @@
     var scene = new THREE.Scene();
     var camera = new THREE.PerspectiveCamera(30, 1, 1, 5000);
 
-    var renderer = new THREE.WebGLRenderer({ antialias:true, alpha:true });
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.5));
+    // Nivel de calidad: equipos modestos (pocos núcleos / poca RAM / táctiles) arrancan sin sombras en tiempo real y a menor resolución.
+    var lowEnd = (navigator.hardwareConcurrency && navigator.hardwareConcurrency <= 4) || (navigator.deviceMemory && navigator.deviceMemory <= 4) ||
+                 (window.matchMedia && window.matchMedia('(pointer:coarse)').matches);
+    var renderer = new THREE.WebGLRenderer({ antialias:!lowEnd, alpha:true, powerPreference:'high-performance' });
+    var maxDpr = lowEnd ? 1.25 : 1.5;
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, maxDpr));
     if('outputColorSpace' in renderer) renderer.outputColorSpace = THREE.SRGBColorSpace;
-    Look.lookRenderer(renderer);
+    Look.lookRenderer(renderer, !lowEnd);
     stage.appendChild(renderer.domElement);
 
     // Esta escena trabaja en metros (el GLB viene en metros), de ahí u = 0.001.
     Look.lookEnvironment(renderer, scene);
-    Look.lookLights(scene, 0.001);
+    var keyLight = Look.lookLights(scene, 0.001, !lowEnd);
     var ground = Look.lookGround(scene, 0.001);
 
     var group = new THREE.Group();
@@ -206,7 +213,8 @@
         tmpBox.setFromObject(L.mesh).getCenter(tmpV).project(camera);
         var x = (tmpV.x * 0.5 + 0.5) * w, y = (-tmpV.y * 0.5 + 0.5) * h;
         L.el.style.opacity = a;
-        L.el.style.transform = 'translate(' + Math.round(Math.min(Math.max(x, 8), w - L.el.offsetWidth - 24)) + 'px,' + Math.round(Math.min(Math.max(y, 8), h - 56)) + 'px)';
+        if(!L.w) L.w = L.el.offsetWidth;
+        L.el.style.transform = 'translate(' + Math.round(Math.min(Math.max(x, 8), w - L.w - 24)) + 'px,' + Math.round(Math.min(Math.max(y, 8), h - 56)) + 'px)';
       }
     }
 
@@ -310,10 +318,13 @@
       exploded = 0; applyFit(); controls.update();
 
       buildControls();
-      stage.classList.remove('is-loading');
-      stage.classList.add('is-ready');
-      needsRender = true;
-      startLoop();
+      var reveal = function(){
+        stage.classList.remove('is-loading');
+        stage.classList.add('is-ready');
+        needsRender = true;
+        startLoop();
+      };
+      if(renderer.compileAsync){ renderer.compileAsync(scene, camera).then(reveal, reveal); } else reveal();
     }, undefined, function(){ fail(); });
 
     // ---------- Control de despiece (botón pausa + deslizador) ----------
@@ -387,10 +398,26 @@
     resize();
 
     var lastU = -1;
+    var perfFrames = 0, perfTime = 0, perfStage = 0;
+    function degrade(){
+      if(perfStage === 0){
+        // 1.º paso: sin sombras en tiempo real (lo más caro) y se conserva la sombra de contacto dibujada
+        perfStage = 1;
+        renderer.shadowMap.enabled = false;
+        keyLight.castShadow = false;
+        ground.visible = false;
+        scene.traverse(function(o){ if(o.material){ (Array.isArray(o.material) ? o.material : [o.material]).forEach(function(m){ m.needsUpdate = true; }); } });
+      }else if(perfStage === 1){
+        perfStage = 2;
+        renderer.setPixelRatio(1);
+        renderer.setSize(stage.clientWidth, stage.clientHeight, false);
+      }
+    }
     function tick(){
       rafId = null;
       framePending = false;
       var delta = Math.min(clock.getDelta(), 1 / 30);
+      var t0 = performance.now();
       var stillAnimating = false;
       if(idleRotateAllowed){
         group.rotation.y += delta * IDLE_SPIN_SPEED;
@@ -410,6 +437,13 @@
         renderer.render(scene, camera);
         updateLabels();
         needsRender = false;
+        if(perfStage < 2 && ++perfFrames > 8){   // se ignoran los primeros cuadros (calentamiento)
+          perfTime += performance.now() - t0;
+          if(perfFrames >= 48){
+            if(perfTime / 40 > 9) degrade();       // más de ~9 ms de CPU por cuadro: se baja la calidad
+            perfFrames = 0; perfTime = 0;
+          }
+        }
       }
       if(stillAnimating) startLoop();
     }

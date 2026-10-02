@@ -30,7 +30,7 @@ diseño/copy que se tomaron por default y conviene revisar.
       completó con base en el "badge" de rol ya existente en cada tarjeta + las herramientas ya
       mencionadas en `#herramientas`. Son inferencias razonables, no biografías dictadas por cada
       integrante — deben revisarlas y ajustarlas ellos mismos (ver modal de cada tarjeta).
-- [ ] **og-preview.png**: regenerada en la nueva paleta (azul/verde, sin morado) con un script en
+- [ ] **og-share.png**: imagen para compartir con el logo (se genera con `node scripts/generate-og-image.mjs`). Sustituir por una foto o render del monoplaza terminado cuando exista.
       `scripts/`, pero sigue siendo un layout genérico de marca — no una fotografía real del auto
       terminado. Sustituir cuando haya una fotografía o render final del monoplaza pintado.
 

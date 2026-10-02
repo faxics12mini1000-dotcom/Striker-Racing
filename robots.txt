@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://striker-racing.vercel.app/sitemap.xml
+Sitemap: https://strikerracing.com/sitemap.xml
