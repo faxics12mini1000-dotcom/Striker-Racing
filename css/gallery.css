@@ -572,3 +572,15 @@ footer .brand-mark{height:26px;}
 @media (max-width:520px){ .car-label{font-size:0.56rem; gap:5px;} .car-label b{width:15px; height:15px;} }
 
 html,body{overflow-x:clip;}
+
+/* Resaltado de pieza: nombre de la pieza bajo el puntero (o del último toque) */
+.car-tip{
+  position:absolute; left:0; top:0; z-index:4; display:inline-flex; align-items:center; gap:7px; white-space:nowrap; pointer-events:none;
+  padding:4px 10px 4px 4px; background:rgba(7,27,51,0.92); border:1px solid var(--emerald);
+  font-family:var(--mono); font-size:0.68rem; letter-spacing:0.05em; text-transform:uppercase; color:var(--ice);
+  opacity:0; transition:opacity .15s ease; will-change:transform, opacity;
+}
+.car-tip.is-on{opacity:1;}
+.car-tip b{display:inline-grid; place-items:center; min-width:18px; height:18px; background:var(--emerald); color:var(--navy-deep); font-size:0.66rem;}
+@media (max-width:520px){ .car-tip{font-size:0.6rem;} }
+@media (prefers-reduced-motion:reduce){ .car-tip{transition:none;} }

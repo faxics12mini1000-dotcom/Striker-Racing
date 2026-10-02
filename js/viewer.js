@@ -101,7 +101,7 @@ import * as Look from './car-look.js';
   }
 
   function initViewer(glbP, decalsP){
-    var EXPLODE = Look.EXPLODE, STEPS = Look.EXPLODE_STEPS;
+    var STEPS = Look.EXPLODE_STEPS, PIECES = Look.PIECES;
     var scene = new THREE.Scene();
     var camera = new THREE.PerspectiveCamera(30, 1, 1, 5000);
 
@@ -114,6 +114,7 @@ import * as Look from './car-look.js';
     if('outputColorSpace' in renderer) renderer.outputColorSpace = THREE.SRGBColorSpace;
     Look.lookRenderer(renderer, !lowEnd);
     stage.appendChild(renderer.domElement);
+    var canvas = renderer.domElement;
 
     // Esta escena trabaja en metros (el GLB viene en metros), de ahí u = 0.001.
     mark('renderer');
@@ -127,60 +128,62 @@ import * as Look from './car-look.js';
 
     var reduceMotion = STILL || (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
 
-    var controls = new OrbitControls(camera, renderer.domElement);
+    var controls = new OrbitControls(camera, canvas);
     controls.enableDamping = true;
-    controls.dampingFactor = 0.08;
+    controls.dampingFactor = 0.06;
     controls.enablePan = false;
     controls.enableZoom = false; // la rueda del mouse sigue haciendo scroll de la página
     controls.minPolarAngle = THREE.MathUtils.degToRad(15);
     controls.maxPolarAngle = THREE.MathUtils.degToRad(150);
-    controls.rotateSpeed = 0.85;
+    controls.rotateSpeed = 0.8;
     controls.autoRotate = false;
     // OrbitControls pone touch-action:none; en pantallas táctiles eso atrapa el dedo y no deja bajar por la página.
     // Con pan-y el deslizamiento vertical sigue siendo scroll; el horizontal gira el auto.
-    renderer.domElement.style.touchAction = 'pan-y';
+    canvas.style.touchAction = 'pan-y';
     var IDLE_SPIN_SPEED = 0.15; // rad/s
 
     var idleRotateAllowed = !reduceMotion;
     var resumeTimer = null;
     var RESUME_DELAY_MS = 2500;
+    var orbiting = false;
     controls.addEventListener('start', function(){
+      orbiting = true; clearHover();
       idleRotateAllowed = false;
       if(resumeTimer){ clearTimeout(resumeTimer); resumeTimer = null; }
     });
     controls.addEventListener('end', function(){
+      orbiting = false;
       if(reduceMotion) return;
-      resumeTimer = setTimeout(function(){ idleRotateAllowed = true; resumeTimer = null; }, RESUME_DELAY_MS);
+      resumeTimer = setTimeout(function(){ idleRotateAllowed = true; resumeTimer = null; requestRender(); }, RESUME_DELAY_MS);
     });
 
-    // ---------- DESPIECE: estado y ciclo automático ----------
-    var parts = [];      // { mesh, home, off, step }
-    var exploded = 0;    // 0 = armado, 1 = despiece completo
+    // ---------- DESPIECE: estado, ciclo automático y pose por pieza ----------
+    var parts = [];        // { mesh, id, step, name, home, off, rot, arc, start, c, guide, edges }
+    var uTarget = 0;       // destino del despiece (slider o ciclo): 0 = armado, 1 = despiece completo
+    var exploded = 0;      // valor mostrado: sigue a uTarget con suavizado cuando manda el slider
     var auto = !reduceMotion;
     var cycleT = 0;
-    // armado (3.2 s) → separa (2.4 s) → despiece (3.6 s) → arma (2.4 s)
-    var HOLD_A = 3.2, MOVE = 2.4, HOLD_B = 3.6, CYCLE = HOLD_A + MOVE + HOLD_B + MOVE;
+    // armado (3.2 s) → separa (3.6 s) → despiece (3.4 s) → arma (3.0 s). El tiempo avanza lineal: la suavidad la pone cada pieza con su easing.
+    var HOLD_A = 3.2, MOVE_OUT = 3.6, HOLD_B = 3.4, MOVE_IN = 3.0, CYCLE = HOLD_A + MOVE_OUT + HOLD_B + MOVE_IN;
+    var GAP = 0.50, SPAN = 0.46;   // la etapa s arranca en (s-1)/(STEPS-1)·GAP, más el retraso de la pieza; cada pieza recorre SPAN
     function ease(t){ return t < .5 ? 4*t*t*t : 1 - Math.pow(-2*t + 2, 3) / 2; }
     function clamp01(x){ return Math.min(1, Math.max(0, x)); }
     function cycleValue(t){
       if(t < HOLD_A) return 0;
-      if(t < HOLD_A + MOVE) return ease((t - HOLD_A) / MOVE);
-      if(t < HOLD_A + MOVE + HOLD_B) return 1;
-      return 1 - ease((t - HOLD_A - MOVE - HOLD_B) / MOVE);
+      if(t < HOLD_A + MOVE_OUT) return (t - HOLD_A) / MOVE_OUT;
+      if(t < HOLD_A + MOVE_OUT + HOLD_B) return 1;
+      return 1 - (t - HOLD_A - MOVE_OUT - HOLD_B) / MOVE_IN;
     }
-    var stepF = [0, 0, 0, 0, 0, 0];   // avance (0..1) de cada etapa, para las etiquetas
-    var LIFT = 0.007;                 // m: las piezas se elevan un poco al viajar (arco) en vez de ir en recta
+    var stepF = [0, 0, 0, 0, 0, 0];   // avance (0..1) de cada etapa: etiquetas y cámara
     function applyPose(u){
       for(var s = 1; s <= STEPS; s++) stepF[s] = 0;
       for(var i = 0; i < parts.length; i++){
         var p = parts[i];
-        // escalonado: cada etapa arranca después de la anterior y, dentro de la etapa, cada pieza con un pequeño retraso
-        var d = (p.step - 1) / (STEPS - 1) * 0.42 + p.lag;
-        var f = ease(clamp01((u - d) / 0.5));
+        var f = p.step ? ease(clamp01((u - p.start) / SPAN)) : 0;
         p.mesh.position.copy(p.home).addScaledVector(p.off, f);
-        if(p.lift) p.mesh.position.y += Math.sin(Math.PI * f) * LIFT;
-        if(p.wheel) p.mesh.rotation.z = f * Math.PI * 2 * p.spin; // las llantas dan una vuelta al salir
-        if(f > stepF[p.step]) stepF[p.step] = f;
+        if(p.arc) p.mesh.position.y += Math.sin(Math.PI * f) * p.arc;
+        if(p.hasRot) p.mesh.rotation.set(p.rot.x * f, p.rot.y * f, p.rot.z * f);
+        if(p.step && f > stepF[p.step]) stepF[p.step] = f;
         if(p.guide){
           var g = p.guide, a = g.geometry.attributes.position;
           a.setXYZ(1, p.home.x + p.c.x + p.off.x * f, p.home.y + p.c.y + p.off.y * f, p.home.z + p.c.z + p.off.z * f);
@@ -192,6 +195,20 @@ import * as Look from './car-look.js';
     }
 
     // ---------- Encuadre: la distancia se ajusta al tamaño real (armado ↔ despiece) para que el auto siempre quepa ----------
+    // Además la cámara acompaña cada etapa mientras se mueve: se acerca un poco y mira hacia donde ocurre (solo en vertical y en
+    // distancia, para no arrastrar la mirada mientras el auto gira) y vuelve al encuadre neutro cuando la etapa termina.
+    var CAM = [null, { dy:-7, z:.94 }, { dy:0, z:1 }, { dy:0, z:.96 }, { dy:14, z:.95 }, { dy:4, z:.97 }];   // dy en mm, z = multiplicador de distancia
+    var camDy = 0, camZoom = 1, camTarget = { dy:0, z:1 };
+    function computeCamTarget(){
+      var sum = 0, dy = 0, zm = 0;
+      for(var s = 1; s <= STEPS; s++){
+        var a = Math.sin(Math.PI * stepF[s]);   // 0 en reposo (armada o terminada), 1 a mitad del recorrido
+        if(a <= 0.001) continue;
+        dy += a * CAM[s].dy; zm += a * (CAM[s].z - 1); sum += a;
+      }
+      var n = Math.max(1, sum);
+      camTarget.dy = dy / n * 0.001; camTarget.z = 1 + zm / n;
+    }
     var half0 = new THREE.Vector3(), half1 = new THREE.Vector3(), cy0 = 0, cy1 = 0;
     var halfNow = new THREE.Vector3(), cyNow = 0;
     var worldUp = new THREE.Vector3(0, 1, 0);
@@ -219,8 +236,8 @@ import * as Look from './car-look.js';
       if(!half0.x) return;
       halfNow.lerpVectors(half0, half1, exploded);
       cyNow = cy0 + (cy1 - cy0) * exploded;
-      controls.target.set(0, cyNow, 0);
-      var dist = computeFitDistance();
+      controls.target.set(0, cyNow + camDy, 0);
+      var dist = computeFitDistance() * camZoom;
       var dir = new THREE.Vector3().subVectors(camera.position, controls.target);
       if(dir.lengthSq() < 1e-8) dir.set(0, 0, 1);
       dir.normalize();
@@ -259,6 +276,86 @@ import * as Look from './car-look.js';
       }
     }
 
+    // ---------- Resaltado de pieza: al pasar el mouse o tocar se ilumina con contorno y muestra su nombre ----------
+    var tip = document.createElement('div');
+    tip.className = 'car-tip';
+    tip.setAttribute('aria-hidden', 'true');
+    stage.appendChild(tip);
+    var tipB = document.createElement('b'), tipT = document.createElement('span');
+    tip.appendChild(tipB); tip.appendChild(tipT);
+    var raycaster = new THREE.Raycaster(), ndc = new THREE.Vector2();
+    var pickMeshes = [], hovered = null;
+    var pointer = { inside:false, x:0, y:0, dirty:false };
+    var stickyTimer = null;
+    function outlineOf(p){
+      if(!p.edges){
+        var ln = new THREE.LineSegments(new THREE.EdgesGeometry(p.mesh.geometry, 30),
+          new THREE.LineBasicMaterial({ color:0x6CF2B0, transparent:true, opacity:0.9, depthTest:false, depthWrite:false, toneMapped:false }));
+        ln.renderOrder = 6; p.mesh.add(ln); p.edges = ln;
+      }
+      return p.edges;
+    }
+    function setHighlight(p, on){
+      if(!p) return;
+      var m = p.mesh.material;
+      if(m.emissive){ m.emissive.setHex(on ? 0x12B866 : 0x000000); m.emissiveIntensity = on ? 0.16 : 1; }
+      if(on) outlineOf(p).visible = true; else if(p.edges) p.edges.visible = false;
+    }
+    function placeTip(cx, cy){
+      var r = stage.getBoundingClientRect(), w = tip.offsetWidth || 180;
+      var x = Math.min(cx - r.left + 14, r.width - w - 8), y = Math.min(cy - r.top + 18, r.height - 64);
+      tip.style.transform = 'translate(' + Math.round(Math.max(8, x)) + 'px,' + Math.round(Math.max(8, y)) + 'px)';
+    }
+    function showHover(p, cx, cy){
+      if(hovered !== p){
+        setHighlight(hovered, false); hovered = p; setHighlight(p, true);
+        tipB.textContent = p.step ? String(p.step) : '·'; tipT.textContent = p.name;
+        tip.classList.add('is-on');
+        requestRender();
+      }
+      placeTip(cx, cy);
+    }
+    function clearHover(){
+      if(stickyTimer){ clearTimeout(stickyTimer); stickyTimer = null; }
+      if(!hovered) return;
+      setHighlight(hovered, false); hovered = null; tip.classList.remove('is-on'); requestRender();
+    }
+    function pick(cx, cy){
+      var r = canvas.getBoundingClientRect();
+      ndc.set((cx - r.left) / r.width * 2 - 1, -((cy - r.top) / r.height) * 2 + 1);
+      raycaster.setFromCamera(ndc, camera);
+      var hit = raycaster.intersectObjects(pickMeshes, false)[0];
+      return hit ? hit.object.userData.part : null;
+    }
+    function updateHover(){
+      if(!pointer.inside || orbiting || !pickMeshes.length) return;
+      var p = pick(pointer.x, pointer.y);
+      if(p) showHover(p, pointer.x, pointer.y); else if(hovered) clearHover();
+      canvas.style.cursor = p ? 'pointer' : '';
+    }
+    canvas.addEventListener('pointermove', function(e){
+      if(e.pointerType === 'touch') return;
+      pointer.inside = true; pointer.x = e.clientX; pointer.y = e.clientY; pointer.dirty = true; requestRender();
+    });
+    canvas.addEventListener('pointerleave', function(e){
+      if(e.pointerType === 'touch') return;
+      pointer.inside = false; pointer.dirty = false; canvas.style.cursor = ''; clearHover();
+    });
+    // Toque: un tap (sin arrastre) resalta la pieza durante unos segundos; arrastrar sigue girando el auto.
+    var tapStart = null;
+    canvas.addEventListener('pointerdown', function(e){ if(e.pointerType !== 'mouse') tapStart = { x:e.clientX, y:e.clientY, t:performance.now() }; });
+    canvas.addEventListener('pointerup', function(e){
+      if(e.pointerType === 'mouse' || !tapStart) return;
+      var moved = Math.hypot(e.clientX - tapStart.x, e.clientY - tapStart.y), dt = performance.now() - tapStart.t;
+      tapStart = null;
+      if(moved > 8 || dt > 450 || !pickMeshes.length) return;
+      var p = pick(e.clientX, e.clientY);
+      if(!p){ clearHover(); return; }
+      showHover(p, e.clientX, e.clientY);
+      if(stickyTimer) clearTimeout(stickyTimer);
+      stickyTimer = setTimeout(clearHover, 2800);
+    });
+
     var loader = new GLTFLoader();
     loader.setMeshoptDecoder(MeshoptDecoder);
     // Primero terminan todas las descargas (en paralelo y pequeñas salvo el GLB); así el trabajo de CPU queda contiguo.
@@ -277,24 +374,29 @@ import * as Look from './car-look.js';
         if(Look.HIDDEN.has(k)){ obj.removeFromParent(); return; } // sin halo
         Look.lookPart(obj);
         byKey[k] = obj;
-        var ex = EXPLODE[k];
-        if(ex){
-          var off = new THREE.Vector3(ex.off[0], ex.off[1], ex.off[2]).multiplyScalar(0.001);
-          obj.geometry.computeBoundingBox();
-          parts.push({ mesh:obj, home:obj.position.clone(), off:off, step:ex.step, wheel:/^1[6-9]$/.test(k), spin:obj.position.z < 0 ? -1 : 1,
-                       lift:Math.abs(off.y) < 1e-6, lag:(parseInt(k, 10) % 3) * 0.025,
-                       c:obj.geometry.boundingBox.getCenter(new THREE.Vector3()) });
-        }
+        var spec = PIECES[Look.pieceId(obj.name)];
+        if(!spec) return;
+        var rot = spec.rot || [0, 0, 0];
+        obj.geometry.computeBoundingBox();
+        var part = {
+          mesh:obj, id:Look.pieceId(obj.name), step:spec.step, name:spec.name[EN ? 'en' : 'es'], home:obj.position.clone(),
+          off:new THREE.Vector3(spec.off[0], spec.off[1], spec.off[2]).multiplyScalar(0.001),
+          rot:new THREE.Vector3(rot[0], rot[1], rot[2]).multiplyScalar(Math.PI / 180), hasRot:!!(rot[0] || rot[1] || rot[2]),
+          arc:(spec.arc || 0) * 0.001, guide:null, edges:null,
+          start:spec.step ? (spec.step - 1) / (STEPS - 1) * GAP + (spec.d || 0) : 0,
+          c:obj.geometry.boundingBox.getCenter(new THREE.Vector3())
+        };
+        obj.userData.part = part;
+        parts.push(part);
+        pickMeshes.push(obj);
       });
       model.updateMatrixWorld(true);
       mark('looks');
 
-      // Líneas guía punteadas (una por clave de pieza; las dos mallas de una llanta comparten línea)
-      var seenGuide = {};
+      // Líneas guía punteadas (una por pieza que viaja; las llantas la comparten con su rin)
       parts.forEach(function(p){
-        var k = p.mesh.name.slice(0, 2);
-        if(seenGuide[k]) return;
-        seenGuide[k] = true;
+        var spec = PIECES[p.id];
+        if(!p.step || spec.guide === false) return;
         var geo = new THREE.BufferGeometry();
         var start = p.home.clone().add(p.c);
         geo.setAttribute('position', new THREE.Float32BufferAttribute([start.x, start.y, start.z, start.x, start.y, start.z], 3));
@@ -362,7 +464,7 @@ import * as Look from './car-look.js';
       var el = THREE.MathUtils.degToRad(26);
       camera.position.set(Math.sin(az) * Math.cos(el), Math.sin(el), Math.cos(az) * Math.cos(el));
       controls.target.set(0, cy0, 0);
-      exploded = 0; applyFit(); controls.update();
+      exploded = 0; uTarget = 0; applyFit(); controls.update();
 
       buildControls();
       mark('built');
@@ -378,7 +480,7 @@ import * as Look from './car-look.js';
       // Los shaders se compilan en paralelo mientras se pegan los logos; el poster sigue visible hasta que todo está listo.
       var compiled = renderer.compileAsync ? renderer.compileAsync(scene, camera).catch(function(){}) : Promise.resolve();
       Promise.all([decalsDone, compiled]).then(reveal, reveal);
-    }).catch(function(){ fail(); });
+    }).catch(function(e){ if(window.console) console.error('[SR-26 visor]', e); fail(); });
 
     // ---------- Control de despiece (botón pausa + deslizador) ----------
     var slider = null, playBtn = null, dragging = false;
@@ -401,12 +503,12 @@ import * as Look from './car-look.js';
       setPlayUi();
       playBtn.addEventListener('click', function(){
         auto = !auto;
-        if(auto){ cycleT = exploded < .5 ? 0 : HOLD_A + MOVE; } // sigue desde donde quedó
+        if(auto){ cycleT = exploded < .5 ? 0 : HOLD_A + MOVE_OUT; } // sigue desde donde quedó
         setPlayUi(); requestRender();
       });
       slider.addEventListener('input', function(){
         auto = false; setPlayUi();
-        exploded = slider.value / 100;
+        uTarget = slider.value / 100;   // el valor mostrado lo alcanza con suavizado (ver tick)
         requestRender();
       });
       slider.addEventListener('pointerdown', function(){ dragging = true; });
@@ -467,25 +569,44 @@ import * as Look from './car-look.js';
       }
     }
     var firstFrame = true;
+    var idleAccum = 0;   // tiempo de giro pendiente: en equipos modestos el giro en reposo se dibuja a 30 cuadros/s
     function tick(){
       rafId = null;
       framePending = false;
-      var delta = Math.min(clock.getDelta(), 1 / 30);
+      var delta = Math.min(clock.getDelta(), 0.1);   // tope 10 cuadros/s: en equipos lentos la animación sigue a su ritmo real
       var t0 = performance.now();
       var stillAnimating = false;
-      if(idleRotateAllowed){
-        group.rotation.y += delta * IDLE_SPIN_SPEED;
-        needsRender = true;
-        stillAnimating = true;
-      }
       if(auto){
         cycleT = (cycleT + delta) % CYCLE;
-        exploded = cycleValue(cycleT);
+        uTarget = exploded = cycleValue(cycleT);
         if(slider && !dragging) slider.value = Math.round(exploded * 100);
         stillAnimating = true;
+      }else if(exploded !== uTarget){
+        // suavizado exponencial hacia el destino del slider (sin saltos al arrastrar o soltar)
+        exploded += (uTarget - exploded) * (1 - Math.exp(-delta * 9));
+        if(Math.abs(uTarget - exploded) < 0.0004) exploded = uTarget;
+        stillAnimating = true;
       }
-      if(exploded !== lastU){ applyPose(exploded); lastU = exploded; needsRender = true; }
+      if(exploded !== lastU){
+        applyPose(exploded); lastU = exploded; needsRender = true;
+        computeCamTarget();
+      }
+      // la cámara persigue su objetivo (acompaña la etapa en curso) con suavizado
+      if(Math.abs(camTarget.dy - camDy) > 2e-6 || Math.abs(camTarget.z - camZoom) > 2e-4){
+        var k = 1 - Math.exp(-delta * 4.5);
+        camDy += (camTarget.dy - camDy) * k; camZoom += (camTarget.z - camZoom) * k;
+        needsRender = true; stillAnimating = true;
+      }
       if(controls.update(delta)){ needsRender = true; stillAnimating = true; }
+      if(pointer.inside && (pointer.dirty || stillAnimating)){ updateHover(); pointer.dirty = false; }
+      if(idleRotateAllowed){
+        idleAccum += delta;
+        stillAnimating = true;
+        if(!lowEnd || needsRender || idleAccum >= 1 / 30 - 0.002){
+          group.rotation.y += idleAccum * IDLE_SPIN_SPEED; idleAccum = 0;
+          needsRender = true;
+        }
+      }
       if(needsRender){
         applyFit();
         renderer.render(scene, camera);

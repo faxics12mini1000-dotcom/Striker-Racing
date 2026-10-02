@@ -22,21 +22,58 @@ export const colorFor = name => isRim(name) ? COLORS.ice : (LIVERY[partKey(name)
 /* Piezas que no se dibujan (el halo 13 ya no viene en el modelo; se deja por si reaparece). */
 export const HIDDEN = new Set(['13']);
 
-/* Despiece por etapas (mm; x = largo, y = alto, z = ancho, +z = lado derecho). El cuerpo (01) queda fijo en el centro.
- *   1 llantas y ejes hacia afuera (+ guías, hacia abajo)   2 alerones, placas, soportes (y nariz) hacia adelante / atrás
- *   3 pontones a los lados   4 espina y pilar hacia arriba   5 cartucho hacia atrás
- * Las dos mallas de cada llanta (Llanta/Rin) y los dos soportes delanteros comparten clave, así que se mueven juntos. */
-export const EXPLODE = {
-  '16':{ off:[0,0,-44], step:1 }, '17':{ off:[0,0,44], step:1 }, '18':{ off:[0,0,-44], step:1 }, '19':{ off:[0,0,44], step:1 },
-  '20':{ off:[0,-30,0], step:1 }, '21':{ off:[0,-30,0], step:1 }, '22':{ off:[0,-46,0], step:1 }, '23':{ off:[0,-46,0], step:1 },
-  '04':{ off:[34,0,0],  step:2 }, '06':{ off:[56,0,0],  step:2 }, '05':{ off:[80,0,0],  step:2 },
-  '07':{ off:[80,0,14], step:2 }, '08':{ off:[80,0,-14], step:2 },
-  '09':{ off:[-72,0,0], step:2 }, '10':{ off:[-72,0,14], step:2 }, '11':{ off:[-72,0,-14], step:2 },
-  '02':{ off:[0,0,46],  step:3 }, '03':{ off:[0,0,-46], step:3 },
-  '24':{ off:[0,40,0],  step:4 }, '12':{ off:[0,40,0],  step:4 },
-  '15':{ off:[-90,0,0], step:5 },
-};
+/* Despiece: cada una de las 27 mallas del GLB tiene su propio vector de separación (mm; x = largo, +x al frente; y = alto; z = ancho, +z = derecha),
+ * su etapa (1–5), un retraso dentro de la etapa, un giro y un arco. El cuerpo (01) queda fijo y es la referencia.
+ *   etapa 1 llantas, rines, ejes y guías · 2 nariz, alerones, placas y soportes · 3 pontones · 4 espina y pilar · 5 cartucho
+ * pieceId(nombre del nodo) devuelve la clave de esta tabla: llanta (t) y rin (r) se separan, igual que el soporte der./izq. del alerón.
+ *   off  [x,y,z] mm a despiece completo        d    retraso dentro de la etapa (fracción del recorrido, 0–0.1)
+ *   rot  [x,y,z] grados a despiece completo    arc  mm que se eleva a mitad del recorrido (trayectoria curva)
+ *   guide  false = sin línea guía punteada */
 export const EXPLODE_STEPS = 5;
+export const PIECES = {
+  '01':{ step:0, off:[0, 0, 0], name:{ es:'Cuerpo', en:'Body' } },
+  // etapa 1 · ruedas: la llanta sale primero y el rin un poco más lejos; ejes y guías bajan
+  '16t':{ step:1, off:[0, 0, -40], rot:[0, 0, -360], d:.00, guide:false, name:{ es:'Llanta delantera izquierda', en:'Front-left tyre' } },
+  '16r':{ step:1, off:[0, 0, -58], rot:[0, 0, -360], d:.02, name:{ es:'Rin delantero izquierdo', en:'Front-left rim' } },
+  '17t':{ step:1, off:[0, 0,  40], rot:[0, 0,  360], d:.04, guide:false, name:{ es:'Llanta delantera derecha', en:'Front-right tyre' } },
+  '17r':{ step:1, off:[0, 0,  58], rot:[0, 0,  360], d:.06, name:{ es:'Rin delantero derecho', en:'Front-right rim' } },
+  '18t':{ step:1, off:[0, 0, -40], rot:[0, 0, -360], d:.08, guide:false, name:{ es:'Llanta trasera izquierda', en:'Rear-left tyre' } },
+  '18r':{ step:1, off:[0, 0, -58], rot:[0, 0, -360], d:.10, name:{ es:'Rin trasero izquierdo', en:'Rear-left rim' } },
+  '19t':{ step:1, off:[0, 0,  40], rot:[0, 0,  360], d:.12, guide:false, name:{ es:'Llanta trasera derecha', en:'Rear-right tyre' } },
+  '19r':{ step:1, off:[0, 0,  58], rot:[0, 0,  360], d:.14, name:{ es:'Rin trasero derecho', en:'Rear-right rim' } },
+  '20':{ step:1, off:[0, -30, 0],  d:.05, name:{ es:'Eje delantero', en:'Front axle' } },
+  '21':{ step:1, off:[0, -30, 0],  d:.09, name:{ es:'Eje trasero', en:'Rear axle' } },
+  '22':{ step:1, off:[8, -50, 0],  d:.07, name:{ es:'Guía delantera', en:'Front tether guide' } },
+  '23':{ step:1, off:[-8, -50, 0], d:.11, name:{ es:'Guía trasera', en:'Rear tether guide' } },
+  // etapa 2 · nariz y alerones: el frente sale hacia adelante, la cola hacia atrás
+  '04':{ step:2, off:[34, 0, 0],       d:.00, arc:6, name:{ es:'Nariz', en:'Nose cone' } },
+  '06d':{ step:2, off:[58, 3, 6],      d:.04, arc:5, rot:[0, 0, 10],  name:{ es:'Soporte del alerón delantero (der.)', en:'Front wing mount (right)' } },
+  '06i':{ step:2, off:[58, 3, -6],     d:.05, arc:5, rot:[0, 0, -10], name:{ es:'Soporte del alerón delantero (izq.)', en:'Front wing mount (left)' } },
+  '05':{ step:2, off:[84, -3, 0],      d:.08, arc:7, name:{ es:'Alerón delantero', en:'Front wing' } },
+  '07':{ step:2, off:[88, -3, 22],     d:.11, arc:5, rot:[0, 14, 0],  name:{ es:'Placa delantera derecha', en:'Front endplate (right)' } },
+  '08':{ step:2, off:[88, -3, -22],    d:.12, arc:5, rot:[0, -14, 0], name:{ es:'Placa delantera izquierda', en:'Front endplate (left)' } },
+  '09':{ step:2, off:[-74, 8, 0],      d:.02, arc:7, name:{ es:'Alerón trasero', en:'Rear wing' } },
+  '10':{ step:2, off:[-74, 8, 26],     d:.06, arc:5, rot:[0, -14, 0], name:{ es:'Placa trasera derecha', en:'Rear endplate (right)' } },
+  '11':{ step:2, off:[-74, 8, -26],    d:.07, arc:5, rot:[0, 14, 0],  name:{ es:'Placa trasera izquierda', en:'Rear endplate (left)' } },
+  // etapa 3 · pontones a los lados
+  '02':{ step:3, off:[5, 2, 50],       d:.00, arc:4, name:{ es:'Pontón derecho', en:'Right sidepod' } },
+  '03':{ step:3, off:[5, 2, -50],      d:.04, arc:4, name:{ es:'Pontón izquierdo', en:'Left sidepod' } },
+  // etapa 4 · espina y pilar hacia arriba
+  '24':{ step:4, off:[0, 46, 0],       d:.00, name:{ es:'Espina', en:'Spine' } },
+  '12':{ step:4, off:[-14, 60, 0],     d:.06, rot:[0, 0, 0], name:{ es:'Pilar del alerón trasero', en:'Rear wing pillar' } },
+  // etapa 5 · el cartucho sale hacia atrás girando sobre su eje
+  '15':{ step:5, off:[-98, 12, 0],     d:.03, rot:[360, 0, 0], arc:0, name:{ es:'Cartucho de CO₂', en:'CO₂ cartridge' } },
+};
+export function pieceId(name) {
+  const k = partKey(name);
+  if (/__Rin_/.test(name)) return k + 'r';
+  if (/__Llanta_/.test(name)) return k + 't';
+  if (k === '06') return /Izq$/.test(name) ? '06i' : '06d';
+  return k;
+}
+/* Compatibilidad (scripts/sr26-view.html): despiece por prefijo numérico, con el vector de la primera pieza de cada clave. */
+export const EXPLODE = {};
+for (const id of Object.keys(PIECES)) { const k = id.slice(0, 2); if (!EXPLODE[k] && PIECES[id].step) EXPLODE[k] = { off: PIECES[id].off, step: PIECES[id].step }; }
 
 const PAINT = new Set(['01','02','03','04','05','06','07','08','09','10','11','12','24']);
 const WHEEL = /^1[6-9]$/;
