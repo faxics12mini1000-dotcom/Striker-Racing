@@ -42,7 +42,9 @@
     bootWhenNear();
   }
 
+  var mark = function(n){ try{ performance.mark('sr26:' + n); }catch(e){} };
   async function boot(){
+    mark('boot');
     stage.classList.add('is-loading');
     var THREE, GLTFLoaderMod, OrbitControlsMod, MeshoptMod, Look;
     try{
@@ -56,6 +58,7 @@
       THREE = mods[0]; GLTFLoaderMod = mods[1]; OrbitControlsMod = mods[2]; MeshoptMod = mods[3]; Look = mods[4];
     }catch(e){ return fail(); }
 
+    mark('modules');
     try{
       initViewer(THREE, GLTFLoaderMod.GLTFLoader, OrbitControlsMod.OrbitControls, MeshoptMod && MeshoptMod.MeshoptDecoder, Look);
     }catch(e){ fail(); }
@@ -77,7 +80,9 @@
     stage.appendChild(renderer.domElement);
 
     // Esta escena trabaja en metros (el GLB viene en metros), de ahí u = 0.001.
+    mark('renderer');
     Look.lookEnvironment(renderer, scene);
+    mark('env');
     var keyLight = Look.lookLights(scene, 0.001, !lowEnd);
     var ground = Look.lookGround(scene, 0.001);
 
@@ -221,6 +226,7 @@
     var loader = new GLTFLoader();
     if(MeshoptDecoder) loader.setMeshoptDecoder(MeshoptDecoder);
     loader.load(new URL('../assets/models/sr26.glb?v=3', import.meta.url).href, function(gltf){
+      mark('glb-parsed');
       var model = gltf.scene;
 
       // assets/models/sr26.glb: metros, Y arriba, X hacia el frente, un nodo por STL (nombre = archivo). Librea y materiales en car-look.js.
@@ -241,6 +247,7 @@
         }
       });
       model.updateMatrixWorld(true);
+      mark('looks');
 
       // Líneas guía punteadas (una por clave de pieza; las dos mallas de una llanta comparten línea)
       var seenGuide = {};
@@ -318,7 +325,9 @@
       exploded = 0; applyFit(); controls.update();
 
       buildControls();
+      mark('built');
       var reveal = function(){
+        mark('compiled');
         stage.classList.remove('is-loading');
         stage.classList.add('is-ready');
         needsRender = true;
@@ -413,6 +422,7 @@
         renderer.setSize(stage.clientWidth, stage.clientHeight, false);
       }
     }
+    var firstFrame = true;
     function tick(){
       rafId = null;
       framePending = false;
@@ -435,6 +445,7 @@
       if(needsRender){
         applyFit();
         renderer.render(scene, camera);
+        if(firstFrame && stage.classList.contains('is-ready')){ firstFrame = false; mark('first-frame'); }
         updateLabels();
         needsRender = false;
         if(perfStage < 2 && ++perfFrames > 8){   // se ignoran los primeros cuadros (calentamiento)
