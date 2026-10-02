@@ -12,7 +12,7 @@
   })();
 </script>
 <title>Striker Racing · STEM Racing Mexico team · 2026–2027 season</title>
-<meta name="description" content="Striker Racing is Preparatoria Celta's team in the STEM Racing Mexico challenge, 2026–2027 season. Meet the car, its technical regulations and the road to the National Final.">
+<meta name="description" content="Meet Striker Racing, Preparatoria Celta's team in the STEM Racing Mexico challenge, 2026–2027: five members, one mentor and a car designed from scratch.">
 <meta name="theme-color" content="#071B33">
 <link rel="canonical" href="https://striker-racing.vercel.app/en/">
 <link rel="alternate" hreflang="es-mx" href="https://striker-racing.vercel.app/">
@@ -30,17 +30,11 @@
 <meta name="twitter:title" content="Striker Racing · STEM Racing Mexico, 2026–2027 season">
 <meta name="twitter:description" content="Preparatoria Celta's team in the STEM Racing Mexico challenge, 2026–2027 season. Join us as a sponsor.">
 <meta name="twitter:image" content="https://striker-racing.vercel.app/team/grupo.webp">
-<link rel="icon" href="../logo.png">
-<link rel="apple-touch-icon" href="../logo.png">
-<link rel="preload" href="../fonts/inter-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="preload" href="../fonts/oswald-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="preload" href="../fonts/jetbrains-mono-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
-<script type="importmap">
-{"imports":{
-  "three":"../vendor/three/build/three.module.min.js",
-  "three/addons/":"../vendor/three/examples/jsm/"
-}}
-</script>
+<link rel="icon" href="/logo.png">
+<link rel="apple-touch-icon" href="/logo.png">
+<link rel="preload" href="/fonts/inter-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/fonts/oswald-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/fonts/jetbrains-mono-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -87,28 +81,27 @@
   "sameAs": ["https://www.instagram.com/striker.racing_mx/"]
 }
 </script>
-<link rel="stylesheet" href="../css/site.css">
-<link rel="stylesheet" href="../css/gallery.css">
+<link rel="stylesheet" href="/css/site.css">
+<link rel="stylesheet" href="/css/gallery.css">
 </head>
 <body>
-
 <a class="skip-link" href="#main">Skip to content</a>
 <nav class="cockpit" aria-label="Main navigation">
   <div class="cockpit-bar">
-    <a href="./" id="brandHome" class="brand-link" aria-label="Striker Racing, home">
-      <span class="brand"><img class="brand-mark" src="../logo-64.webp" width="34" height="32" alt="">STRIKER RACING</span>
+    <a href="/en/" id="brandHome" class="brand-link" aria-label="Striker Racing, home">
+      <span class="brand"><img class="brand-mark" src="/logo-64.webp" width="34" height="32" alt="">STRIKER RACING</span>
     </a>
     <button class="nav-toggle" id="navToggle" type="button" aria-label="Open menu" data-label-open="Open menu" data-label-close="Close menu" aria-expanded="false" aria-controls="navPanel"><span></span></button>
     <div class="nav-panel" id="navPanel">
       <ul class="cockpit-links">
-        <li><a href="#home">Home</a></li>
-        <li><a href="#team">Team</a></li>
-        <li><a href="#budget">Budget</a></li>
-        <li><a href="#sponsorship">Sponsorship</a></li>
+        <li><a href="/en/" aria-current="page">Home</a></li>
+        <li><a href="/en/car/">Car</a></li>
+        <li><a href="/en/budget/">Budget</a></li>
+        <li><a href="/en/sponsorship/">Sponsorship</a></li>
       </ul>
       <div class="cockpit-actions">
         <div class="lang-switch" role="group" aria-label="Language">
-          <a href="../" lang="es" hreflang="es-mx">ES</a><span aria-hidden="true">|</span><a href="./" aria-current="true" lang="en" hreflang="en">EN</a>
+          <a href="/" lang="es" hreflang="es-mx">ES</a><span aria-hidden="true">|</span><a href="/en/" aria-current="true" lang="en" hreflang="en">EN</a>
         </div>
         <a class="contact-cta" href="https://wa.me/525511839779?text=Hi%2C%20I%27m%20interested%20in%20sponsoring%20Striker%20Racing%2C%20could%20we%20talk%3F" target="_blank" rel="noopener">Contact us</a>
       </div>
@@ -118,7 +111,7 @@
 
 <main id="main" tabindex="-1">
 
-<header class="gallery-hero" id="home">
+<header class="gallery-hero hero-short" id="home">
   <div class="wrap">
     <div class="hero-top">
       <div>
@@ -126,38 +119,147 @@
         <h1><em>Mexican engineering</em> on the STEM Racing Mexico track.</h1>
       </div>
       <div>
-        <p class="hero-lead">We design, build and race a scale Formula 1 car in the STEM Racing Mexico challenge, an international science, technology and engineering education challenge supported by Formula 1® and coordinated in Mexico by Persiste A.C. Development Category · Preparatoria Celta, Querétaro.</p>
+        <p class="hero-lead">We design, build and race a scale Formula 1 car. Development Category · Preparatoria Celta, Querétaro.</p>
         <div class="cta-row">
           <a class="btn btn-solid" href="#team">Meet the team</a>
-          <a class="btn" href="#sponsorship">View sponsorship</a>
+          <a class="btn" href="/en/sponsorship/">View sponsorship</a>
         </div>
       </div>
     </div>
   </div>
-  <div class="wrap hero-frame">
-    <div class="hero-main">
-      <div class="model-stage" id="modelStage" aria-label="3D model of the SR-26, the Striker Racing car, with an exploded-view animation">
-        <img class="model-poster" src="../car-poster.webp" width="800" height="550" alt="Striker Racing SR-26 car in its purple, white and emerald livery" loading="eager" fetchpriority="high">
-        <span class="model-tag">SR-26 · Striker Racing prototype</span>
-        <span class="model-hint">Drag to rotate</span>
-        <div class="model-loader" aria-hidden="true"><span class="model-spinner"></span></div>
-        <div class="model-fallback">Your browser can't display the interactive 3D model.<br>See the regulation dimensions.</div>
-      </div>
-      <aside class="hud-panel" aria-label="Category regulation dimensions">
-        <div class="hud-head">Technical regulations · Official dimensions</div>
-        <dl class="cotas">
-          <div class="cota"><dt class="micro">Allowed length</dt><dd><span class="big-num">170–210</span><span class="unit">mm</span></dd></div>
-          <div class="cota"><dt class="micro">Minimum mass · without cartridge</dt><dd><span class="big-num">50</span><span class="unit">g</span></dd></div>
-          <div class="cota"><dt class="micro">Propulsion · cartridge</dt><dd><span class="big-num">8</span><span class="unit">g CO₂</span></dd></div>
-          <div class="cota cota-txt"><dt class="micro">Track · wheelbase</dt><dd>20 m · 130.0 mm</dd></div>
-          <div class="cota cota-txt"><dt class="micro">Prototype</dt><dd>SR-26 · in-house Fusion 360 design</dd></div>
-        </dl>
-        <p class="hud-disclaimer">*Visual prototype of the SR-26. The car is modeled under the technical regulations in Autodesk Fusion 360 and validated in Ansys Student CFD; the final design may change.</p>
-      </aside>
-    </div>
-  </div>
 </header>
 
+<section id="team" class="blueprint">
+  <div class="wrap">
+    <div class="team-head">
+      <div class="eyebrow-tag">Preparatoria Celta · Querétaro</div>
+      <h2>Five members.<br>Five fronts of work.</h2>
+      <div class="team-group-text">
+        <p>We design a CO₂-powered car using professional engineering tools (CAD, CAM, CFD) under a strict technical regulation.</p>
+        <p>We run the team like a real company: managing budget, brand identity and business plans, aiming to represent Mexico at the world final.</p>
+      </div>
+    </div>
+    <div class="team-feature">
+      <figure class="team-photo">
+        <img src="/team/grupo.webp" width="750" height="482" loading="lazy" decoding="async" alt="Striker Racing team members with their mentor, Preparatoria Celta">
+        <figcaption>Striker Racing · Preparatoria Celta, Querétaro</figcaption>
+      </figure>
+      <dl class="team-stats" aria-label="Team facts">
+          <div class="team-stat"><dt>Members</dt><dd>5</dd></div>
+          <div class="team-stat"><dt>Certified mentor</dt><dd>1</dd></div>
+          <div class="team-stat"><dt>Category</dt><dd>Development</dd></div>
+          <div class="team-stat"><dt>Season</dt><dd>2026–27</dd></div>
+      </dl>
+    </div>
+    <p class="team-cards-intro">The team's spec sheet: official role, hard skills and tools for each member, plus their full technical credential in the viewer.</p>
+    <div class="pass-grid">
+
+      <article class="card-reveal paddock-pass">
+        <img class="pass-img" src="/team/ari.webp" width="680" height="1020" loading="lazy" decoding="async" alt="Ariadna Mejía, Team Direction &amp; CAD Design, Striker Racing">
+        <div class="pass-head"><span class="micro">Team member</span><span class="micro">Striker Racing · 26/27</span></div>
+        <div class="pass-top"><div class="pass-no">01</div></div>
+        <div class="pass-id">
+          <h3>Ariadna Mejía Hernández</h3>
+          <p class="pass-role">Team Direction &amp; CAD Design</p>
+        </div>
+        <ul class="pass-skills">
+          <li>CAD modeling of the car, part by part</li>
+          <li>Compliance with STEM Racing technical regulations</li>
+          <li>Season schedule planning</li>
+        </ul>
+        <div class="pass-chips"><span>Autodesk Fusion 360</span><span>Project management</span></div>
+        <div class="pass-foot"><button class="cv-view-btn" type="button" data-file="/cv/ariadna-mejia.pdf" data-name="Ariadna Mejía Hernández">View Technical Credential</button></div>
+      </article>
+
+      <article class="card-reveal paddock-pass">
+        <img class="pass-img" src="/team/unai.webp" width="680" height="1020" loading="lazy" decoding="async" alt="Unai Bozalongo, Operations &amp; Finance Direction, Striker Racing">
+        <div class="pass-head"><span class="micro">Team member</span><span class="micro">Striker Racing · 26/27</span></div>
+        <div class="pass-top"><div class="pass-no">02</div></div>
+        <div class="pass-id">
+          <h3>Unai Bozalongo Valiente</h3>
+          <p class="pass-role">Operations &amp; Finance Direction</p>
+        </div>
+        <ul class="pass-skills">
+          <li>Season budget and expense control</li>
+          <li>Sponsor tracking and progress reports</li>
+          <li>Travel, registration and admin logistics</li>
+        </ul>
+        <div class="pass-chips"><span>Financial control</span><span>Sponsorship coordination</span></div>
+        <div class="pass-foot"><button class="cv-view-btn" type="button" data-file="/cv/unai-bozalongo.pdf" data-name="Unai Bozalongo Valiente">View Technical Credential</button></div>
+      </article>
+
+      <article class="card-reveal paddock-pass">
+        <img class="pass-img" src="/team/mafer.webp" width="680" height="1020" loading="lazy" decoding="async" alt="María Fernanda Escobar, Creative &amp; Brand Direction, Striker Racing">
+        <div class="pass-head"><span class="micro">Team member</span><span class="micro">Striker Racing · 26/27</span></div>
+        <div class="pass-top"><div class="pass-no">03</div></div>
+        <div class="pass-id">
+          <h3>María Fernanda Escobar López</h3>
+          <p class="pass-role">Creative &amp; Brand Direction</p>
+        </div>
+        <ul class="pass-skills">
+          <li>Visual identity: livery, pit display and uniforms</li>
+          <li>Social media and the Preparatoria Celta community</li>
+          <li>Graphic material for judges and sponsors</li>
+        </ul>
+        <div class="pass-chips"><span>Graphic design</span><span>Social media</span></div>
+        <div class="pass-foot"><button class="cv-view-btn" type="button" data-file="/cv/mafer-escobar.pdf" data-name="María Fernanda Escobar López">View Technical Credential</button></div>
+      </article>
+
+      <article class="card-reveal paddock-pass">
+        <img class="pass-img" src="/team/ulises.webp" width="680" height="1020" loading="lazy" decoding="async" alt="Josué Ulises Gutiérrez, Manufacturing &amp; Prototyping Lead, Striker Racing">
+        <div class="pass-head"><span class="micro">Team member</span><span class="micro">Striker Racing · 26/27</span></div>
+        <div class="pass-top"><div class="pass-no">04</div></div>
+        <div class="pass-id">
+          <h3>Josué Ulises Gutiérrez Rodríguez</h3>
+          <p class="pass-role">Manufacturing &amp; Prototyping Lead</p>
+        </div>
+        <ul class="pass-skills">
+          <li>CNC machining and 3D printing of the chassis</li>
+          <li>Assembly and dimensional control vs. regulations</li>
+          <li>Preparing prototypes for on-track testing</li>
+        </ul>
+        <div class="pass-chips"><span>CNC</span><span>3D printing</span><span>Fusion CAM</span></div>
+        <div class="pass-foot"><button class="cv-view-btn" type="button" data-file="/cv/ulises-gutierrez.jpg" data-name="Josué Ulises Gutiérrez Rodríguez">View Technical Credential</button></div>
+      </article>
+
+      <article class="card-reveal paddock-pass">
+        <img class="pass-img" src="/team/carlo.webp" width="680" height="1020" loading="lazy" decoding="async" alt="Carlo David Serafín, Chief Technology Officer (CTO) &amp; CFD Analysis, Striker Racing">
+        <div class="pass-head"><span class="micro">Team member</span><span class="micro">Striker Racing · 26/27</span></div>
+        <div class="pass-top"><div class="pass-no">05</div></div>
+        <div class="pass-id">
+          <h3>Carlo David Serafín González Pacheco</h3>
+          <p class="pass-role">Chief Technology Officer (CTO) &amp; CFD Analysis</p>
+        </div>
+        <ul class="pass-skills">
+          <li>Aerodynamic simulation and validation in CFD</li>
+          <li>Technical integration: CAD – manufacturing – regulations</li>
+          <li>Team website and technical report</li>
+        </ul>
+        <div class="pass-chips"><span>Ansys Student CFD</span><span>Autodesk Fusion 360</span></div>
+        <div class="pass-foot"><button class="cv-view-btn" type="button" data-file="/cv/carlo-serafin.pdf" data-name="Carlo David Serafín González Pacheco">View Technical Credential</button></div>
+      </article>
+
+      <article class="card-reveal paddock-pass is-mentor">
+        <img class="pass-img" src="/team/profe-alex.webp" width="680" height="1020" loading="lazy" decoding="async" alt="Alejandro Félix Barajas, Mechatronics Engineer · Official Mentor, Striker Racing">
+        <div class="pass-head"><span class="micro">Mentor</span><span class="micro">Institutional backing · Preparatoria Celta</span></div>
+        <div class="pass-top"><div class="pass-no">MT</div></div>
+        <div class="pass-id">
+          <h3>Alejandro Félix Barajas</h3>
+          <p class="pass-role">Mechatronics Engineer · Official Mentor</p>
+        </div>
+        <blockquote class="mentor-quote">Technical rigor in CAD and CFD validation form the foundation that ensures our car's competitiveness and the world-class engineering standards of our team.</blockquote>
+        <ul class="pass-skills">
+          <li>Official technical advising before STEM Racing Mexico</li>
+          <li>Supervision of CAD, manufacturing and regulations</li>
+          <li>Institutional link with Preparatoria Celta</li>
+        </ul>
+        <div class="pass-chips"><span>SolidWorks CSWA / CSWP</span><span>Lean Six Sigma Black Belt</span><span>CAD / Robotics</span></div>
+        <div class="pass-foot"><button class="cv-view-btn" type="button" data-file="/cv/alejandro-felix.pdf" data-name="Alejandro Félix Barajas">View Technical Credential</button></div>
+      </article>
+
+    </div>
+  </div>
+</section>
 
 <section id="manifesto" class="reveal">
   <div class="wrap manifesto-grid">
@@ -238,334 +340,6 @@
   </div>
 </section>
 
-<section id="team" class="blueprint">
-  <div class="wrap">
-    <div class="team-head">
-      <div class="eyebrow-tag">Preparatoria Celta · Querétaro</div>
-      <h2>Five members.<br>Five fronts of work.</h2>
-      <div class="team-group-text">
-        <p>We design a CO₂-powered car using professional engineering tools (CAD, CAM, CFD) under a strict technical regulation.</p>
-        <p>We run the team like a real company: managing budget, brand identity and business plans, aiming to represent Mexico at the world final.</p>
-      </div>
-    </div>
-    <div class="team-feature">
-      <figure class="team-photo">
-        <img src="../team/grupo.webp" width="750" height="482" loading="lazy" decoding="async" alt="Striker Racing team members with their mentor, Preparatoria Celta">
-        <figcaption>Striker Racing · Preparatoria Celta, Querétaro</figcaption>
-      </figure>
-      <dl class="team-stats" aria-label="Team facts">
-          <div class="team-stat"><dt>Members</dt><dd>5</dd></div>
-          <div class="team-stat"><dt>Certified mentor</dt><dd>1</dd></div>
-          <div class="team-stat"><dt>Category</dt><dd>Development</dd></div>
-          <div class="team-stat"><dt>Season</dt><dd>2026–27</dd></div>
-      </dl>
-    </div>
-    <p class="team-cards-intro">The team's spec sheet: official role, hard skills and tools for each member, plus their full technical credential in the viewer.</p>
-    <div class="pass-grid">
-
-      <article class="card-reveal paddock-pass">
-        <img class="pass-img" src="../team/ari.webp" width="680" height="1020" loading="lazy" decoding="async" alt="Ariadna Mejía, Team Direction &amp; CAD Design, Striker Racing">
-        <div class="pass-head"><span class="micro">Team member</span><span class="micro">Striker Racing · 26/27</span></div>
-        <div class="pass-top"><div class="pass-no">01</div></div>
-        <div class="pass-id">
-          <h3>Ariadna Mejía Hernández</h3>
-          <p class="pass-role">Team Direction &amp; CAD Design</p>
-        </div>
-        <ul class="pass-skills">
-          <li>CAD modeling of the car, part by part</li>
-          <li>Compliance with STEM Racing technical regulations</li>
-          <li>Season schedule planning</li>
-        </ul>
-        <div class="pass-chips"><span>Autodesk Fusion 360</span><span>Project management</span></div>
-        <div class="pass-foot"><button class="cv-view-btn" type="button" data-file="../cv/ariadna-mejia.pdf" data-name="Ariadna Mejía Hernández">View Technical Credential</button></div>
-      </article>
-
-      <article class="card-reveal paddock-pass">
-        <img class="pass-img" src="../team/unai.webp" width="680" height="1020" loading="lazy" decoding="async" alt="Unai Bozalongo, Operations &amp; Finance Direction, Striker Racing">
-        <div class="pass-head"><span class="micro">Team member</span><span class="micro">Striker Racing · 26/27</span></div>
-        <div class="pass-top"><div class="pass-no">02</div></div>
-        <div class="pass-id">
-          <h3>Unai Bozalongo Valiente</h3>
-          <p class="pass-role">Operations &amp; Finance Direction</p>
-        </div>
-        <ul class="pass-skills">
-          <li>Season budget and expense control</li>
-          <li>Sponsor tracking and progress reports</li>
-          <li>Travel, registration and admin logistics</li>
-        </ul>
-        <div class="pass-chips"><span>Financial control</span><span>Sponsorship coordination</span></div>
-        <div class="pass-foot"><button class="cv-view-btn" type="button" data-file="../cv/unai-bozalongo.pdf" data-name="Unai Bozalongo Valiente">View Technical Credential</button></div>
-      </article>
-
-      <article class="card-reveal paddock-pass">
-        <img class="pass-img" src="../team/mafer.webp" width="680" height="1020" loading="lazy" decoding="async" alt="María Fernanda Escobar, Creative &amp; Brand Direction, Striker Racing">
-        <div class="pass-head"><span class="micro">Team member</span><span class="micro">Striker Racing · 26/27</span></div>
-        <div class="pass-top"><div class="pass-no">03</div></div>
-        <div class="pass-id">
-          <h3>María Fernanda Escobar López</h3>
-          <p class="pass-role">Creative &amp; Brand Direction</p>
-        </div>
-        <ul class="pass-skills">
-          <li>Visual identity: livery, pit display and uniforms</li>
-          <li>Social media and the Preparatoria Celta community</li>
-          <li>Graphic material for judges and sponsors</li>
-        </ul>
-        <div class="pass-chips"><span>Graphic design</span><span>Social media</span></div>
-        <div class="pass-foot"><button class="cv-view-btn" type="button" data-file="../cv/mafer-escobar.pdf" data-name="María Fernanda Escobar López">View Technical Credential</button></div>
-      </article>
-
-      <article class="card-reveal paddock-pass">
-        <img class="pass-img" src="../team/ulises.webp" width="680" height="1020" loading="lazy" decoding="async" alt="Josué Ulises Gutiérrez, Manufacturing &amp; Prototyping Lead, Striker Racing">
-        <div class="pass-head"><span class="micro">Team member</span><span class="micro">Striker Racing · 26/27</span></div>
-        <div class="pass-top"><div class="pass-no">04</div></div>
-        <div class="pass-id">
-          <h3>Josué Ulises Gutiérrez Rodríguez</h3>
-          <p class="pass-role">Manufacturing &amp; Prototyping Lead</p>
-        </div>
-        <ul class="pass-skills">
-          <li>CNC machining and 3D printing of the chassis</li>
-          <li>Assembly and dimensional control vs. regulations</li>
-          <li>Preparing prototypes for on-track testing</li>
-        </ul>
-        <div class="pass-chips"><span>CNC</span><span>3D printing</span><span>Fusion CAM</span></div>
-        <div class="pass-foot"><button class="cv-view-btn" type="button" data-file="../cv/ulises-gutierrez.jpg" data-name="Josué Ulises Gutiérrez Rodríguez">View Technical Credential</button></div>
-      </article>
-
-      <article class="card-reveal paddock-pass">
-        <img class="pass-img" src="../team/carlo.webp" width="680" height="1020" loading="lazy" decoding="async" alt="Carlo David Serafín, Chief Technology Officer (CTO) &amp; CFD Analysis, Striker Racing">
-        <div class="pass-head"><span class="micro">Team member</span><span class="micro">Striker Racing · 26/27</span></div>
-        <div class="pass-top"><div class="pass-no">05</div></div>
-        <div class="pass-id">
-          <h3>Carlo David Serafín González Pacheco</h3>
-          <p class="pass-role">Chief Technology Officer (CTO) &amp; CFD Analysis</p>
-        </div>
-        <ul class="pass-skills">
-          <li>Aerodynamic simulation and validation in CFD</li>
-          <li>Technical integration: CAD – manufacturing – regulations</li>
-          <li>Team website and technical report</li>
-        </ul>
-        <div class="pass-chips"><span>Ansys Student CFD</span><span>Autodesk Fusion 360</span></div>
-        <div class="pass-foot"><button class="cv-view-btn" type="button" data-file="../cv/carlo-serafin.pdf" data-name="Carlo David Serafín González Pacheco">View Technical Credential</button></div>
-      </article>
-
-      <article class="card-reveal paddock-pass is-mentor">
-        <img class="pass-img" src="../team/profe-alex.webp" width="680" height="1020" loading="lazy" decoding="async" alt="Alejandro Félix Barajas, Mechatronics Engineer · Official Mentor, Striker Racing">
-        <div class="pass-head"><span class="micro">Mentor</span><span class="micro">Institutional backing · Preparatoria Celta</span></div>
-        <div class="pass-top"><div class="pass-no">MT</div></div>
-        <div class="pass-id">
-          <h3>Alejandro Félix Barajas</h3>
-          <p class="pass-role">Mechatronics Engineer · Official Mentor</p>
-        </div>
-        <blockquote class="mentor-quote">Technical rigor in CAD and CFD validation form the foundation that ensures our car's competitiveness and the world-class engineering standards of our team.</blockquote>
-        <ul class="pass-skills">
-          <li>Official technical advising before STEM Racing Mexico</li>
-          <li>Supervision of CAD, manufacturing and regulations</li>
-          <li>Institutional link with Preparatoria Celta</li>
-        </ul>
-        <div class="pass-chips"><span>SolidWorks CSWA / CSWP</span><span>Lean Six Sigma Black Belt</span><span>CAD / Robotics</span></div>
-        <div class="pass-foot"><button class="cv-view-btn" type="button" data-file="../cv/alejandro-felix.pdf" data-name="Alejandro Félix Barajas">View Technical Credential</button></div>
-      </article>
-
-    </div>
-  </div>
-</section>
-
-<section id="stack" class="tools-band reveal">
-  <div class="wrap">
-    <div class="section-head on-dark">
-      <div class="eyebrow-tag">Tech stack</div>
-      <h2>What we use to design the car</h2>
-      <p>The software we need is free for students; what sponsors fund is the physical kit, equipment and logistics, not licenses.</p>
-    </div>
-    <div class="tool-grid">
-      <div class="tool">
-        <h3>Autodesk Fusion <span class="tag">Free</span></h3>
-        <p>Official CAD/CAM/CAE partner of STEM Racing. This is where we model the car part by part and prepare machining toolpaths.</p>
-      </div>
-      <div class="tool">
-        <h3>Ansys Student <span class="tag">Free</span></h3>
-        <p>Includes Ansys Discovery, the tournament's official CFD partner. We simulate airflow over the car before manufacturing each version.</p>
-      </div>
-      <div class="tool">
-        <h3>Computing equipment</h3>
-        <p>CFD simulations demand equipment with strong graphics capability: this is one area where a sponsor's support directly speeds up our work.</p>
-      </div>
-      <div class="tool">
-        <h3>Official STEM Racing Mexico kit</h3>
-        <p>Chassis material blocks, CO₂ tanks, wheels, axles and eyelets, provided when the season registration fee is paid.</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section id="budget" class="reveal">
-  <div class="wrap">
-    <div class="section-head">
-      <div class="eyebrow-tag">Budget</div>
-      <h2>Real breakdown: Regional season</h2>
-      <p>This is what it costs to compete in the Regional stage, and how much sponsorship we need to make it happen.</p>
-      <p style="margin-top:10px; font-size:0.9rem; color:var(--ice-dim); font-style:italic;">Approximate budget starting from zero. Costs are logistics and manufacturing estimates that may vary depending on the official venue and supplier quotes.</p>
-    </div>
-    <div class="budget-box">
-      <div class="budget-summary">
-        <div>
-          <div class="budget-figure">$65,450.00<span class="budget-figure-unit">MXN</span></div>
-          <div class="budget-figure-label micro">Estimated total cost of the Regional season</div>
-        </div>
-        <div class="budget-ask">
-          <div class="funding-bar-head">
-            <span>Sponsorship funding goal</span>
-            <b><span data-funding="recaudado">$0</span> / <span data-funding="meta">$65,450</span> MXN</b>
-          </div>
-          <div class="funding-track" role="img" aria-label="Season fundraising progress"><div class="funding-fill" data-funding="fill" style="width:0%"></div></div>
-          <div class="funding-caption">Cash or in kind (materials, machining, equipment, transport). See <a href="#tiers" style="color:var(--emerald);">sponsorship tiers</a>.</div>
-        </div>
-      </div>
-      <ul class="budget-list">
-        <li><span><b>1.</b> Registration and official licenses <em>($43,500 + regulatory VAT · 1 installment)</em></span> <b>$50,460.00</b><i class="bar" style="--w:77.1%" aria-hidden="true"></i></li>
-        <li><span><b>2.</b> Manufacturing and printing (CNC / 3D) <em>(2 units at $2,000 each)</em></span> <b>$4,000.00</b><i class="bar" style="--w:6.1%" aria-hidden="true"></i></li>
-        <li><span><b>3.</b> Official team uniforms <em>(6 pieces at $750 each)</em></span> <b>$4,500.00</b><i class="bar" style="--w:6.9%" aria-hidden="true"></i></li>
-        <li><span><b>4.</b> Pit display and stand <em>(9 pieces of signage/banners at $110 each)</em></span> <b>$990.00</b><i class="bar" style="--w:1.5%" aria-hidden="true"></i></li>
-        <li><span><b>5.</b> Regional travel expenses (transport and meals)</span> <b>$5,500.00</b><i class="bar" style="--w:8.4%" aria-hidden="true"></i></li>
-      </ul>
-      <div class="budget-note">
-        <b>We accept in-kind sponsorship:</b> manufacturing materials, CNC machining, 3D printing, uniforms, computing equipment or transport. Every in-kind contribution is quantified and credited at the equivalent sponsorship tier (Collaborator, Booster, Technical Ally or Strategic Partner).
-      </div>
-      <div class="budget-note" style="margin-top:14px;">
-        <b>Commercial scheme:</b> a commercial and advertising sponsorship scheme with a deductible invoice issued under the applicable regime for partner companies, coordinated through the corresponding institutional backing.
-      </div>
-    </div>
-  </div>
-</section>
-
-<section id="sponsorship" class="blueprint reveal">
-  <div class="wrap">
-    <div class="section-head">
-      <div class="eyebrow-tag">Sponsorship</div>
-      <h2>Why invest<br>in <em>Striker Racing</em>?</h2>
-      <p>Direct brand exposure in a technological, pre-university, high-performance environment.</p>
-      <div class="cta-row">
-      <a class="btn btn-solid" href="https://wa.me/525511839779?text=Hi%2C%20I%27m%20interested%20in%20sponsoring%20Striker%20Racing%2C%20could%20we%20talk%3F" target="_blank" rel="noopener">Message us on WhatsApp</a>
-      <a class="btn" href="#tiers">View tiers</a>
-    </div>
-    </div>
-    <div class="why-grid">
-      <div class="why-item">
-        <span class="why-num">01</span>
-        <h3>Visibility with purpose</h3>
-        <p>Your logo goes on a real engineering project, backed by the Preparatoria Celta community and present at the STEM Racing Mexico competition throughout the season.</p>
-      </div>
-      <div class="why-item">
-        <span class="why-num">02</span>
-        <h3>Alignment with innovation</h3>
-        <p>You associate your brand with science, technology and applied engineering: the same ground where you compete for talent and clients.</p>
-      </div>
-      <div class="why-item">
-        <span class="why-num">03</span>
-        <h3>Access to young talent</h3>
-        <p>You get to know first-hand five students who already build, code and manage real projects before entering university.</p>
-      </div>
-    </div>
-
-    <div class="section-head" id="tiers">
-      <div class="eyebrow-tag">Sponsorship tiers</div>
-      <h2>Choose your tier</h2>
-    </div>
-
-    <div class="tiers">
-      <div class="card-reveal tier">
-        <h3>Collaborator</h3>
-        <div class="price">$1,500 – $3,000</div>
-        <div class="price-note">MXN</div>
-        <ul>
-          <li><b>Uniform:</b> logo on lower back</li>
-          <li><b>Presence:</b> perimeter mention on the pit display (stand) and on the team's social media</li>
-        </ul>
-        <div class="tier-cta">
-          <a class="tier-btn" href="https://wa.me/525511839779?text=Hi%2C%20I%27m%20interested%20in%20the%20Collaborator%20tier%20sponsorship%20for%20Striker%20Racing%2C%20could%20we%20talk%3F" target="_blank" rel="noopener">Contact us · WhatsApp</a>
-          <a class="tier-mail" href="mailto:strikerracingf1@gmail.com?subject=Striker%20Racing%20Sponsorship%3A%20Collaborator%20Tier">Email</a>
-        </div>
-      </div>
-      <div class="card-reveal tier">
-        <h3>Booster</h3>
-        <div class="price">$3,000 – $6,000</div>
-        <div class="price-note">MXN</div>
-        <ul>
-          <li><b>Uniform:</b> logo on shoulder blades / upper back</li>
-          <li><b>Presence:</b> featured pit display placement and acknowledgment in the technical report</li>
-        </ul>
-        <div class="tier-cta">
-          <a class="tier-btn" href="https://wa.me/525511839779?text=Hi%2C%20I%27m%20interested%20in%20the%20Booster%20tier%20sponsorship%20for%20Striker%20Racing%2C%20could%20we%20talk%3F" target="_blank" rel="noopener">Contact us · WhatsApp</a>
-          <a class="tier-mail" href="mailto:strikerracingf1@gmail.com?subject=Striker%20Racing%20Sponsorship%3A%20Booster%20Tier">Email</a>
-        </div>
-      </div>
-      <div class="card-reveal tier">
-        <h3>Technical Ally</h3>
-        <div class="price">$6,000 – $10,000</div>
-        <div class="price-note">MXN</div>
-        <ul>
-          <li><b>Uniform:</b> exclusive space on the left or right sleeve (arm)</li>
-          <li><b>Car:</b> logo on the chassis sides and rear wing</li>
-        </ul>
-        <div class="tier-cta">
-          <a class="tier-btn" href="https://wa.me/525511839779?text=Hi%2C%20I%27m%20interested%20in%20the%20Technical%20Ally%20tier%20sponsorship%20for%20Striker%20Racing%2C%20could%20we%20talk%3F" target="_blank" rel="noopener">Contact us · WhatsApp</a>
-          <a class="tier-mail" href="mailto:strikerracingf1@gmail.com?subject=Striker%20Racing%20Sponsorship%3A%20Technical%20Ally%20Tier">Email</a>
-        </div>
-      </div>
-      <div class="card-reveal tier featured">
-        <span class="ribbon">Custom</span>
-        <h3>Strategic Partner</h3>
-        <div class="price">+ $10,000</div>
-        <div class="price-note">MXN</div>
-        <ul>
-          <li><b>Uniform:</b> central sponsor on the chest (front) and main back number</li>
-          <li><b>Car:</b> nose / front tip, with the option of two main spaces depending on the proposal</li>
-          <li><b>Activation &amp; merch:</b> custom system</li>
-        </ul>
-        <div class="tier-cta">
-          <a class="tier-btn" href="https://wa.me/525511839779?text=Hi%2C%20I%27m%20interested%20in%20the%20Strategic%20Partner%20tier%20sponsorship%20for%20Striker%20Racing%2C%20could%20we%20talk%3F" target="_blank" rel="noopener">Contact us · WhatsApp</a>
-          <a class="tier-mail" href="mailto:strikerracingf1@gmail.com?subject=Striker%20Racing%20Sponsorship%3A%20Strategic%20Partner">Email</a>
-        </div>
-      </div>
-    </div>
-
-    <p class="tiers-note">We accept both cash and in-kind sponsorships. <b>Confirm before November 23</b> so your brand joins the 2026–2027 season.</p>
-
-    <h2 class="faq-title">Frequently asked questions</h2>
-    <div class="faq">
-      <details>
-        <summary>Can sponsorship be in kind instead of cash?</summary>
-        <p>Yes. Manufacturing materials, computing equipment, design, printing or transport count as a contribution and are recognized at the equivalent tier.</p>
-      </details>
-      <details>
-        <summary>How will I know what my contribution was used for?</summary>
-        <p>We send a short report after each stage (regional and national) with the car's progress, results and photos of the pit display featuring your brand.</p>
-      </details>
-      <details>
-        <summary>Can I sponsor just part of the process, not the whole season?</summary>
-        <p>Yes, tiers are flexible. We can adjust the benefits to a one-off contribution, for example just covering travel expenses for the national final.</p>
-      </details>
-      <details>
-        <summary>Is the sponsorship tax deductible?</summary>
-        <p>We run a commercial and advertising sponsorship scheme with a deductible invoice issued under the applicable regime for partner companies, coordinated through the corresponding institutional backing.</p>
-      </details>
-    </div>
-  </div>
-
-</section>
-
-<section id="contact" class="contact-band reveal">
-  <div class="wrap">
-    <h2>Interested in sponsoring us?</h2>
-    <p>Write to us and let's talk details: tiers, timing and how your contribution is used.</p>
-    <div class="contact-links">
-      <a class="contact-primary" href="https://wa.me/525511839779?text=Hi%2C%20I%27m%20reaching%20out%20to%20learn%20about%20Striker%20Racing%27s%20sponsorship%20proposal." target="_blank" rel="noopener">Direct WhatsApp · (+52) 55 1183 9779</a>
-      <a class="contact-secondary" href="mailto:strikerracingf1@gmail.com?subject=Striker%20Racing%20Sponsorship">strikerracingf1@gmail.com</a>
-    </div>
-    <div class="contact-meta">Instagram: <a href="https://instagram.com/striker.racing_mx" target="_blank" rel="noopener" class="social-link">@striker.racing_mx</a></div>
-  </div>
-</section>
-
 </main>
 
 <dialog id="cvViewerModal" class="cv-dialog" aria-labelledby="cvTitle">
@@ -591,16 +365,16 @@
   <div class="wrap">
     <div class="footer-grid">
       <div class="footer-col">
-        <div class="brand"><img class="brand-mark" src="../logo-64.webp" width="34" height="32" alt="">STRIKER RACING</div>
+        <div class="brand"><img class="brand-mark" src="/logo-64.webp" width="34" height="32" alt="">STRIKER RACING</div>
         <p>Preparatoria Celta, Querétaro · STEM Racing Mexico, 2026–2027 season.</p>
       </div>
       <div class="footer-col">
         <h3 class="footer-heading">Navigate</h3>
         <ul>
-          <li><a href="#home">Home</a></li>
-          <li><a href="#team">Team</a></li>
-          <li><a href="#budget">Budget</a></li>
-          <li><a href="#sponsorship">Sponsorship</a></li>
+          <li><a href="/en/">Home</a></li>
+          <li><a href="/en/car/">Car</a></li>
+          <li><a href="/en/budget/">Budget</a></li>
+          <li><a href="/en/sponsorship/">Sponsorship</a></li>
         </ul>
       </div>
       <div class="footer-col">
@@ -608,7 +382,7 @@
         <ul>
           <li><a href="mailto:strikerracingf1@gmail.com">strikerracingf1@gmail.com</a></li>
           <li><a href="https://instagram.com/striker.racing_mx" target="_blank" rel="noopener" class="social-link">Instagram: @striker.racing_mx</a></li>
-          <li><a href="privacidad.html">Privacy notice</a></li>
+          <li><a href="/en/privacidad.html">Privacy notice</a></li>
         </ul>
       </div>
     </div>
@@ -621,9 +395,7 @@
 
 <button id="backToTop" class="hud-top-btn" type="button" aria-label="Back to top">&#9650; TOP</button>
 
-<script src="../js/config.js" defer></script>
-<script src="../js/site.js" defer></script>
-<script src="../js/cv-viewer.js" defer></script>
-<script type="module" src="../js/viewer.js"></script>
+<script src="/js/site.js" defer></script>
+<script src="/js/cv-viewer.js" defer></script>
 </body>
 </html>

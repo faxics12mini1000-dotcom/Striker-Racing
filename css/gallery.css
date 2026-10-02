@@ -150,6 +150,10 @@ section{padding:104px 0;}
 .room-head .cta-row{margin-top:28px;}
 @media (max-width:700px){ .room-head{padding:56px 0 48px;} }
 
+/* Hero corto del inicio: sin visor, solo titular + CTAs */
+.hero-short .hero-top{padding-bottom:88px;}
+@media (max-width:900px){ .hero-short .hero-top{padding-bottom:56px;} }
+
 /* ---------- Escultura 3D + HUD de cotas ---------- */
 .hero-main{
   position:relative; z-index:2; display:grid; grid-template-columns:minmax(0,1.75fr) minmax(300px,1fr);

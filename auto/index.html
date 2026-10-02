@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script>
+  // Sin JS (o si falla a medio cargar) las secciones .reveal quedan visibles desde el primer render.
+  (function(){
+    var c = document.documentElement.classList;
+    c.add('js');
+    if('IntersectionObserver' in window) c.add('has-io');
+  })();
+</script>
+<title>SR-26 · Monoplaza en 3D y ficha técnica | Striker Racing</title>
+<meta name="description" content="Explora el SR-26 en 3D: gíralo, ábrelo en despiece y revisa las cotas del reglamento técnico de STEM Racing México.">
+<meta name="theme-color" content="#071B33">
+<link rel="canonical" href="https://striker-racing.vercel.app/auto/">
+<link rel="alternate" hreflang="es-mx" href="https://striker-racing.vercel.app/auto/">
+<link rel="alternate" hreflang="en" href="https://striker-racing.vercel.app/en/car/">
+<link rel="alternate" hreflang="x-default" href="https://striker-racing.vercel.app/auto/">
+<meta property="og:title" content="SR-26, el monoplaza de Striker Racing">
+<meta property="og:description" content="Gira el SR-26 en 3D, ábrelo en despiece y revisa las cotas oficiales del reglamento técnico.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://striker-racing.vercel.app/auto/">
+<meta property="og:image" content="https://striker-racing.vercel.app/car-poster.webp">
+<meta property="og:image:width" content="800">
+<meta property="og:image:height" content="550">
+<meta property="og:locale" content="es_MX">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="SR-26, el monoplaza de Striker Racing">
+<meta name="twitter:description" content="Gira el SR-26 en 3D, ábrelo en despiece y revisa las cotas oficiales del reglamento técnico.">
+<meta name="twitter:image" content="https://striker-racing.vercel.app/car-poster.webp">
+<link rel="icon" href="/logo.png">
+<link rel="apple-touch-icon" href="/logo.png">
+<link rel="preload" href="/fonts/inter-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/fonts/oswald-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/fonts/jetbrains-mono-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<script type="importmap">
+{"imports":{
+  "three":"/vendor/three/build/three.module.min.js",
+  "three/addons/":"/vendor/three/examples/jsm/"
+}}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebPage",
+      "@id": "https://striker-racing.vercel.app/auto/#webpage",
+      "url": "https://striker-racing.vercel.app/auto/",
+      "name": "SR-26 · Monoplaza en 3D y ficha técnica | Striker Racing",
+      "description": "Explora el SR-26 en 3D: gíralo, ábrelo en despiece y revisa las cotas del reglamento técnico de STEM Racing México.",
+      "inLanguage": "es-mx",
+      "isPartOf": {
+        "@type": "WebSite",
+        "name": "Striker Racing",
+        "url": "https://striker-racing.vercel.app/"
+      },
+      "about": {
+        "@type": "SportsTeam",
+        "name": "Striker Racing",
+        "url": "https://striker-racing.vercel.app/"
+      }
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Inicio",
+          "item": "https://striker-racing.vercel.app/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Auto",
+          "item": "https://striker-racing.vercel.app/auto/"
+        }
+      ]
+    }
+  ]
+}
+</script>
+<link rel="stylesheet" href="/css/site.css">
+<link rel="stylesheet" href="/css/gallery.css">
+</head>
+<body>
+<a class="skip-link" href="#main">Saltar al contenido</a>
+<nav class="cockpit" aria-label="Navegación principal">
+  <div class="cockpit-bar">
+    <a href="/" id="brandHome" class="brand-link" aria-label="Striker Racing, inicio">
+      <span class="brand"><img class="brand-mark" src="/logo-64.webp" width="34" height="32" alt="">STRIKER RACING</span>
+    </a>
+    <button class="nav-toggle" id="navToggle" type="button" aria-label="Abrir menú" data-label-open="Abrir menú" data-label-close="Cerrar menú" aria-expanded="false" aria-controls="navPanel"><span></span></button>
+    <div class="nav-panel" id="navPanel">
+      <ul class="cockpit-links">
+        <li><a href="/">Inicio</a></li>
+        <li><a href="/auto/" aria-current="page">Auto</a></li>
+        <li><a href="/presupuesto/">Presupuesto</a></li>
+        <li><a href="/patrocinios/">Patrocinios</a></li>
+      </ul>
+      <div class="cockpit-actions">
+        <div class="lang-switch" role="group" aria-label="Idioma">
+          <a href="/auto/" aria-current="true" lang="es" hreflang="es-mx">ES</a><span aria-hidden="true">|</span><a href="/en/car/" lang="en" hreflang="en">EN</a>
+        </div>
+        <a class="contact-cta" href="https://wa.me/525511839779?text=Hola%2C%20me%20interesa%20patrocinar%20a%20Striker%20Racing%2C%20%C2%BFpodemos%20platicar%3F" target="_blank" rel="noopener">Escríbenos</a>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<main id="main" tabindex="-1">
+
+<header class="gallery-hero hero-car" id="auto">
+  <div class="wrap">
+    <div class="hero-top">
+      <div>
+        <div class="room-tag micro">Prototipo SR-26 · Temporada 2026–2027</div>
+        <h1><em>SR-26:</em> el monoplaza de Striker Racing.</h1>
+      </div>
+      <div>
+        <p class="hero-lead">Gíralo con el dedo o el mouse, ábrelo en despiece y revisa las cotas oficiales del reglamento técnico.</p>
+        <div class="cta-row">
+          <a class="btn btn-solid" href="/presupuesto/">Ver presupuesto</a>
+          <a class="btn" href="/patrocinios/">Patrocinar el proyecto</a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="wrap hero-frame">
+    <div class="hero-main">
+      <div class="model-stage" id="modelStage" aria-label="Modelo 3D del SR-26, monoplaza de Striker Racing, con animación de despiece">
+        <img class="model-poster" src="/car-poster.webp" width="800" height="550" alt="Monoplaza SR-26 de Striker Racing con su librea morada, blanca y esmeralda" loading="eager" fetchpriority="high">
+        <span class="model-tag">SR-26 · Prototipo Striker Racing</span>
+        <span class="model-hint">Arrastra para girar</span>
+        <div class="model-loader" aria-hidden="true"><span class="model-spinner"></span></div>
+        <div class="model-fallback">Tu navegador no puede mostrar el modelo 3D interactivo.<br>Consulta las cotas reglamentarias.</div>
+      </div>
+      <aside class="hud-panel" aria-label="Cotas reglamentarias de la categoría">
+        <div class="hud-head">Reglamento técnico · Cotas oficiales</div>
+        <dl class="cotas">
+          <div class="cota"><dt class="micro">Longitud permitida</dt><dd><span class="big-num">170–210</span><span class="unit">mm</span></dd></div>
+          <div class="cota"><dt class="micro">Masa mínima · sin cartucho</dt><dd><span class="big-num">50</span><span class="unit">g</span></dd></div>
+          <div class="cota"><dt class="micro">Propulsión · cartucho</dt><dd><span class="big-num">8</span><span class="unit">g CO₂</span></dd></div>
+          <div class="cota cota-txt"><dt class="micro">Pista · batalla</dt><dd>20 m · 130.0 mm</dd></div>
+          <div class="cota cota-txt"><dt class="micro">Prototipo</dt><dd>SR-26 · diseño propio en Fusion 360</dd></div>
+        </dl>
+        <p class="hud-disclaimer">*Prototipo visual del SR-26. El monoplaza se modela bajo normativa técnica en Autodesk Fusion 360 y se valida en Ansys Student CFD; el diseño final puede variar.</p>
+      </aside>
+    </div>
+  </div>
+</header>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="footer-grid">
+      <div class="footer-col">
+        <div class="brand"><img class="brand-mark" src="/logo-64.webp" width="34" height="32" alt="">STRIKER RACING</div>
+        <p>Preparatoria Celta, Querétaro · STEM Racing México, temporada 2026–2027.</p>
+      </div>
+      <div class="footer-col">
+        <h3 class="footer-heading">Navegación</h3>
+        <ul>
+          <li><a href="/">Inicio</a></li>
+          <li><a href="/auto/">Auto</a></li>
+          <li><a href="/presupuesto/">Presupuesto</a></li>
+          <li><a href="/patrocinios/">Patrocinios</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h3 class="footer-heading">Contacto</h3>
+        <ul>
+          <li><a href="mailto:strikerracingf1@gmail.com">strikerracingf1@gmail.com</a></li>
+          <li><a href="https://instagram.com/striker.racing_mx" target="_blank" rel="noopener" class="social-link">Instagram: @striker.racing_mx</a></li>
+          <li><a href="/privacidad.html">Aviso de privacidad</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026–2027 Striker Racing</span>
+      <span>Sitio desarrollado por el equipo</span>
+    </div>
+  </div>
+</footer>
+
+<button id="backToTop" class="hud-top-btn" type="button" aria-label="Volver arriba">&#9650; TOP</button>
+
+<script src="/js/site.js" defer></script>
+<script type="module" src="/js/viewer.js"></script>
+</body>
+</html>

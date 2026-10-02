@@ -11,6 +11,43 @@
     <xhtml:link rel="alternate" hreflang="en" href="https://striker-racing.vercel.app/en/"/>
   </url>
   <url>
+    <loc>https://striker-racing.vercel.app/auto/</loc>
+    <xhtml:link rel="alternate" hreflang="es-mx" href="https://striker-racing.vercel.app/auto/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://striker-racing.vercel.app/en/car/"/>
+  </url>
+  <url>
+    <loc>https://striker-racing.vercel.app/en/car/</loc>
+    <xhtml:link rel="alternate" hreflang="es-mx" href="https://striker-racing.vercel.app/auto/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://striker-racing.vercel.app/en/car/"/>
+  </url>
+  <url>
+    <loc>https://striker-racing.vercel.app/presupuesto/</loc>
+    <xhtml:link rel="alternate" hreflang="es-mx" href="https://striker-racing.vercel.app/presupuesto/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://striker-racing.vercel.app/en/budget/"/>
+  </url>
+  <url>
+    <loc>https://striker-racing.vercel.app/en/budget/</loc>
+    <xhtml:link rel="alternate" hreflang="es-mx" href="https://striker-racing.vercel.app/presupuesto/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://striker-racing.vercel.app/en/budget/"/>
+  </url>
+  <url>
+    <loc>https://striker-racing.vercel.app/patrocinios/</loc>
+    <xhtml:link rel="alternate" hreflang="es-mx" href="https://striker-racing.vercel.app/patrocinios/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://striker-racing.vercel.app/en/sponsorship/"/>
+  </url>
+  <url>
+    <loc>https://striker-racing.vercel.app/en/sponsorship/</loc>
+    <xhtml:link rel="alternate" hreflang="es-mx" href="https://striker-racing.vercel.app/patrocinios/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://striker-racing.vercel.app/en/sponsorship/"/>
+  </url>
+  <url>
     <loc>https://striker-racing.vercel.app/privacidad.html</loc>
+    <xhtml:link rel="alternate" hreflang="es-mx" href="https://striker-racing.vercel.app/privacidad.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://striker-racing.vercel.app/en/privacidad.html"/>
+  </url>
+  <url>
+    <loc>https://striker-racing.vercel.app/en/privacidad.html</loc>
+    <xhtml:link rel="alternate" hreflang="es-mx" href="https://striker-racing.vercel.app/privacidad.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://striker-racing.vercel.app/en/privacidad.html"/>
   </url>
 </urlset>

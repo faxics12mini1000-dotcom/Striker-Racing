@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script>
+  // Without JS (or if it fails mid-load) .reveal sections stay visible from the first render.
+  (function(){
+    var c = document.documentElement.classList;
+    c.add('js');
+    if('IntersectionObserver' in window) c.add('has-io');
+  })();
+</script>
+<title>SR-26 · 3D car and technical sheet | Striker Racing</title>
+<meta name="description" content="Explore the SR-26 in 3D: spin it, open it into an exploded view and check the STEM Racing Mexico technical regulation dimensions.">
+<meta name="theme-color" content="#071B33">
+<link rel="canonical" href="https://striker-racing.vercel.app/en/car/">
+<link rel="alternate" hreflang="es-mx" href="https://striker-racing.vercel.app/auto/">
+<link rel="alternate" hreflang="en" href="https://striker-racing.vercel.app/en/car/">
+<link rel="alternate" hreflang="x-default" href="https://striker-racing.vercel.app/auto/">
+<meta property="og:title" content="SR-26, the Striker Racing car">
+<meta property="og:description" content="Spin the SR-26 in 3D, open it into an exploded view and check the official regulation dimensions.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://striker-racing.vercel.app/en/car/">
+<meta property="og:image" content="https://striker-racing.vercel.app/car-poster.webp">
+<meta property="og:image:width" content="800">
+<meta property="og:image:height" content="550">
+<meta property="og:locale" content="en_US">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="SR-26, the Striker Racing car">
+<meta name="twitter:description" content="Spin the SR-26 in 3D, open it into an exploded view and check the official regulation dimensions.">
+<meta name="twitter:image" content="https://striker-racing.vercel.app/car-poster.webp">
+<link rel="icon" href="/logo.png">
+<link rel="apple-touch-icon" href="/logo.png">
+<link rel="preload" href="/fonts/inter-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/fonts/oswald-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/fonts/jetbrains-mono-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<script type="importmap">
+{"imports":{
+  "three":"/vendor/three/build/three.module.min.js",
+  "three/addons/":"/vendor/three/examples/jsm/"
+}}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebPage",
+      "@id": "https://striker-racing.vercel.app/en/car/#webpage",
+      "url": "https://striker-racing.vercel.app/en/car/",
+      "name": "SR-26 · 3D car and technical sheet | Striker Racing",
+      "description": "Explore the SR-26 in 3D: spin it, open it into an exploded view and check the STEM Racing Mexico technical regulation dimensions.",
+      "inLanguage": "en",
+      "isPartOf": {
+        "@type": "WebSite",
+        "name": "Striker Racing",
+        "url": "https://striker-racing.vercel.app/en/"
+      },
+      "about": {
+        "@type": "SportsTeam",
+        "name": "Striker Racing",
+        "url": "https://striker-racing.vercel.app/en/"
+      }
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": "https://striker-racing.vercel.app/en/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Car",
+          "item": "https://striker-racing.vercel.app/en/car/"
+        }
+      ]
+    }
+  ]
+}
+</script>
+<link rel="stylesheet" href="/css/site.css">
+<link rel="stylesheet" href="/css/gallery.css">
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+<nav class="cockpit" aria-label="Main navigation">
+  <div class="cockpit-bar">
+    <a href="/en/" id="brandHome" class="brand-link" aria-label="Striker Racing, home">
+      <span class="brand"><img class="brand-mark" src="/logo-64.webp" width="34" height="32" alt="">STRIKER RACING</span>
+    </a>
+    <button class="nav-toggle" id="navToggle" type="button" aria-label="Open menu" data-label-open="Open menu" data-label-close="Close menu" aria-expanded="false" aria-controls="navPanel"><span></span></button>
+    <div class="nav-panel" id="navPanel">
+      <ul class="cockpit-links">
+        <li><a href="/en/">Home</a></li>
+        <li><a href="/en/car/" aria-current="page">Car</a></li>
+        <li><a href="/en/budget/">Budget</a></li>
+        <li><a href="/en/sponsorship/">Sponsorship</a></li>
+      </ul>
+      <div class="cockpit-actions">
+        <div class="lang-switch" role="group" aria-label="Language">
+          <a href="/auto/" lang="es" hreflang="es-mx">ES</a><span aria-hidden="true">|</span><a href="/en/car/" aria-current="true" lang="en" hreflang="en">EN</a>
+        </div>
+        <a class="contact-cta" href="https://wa.me/525511839779?text=Hi%2C%20I%27m%20interested%20in%20sponsoring%20Striker%20Racing%2C%20could%20we%20talk%3F" target="_blank" rel="noopener">Contact us</a>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<main id="main" tabindex="-1">
+
+<header class="gallery-hero hero-car" id="car">
+  <div class="wrap">
+    <div class="hero-top">
+      <div>
+        <div class="room-tag micro">SR-26 prototype · 2026–2027 season</div>
+        <h1><em>SR-26:</em> the Striker Racing car.</h1>
+      </div>
+      <div>
+        <p class="hero-lead">Spin it with your finger or mouse, open it into an exploded view and check the official technical regulation dimensions.</p>
+        <div class="cta-row">
+          <a class="btn btn-solid" href="/en/budget/">View budget</a>
+          <a class="btn" href="/en/sponsorship/">Sponsor the project</a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="wrap hero-frame">
+    <div class="hero-main">
+      <div class="model-stage" id="modelStage" aria-label="3D model of the SR-26, the Striker Racing car, with an exploded-view animation">
+        <img class="model-poster" src="/car-poster.webp" width="800" height="550" alt="Striker Racing SR-26 car in its purple, white and emerald livery" loading="eager" fetchpriority="high">
+        <span class="model-tag">SR-26 · Striker Racing prototype</span>
+        <span class="model-hint">Drag to rotate</span>
+        <div class="model-loader" aria-hidden="true"><span class="model-spinner"></span></div>
+        <div class="model-fallback">Your browser can't display the interactive 3D model.<br>See the regulation dimensions.</div>
+      </div>
+      <aside class="hud-panel" aria-label="Category regulation dimensions">
+        <div class="hud-head">Technical regulations · Official dimensions</div>
+        <dl class="cotas">
+          <div class="cota"><dt class="micro">Allowed length</dt><dd><span class="big-num">170–210</span><span class="unit">mm</span></dd></div>
+          <div class="cota"><dt class="micro">Minimum mass · without cartridge</dt><dd><span class="big-num">50</span><span class="unit">g</span></dd></div>
+          <div class="cota"><dt class="micro">Propulsion · cartridge</dt><dd><span class="big-num">8</span><span class="unit">g CO₂</span></dd></div>
+          <div class="cota cota-txt"><dt class="micro">Track · wheelbase</dt><dd>20 m · 130.0 mm</dd></div>
+          <div class="cota cota-txt"><dt class="micro">Prototype</dt><dd>SR-26 · in-house Fusion 360 design</dd></div>
+        </dl>
+        <p class="hud-disclaimer">*Visual prototype of the SR-26. The car is modeled under the technical regulations in Autodesk Fusion 360 and validated in Ansys Student CFD; the final design may change.</p>
+      </aside>
+    </div>
+  </div>
+</header>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="footer-grid">
+      <div class="footer-col">
+        <div class="brand"><img class="brand-mark" src="/logo-64.webp" width="34" height="32" alt="">STRIKER RACING</div>
+        <p>Preparatoria Celta, Querétaro · STEM Racing Mexico, 2026–2027 season.</p>
+      </div>
+      <div class="footer-col">
+        <h3 class="footer-heading">Navigate</h3>
+        <ul>
+          <li><a href="/en/">Home</a></li>
+          <li><a href="/en/car/">Car</a></li>
+          <li><a href="/en/budget/">Budget</a></li>
+          <li><a href="/en/sponsorship/">Sponsorship</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h3 class="footer-heading">Contact</h3>
+        <ul>
+          <li><a href="mailto:strikerracingf1@gmail.com">strikerracingf1@gmail.com</a></li>
+          <li><a href="https://instagram.com/striker.racing_mx" target="_blank" rel="noopener" class="social-link">Instagram: @striker.racing_mx</a></li>
+          <li><a href="/en/privacidad.html">Privacy notice</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026–2027 Striker Racing</span>
+      <span>Site built by the team</span>
+    </div>
+  </div>
+</footer>
+
+<button id="backToTop" class="hud-top-btn" type="button" aria-label="Back to top">&#9650; TOP</button>
+
+<script src="/js/site.js" defer></script>
+<script type="module" src="/js/viewer.js"></script>
+</body>
+</html>

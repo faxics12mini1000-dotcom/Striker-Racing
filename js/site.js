@@ -22,6 +22,18 @@
     window.addEventListener('resize', function(){ if(window.innerWidth > 900) setNav(false); });
   }
 
+  // Anclas de la versión de una sola página (#presupuesto, #patrocinios…): llevan a la página nueva.
+  // Solo se redirige si el ancla no existe en esta página (#equipo sigue viviendo en el inicio).
+  var base = lang === 'en' ? '/en/' : '/';
+  var LEGACY = lang === 'en'
+    ? { '#budget':'budget/', '#sponsorship':'sponsorship/', '#tiers':'sponsorship/#tiers', '#contact':'sponsorship/#contact', '#stack':'budget/#stack', '#despiece':'car/' }
+    : { '#presupuesto':'presupuesto/', '#patrocinios':'patrocinios/', '#niveles':'patrocinios/#niveles', '#contacto':'patrocinios/#contacto', '#stack':'presupuesto/#stack', '#despiece':'auto/' };
+  var legacyTarget = LEGACY[location.hash];
+  if(legacyTarget && !document.getElementById(location.hash.slice(1))){
+    location.replace(base + legacyTarget);
+    return;
+  }
+
   // Logo: si ya estamos en el inicio, sube suave en vez de recargar.
   var brand = document.getElementById('brandHome');
   if(brand){
@@ -33,39 +45,6 @@
         window.scrollTo({ top: 0, behavior: 'smooth' });
       }
     });
-  }
-
-  // Resalta en el navbar la sección visible (solo en la página principal, donde los enlaces son anclas).
-  // Nota: se guarda el estado de intersección de CADA sección observada en `intersecting` y, tras
-  // cada lote de entries, se deriva el único enlace activo (el último, en orden del documento, que
-  // siga intersectando la franja) en vez de alternar aria-current entry por entry -- así nunca queda
-  // más de un enlace marcado a la vez, sin importar el orden en que el navegador reporte los cambios.
-  if('IntersectionObserver' in window){
-    var spyLinks = {};
-    var spyOrder = [];
-    document.querySelectorAll('.cockpit-links a[href^="#"]').forEach(function(a){
-      var id = a.getAttribute('href').slice(1);
-      spyLinks[id] = a;
-      spyOrder.push(id);
-    });
-    if(spyOrder.length){
-      var intersecting = {};
-      function applyActive(){
-        var activeId = null;
-        for(var i = 0; i < spyOrder.length; i++){
-          if(intersecting[spyOrder[i]]) activeId = spyOrder[i];
-        }
-        spyOrder.forEach(function(id){
-          if(id === activeId) spyLinks[id].setAttribute('aria-current', 'location');
-          else spyLinks[id].removeAttribute('aria-current');
-        });
-      }
-      var spy = new IntersectionObserver(function(entries){
-        entries.forEach(function(entry){ intersecting[entry.target.id] = entry.isIntersecting; });
-        applyActive();
-      }, { rootMargin: '-45% 0px -50% 0px' });
-      spyOrder.forEach(function(id){ var el = document.getElementById(id); if(el) spy.observe(el); });
-    }
   }
 
   // ---------- VOLVER ARRIBA ----------
