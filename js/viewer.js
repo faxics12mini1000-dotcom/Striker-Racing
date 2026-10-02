@@ -8,8 +8,12 @@
   function fail(){ stage.classList.add('no-3d'); }
   var EN = (document.documentElement.lang || 'es').slice(0, 2) === 'en';
   var TXT = EN
-    ? { slider:'Exploded view of the car', assembled:'Assembled', exploded:'Exploded', pause:'Pause animation', play:'Play animation' }
-    : { slider:'Despiece del auto', assembled:'Armado', exploded:'Despiece', pause:'Pausar animación', play:'Reanudar animación' };
+    ? { slider:'Exploded view of the car', assembled:'Assembled', exploded:'Exploded', pause:'Pause animation', play:'Play animation',
+        steps:['Wheels & axles', 'Wings & nose', 'Sidepods', 'Spine & pillar', 'CO₂ cartridge'] }
+    : { slider:'Despiece del auto', assembled:'Armado', exploded:'Despiece', pause:'Pausar animación', play:'Reanudar animación',
+        steps:['Llantas y ejes', 'Alerones y nariz', 'Pontones', 'Espina y pilar', 'Cartucho CO₂'] };
+  // Pieza que ancla la etiqueta de cada etapa (clave del nodo en el GLB)
+  var LABEL_KEYS = ['17', '05', '02', '24', '15'];
 
   try{
     var testCanvas = document.createElement('canvas');
@@ -116,13 +120,26 @@
       if(t < HOLD_A + MOVE + HOLD_B) return 1;
       return 1 - ease((t - HOLD_A - MOVE - HOLD_B) / MOVE);
     }
+    var stepF = [0, 0, 0, 0, 0, 0];   // avance (0..1) de cada etapa, para las etiquetas
+    var LIFT = 0.007;                 // m: las piezas se elevan un poco al viajar (arco) en vez de ir en recta
     function applyPose(u){
+      for(var s = 1; s <= STEPS; s++) stepF[s] = 0;
       for(var i = 0; i < parts.length; i++){
         var p = parts[i];
-        var d = (p.step - 1) / (STEPS - 1) * 0.45;
-        var f = ease(clamp01((u - d) / 0.55));
+        // escalonado: cada etapa arranca después de la anterior y, dentro de la etapa, cada pieza con un pequeño retraso
+        var d = (p.step - 1) / (STEPS - 1) * 0.42 + p.lag;
+        var f = ease(clamp01((u - d) / 0.5));
         p.mesh.position.copy(p.home).addScaledVector(p.off, f);
+        if(p.lift) p.mesh.position.y += Math.sin(Math.PI * f) * LIFT;
         if(p.wheel) p.mesh.rotation.z = f * Math.PI * 2 * p.spin; // las llantas dan una vuelta al salir
+        if(f > stepF[p.step]) stepF[p.step] = f;
+        if(p.guide){
+          var g = p.guide, a = g.geometry.attributes.position;
+          a.setXYZ(1, p.home.x + p.c.x + p.off.x * f, p.home.y + p.c.y + p.off.y * f, p.home.z + p.c.z + p.off.z * f);
+          a.needsUpdate = true; g.computeLineDistances();
+          g.material.opacity = 0.55 * Math.min(1, f * 3);
+          g.visible = f > 0.02;
+        }
       }
     }
 
@@ -178,6 +195,21 @@
       return new THREE.CanvasTexture(c);
     }
 
+    var labelHost = null, labels = [];
+    var tmpBox = new THREE.Box3(), tmpV = new THREE.Vector3();
+    function updateLabels(){
+      if(!labelHost) return;
+      var w = stage.clientWidth, h = stage.clientHeight;
+      for(var i = 0; i < labels.length; i++){
+        var L = labels[i], a = clamp01((stepF[L.step] - 0.35) / 0.4);
+        if(!L.mesh || a <= 0.01){ L.el.style.opacity = 0; continue; }
+        tmpBox.setFromObject(L.mesh).getCenter(tmpV).project(camera);
+        var x = (tmpV.x * 0.5 + 0.5) * w, y = (-tmpV.y * 0.5 + 0.5) * h;
+        L.el.style.opacity = a;
+        L.el.style.transform = 'translate(' + Math.round(Math.min(Math.max(x, 8), w - L.el.offsetWidth - 24)) + 'px,' + Math.round(Math.min(Math.max(y, 8), h - 56)) + 'px)';
+      }
+    }
+
     var loader = new GLTFLoader();
     if(MeshoptDecoder) loader.setMeshoptDecoder(MeshoptDecoder);
     loader.load(new URL('../assets/models/sr26.glb?v=3', import.meta.url).href, function(gltf){
@@ -193,11 +225,42 @@
         byKey[k] = obj;
         var ex = EXPLODE[k];
         if(ex){
-          parts.push({ mesh:obj, home:obj.position.clone(), off:new THREE.Vector3(ex.off[0], ex.off[1], ex.off[2]).multiplyScalar(0.001),
-                       step:ex.step, wheel:/^1[6-9]$/.test(k), spin:obj.position.z < 0 ? -1 : 1 });
+          var off = new THREE.Vector3(ex.off[0], ex.off[1], ex.off[2]).multiplyScalar(0.001);
+          obj.geometry.computeBoundingBox();
+          parts.push({ mesh:obj, home:obj.position.clone(), off:off, step:ex.step, wheel:/^1[6-9]$/.test(k), spin:obj.position.z < 0 ? -1 : 1,
+                       lift:Math.abs(off.y) < 1e-6, lag:(parseInt(k, 10) % 3) * 0.025,
+                       c:obj.geometry.boundingBox.getCenter(new THREE.Vector3()) });
         }
       });
       model.updateMatrixWorld(true);
+
+      // Líneas guía punteadas (una por clave de pieza; las dos mallas de una llanta comparten línea)
+      var seenGuide = {};
+      parts.forEach(function(p){
+        var k = p.mesh.name.slice(0, 2);
+        if(seenGuide[k]) return;
+        seenGuide[k] = true;
+        var geo = new THREE.BufferGeometry();
+        var start = p.home.clone().add(p.c);
+        geo.setAttribute('position', new THREE.Float32BufferAttribute([start.x, start.y, start.z, start.x, start.y, start.z], 3));
+        var line = new THREE.Line(geo, new THREE.LineDashedMaterial({ color:0xCDDEEF, dashSize:0.005, gapSize:0.004, transparent:true, opacity:0, depthTest:false, depthWrite:false, toneMapped:false }));
+        line.renderOrder = 5; line.visible = false; line.frustumCulled = false;
+        model.add(line);
+        p.guide = line;
+      });
+
+      // Etiquetas por etapa (HTML sobre el visor, ancladas a una pieza de cada etapa)
+      labelHost = document.createElement('div');
+      labelHost.className = 'car-labels';
+      labelHost.setAttribute('aria-hidden', 'true');
+      LABEL_KEYS.forEach(function(k, i){
+        var el = document.createElement('span');
+        el.className = 'car-label';
+        el.innerHTML = '<b>' + (i + 1) + '</b>' + TXT.steps[i];
+        labelHost.appendChild(el);
+        labels.push({ el:el, mesh:byKey[k], step:i + 1 });
+      });
+      stage.appendChild(labelHost);
 
       // Logos dibujados en código (espina + espacios disponibles). Si falla la carga, el auto se ve igual.
       Look.addLogoDecals(byKey, new URL('../logo.png', import.meta.url).href, EN ? 'en' : 'es').then(function(){ needsRender = true; startLoop(); }).catch(function(){});
@@ -345,6 +408,7 @@
       if(needsRender){
         applyFit();
         renderer.render(scene, camera);
+        updateLabels();
         needsRender = false;
       }
       if(stillAnimating) startLoop();
