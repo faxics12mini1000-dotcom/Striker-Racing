@@ -301,6 +301,7 @@ section{padding:104px 0;}
   .team-stats{grid-template-columns:repeat(2,minmax(0,1fr)); gap:32px 24px; margin-bottom:56px;}
 }
 .pass-head{display:none;}
+.pass-tools-toggle{display:none;}
 .pass-top{position:absolute; top:0; left:0; padding:18px 20px 0;}
 .pass-no{font-family:var(--mono); font-size:0.85rem; font-weight:700; letter-spacing:0.12em; color:var(--ice); background:rgba(7,27,51,0.75); padding:4px 10px;}
 .pass-id{padding:0 22px;}
@@ -516,6 +517,17 @@ footer .brand-mark{height:26px;}
 @media (max-width:800px){
   .paddock-pass{min-height:640px;}
   .paddock-pass::before{background:linear-gradient(180deg, rgba(7,27,51,0) 8%, rgba(7,27,51,0.9) 42%, #071B33 66%);}
+  /* Táctil: las herramientas se despliegan con un toque en la card (o en el botón) */
   .paddock-pass .pass-chips{display:none;}
+  .paddock-pass.is-open .pass-chips{display:flex;}
+  .pass-tools-toggle{
+    display:flex; justify-content:space-between; align-items:center; width:calc(100% - 44px); margin:14px 22px 0; padding:10px 0 0;
+    background:none; border:none; border-top:1px solid var(--border-fine); cursor:pointer; text-align:left;
+    font-family:var(--mono); font-size:0.7rem; letter-spacing:0.12em; text-transform:uppercase; color:var(--ice);
+  }
+  .pass-tools-toggle::after{content:"+"; font-size:1.1rem; color:var(--emerald); letter-spacing:0;}
+  .paddock-pass.is-open .pass-tools-toggle::after{content:"–";}
+  .paddock-pass.is-open .pass-chips{padding-top:10px;}
+  .paddock-pass{cursor:pointer;}
   .team-feature .team-stats{gap:28px 20px;}
 }

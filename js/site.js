@@ -47,6 +47,19 @@
     });
   }
 
+  // ---------- CARDS DE EQUIPO (táctil): un toque despliega las herramientas ----------
+  var narrow = window.matchMedia ? window.matchMedia('(max-width:800px)') : { matches:false };
+  document.querySelectorAll('.paddock-pass').forEach(function(card){
+    var btn = card.querySelector('.pass-tools-toggle');
+    if(!btn) return;
+    function set(open){ card.classList.toggle('is-open', open); btn.setAttribute('aria-expanded', open ? 'true' : 'false'); }
+    btn.addEventListener('click', function(e){ e.stopPropagation(); set(!card.classList.contains('is-open')); });
+    card.addEventListener('click', function(e){
+      if(!narrow.matches || e.target.closest('a, button')) return;
+      set(!card.classList.contains('is-open'));
+    });
+  });
+
   // ---------- VOLVER ARRIBA ----------
   var backToTop = document.getElementById('backToTop');
   if(backToTop){
