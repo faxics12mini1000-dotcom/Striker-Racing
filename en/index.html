@@ -89,7 +89,6 @@
 </script>
 <link rel="stylesheet" href="../css/site.css">
 <link rel="stylesheet" href="../css/gallery.css">
-<link rel="stylesheet" href="/despiece/sr26-despiece.css">
 </head>
 <body>
 
@@ -137,9 +136,9 @@
   </div>
   <div class="wrap hero-frame">
     <div class="hero-main">
-      <div class="model-stage" id="modelStage" aria-label="Reference 3D model with the Striker Racing livery">
-        <img class="model-poster" src="../car-poster.webp" width="800" height="550" alt="Reference view of the Striker Racing car, blue and green livery" loading="eager" fetchpriority="high">
-        <span class="model-tag">Aerodynamic benchmark · F1 concept ref</span>
+      <div class="model-stage" id="modelStage" aria-label="3D model of the SR-26, the Striker Racing car, with an exploded-view animation">
+        <img class="model-poster" src="../car-poster.webp" width="800" height="550" alt="Striker Racing SR-26 car in its purple, white and emerald livery" loading="eager" fetchpriority="high">
+        <span class="model-tag">SR-26 · Striker Racing prototype</span>
         <span class="model-hint">Drag to rotate</span>
         <div class="model-loader" aria-hidden="true"><span class="model-spinner"></span></div>
         <div class="model-fallback">Your browser can't display the interactive 3D model.<br>See the regulation dimensions.</div>
@@ -151,51 +150,13 @@
           <div class="cota"><dt class="micro">Minimum mass · without cartridge</dt><dd><span class="big-num">50</span><span class="unit">g</span></dd></div>
           <div class="cota"><dt class="micro">Propulsion · cartridge</dt><dd><span class="big-num">8</span><span class="unit">g CO₂</span></dd></div>
           <div class="cota cota-txt"><dt class="micro">Track · wheelbase</dt><dd>20 m · 130.0 mm</dd></div>
-          <div class="cota cota-txt"><dt class="micro">Aerodynamic benchmark</dt><dd>F1 concept ref. (AMR-inspired)</dd></div>
+          <div class="cota cota-txt"><dt class="micro">Prototype</dt><dd>SR-26 · in-house Fusion 360 design</dd></div>
         </dl>
-        <p class="hud-disclaimer">*Aerodynamic reference 3D geometry. The official Striker Racing car is modeled under the technical regulations in Autodesk Fusion 360 and validated in Ansys Student CFD.</p>
+        <p class="hud-disclaimer">*Visual prototype of the SR-26. The car is modeled under the technical regulations in Autodesk Fusion 360 and validated in Ansys Student CFD; the final design may change.</p>
       </aside>
     </div>
   </div>
 </header>
-
-<!-- Scroll-driven 3D exploded view of the SR-26 (not in the menu) -->
-<section class="sr-despiece" id="despiece" aria-label="Exploded view of the Striker Racing car, part by part">
-  <div class="sr-stage">
-    <div class="sr-canvas"></div>
-    <header class="sr-top">
-      <img class="sr-logo" src="/logo-64.webp" width="34" height="32" alt="">
-      <div><b>Striker Racing</b><span>Car prototype · exploded view</span></div>
-      <span class="sr-chip"></span>
-    </header>
-    <div class="sr-title on">
-      <h2><em>SR-26,</em> part by part.</h2>
-      <p>STEM Racing Mexico prototype</p>
-      <small>Scroll to take it apart ↓</small>
-    </div>
-    <div class="sr-dims"></div>
-    <svg class="sr-lines" aria-hidden="true"></svg>
-    <div class="sr-card" aria-live="polite"></div>
-    <div class="sr-table"></div>
-    <div class="sr-bar">
-      <div class="sr-bar-label">Assembled car</div>
-      <div class="sr-track"><div class="sr-bar-fill"></div><div class="sr-ticks"></div></div>
-      <span class="sr-credit">Visual prototype · dimensions taken from the 3D model</span>
-    </div>
-    <div class="sr-fallback">
-      <div><img src="/car-poster.webp" alt="Striker Racing car" width="400" height="275" style="max-width:100%;height:auto"><p>Your browser can't display the 3D model. These are the SR-26 parts: body, sidepods, nose, wings, halo, helmet, CO₂ cartridge, wheels, axles and tether guides.</p></div>
-    </div>
-  </div>
-</section>
-<script type="module">
-(function(){
-  var sec = document.getElementById('despiece'), nav = document.querySelector('.cockpit');
-  if (nav && 'ResizeObserver' in window) new ResizeObserver(function(){ sec.style.setProperty('--sr-nav', nav.offsetHeight + 'px'); }).observe(nav);
-  var go = function(){ import('/despiece/sr26-despiece.js').then(function(m){ m.initDespiece(sec, { glb:'/despiece/sr26.glb', logo:'/logo.png', clase:'entry', lang:'en' }); }).catch(function(){ sec.classList.add('no-3d'); }); };
-  if ('IntersectionObserver' in window) new IntersectionObserver(function(es, io){ if (es[0].isIntersecting) { io.disconnect(); go(); } }, { rootMargin:'600px' }).observe(sec);
-  else go();
-})();
-</script>
 
 
 <section id="manifesto" class="reveal">
@@ -288,7 +249,7 @@
       </div>
     </div>
     <figure class="team-photo">
-      <img src="team/grupo.webp" width="750" height="482" loading="lazy" decoding="async" alt="Striker Racing team members with their mentor, Preparatoria Celta">
+      <img src="../team/grupo.webp" width="750" height="482" loading="lazy" decoding="async" alt="Striker Racing team members with their mentor, Preparatoria Celta">
       <figcaption>Striker Racing · Preparatoria Celta, Querétaro</figcaption>
     </figure>
     <dl class="team-stats" aria-label="Team facts">
@@ -301,7 +262,7 @@
     <div class="pass-grid">
 
       <article class="card-reveal paddock-pass">
-        <img class="pass-img" src="team/ari.webp" width="680" height="1020" loading="lazy" decoding="async" alt="Ariadna Mejía, Team Direction &amp; CAD Design, Striker Racing">
+        <img class="pass-img" src="../team/ari.webp" width="680" height="1020" loading="lazy" decoding="async" alt="Ariadna Mejía, Team Direction &amp; CAD Design, Striker Racing">
         <div class="pass-head"><span class="micro">Team member</span><span class="micro">Striker Racing · 26/27</span></div>
         <div class="pass-top"><div class="pass-no">01</div></div>
         <div class="pass-id">
@@ -318,7 +279,7 @@
       </article>
 
       <article class="card-reveal paddock-pass">
-        <img class="pass-img" src="team/unai.webp" width="680" height="1020" loading="lazy" decoding="async" alt="Unai Bozalongo, Operations &amp; Finance Direction, Striker Racing">
+        <img class="pass-img" src="../team/unai.webp" width="680" height="1020" loading="lazy" decoding="async" alt="Unai Bozalongo, Operations &amp; Finance Direction, Striker Racing">
         <div class="pass-head"><span class="micro">Team member</span><span class="micro">Striker Racing · 26/27</span></div>
         <div class="pass-top"><div class="pass-no">02</div></div>
         <div class="pass-id">
@@ -335,7 +296,7 @@
       </article>
 
       <article class="card-reveal paddock-pass">
-        <img class="pass-img" src="team/mafer.webp" width="680" height="1020" loading="lazy" decoding="async" alt="María Fernanda Escobar, Creative &amp; Brand Direction, Striker Racing">
+        <img class="pass-img" src="../team/mafer.webp" width="680" height="1020" loading="lazy" decoding="async" alt="María Fernanda Escobar, Creative &amp; Brand Direction, Striker Racing">
         <div class="pass-head"><span class="micro">Team member</span><span class="micro">Striker Racing · 26/27</span></div>
         <div class="pass-top"><div class="pass-no">03</div></div>
         <div class="pass-id">
@@ -352,7 +313,7 @@
       </article>
 
       <article class="card-reveal paddock-pass">
-        <img class="pass-img" src="team/ulises.webp" width="680" height="1020" loading="lazy" decoding="async" alt="Josué Ulises Gutiérrez, Manufacturing &amp; Prototyping Lead, Striker Racing">
+        <img class="pass-img" src="../team/ulises.webp" width="680" height="1020" loading="lazy" decoding="async" alt="Josué Ulises Gutiérrez, Manufacturing &amp; Prototyping Lead, Striker Racing">
         <div class="pass-head"><span class="micro">Team member</span><span class="micro">Striker Racing · 26/27</span></div>
         <div class="pass-top"><div class="pass-no">04</div></div>
         <div class="pass-id">
@@ -369,7 +330,7 @@
       </article>
 
       <article class="card-reveal paddock-pass">
-        <img class="pass-img" src="team/carlo.webp" width="680" height="1020" loading="lazy" decoding="async" alt="Carlo David Serafín, Chief Technology Officer (CTO) &amp; CFD Analysis, Striker Racing">
+        <img class="pass-img" src="../team/carlo.webp" width="680" height="1020" loading="lazy" decoding="async" alt="Carlo David Serafín, Chief Technology Officer (CTO) &amp; CFD Analysis, Striker Racing">
         <div class="pass-head"><span class="micro">Team member</span><span class="micro">Striker Racing · 26/27</span></div>
         <div class="pass-top"><div class="pass-no">05</div></div>
         <div class="pass-id">
@@ -386,8 +347,8 @@
       </article>
 
       <article class="card-reveal paddock-pass is-mentor">
-        <img class="pass-img" src="team/profe-alex.webp" width="680" height="1020" loading="lazy" decoding="async" alt="Alejandro Félix Barajas, Mechatronics Engineer · Official Mentor, Striker Racing">
-        <div class="pass-head"><span class="micro">Mentor</span><span class="micro">Institutional backing · Colegio Celta</span></div>
+        <img class="pass-img" src="../team/profe-alex.webp" width="680" height="1020" loading="lazy" decoding="async" alt="Alejandro Félix Barajas, Mechatronics Engineer · Official Mentor, Striker Racing">
+        <div class="pass-head"><span class="micro">Mentor</span><span class="micro">Institutional backing · Preparatoria Celta</span></div>
         <div class="pass-top"><div class="pass-no">MT</div></div>
         <div class="pass-id">
           <h3>Alejandro Félix Barajas</h3>
@@ -397,7 +358,7 @@
         <ul class="pass-skills">
           <li>Official technical advising before STEM Racing Mexico</li>
           <li>Supervision of CAD, manufacturing and regulations</li>
-          <li>Institutional link with Colegio Celta Internacional</li>
+          <li>Institutional link with Preparatoria Celta</li>
         </ul>
         <div class="pass-chips"><span>SolidWorks CSWA / CSWP</span><span>Lean Six Sigma Black Belt</span><span>CAD / Robotics</span></div>
         <div class="pass-foot"><button class="cv-view-btn" type="button" data-file="../cv/alejandro-felix.pdf" data-name="Alejandro Félix Barajas">View Technical Credential</button></div>
@@ -509,55 +470,26 @@
       <h2>Choose your tier</h2>
     </div>
 
-    <div class="zone-diagram card-reveal">
-      <div class="zone-diagram-caption">Logo zones — hover, tap or tab through each tier to see where your brand goes</div>
-      <svg viewBox="0 0 560 190" role="img" aria-label="Diagram of available logo zones on the car (side view) and on the uniform (front and back)">
-        <text x="14" y="20" class="zone-caption">CAR · SIDE VIEW</text>
-        <rect class="zone-base" x="60" y="95" width="160" height="30" rx="6"/>
-        <polygon class="zone-base" points="20,110 60,95 60,125"/>
-        <circle class="zone-wheel" cx="80" cy="132" r="13"/>
-        <circle class="zone-wheel" cx="200" cy="132" r="13"/>
-        <polygon class="zone-shape" data-zone="nose" aria-label="Car zone: nose" aria-pressed="false" points="24,110 60,98 60,122"/>
-        <rect class="zone-shape" data-zone="side-pontoon" aria-label="Car zone: chassis side" aria-pressed="false" x="95" y="97" width="65" height="26"/>
-        <rect class="zone-shape" data-zone="rear-wing" aria-label="Car zone: rear wing" aria-pressed="false" x="218" y="86" width="10" height="52"/>
-
-        <text x="330" y="20" class="zone-caption">UNIFORM · FRONT / BACK</text>
-        <rect class="zone-base" x="330" y="40" width="66" height="112" rx="10"/>
-        <rect class="zone-base" x="308" y="46" width="18" height="46" rx="6"/>
-        <rect class="zone-base" x="450" y="40" width="66" height="112" rx="10"/>
-        <rect class="zone-shape" data-zone="front-chest" aria-label="Uniform zone: chest" aria-pressed="false" x="345" y="58" width="36" height="28"/>
-        <rect class="zone-shape" data-zone="sleeve" aria-label="Uniform zone: sleeve" aria-pressed="false" x="308" y="46" width="18" height="46" rx="6"/>
-        <rect class="zone-shape" data-zone="upper-back" aria-label="Uniform zone: upper back" aria-pressed="false" x="460" y="50" width="46" height="34"/>
-        <rect class="zone-shape" data-zone="lower-back" aria-label="Uniform zone: lower back" aria-pressed="false" x="460" y="112" width="46" height="30"/>
-      </svg>
-      <div class="zone-diagram-cta">
-        <button class="profile-btn" type="button" data-open="dlg-configurator">Try the logo configurator</button>
-        <span>Upload your logo and see how it would look on the 3D car.</span>
-      </div>
-    </div>
-
     <div class="tiers">
-      <div class="card-reveal tier" data-zones="lower-back">
-        <div class="tier-cupo" data-config="sponsorTiers.0.availability">5 of 5 spots available</div>
+      <div class="card-reveal tier">
         <h3>Collaborator</h3>
-        <div class="price">$1,500–2,999</div>
+        <div class="price">$1,500 – $3,000</div>
         <div class="price-note">MXN</div>
         <ul>
           <li><b>Uniform:</b> logo on lower back</li>
-          <li><b>Presence:</b> perimeter mention on the pit display (tent) and on the team's social media</li>
+          <li><b>Presence:</b> perimeter mention on the pit display (stand) and on the team's social media</li>
         </ul>
         <div class="tier-cta">
           <a class="tier-btn" href="https://wa.me/525511839779?text=Hi%2C%20I%27m%20interested%20in%20the%20Collaborator%20tier%20sponsorship%20dossier%20for%20Striker%20Racing%2C%20could%20you%20share%20it%20with%20me%3F" target="_blank" rel="noopener">Request dossier · WhatsApp</a>
           <a class="tier-mail" href="mailto:strikerracingf1@gmail.com?subject=Striker%20Racing%20Sponsorship%3A%20Collaborator%20Tier">Email</a>
         </div>
       </div>
-      <div class="card-reveal tier" data-zones="upper-back">
-        <div class="tier-cupo" data-config="sponsorTiers.1.availability">5 of 5 spots available</div>
+      <div class="card-reveal tier">
         <h3>Booster</h3>
-        <div class="price">$3,000–5,999</div>
+        <div class="price">$3,000 – $6,000</div>
         <div class="price-note">MXN</div>
         <ul>
-          <li><b>Uniform:</b> logo on shoulder blades / upper back (higher visibility)</li>
+          <li><b>Uniform:</b> logo on shoulder blades / upper back</li>
           <li><b>Presence:</b> featured pit display placement and acknowledgment in the technical report</li>
         </ul>
         <div class="tier-cta">
@@ -565,32 +497,28 @@
           <a class="tier-mail" href="mailto:strikerracingf1@gmail.com?subject=Striker%20Racing%20Sponsorship%3A%20Booster%20Tier">Email</a>
         </div>
       </div>
-      <div class="card-reveal tier" data-zones="sleeve,side-pontoon">
-        <div class="tier-cupo" data-config="sponsorTiers.2.availability">4 of 4 spots available</div>
+      <div class="card-reveal tier">
         <h3>Technical Ally</h3>
-        <div class="price">$6,000–9,999</div>
+        <div class="price">$6,000 – $10,000</div>
         <div class="price-note">MXN</div>
         <ul>
           <li><b>Uniform:</b> exclusive space on the left or right sleeve (arm)</li>
           <li><b>Car:</b> logo on the chassis sides and rear wing</li>
-          <li>Accepts 100% in-kind equivalence: CNC machining or prototype materials</li>
         </ul>
         <div class="tier-cta">
           <a class="tier-btn" href="https://wa.me/525511839779?text=Hi%2C%20I%27m%20interested%20in%20the%20Technical%20Ally%20tier%20sponsorship%20dossier%20for%20Striker%20Racing%2C%20could%20you%20share%20it%20with%20me%3F" target="_blank" rel="noopener">Request dossier · WhatsApp</a>
           <a class="tier-mail" href="mailto:strikerracingf1@gmail.com?subject=Striker%20Racing%20Sponsorship%3A%20Technical%20Ally%20Tier">Email</a>
         </div>
       </div>
-      <div class="card-reveal tier featured" data-zones="front-chest,nose">
+      <div class="card-reveal tier featured">
         <span class="ribbon">Custom</span>
-        <div class="tier-cupo" data-config="sponsorTiers.3.availability">Single spot · custom partnership</div>
         <h3>Strategic Partner</h3>
-        <div class="price">$18,950+</div>
+        <div class="price">+ $10,000</div>
         <div class="price-note">MXN</div>
         <ul>
           <li><b>Uniform:</b> central sponsor on the chest (front) and main back number</li>
           <li><b>Car:</b> nose / front tip, with the option of two main spaces depending on the proposal</li>
-          <li><b>Activation &amp; merch:</b> brand integration on the team's official notebooks and pens</li>
-          <li>Corporate flyer distribution at the pit display and full co-branding</li>
+          <li><b>Activation &amp; merch:</b> custom system</li>
         </ul>
         <div class="tier-cta">
           <a class="tier-btn" href="https://wa.me/525511839779?text=Hi%2C%20I%27m%20interested%20in%20the%20Strategic%20Partner%20tier%20sponsorship%20dossier%20for%20Striker%20Racing%2C%20could%20you%20share%20it%20with%20me%3F" target="_blank" rel="noopener">Request dossier · WhatsApp</a>
@@ -599,7 +527,9 @@
       </div>
     </div>
 
-    <h3 class="faq-title">Frequently asked questions</h3>
+    <p class="tiers-note">We accept both cash and in-kind sponsorships. <b>Confirm before November 23</b> so your brand joins the 2026–2027 season.</p>
+
+    <h2 class="faq-title">Frequently asked questions</h2>
     <div class="faq">
       <details>
         <summary>Can sponsorship be in kind instead of cash?</summary>
@@ -620,49 +550,6 @@
     </div>
   </div>
 
-  <dialog class="profile-dialog configurator-dialog" id="dlg-configurator">
-    <div class="profile-dialog-inner">
-      <div class="profile-dialog-head">
-        <h3>Logo configurator</h3>
-        <button class="profile-close" type="button" data-close aria-label="Close configurator">✕</button>
-      </div>
-      <p class="configurator-note">Upload your logo, choose a tier and zone, and see it as a decal on the 3D car. The file is processed only in your browser: it's never uploaded to any server (see <a href="privacidad.html" style="color:var(--emerald);">privacy notice</a>).</p>
-
-      <div class="configurator-grid">
-        <div class="configurator-controls">
-          <label class="configurator-field">
-            <span>1. Your logo (PNG or JPG, transparent background recommended)</span>
-            <input type="file" id="cfgLogoInput" accept="image/png,image/jpeg,image/webp,image/svg+xml">
-          </label>
-          <label class="configurator-field">
-            <span>2. Sponsorship tier</span>
-            <select id="cfgTierSelect">
-              <option value="colaborador" data-zone="nose">Collaborator (uniform: lower back)</option>
-              <option value="impulsor" data-zone="nose">Booster (uniform: upper back)</option>
-              <option value="aliado-tecnico" data-zone="side-pontoon">Technical Ally (car: chassis side)</option>
-              <option value="partner" data-zone="nose">Strategic Partner (car: nose)</option>
-            </select>
-          </label>
-          <label class="configurator-field">
-            <span>3. Zone on the 3D car</span>
-            <select id="cfgZoneSelect">
-              <option value="nose">Nose</option>
-              <option value="side-pontoon">Chassis side</option>
-              <option value="rear-wing">Rear wing</option>
-            </select>
-          </label>
-          <p class="configurator-hint" id="cfgUniformHint" hidden>This tier places your logo on the uniform, not on the car. Here you can preview size and color on the chassis as a reference.</p>
-          <button class="btn btn-solid" type="button" id="cfgDownloadBtn" disabled>Download preview (PNG)</button>
-        </div>
-        <div class="configurator-stage-wrap">
-          <div class="model-stage configurator-stage" id="cfgStage" aria-label="Preview of the logo on the 3D model of the car">
-            <div class="model-loader" aria-hidden="true"><span class="model-spinner"></span></div>
-            <div class="model-fallback">Your browser can't display the interactive 3D model.</div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </dialog>
 </section>
 
 <section id="contact" class="contact-band reveal">
@@ -736,6 +623,5 @@
 <script src="../js/site.js" defer></script>
 <script src="../js/cv-viewer.js" defer></script>
 <script type="module" src="../js/viewer.js"></script>
-<script type="module" src="../js/configurator.js"></script>
 </body>
 </html>

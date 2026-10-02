@@ -89,7 +89,6 @@
 </script>
 <link rel="stylesheet" href="css/site.css">
 <link rel="stylesheet" href="css/gallery.css">
-<link rel="stylesheet" href="/despiece/sr26-despiece.css">
 </head>
 <body>
 
@@ -137,9 +136,9 @@
   </div>
   <div class="wrap hero-frame">
     <div class="hero-main">
-      <div class="model-stage" id="modelStage" aria-label="Modelo 3D de referencia con librea de Striker Racing">
-        <img class="model-poster" src="car-poster.webp" width="800" height="550" alt="Vista de referencia del monoplaza de Striker Racing, librea azul y verde" loading="eager" fetchpriority="high">
-        <span class="model-tag">Benchmark aerodinámico · Ref. conceptual F1</span>
+      <div class="model-stage" id="modelStage" aria-label="Modelo 3D del SR-26, monoplaza de Striker Racing, con animación de despiece">
+        <img class="model-poster" src="car-poster.webp" width="800" height="550" alt="Monoplaza SR-26 de Striker Racing con su librea morada, blanca y esmeralda" loading="eager" fetchpriority="high">
+        <span class="model-tag">SR-26 · Prototipo Striker Racing</span>
         <span class="model-hint">Arrastra para girar</span>
         <div class="model-loader" aria-hidden="true"><span class="model-spinner"></span></div>
         <div class="model-fallback">Tu navegador no puede mostrar el modelo 3D interactivo.<br>Consulta las cotas reglamentarias.</div>
@@ -151,51 +150,13 @@
           <div class="cota"><dt class="micro">Masa mínima · sin cartucho</dt><dd><span class="big-num">50</span><span class="unit">g</span></dd></div>
           <div class="cota"><dt class="micro">Propulsión · cartucho</dt><dd><span class="big-num">8</span><span class="unit">g CO₂</span></dd></div>
           <div class="cota cota-txt"><dt class="micro">Pista · batalla</dt><dd>20 m · 130.0 mm</dd></div>
-          <div class="cota cota-txt"><dt class="micro">Benchmark aerodinámico</dt><dd>Ref. conceptual F1 (inspiración AMR)</dd></div>
+          <div class="cota cota-txt"><dt class="micro">Prototipo</dt><dd>SR-26 · diseño propio en Fusion 360</dd></div>
         </dl>
-        <p class="hud-disclaimer">*Geometría 3D de referencia aerodinámica. El monoplaza oficial Striker Racing se modela bajo normativa técnica en Autodesk Fusion 360 y se valida en Ansys Student CFD.</p>
+        <p class="hud-disclaimer">*Prototipo visual del SR-26. El monoplaza se modela bajo normativa técnica en Autodesk Fusion 360 y se valida en Ansys Student CFD; el diseño final puede variar.</p>
       </aside>
     </div>
   </div>
 </header>
-
-<!-- Despiece 3D del SR-26 guiado por scroll (no está en el menú) -->
-<section class="sr-despiece" id="despiece" aria-label="Despiece del monoplaza de Striker Racing, pieza por pieza">
-  <div class="sr-stage">
-    <div class="sr-canvas"></div>
-    <header class="sr-top">
-      <img class="sr-logo" src="/logo-64.webp" width="34" height="32" alt="">
-      <div><b>Striker Racing</b><span>Prototipo del carro · despiece</span></div>
-      <span class="sr-chip"></span>
-    </header>
-    <div class="sr-title on">
-      <h2><em>SR-26,</em> pieza por pieza.</h2>
-      <p>Prototipo STEM Racing México</p>
-      <small>Desliza para desarmarlo ↓</small>
-    </div>
-    <div class="sr-dims"></div>
-    <svg class="sr-lines" aria-hidden="true"></svg>
-    <div class="sr-card" aria-live="polite"></div>
-    <div class="sr-table"></div>
-    <div class="sr-bar">
-      <div class="sr-bar-label">Carro armado</div>
-      <div class="sr-track"><div class="sr-bar-fill"></div><div class="sr-ticks"></div></div>
-      <span class="sr-credit">Prototipo visual · medidas tomadas del modelo 3D</span>
-    </div>
-    <div class="sr-fallback">
-      <div><img src="/car-poster.webp" alt="Monoplaza de Striker Racing" width="400" height="275" style="max-width:100%;height:auto"><p>Tu navegador no puede mostrar el modelo 3D. Estas son las piezas del SR-26: cuerpo, pontones, nariz, alerones, halo, casco, cartucho de CO₂, llantas, ejes y guías de cable.</p></div>
-    </div>
-  </div>
-</section>
-<script type="module">
-(function(){
-  var sec = document.getElementById('despiece'), nav = document.querySelector('.cockpit');
-  if (nav && 'ResizeObserver' in window) new ResizeObserver(function(){ sec.style.setProperty('--sr-nav', nav.offsetHeight + 'px'); }).observe(nav);
-  var go = function(){ import('/despiece/sr26-despiece.js').then(function(m){ m.initDespiece(sec, { glb:'/despiece/sr26.glb', logo:'/logo.png', clase:'entry', lang:'es' }); }).catch(function(){ sec.classList.add('no-3d'); }); };
-  if ('IntersectionObserver' in window) new IntersectionObserver(function(es, io){ if (es[0].isIntersecting) { io.disconnect(); go(); } }, { rootMargin:'600px' }).observe(sec);
-  else go();
-})();
-</script>
 
 
 <section id="manifiesto" class="reveal">
@@ -387,7 +348,7 @@
 
       <article class="card-reveal paddock-pass is-mentor">
         <img class="pass-img" src="team/profe-alex.webp" width="680" height="1020" loading="lazy" decoding="async" alt="Alejandro Félix Barajas, Ing. Mecatrónico · Mentor Oficial, Striker Racing">
-        <div class="pass-head"><span class="micro">Mentor</span><span class="micro">Respaldo institucional · Colegio Celta</span></div>
+        <div class="pass-head"><span class="micro">Mentor</span><span class="micro">Respaldo institucional · Preparatoria Celta</span></div>
         <div class="pass-top"><div class="pass-no">MT</div></div>
         <div class="pass-id">
           <h3>Alejandro Félix Barajas</h3>
@@ -397,7 +358,7 @@
         <ul class="pass-skills">
           <li>Asesoría técnica oficial ante STEM Racing México</li>
           <li>Supervisión de CAD, manufactura y reglamento</li>
-          <li>Vínculo institucional con Colegio Celta Internacional</li>
+          <li>Vínculo institucional con Preparatoria Celta</li>
         </ul>
         <div class="pass-chips"><span>SolidWorks CSWA / CSWP</span><span>Lean Six Sigma Black Belt</span><span>CAD / Robótica</span></div>
         <div class="pass-foot"><button class="cv-view-btn" type="button" data-file="cv/alejandro-felix.pdf" data-name="Alejandro Félix Barajas">Ver Credencial Técnica</button></div>
@@ -509,55 +470,26 @@
       <h2>Elige tu nivel</h2>
     </div>
 
-    <div class="zone-diagram card-reveal">
-      <div class="zone-diagram-caption">Zonas de logo — pasa el cursor, toca o navega con teclado cada nivel para ver dónde va tu marca</div>
-      <svg viewBox="0 0 560 190" role="img" aria-label="Diagrama de zonas de logo disponibles en el auto (vista lateral) y en el uniforme (frente y espalda)">
-        <text x="14" y="20" class="zone-caption">AUTO · VISTA LATERAL</text>
-        <rect class="zone-base" x="60" y="95" width="160" height="30" rx="6"/>
-        <polygon class="zone-base" points="20,110 60,95 60,125"/>
-        <circle class="zone-wheel" cx="80" cy="132" r="13"/>
-        <circle class="zone-wheel" cx="200" cy="132" r="13"/>
-        <polygon class="zone-shape" data-zone="nose" aria-label="Zona del auto: nariz" aria-pressed="false" points="24,110 60,98 60,122"/>
-        <rect class="zone-shape" data-zone="side-pontoon" aria-label="Zona del auto: lateral del chasis" aria-pressed="false" x="95" y="97" width="65" height="26"/>
-        <rect class="zone-shape" data-zone="rear-wing" aria-label="Zona del auto: alerón trasero" aria-pressed="false" x="218" y="86" width="10" height="52"/>
-
-        <text x="330" y="20" class="zone-caption">UNIFORME · FRENTE / ESPALDA</text>
-        <rect class="zone-base" x="330" y="40" width="66" height="112" rx="10"/>
-        <rect class="zone-base" x="308" y="46" width="18" height="46" rx="6"/>
-        <rect class="zone-base" x="450" y="40" width="66" height="112" rx="10"/>
-        <rect class="zone-shape" data-zone="front-chest" aria-label="Zona del uniforme: pecho" aria-pressed="false" x="345" y="58" width="36" height="28"/>
-        <rect class="zone-shape" data-zone="sleeve" aria-label="Zona del uniforme: manga" aria-pressed="false" x="308" y="46" width="18" height="46" rx="6"/>
-        <rect class="zone-shape" data-zone="upper-back" aria-label="Zona del uniforme: espalda alta" aria-pressed="false" x="460" y="50" width="46" height="34"/>
-        <rect class="zone-shape" data-zone="lower-back" aria-label="Zona del uniforme: espalda baja" aria-pressed="false" x="460" y="112" width="46" height="30"/>
-      </svg>
-      <div class="zone-diagram-cta">
-        <button class="profile-btn" type="button" data-open="dlg-configurator">Probar el configurador de logo</button>
-        <span>Sube tu logo y ve cómo se vería en el auto 3D.</span>
-      </div>
-    </div>
-
     <div class="tiers">
-      <div class="card-reveal tier" data-zones="lower-back">
-        <div class="tier-cupo" data-config="sponsorTiers.0.availability">5 de 5 espacios disponibles</div>
+      <div class="card-reveal tier">
         <h3>Colaborador</h3>
-        <div class="price">$1,500–2,999</div>
+        <div class="price">$1,500 – $3,000</div>
         <div class="price-note">MXN</div>
         <ul>
-          <li><b>Uniforme:</b> logotipo en cuadrante inferior de espalda (lower back)</li>
-          <li><b>Presencia:</b> mención perimetral en Pit Display (carpa) y en redes sociales del equipo</li>
+          <li><b>Uniforme:</b> logotipo en cuadrante inferior de espalda</li>
+          <li><b>Presencia:</b> mención perimetral en Pit Display (stand) y en redes sociales del equipo</li>
         </ul>
         <div class="tier-cta">
           <a class="tier-btn" href="https://wa.me/525511839779?text=Hola%2C%20me%20interesa%20el%20dossier%20de%20patrocinio%20nivel%20Colaborador%20de%20Striker%20Racing%2C%20%C2%BFme%20lo%20pueden%20compartir%3F" target="_blank" rel="noopener">Solicitar dossier · WhatsApp</a>
           <a class="tier-mail" href="mailto:strikerracingf1@gmail.com?subject=Patrocinio%20Striker%20Racing%3A%20Nivel%20Colaborador">Correo</a>
         </div>
       </div>
-      <div class="card-reveal tier" data-zones="upper-back">
-        <div class="tier-cupo" data-config="sponsorTiers.1.availability">5 de 5 espacios disponibles</div>
+      <div class="card-reveal tier">
         <h3>Impulsor</h3>
-        <div class="price">$3,000–5,999</div>
+        <div class="price">$3,000 – $6,000</div>
         <div class="price-note">MXN</div>
         <ul>
-          <li><b>Uniforme:</b> logotipo en omóplatos / espalda alta (upper back, mayor visibilidad)</li>
+          <li><b>Uniforme:</b> logotipo en omóplatos / espalda alta</li>
           <li><b>Presencia:</b> Pit Display destacado y agradecimiento en memoria técnica</li>
         </ul>
         <div class="tier-cta">
@@ -565,32 +497,28 @@
           <a class="tier-mail" href="mailto:strikerracingf1@gmail.com?subject=Patrocinio%20Striker%20Racing%3A%20Nivel%20Impulsor">Correo</a>
         </div>
       </div>
-      <div class="card-reveal tier" data-zones="sleeve,side-pontoon">
-        <div class="tier-cupo" data-config="sponsorTiers.2.availability">4 de 4 espacios disponibles</div>
+      <div class="card-reveal tier">
         <h3>Aliado Técnico</h3>
-        <div class="price">$6,000–9,999</div>
+        <div class="price">$6,000 – $10,000</div>
         <div class="price-note">MXN</div>
         <ul>
           <li><b>Uniforme:</b> espacio exclusivo en manga izquierda o derecha (brazo)</li>
           <li><b>Auto:</b> logotipo en laterales del chasis y alerón trasero</li>
-          <li>Acepta equivalencia 100% en especie: maquinado CNC o materiales de prototipo</li>
         </ul>
         <div class="tier-cta">
           <a class="tier-btn" href="https://wa.me/525511839779?text=Hola%2C%20me%20interesa%20el%20dossier%20de%20patrocinio%20nivel%20Aliado%20T%C3%A9cnico%20de%20Striker%20Racing%2C%20%C2%BFme%20lo%20pueden%20compartir%3F" target="_blank" rel="noopener">Solicitar dossier · WhatsApp</a>
           <a class="tier-mail" href="mailto:strikerracingf1@gmail.com?subject=Patrocinio%20Striker%20Racing%3A%20Nivel%20Aliado%20T%C3%A9cnico">Correo</a>
         </div>
       </div>
-      <div class="card-reveal tier featured" data-zones="front-chest,nose">
+      <div class="card-reveal tier featured">
         <span class="ribbon">Personalizado</span>
-        <div class="tier-cupo" data-config="sponsorTiers.3.availability">Cupo único · alianza personalizada</div>
         <h3>Partner Estratégico</h3>
-        <div class="price">$18,950+</div>
+        <div class="price">+ $10,000</div>
         <div class="price-note">MXN</div>
         <ul>
           <li><b>Uniforme:</b> patrocinador central en el pecho (front) y dorsal principal</li>
           <li><b>Auto:</b> nariz / trompa frontal, con opción a dos espacios principales según propuesta</li>
-          <li><b>Activación y merch:</b> integración de marca en libretas y plumas oficiales del equipo</li>
-          <li>Distribución de flyers corporativos en el Pit Display y co-branding total</li>
+          <li><b>Activación y merch:</b> sistema personalizado</li>
         </ul>
         <div class="tier-cta">
           <a class="tier-btn" href="https://wa.me/525511839779?text=Hola%2C%20me%20interesa%20el%20dossier%20de%20patrocinio%20nivel%20Partner%20Estrat%C3%A9gico%20de%20Striker%20Racing%2C%20%C2%BFme%20lo%20pueden%20compartir%3F" target="_blank" rel="noopener">Solicitar dossier · WhatsApp</a>
@@ -599,7 +527,9 @@
       </div>
     </div>
 
-    <h3 class="faq-title">Preguntas frecuentes</h3>
+    <p class="tiers-note">Aceptamos patrocinios monetarios y en especie. <b>Confirma antes del 23 de noviembre</b> para que tu marca entre en la temporada 2026–2027.</p>
+
+    <h2 class="faq-title">Preguntas frecuentes</h2>
     <div class="faq">
       <details>
         <summary>¿El patrocinio puede ser en especie y no en efectivo?</summary>
@@ -620,49 +550,6 @@
     </div>
   </div>
 
-  <dialog class="profile-dialog configurator-dialog" id="dlg-configurator">
-    <div class="profile-dialog-inner">
-      <div class="profile-dialog-head">
-        <h3>Configurador de logo</h3>
-        <button class="profile-close" type="button" data-close aria-label="Cerrar configurador">✕</button>
-      </div>
-      <p class="configurator-note">Sube tu logo, elige nivel y zona, y velo como decal sobre el auto 3D. El archivo se procesa solo en tu navegador: nunca se sube a ningún servidor (ver <a href="privacidad.html" style="color:var(--emerald);">aviso de privacidad</a>).</p>
-
-      <div class="configurator-grid">
-        <div class="configurator-controls">
-          <label class="configurator-field">
-            <span>1. Tu logo (PNG o JPG, fondo transparente recomendado)</span>
-            <input type="file" id="cfgLogoInput" accept="image/png,image/jpeg,image/webp,image/svg+xml">
-          </label>
-          <label class="configurator-field">
-            <span>2. Nivel de patrocinio</span>
-            <select id="cfgTierSelect">
-              <option value="colaborador" data-zone="nose">Colaborador (uniforme: lower back)</option>
-              <option value="impulsor" data-zone="nose">Impulsor (uniforme: upper back)</option>
-              <option value="aliado-tecnico" data-zone="side-pontoon">Aliado Técnico (auto: lateral del chasis)</option>
-              <option value="partner" data-zone="nose">Partner Estratégico (auto: nariz)</option>
-            </select>
-          </label>
-          <label class="configurator-field">
-            <span>3. Zona en el auto 3D</span>
-            <select id="cfgZoneSelect">
-              <option value="nose">Nariz</option>
-              <option value="side-pontoon">Lateral del chasis</option>
-              <option value="rear-wing">Alerón trasero</option>
-            </select>
-          </label>
-          <p class="configurator-hint" id="cfgUniformHint" hidden>Este nivel coloca tu logo en el uniforme, no en el auto. Aquí puedes previsualizar tamaño y color sobre el chasis como referencia.</p>
-          <button class="btn btn-solid" type="button" id="cfgDownloadBtn" disabled>Descargar vista previa (PNG)</button>
-        </div>
-        <div class="configurator-stage-wrap">
-          <div class="model-stage configurator-stage" id="cfgStage" aria-label="Vista previa del logo sobre el modelo 3D del auto">
-            <div class="model-loader" aria-hidden="true"><span class="model-spinner"></span></div>
-            <div class="model-fallback">Tu navegador no puede mostrar el modelo 3D interactivo.</div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </dialog>
 </section>
 
 <section id="contacto" class="contact-band reveal">
@@ -736,6 +623,5 @@
 <script src="js/site.js" defer></script>
 <script src="js/cv-viewer.js" defer></script>
 <script type="module" src="js/viewer.js"></script>
-<script type="module" src="js/configurator.js"></script>
 </body>
 </html>
