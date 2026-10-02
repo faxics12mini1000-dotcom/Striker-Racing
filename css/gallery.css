@@ -408,8 +408,25 @@ dialog.profile-dialog::backdrop{background:rgba(7,27,51,0.85); -webkit-backdrop-
 /* ---------- Contacto y footer ---------- */
 .contact-band{background:var(--surface); border-top:1px solid var(--border-fine);}
 .contact-band h2{text-transform:uppercase; font-weight:600; line-height:1;}
-.contact-links a.contact-primary{color:var(--navy-deep);}
-.contact-links a.contact-secondary{border-color:var(--border-fine);}
+/* Tarjetas de contacto: las tres idénticas en alto, ancho, borde y padding; solo WhatsApp lleva relleno verde. */
+.contact-cards{display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:16px;}
+@media (max-width:700px){ .contact-cards{grid-template-columns:1fr;} }
+.contact-card{
+  display:grid; grid-template-rows:auto auto 1fr; align-content:start; gap:10px; min-height:176px; padding:24px;
+  border:1px solid var(--border-fine); background:transparent; color:var(--ice); text-decoration:none;
+  transition:border-color .15s ease, background .15s ease, color .15s ease;
+}
+@media (max-width:700px){ .contact-card{min-height:0;} }
+.contact-card:hover{border-color:var(--emerald); background:var(--surface-2);}
+.contact-card .cc-icon{display:block; color:var(--emerald);}
+.contact-card .cc-label{font-family:var(--mono); font-size:0.72rem; font-weight:700; letter-spacing:0.14em; color:var(--ice-dim);}
+.contact-card .cc-value{font-family:var(--mono); font-size:1rem; font-weight:500; line-height:1.4; overflow-wrap:anywhere; align-self:end;}
+.contact-card.is-wa{background:var(--emerald); border-color:var(--emerald); color:var(--navy-deep);}
+.contact-card.is-wa .cc-icon, .contact-card.is-wa .cc-label{color:var(--navy-deep);}
+.contact-card.is-wa .cc-value{font-weight:700;}
+.contact-card.is-wa:hover{filter:brightness(0.92); background:var(--emerald);}
+.contact-card:focus-visible{outline:2px solid var(--lime); outline-offset:3px;}
+.contact-band p{margin-bottom:36px;}
 footer{background:var(--navy-deep); border-top:1px solid var(--border-fine);}
 footer .brand{font-size:1rem; margin-bottom:10px;}
 footer .brand-mark{height:26px;}

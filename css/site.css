@@ -404,24 +404,6 @@
   }
   .contact-band h2{color:var(--ice); font-size:clamp(1.8rem,3.6vw,2.6rem); margin-bottom:16px;}
   .contact-band p{color:var(--ice); max-width:520px; margin-bottom:32px; font-size:1.05rem;}
-  .contact-links{display:flex; gap:16px; flex-wrap:wrap; align-items:center;}
-  .contact-links a.contact-primary{
-    padding:15px 28px; border-radius:0;
-    font-family:var(--mono); font-weight:700; font-size:0.92rem; text-decoration:none; color:var(--navy-deep);
-    background:var(--emerald); border:1px solid var(--emerald);
-    transition:filter .15s ease;
-  }
-  .contact-links a.contact-primary:hover{filter:brightness(0.9);}
-  .contact-links a.contact-secondary{
-    padding:13px 22px; border-radius:0;
-    font-family:var(--mono); font-weight:500; font-size:0.86rem; text-decoration:none; color:var(--ice);
-    border:1px solid var(--line); background:transparent;
-    transition:border-color .15s ease, color .15s ease;
-  }
-  .contact-links a.contact-secondary:hover{border-color:var(--emerald); color:var(--emerald);}
-  .contact-meta{margin-top:22px; font-size:0.88rem; color:var(--ice-dim);}
-  .contact-meta .social-link{color:var(--ice-dim); text-decoration:underline;}
-  .contact-meta .social-link:hover{color:var(--emerald);}
   footer{padding:52px 0 26px; color:var(--ice-dim); font-size:0.9rem; background:var(--navy-deep); border-top:1px solid var(--line);}
   .footer-grid{display:grid; grid-template-columns:1.3fr 1fr 1fr; gap:32px; text-align:left;}
   @media (max-width:700px){ .footer-grid{grid-template-columns:1fr; gap:28px;} }
