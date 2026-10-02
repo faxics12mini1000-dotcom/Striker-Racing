@@ -269,12 +269,14 @@ section{padding:104px 0;}
 @media (max-width:1000px){ .pass-grid{grid-template-columns:repeat(2,1fr);} }
 @media (max-width:640px){ .pass-grid{grid-template-columns:1fr;} }
 .paddock-pass{
-  position:relative; display:flex; flex-direction:column; height:100%;
-  background:var(--surface); border:1px solid var(--border-fine);
-  padding:0; transition:border-color .2s ease;
+  position:relative; display:flex; flex-direction:column; justify-content:flex-end; height:100%; min-height:600px; isolation:isolate; overflow:hidden;
+  background:var(--navy-deep); border:1px solid var(--border-fine); padding:0; transition:border-color .2s ease;
 }
 .paddock-pass:hover, .paddock-pass:focus-within{border-color:rgba(18,184,102,0.6);}
-.pass-img{display:block; width:100%; height:auto; aspect-ratio:2/3; object-fit:cover; object-position:top center; border-bottom:1px solid var(--border-fine);}
+/* Foto a sangre como fondo de la tarjeta; degradado al navy oficial en la mitad inferior */
+.pass-img{position:absolute; inset:0; z-index:-2; width:100%; height:100%; object-fit:cover; object-position:top center; transition:transform .6s ease;}
+.paddock-pass::before{content:""; position:absolute; inset:0; z-index:-1; background:linear-gradient(180deg, rgba(7,27,51,0) 28%, rgba(7,27,51,0.82) 58%, #071B33 88%);}
+.paddock-pass:hover .pass-img{transform:scale(1.03);}
 /* Equipo: encabezado -> foto -> cifras -> tarjetas */
 .team-head{margin-bottom:64px;}
 .team-head h2{margin:14px 0 32px; max-width:18ch; text-transform:uppercase; font-weight:600; line-height:1.02; font-size:clamp(1.9rem, 3.8vw, 3rem);}
@@ -294,36 +296,25 @@ section{padding:104px 0;}
   .team-photo{margin-bottom:48px;}
   .team-stats{grid-template-columns:repeat(2,minmax(0,1fr)); gap:32px 24px; margin-bottom:56px;}
 }
-.pass-head{
-  display:flex; justify-content:space-between; align-items:center; gap:12px;
-  padding:12px 20px; border-bottom:1px solid var(--border-fine);
-}
-.pass-head .micro{color:var(--ice-dim);}
-.pass-top{display:flex; justify-content:space-between; align-items:flex-start; gap:16px; padding:22px 20px 0;}
-.pass-no{
-  font-family:var(--mono); font-size:clamp(2.5rem, 5vw, 4.5rem); font-weight:700; line-height:1;
-  letter-spacing:-0.02em; color:var(--purple-text);
-}
-.pass-id{padding:18px 20px 0;}
-.pass-id h3{font-size:1.25rem; line-height:1.2; font-weight:600; margin-bottom:8px;}
-.pass-role{
-  display:inline-block; margin-top:4px; padding:4px 10px;
-  background:var(--purple); color:var(--ice);
-  font-family:var(--mono); font-size:0.72rem; letter-spacing:0.06em; text-transform:uppercase; line-height:1.5;
-}
+.pass-head{display:none;}
+.pass-top{position:absolute; top:0; left:0; padding:18px 20px 0;}
+.pass-no{font-family:var(--mono); font-size:0.85rem; font-weight:700; letter-spacing:0.12em; color:var(--ice); background:rgba(7,27,51,0.75); padding:4px 10px;}
+.pass-id{padding:0 22px;}
+.pass-id h3{font-size:clamp(1.5rem,2.4vw,1.9rem); line-height:1.08; font-weight:600; margin-bottom:10px; text-transform:uppercase;}
+.pass-role{display:inline-block; margin-top:2px; padding:4px 10px; background:var(--purple); color:var(--ice); font-family:var(--mono); font-size:0.72rem; letter-spacing:0.06em; text-transform:uppercase; line-height:1.5;}
 .mentor-quote{
   margin:16px 20px 0; padding:14px 16px; font-size:0.92rem; font-style:italic; color:var(--ice);
   background:rgba(113,55,212,0.08); border-left:3px solid var(--purple);
 }
-.pass-skills{list-style:none; margin:20px 20px 0; padding-top:18px; border-top:1px solid var(--border-fine);}
-.pass-skills li{position:relative; padding:5px 0 5px 22px; font-size:0.92rem; color:var(--ice); line-height:1.45;}
+.pass-skills{list-style:none; margin:16px 22px 0; padding-top:14px; border-top:1px solid var(--border-fine);}
+.pass-skills li{position:relative; padding:3px 0 3px 22px; font-size:0.88rem; color:var(--ice); line-height:1.45;}
 .pass-skills li::before{content:"—"; position:absolute; left:0; color:var(--lime);}
-.pass-chips{display:flex; flex-wrap:wrap; gap:6px; padding:18px 20px 0;}
+.pass-chips{display:flex; flex-wrap:wrap; gap:6px; padding:14px 22px 0;}
 .pass-chips span{
   font-family:var(--mono); font-size:0.68rem; letter-spacing:0.04em; padding:5px 9px;
   border:1px solid var(--border-fine); color:var(--ice-dim);
 }
-.pass-foot{margin-top:auto; padding:24px 20px 20px;}
+.pass-foot{padding:18px 22px 22px;}
 .cv-view-btn{
   width:100%; cursor:pointer; padding:13px 14px; background:transparent; color:var(--emerald);
   border:1px solid var(--emerald); font-family:var(--mono); font-size:0.74rem; font-weight:500;
@@ -446,3 +437,64 @@ footer .brand-mark{height:26px;}
 .car-ctl-range{flex:1; min-width:0; accent-color:var(--emerald); cursor:pointer;}
 .car-ctl-play:focus-visible, .car-ctl-range:focus-visible{outline:2px solid var(--lime); outline-offset:2px;}
 @media (max-width:520px){ .car-ctl{gap:8px; padding:6px 8px;} .car-ctl-end{font-size:0.56rem;} }
+
+/* Tarjetas de equipo: con puntero, la foto domina y el detalle técnico se despliega al pasar/enfocar */
+@media (hover:hover) and (min-width:801px){
+  .paddock-pass .pass-skills, .paddock-pass .pass-chips, .paddock-pass .mentor-quote{
+    max-height:0; opacity:0; overflow:hidden; margin-top:0; padding-top:0; border-top-color:transparent;
+    transition:max-height .45s ease, opacity .3s ease;
+  }
+  .paddock-pass:hover .pass-skills, .paddock-pass:focus-within .pass-skills,
+  .paddock-pass:hover .pass-chips, .paddock-pass:focus-within .pass-chips,
+  .paddock-pass:hover .mentor-quote, .paddock-pass:focus-within .mentor-quote{max-height:320px; opacity:1;}
+  .paddock-pass:hover .pass-skills, .paddock-pass:focus-within .pass-skills{margin-top:16px; padding-top:14px; border-top-color:var(--border-fine);}
+  .paddock-pass:hover .pass-chips, .paddock-pass:focus-within .pass-chips{padding-top:14px;}
+}
+.paddock-pass .mentor-quote{margin:14px 22px 0; font-size:0.85rem; background:rgba(7,27,51,0.7);}
+@media (prefers-reduced-motion:reduce){ .paddock-pass .pass-skills, .paddock-pass .pass-chips, .paddock-pass .mentor-quote, .pass-img{transition:none;} }
+
+/* ---------- Ritmo y jerarquía (rediseño) ---------- */
+.gallery-hero h1{font-size:clamp(2.5rem, 5.2vw, 4.6rem); line-height:0.96;}
+.section-head{max-width:none; margin-bottom:56px; display:grid; grid-template-columns:minmax(0,1.35fr) minmax(0,0.65fr); column-gap:64px; row-gap:0; align-items:end;}
+.section-head > .eyebrow-tag{grid-column:1 / -1; margin-bottom:18px;}
+.section-head h2{font-size:clamp(2.4rem, 6vw, 4.8rem); line-height:0.98; text-transform:uppercase; font-weight:600; letter-spacing:0; margin:0;}
+.section-head > p{font-size:1rem; margin:0; padding-bottom:6px;}
+.section-head .cta-row{grid-column:2; margin-top:20px;}
+.manifesto-grid .section-head{display:block;}
+.manifesto-grid .section-head h2{font-size:clamp(2.2rem, 4.4vw, 3.6rem); margin-bottom:18px;}
+.section-head.center{display:block;}
+@media (max-width:900px){
+  .section-head{display:block; margin-bottom:36px;}
+  .section-head h2{font-size:clamp(2.1rem, 9vw, 3rem); margin-bottom:14px;}
+  .section-head > p{padding:0;}
+}
+
+/* Equipo: foto de grupo junto a las cifras */
+.team-feature{display:grid; grid-template-columns:minmax(0,1.6fr) minmax(0,1fr); gap:56px; align-items:stretch; margin-bottom:72px;}
+.team-feature .team-photo{margin:0;}
+.team-feature .team-stats{grid-template-columns:1fr 1fr; gap:36px 24px; margin:0; padding:0; border-top:none; align-content:space-between; max-width:none;}
+.team-feature .team-stat{border-top:1px solid var(--border-fine); padding-top:18px;}
+.team-feature .team-stat dd{font-size:clamp(1.8rem, 3vw, 2.8rem);}
+@media (max-width:900px){ .team-feature{grid-template-columns:1fr; gap:36px; margin-bottom:48px;} }
+
+/* Herramientas: lista editorial en filas, no cuadrícula de cajas */
+.tool-grid{display:block; background:none; border:none; border-top:1px solid var(--border-fine);}
+.tool{display:grid; grid-template-columns:minmax(0,0.9fr) minmax(0,1.1fr); gap:48px; align-items:baseline; background:none; padding:30px 0; border-bottom:1px solid var(--border-fine);}
+.tool h3{font-size:clamp(1.4rem, 2.4vw, 2rem); font-weight:600; text-transform:uppercase; margin:0; flex-wrap:wrap;}
+.tool p{font-size:1rem; max-width:56ch;}
+@media (max-width:800px){ .tool{grid-template-columns:1fr; gap:10px; padding:24px 0;} }
+
+/* Por qué invertir: filas con numerales grandes */
+.why-grid{display:block; margin-bottom:96px; border-top:1px solid var(--border-fine);}
+.why-item{display:grid; grid-template-columns:120px minmax(0,0.9fr) minmax(0,1.1fr); gap:32px; align-items:baseline; padding:28px 0; border-top:none; border-bottom:1px solid var(--border-fine);}
+.why-item .why-num{font-size:clamp(2.6rem, 5vw, 4.2rem); line-height:1; color:var(--purple-text); margin:0;}
+.why-item h3{font-size:clamp(1.3rem, 2.2vw, 1.8rem); text-transform:uppercase; margin:0; font-weight:600;}
+.why-item p{font-size:1rem;}
+@media (max-width:800px){ .why-item{grid-template-columns:64px 1fr; gap:6px 16px;} .why-item p{grid-column:2;} .why-item .why-num{grid-row:span 2;} }
+.team-feature .team-stats{align-content:center; gap:44px 24px;}
+@media (max-width:800px){
+  .paddock-pass{min-height:640px;}
+  .paddock-pass::before{background:linear-gradient(180deg, rgba(7,27,51,0) 8%, rgba(7,27,51,0.9) 42%, #071B33 66%);}
+  .paddock-pass .pass-chips{display:none;}
+  .team-feature .team-stats{gap:28px 20px;}
+}
