@@ -14,7 +14,7 @@ button, input, select, textarea { font: inherit; }
   --purple-text:#B79CF0;     /* Lavanda de alto contraste para textos pequeños sobre navy (WCAG AA) */
   --border-fine:#183969;     /* 4. Azul marino: estructura / bordes / retícula CAD */
   --line:#183969;
-  --lime:#C8FF32;            /* 5. Limón: detalle puntual / dots de status / acento mínimo */
+  --lime:#7FD9B0;            /* 5. Limón: detalle puntual / dots de status / acento mínimo */
   --ice:#CDDEEF;             /* 6. Azul pálido: tipografía principal / cifras / telemetría */
 
   /* Superficies y Derivados Técnicos */
@@ -549,3 +549,26 @@ footer .brand-mark{height:26px;}
 .sm-legend li{display:grid; grid-template-columns:auto 1fr; column-gap:10px; row-gap:2px; align-items:center; border:1px solid var(--border-fine); padding:12px;}
 .sm-legend li b{grid-column:2; color:var(--emerald); font-weight:600;}
 .sm-note{margin:16px 0 0; color:var(--ice-dim); font-size:0.9rem;}
+
+/* Foto del equipo: grande, a sangrado completo, con el título encima (misma lógica que las tarjetas del equipo) */
+.team-hero{position:relative; margin:0 calc(50% - 50vw) 0; width:100vw; max-width:100vw; overflow:hidden; background:var(--navy-deep);}
+.team-hero img{display:block; width:100%; height:auto; aspect-ratio:16/9; object-fit:cover; object-position:50% 100%;}
+.team-hero::before{content:""; position:absolute; inset:0; z-index:1; pointer-events:none; background:linear-gradient(180deg, rgba(7,27,51,0.92) 0%, rgba(7,27,51,0.6) 32%, rgba(7,27,51,0) 58%), linear-gradient(0deg, #071B33 0%, rgba(7,27,51,0) 14%);}
+.team-hero-text{position:absolute; z-index:2; top:0; left:0; right:0; max-width:1120px; margin:0 auto; padding:clamp(28px,5vw,64px) 24px 0;}
+.team-hero-text h2{margin:14px 0 0; max-width:18ch; text-transform:uppercase; font-weight:600; line-height:1.02; font-size:clamp(1.8rem, 4.2vw, 3.4rem);}
+.team-below{margin-top:40px;}
+.team-below .team-group-text{margin-bottom:40px;}
+.team-below .team-stats{max-width:none; margin:0 0 64px;}
+@media (max-width:800px){ .team-hero img{aspect-ratio:auto; height:540px; object-position:46% 100%;} .team-below{margin-top:28px;} }
+
+/* Despiece: etiquetas por etapa ancladas a las piezas */
+.car-labels{position:absolute; inset:0; z-index:3; pointer-events:none; overflow:hidden;}
+.car-label{
+  position:absolute; left:0; top:0; display:inline-flex; align-items:center; gap:7px; white-space:nowrap; opacity:0; will-change:transform, opacity;
+  margin:-12px 0 0 12px; padding:4px 9px 4px 4px; background:rgba(7,27,51,0.82); border:1px solid var(--border-fine);
+  font-family:var(--mono); font-size:0.64rem; letter-spacing:0.05em; text-transform:uppercase; color:var(--ice);
+}
+.car-label b{display:inline-grid; place-items:center; width:18px; height:18px; background:var(--emerald); color:var(--navy-deep); font-size:0.66rem;}
+@media (max-width:520px){ .car-label{font-size:0.56rem; gap:5px;} .car-label b{width:15px; height:15px;} }
+
+html,body{overflow-x:clip;}

@@ -21,7 +21,7 @@ const svg = `
   <rect x="0" y="0" width="10" height="${H}" fill="#7137D4"/>
   <rect x="${W - 10}" y="0" width="10" height="${H}" fill="#12B866"/>
   <rect x="640" y="70" width="480" height="330" fill="none" stroke="#183969" stroke-width="2"/>
-  <rect x="80" y="104" width="10" height="10" fill="#C8FF32"/>
+  <rect x="80" y="104" width="10" height="10" fill="#7FD9B0"/>
 
   <text x="104" y="114" font-family="Arial, sans-serif" font-size="20" font-weight="700"
         letter-spacing="3" fill="#B79CF0">STEM RACING MÉXICO · 2026–2027</text>
