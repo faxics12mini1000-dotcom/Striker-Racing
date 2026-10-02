@@ -7,11 +7,11 @@ import { toCreasedNormals } from 'three/addons/utils/BufferGeometryUtils.js';
 
 /* Librea: un color plano por pieza (paleta del sitio). Pontones blancos para que el logo se lea; nariz esmeralda. */
 export const LIVERY = {
-  '01':'#7138D4', '02':'#E9F1FA', '03':'#E9F1FA', '04':'#12B866',
-  '05':'#2020E0', '06':'#2020E0', '07':'#3AF7B2', '08':'#3AF7B2',
-  '09':'#2020E0', '10':'#3AF7B2', '11':'#3AF7B2', '12':'#7138D4',
+  '01':'#7137D4', '02':'#CDDEEF', '03':'#CDDEEF', '04':'#12B866',
+  '05':'#183969', '06':'#183969', '07':'#12B866', '08':'#12B866',
+  '09':'#183969', '10':'#12B866', '11':'#12B866', '12':'#7137D4',
   '13':'#CDDEEF', '14':'#CDDEEF', '15':'#CDDEEF',
-  '16':'#22385C', '17':'#22385C', '18':'#22385C', '19':'#22385C', '20':'#9DB8D6', '21':'#9DB8D6', '22':'#140A33', '23':'#140A33',
+  '16':'#183969', '17':'#183969', '18':'#183969', '19':'#183969', '20':'#CDDEEF', '21':'#CDDEEF', '22':'#071B33', '23':'#071B33',
 };
 
 /* Despiece: desplazamiento (mm) de cada pieza al estar totalmente separada; x = largo, y = alto, z = ancho.
@@ -66,8 +66,8 @@ export function lookPart(mesh, key, hex) {
   else mat = new THREE.MeshStandardMaterial({ ...base, metalness: .1, roughness: .55, envMapIntensity: .8 });
   mesh.material = mat; mesh.castShadow = true; mesh.receiveShadow = true;
   if (WHEEL.test(key)) {   /* buje de aluminio: un cilindro liso se lee como rueda de juguete */
-    const hubMat = new THREE.MeshStandardMaterial({ color: '#9DB8D6', metalness: .9, roughness: .28, envMapIntensity: 1.2, fog: false });
-    const capMat = new THREE.MeshStandardMaterial({ color: '#0A1424', metalness: .6, roughness: .4, fog: false });
+    const hubMat = new THREE.MeshStandardMaterial({ color: '#CDDEEF', metalness: .9, roughness: .28, envMapIntensity: 1.2, fog: false });
+    const capMat = new THREE.MeshStandardMaterial({ color: '#071B33', metalness: .6, roughness: .4, fog: false });
     const hub = new THREE.Mesh(new THREE.CylinderGeometry(.0072, .0072, .0162, 28), hubMat); hub.rotation.x = Math.PI / 2;
     const cap = new THREE.Mesh(new THREE.CylinderGeometry(.0026, .0026, .0172, 16), capMat); cap.rotation.x = Math.PI / 2;
     hub.castShadow = cap.castShadow = true; mesh.add(hub, cap);
@@ -90,7 +90,7 @@ async function drawLockup(img) {
 function drawBadge(img) {
   const c = document.createElement('canvas'); c.width = c.height = 512;
   const g = c.getContext('2d');
-  g.fillStyle = '#F4F8FD'; g.beginPath(); g.arc(256, 256, 250, 0, Math.PI * 2); g.fill();
+  g.fillStyle = '#CDDEEF'; g.beginPath(); g.arc(256, 256, 250, 0, Math.PI * 2); g.fill();
   g.strokeStyle = '#071B33'; g.lineWidth = 10; g.beginPath(); g.arc(256, 256, 238, 0, Math.PI * 2); g.stroke();
   const w = 330; g.drawImage(img, 256 - w / 2, 256 - w * img.height / img.width / 2, w, w * img.height / img.width);
   return c;

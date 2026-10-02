@@ -98,40 +98,6 @@
     }
   }
 
-  // ---------- DIÁLOGOS GENÉRICOS (configurador de logo) ----------
-  document.querySelectorAll('[data-open]').forEach(function(btn){
-    btn.addEventListener('click', function(){
-      var dlg = document.getElementById(btn.getAttribute('data-open'));
-      if(dlg && typeof dlg.showModal === 'function') dlg.showModal();
-    });
-  });
-  document.querySelectorAll('dialog.profile-dialog').forEach(function(dlg){
-    dlg.querySelectorAll('[data-close]').forEach(function(btn){ btn.addEventListener('click', function(){ dlg.close(); }); });
-    dlg.addEventListener('click', function(e){ if(e.target === dlg) dlg.close(); });
-  });
-
-  // ---------- DIAGRAMA DE ZONAS: resalta al pasar/enfocar un nivel ----------
-  function zoneEls(names){
-    var sel = names.split(',').map(function(z){ return '.zone-shape[data-zone="' + z.trim() + '"]'; }).join(',');
-    return document.querySelectorAll(sel);
-  }
-  document.querySelectorAll('.tier[data-zones]').forEach(function(tier){
-    var zones = zoneEls(tier.getAttribute('data-zones'));
-    function on(){ zones.forEach(function(z){ z.classList.add('zone-hot'); }); }
-    function off(){ zones.forEach(function(z){ z.classList.remove('zone-hot'); }); }
-    tier.addEventListener('mouseenter', on);
-    tier.addEventListener('mouseleave', off);
-    tier.addEventListener('focusin', on);
-    tier.addEventListener('focusout', off);
-  });
-  document.querySelectorAll('.zone-shape').forEach(function(shape){
-    shape.setAttribute('tabindex', '0');
-    shape.setAttribute('role', 'button');
-    function flip(){ shape.setAttribute('aria-pressed', shape.classList.toggle('zone-hot') ? 'true' : 'false'); }
-    shape.addEventListener('click', flip);
-    shape.addEventListener('keydown', function(e){ if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); flip(); } });
-  });
-
   // ---------- REVEAL AL SCROLL ----------
   if('IntersectionObserver' in window){
     var io = new IntersectionObserver(function(entries){

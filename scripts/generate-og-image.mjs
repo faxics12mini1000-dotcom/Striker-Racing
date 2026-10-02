@@ -18,7 +18,7 @@ const svg = `
   <rect width="${W}" height="${H}" fill="#071B33"/>
   <rect width="${W}" height="${H}" fill="url(#grid)"/>
 
-  <rect x="0" y="0" width="10" height="${H}" fill="#2A6DF5"/>
+  <rect x="0" y="0" width="10" height="${H}" fill="#183969"/>
   <rect x="${W - 10}" y="0" width="10" height="${H}" fill="#12B866"/>
 
   <text x="80" y="150" font-family="Arial, sans-serif" font-size="26" font-weight="700"
@@ -37,7 +37,7 @@ const svg = `
   </text>
 
   <g transform="translate(80,538)">
-    <rect x="0" y="0" width="360" height="50" fill="none" stroke="#2A6DF5" stroke-width="2"/>
+    <rect x="0" y="0" width="360" height="50" fill="none" stroke="#183969" stroke-width="2"/>
     <text x="180" y="32" font-family="Arial, sans-serif" font-size="19" font-weight="700" fill="#CDDEEF" text-anchor="middle" letter-spacing="1">SUMATE COMO PATROCINADOR</text>
   </g>
 
