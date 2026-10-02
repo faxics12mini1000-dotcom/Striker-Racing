@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<!-- Herramienta de desarrollo (no se publica enlazada): renderiza el SR-26 con la librea de js/car-look.js desde una vista fija,
+     para generar las imágenes de la sección de patrocinios (scripts/capture-sr26.mjs) y revisar piezas de cerca.
+     Servir con: node scripts/dev-server.mjs  →  /scripts/sr26-view.html?view=top|side|iso&lang=es|en&ex=0..1&w=1000&h=560&bg=0|1&look=px,py,pz,tx,ty,tz,fov
+     Expone window.carReady (Promise) y window.carMarkers (posición en % de cada espacio disponible). -->
+<html lang="es"><head><meta charset="utf-8"><title>SR-26 · vista</title>
+<script type="importmap">{"imports":{"three":"/vendor/three/build/three.module.min.js","three/addons/":"/vendor/three/examples/jsm/"}}</script>
+<style>html,body{margin:0;background:transparent}canvas{display:block}</style></head>
+<body>
+<script type="module">
+import * as THREE from 'three';
+import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+import { MeshoptDecoder } from 'three/addons/libs/meshopt_decoder.module.js';
+import * as Look from '/js/car-look.js';
+
+const q = new URLSearchParams(location.search);
+const view = q.get('view') || 'iso', lang = q.get('lang') || 'es', ex = +(q.get('ex') || 0);
+const W = +(q.get('w') || 1000), H = +(q.get('h') || 560);
+const renderer = new THREE.WebGLRenderer({ antialias:true, alpha:true, preserveDrawingBuffer:true });
+renderer.setPixelRatio(+(q.get('dpr') || 1)); renderer.setSize(W, H); renderer.outputColorSpace = THREE.SRGBColorSpace;
+Look.lookRenderer(renderer); document.body.appendChild(renderer.domElement);
+if (q.get('bg') === '1') renderer.setClearColor('#071B33', 1);
+const scene = new THREE.Scene();
+Look.lookEnvironment(renderer, scene); Look.lookLights(scene, .001);
+
+window.carReady = new Promise((ok, no) => {
+  const loader = new GLTFLoader().setMeshoptDecoder(MeshoptDecoder);
+  loader.load('/assets/models/sr26.glb', async gltf => {
+    const model = gltf.scene, parts = {}; const list = [];
+    model.traverse(o => { if (o.isMesh) list.push(o); });
+    list.forEach(o => {
+      const k = Look.partKey(o.name); Look.lookPart(o); parts[k] = o;
+      const e = Look.EXPLODE[k];
+      if (e) { const home = o.position.clone(); const f = ex, d = (e.step - 1) / (Look.EXPLODE_STEPS - 1) * .45;
+        const t = Math.min(1, Math.max(0, (f - d) / .55)), s = t < .5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+        o.position.copy(home).addScaledVector(new THREE.Vector3(...e.off).multiplyScalar(.001), s); }
+    });
+    model.updateMatrixWorld(true);
+    try { await Look.addLogoDecals(parts, '/logo.png', lang); } catch (e) { console.log('decals:', e.message); }
+    const box = new THREE.Box3().setFromObject(model), c = box.getCenter(new THREE.Vector3()), sz = box.getSize(new THREE.Vector3());
+    model.position.sub(c); scene.add(model); model.updateMatrixWorld(true);
+    const asp = W / H;
+    let cam, hh;
+    const dist = 2;
+    if (view === 'iso') {   // mismo ángulo y encuadre (margen 1.16) que el visor del hero al cargar
+      cam = new THREE.PerspectiveCamera(30, asp, .01, 10);
+      const dir = new THREE.Vector3(Math.sin(.61) * Math.cos(.45), Math.sin(.45), Math.cos(.61) * Math.cos(.45)).normalize();
+      const right = new THREE.Vector3().crossVectors(new THREE.Vector3(0, 1, 0), dir).normalize(), up = new THREE.Vector3().crossVectors(dir, right);
+      const hx = Math.max(Math.abs(box.min.x - c.x), Math.abs(box.max.x - c.x)), hy = sz.y / 2, hz = Math.max(Math.abs(box.min.z - c.z), Math.abs(box.max.z - c.z));
+      let mh = 0, mv = 0;
+      for (const sx of [-1, 1]) for (const sy of [-1, 1]) for (const sz2 of [-1, 1]) { const k = new THREE.Vector3(sx * hx, sy * hy, sz2 * hz); mh = Math.max(mh, Math.abs(k.dot(right))); mv = Math.max(mv, Math.abs(k.dot(up))); }
+      const vf = THREE.MathUtils.degToRad(15), hf = Math.atan(Math.tan(vf) * asp), d = Math.max(mv / Math.tan(vf), mh / Math.tan(hf)) * 1.16;
+      cam.position.copy(dir.multiplyScalar(d)); cam.lookAt(0, 0, 0);
+    }
+    else {
+      const m = +(q.get('margin') || 1.12);
+      const fitW = (view === 'top' ? sz.x : sz.x) * m, fitH = (view === 'top' ? sz.z : sz.y) * m;
+      hh = Math.max(fitH / 2, fitW / 2 / asp);
+      cam = new THREE.OrthographicCamera(-hh * asp, hh * asp, hh, -hh, .01, 10);
+      if (view === 'top') { cam.position.set(0, dist, 0); cam.up.set(0, 0, -1); } else { cam.position.set(0, 0, dist); cam.up.set(0, 1, 0); }
+      cam.lookAt(0, 0, 0);
+    }
+    const look = q.get('look'); if (look) { const [px, py, pz, tx, ty, tz, fov] = look.split(',').map(Number);   // acercamientos: posición y objetivo en mm del modelo (x,y,z del glb)
+      cam = new THREE.PerspectiveCamera(fov || 30, asp, .001, 10); cam.position.set(px, py, pz).multiplyScalar(.001).add(model.position); cam.lookAt(new THREE.Vector3(tx, ty, tz).multiplyScalar(.001).add(model.position)); }
+    cam.updateMatrixWorld(true); cam.updateProjectionMatrix();
+    // marcadores (centro de cada espacio) en % del lienzo
+    const pct = (x, y, z) => { const p = new THREE.Vector3(x, y, z).multiplyScalar(.001).add(model.position).project(cam); return [ +((p.x + 1) / 2 * 100).toFixed(2), +((1 - p.y) / 2 * 100).toFixed(2) ]; };
+    const S = Look.SLOTS;
+    window.carMarkers = { nariz:pct(S.nariz.x, S.nariz.y, 0), aleron:pct(S.aleron.x, S.aleron.y, 0), ponton:pct(S.ponton.x, S.ponton.y, S.ponton.z), espina:pct(S.espina.x, S.espina.y, S.espina.z) };
+    renderer.render(scene, cam); ok(true);
+  }, undefined, no);
+});
+</script></body></html>

@@ -1,5 +1,5 @@
 (function(){
-  // Visor 3D del monoplaza SR-26 (despiece/sr26.glb) en el hero: gira solo, se arma y se desarma en bucle,
+  // Visor 3D del monoplaza SR-26 (assets/models/sr26.glb) en el hero: gira solo, se arma y se desarma en bucle,
   // y se puede arrastrar para girar o mover el control para ver el despiece. NO secuestra el scroll de la página.
   // Perf: three.js + el .glb solo se descargan cuando el visor está por entrar en viewport y la página ya cargó;
   // hasta entonces se muestra el poster estático (car-poster.webp).
@@ -55,7 +55,7 @@
   }
 
   function initViewer(THREE, GLTFLoader, OrbitControls, MeshoptDecoder, Look){
-    var LIVERY = Look.LIVERY, EXPLODE = Look.EXPLODE, STEPS = Look.EXPLODE_STEPS;
+    var EXPLODE = Look.EXPLODE, STEPS = Look.EXPLODE_STEPS;
     var scene = new THREE.Scene();
     var camera = new THREE.PerspectiveCamera(30, 1, 1, 5000);
 
@@ -180,16 +180,16 @@
 
     var loader = new GLTFLoader();
     if(MeshoptDecoder) loader.setMeshoptDecoder(MeshoptDecoder);
-    loader.load(new URL('../despiece/sr26.glb?v=2', import.meta.url).href, function(gltf){
+    loader.load(new URL('../assets/models/sr26.glb?v=3', import.meta.url).href, function(gltf){
       var model = gltf.scene;
 
-      // despiece/sr26.glb: metros, Y arriba, X hacia el frente. Un material por pieza con la librea de car-look.js.
+      // assets/models/sr26.glb: metros, Y arriba, X hacia el frente, un nodo por STL (nombre = archivo). Librea y materiales en car-look.js.
       var meshes = [], byKey = {};
-      model.traverse(function(obj){ if(obj.isMesh) meshes.push(obj); }); // lookPart agrega bujes a las llantas: se recorre una lista fija
+      model.traverse(function(obj){ if(obj.isMesh) meshes.push(obj); }); // lista fija: lookPart reemplaza geometría y material
       meshes.forEach(function(obj){
         var k = obj.name.slice(0, 2);
         if(Look.HIDDEN.has(k)){ obj.removeFromParent(); return; } // sin halo
-        Look.lookPart(obj, k, LIVERY[k] || '#CDDEEF');
+        Look.lookPart(obj);
         byKey[k] = obj;
         var ex = EXPLODE[k];
         if(ex){
@@ -199,8 +199,8 @@
       });
       model.updateMatrixWorld(true);
 
-      // Logo de Striker Racing solo en los dos costados (pontones). Si falla la carga, el auto se ve igual.
-      Look.addLogoDecals(byKey, new URL('../logo.png', import.meta.url).href).then(function(){ needsRender = true; startLoop(); }).catch(function(){});
+      // Logos dibujados en código (espina + espacios disponibles). Si falla la carga, el auto se ve igual.
+      Look.addLogoDecals(byKey, new URL('../logo.png', import.meta.url).href, EN ? 'en' : 'es').then(function(){ needsRender = true; startLoop(); }).catch(function(){});
 
       var box = new THREE.Box3().setFromObject(model);
       var size = box.getSize(new THREE.Vector3());
