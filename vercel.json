@@ -1,14 +1,46 @@
 {
   "trailingSlash": true,
   "redirects": [
-    { "source": "/equipo.html", "destination": "/#equipo", "permanent": true },
-    { "source": "/patrocinios.html", "destination": "/patrocinios/", "permanent": true },
-    { "source": "/presupuesto.html", "destination": "/presupuesto/", "permanent": true },
-    { "source": "/auto.html", "destination": "/auto/", "permanent": true },
-    { "source": "/en/equipo.html", "destination": "/en/#team", "permanent": true },
-    { "source": "/en/patrocinios.html", "destination": "/en/sponsorship/", "permanent": true },
-    { "source": "/en/presupuesto.html", "destination": "/en/budget/", "permanent": true },
-    { "source": "/en/auto.html", "destination": "/en/car/", "permanent": true }
+    {
+      "source": "/equipo.html",
+      "destination": "/#equipo",
+      "permanent": true
+    },
+    {
+      "source": "/patrocinios.html",
+      "destination": "/patrocinios/",
+      "permanent": true
+    },
+    {
+      "source": "/presupuesto.html",
+      "destination": "/presupuesto/",
+      "permanent": true
+    },
+    {
+      "source": "/auto.html",
+      "destination": "/auto/",
+      "permanent": true
+    },
+    {
+      "source": "/en/equipo.html",
+      "destination": "/en/#team",
+      "permanent": true
+    },
+    {
+      "source": "/en/patrocinios.html",
+      "destination": "/en/sponsorship/",
+      "permanent": true
+    },
+    {
+      "source": "/en/presupuesto.html",
+      "destination": "/en/budget/",
+      "permanent": true
+    },
+    {
+      "source": "/en/auto.html",
+      "destination": "/en/car/",
+      "permanent": true
+    }
   ],
   "headers": [
     {
@@ -26,24 +58,6 @@
         {
           "key": "Cache-Control",
           "value": "public, max-age=31536000, immutable"
-        }
-      ]
-    },
-    {
-      "source": "/despiece/(.*).(glb|webp)",
-      "headers": [
-        {
-          "key": "Cache-Control",
-          "value": "public, max-age=604800, stale-while-revalidate=86400"
-        }
-      ]
-    },
-    {
-      "source": "/despiece/(.*).(js|css)",
-      "headers": [
-        {
-          "key": "Cache-Control",
-          "value": "public, max-age=3600, stale-while-revalidate=86400"
         }
       ]
     },
@@ -107,6 +121,15 @@
         {
           "key": "Cache-Control",
           "value": "public, max-age=86400"
+        }
+      ]
+    },
+    {
+      "source": "/assets/(.*).(glb|webp)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=604800, stale-while-revalidate=86400"
         }
       ]
     }

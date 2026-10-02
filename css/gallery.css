@@ -531,3 +531,21 @@ footer .brand-mark{height:26px;}
   .paddock-pass{cursor:pointer;}
   .team-feature .team-stats{gap:28px 20px;}
 }
+
+/* ---------- Mapa de patrocinios sobre el auto ---------- */
+.sponsor-map{margin:56px 0 0; padding:28px 24px; background:var(--surface); border:1px solid var(--border-fine);}
+.sponsor-map h3{text-transform:uppercase; font-weight:600; margin:0 0 6px;}
+.sponsor-map figcaption p{margin:0 0 20px; color:var(--ice-dim);}
+.sm-views{display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:16px;}
+@media (max-width:760px){ .sm-views{grid-template-columns:1fr;} }
+.sm-cap{display:block; margin-bottom:6px;}
+.sm-img{position:relative; border:1px solid var(--border-fine); background-color:var(--navy-deep);
+  background-image:linear-gradient(var(--grid-line) 1px, transparent 1px), linear-gradient(90deg, var(--grid-line) 1px, transparent 1px); background-size:24px 24px;}
+.sm-img img{display:block; width:100%; height:auto;}
+.sm-pin{display:inline-grid; place-items:center; width:24px; height:24px; flex:none; background:var(--lime); color:var(--navy-deep); font-family:var(--mono); font-size:0.75rem; font-weight:700;}
+.sm-img .sm-pin{position:absolute; transform:translate(-50%,-150%); width:20px; height:20px; font-size:0.68rem; box-shadow:0 0 0 2px var(--navy-deep);}
+.sm-legend{list-style:none; margin:20px 0 0; padding:0; display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:12px;}
+@media (max-width:760px){ .sm-legend{grid-template-columns:1fr;} }
+.sm-legend li{display:grid; grid-template-columns:auto 1fr; column-gap:10px; row-gap:2px; align-items:center; border:1px solid var(--border-fine); padding:12px;}
+.sm-legend li b{grid-column:2; color:var(--emerald); font-weight:600;}
+.sm-note{margin:16px 0 0; color:var(--ice-dim); font-size:0.9rem;}

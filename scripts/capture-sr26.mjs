@@ -53,7 +53,7 @@ if (todo.includes('paginas')) {
     await p.emulateMediaFeatures([{ name: 'prefers-reduced-motion', value: 'reduce' }]);   // sin giro ni ciclo: la pose depende solo del control
     await p.setViewport({ width: w, height: w > 600 ? 900 : 812, deviceScaleFactor: 1, isMobile: w < 600 });
     await p.goto(`${BASE}/auto/`, { waitUntil: 'networkidle0' });
-    await p.evaluate(() => document.getElementById('modelStage').scrollIntoView({ block: 'start' }));
+    await p.evaluate(() => document.getElementById('modelStage').scrollIntoView({ block: 'center' }));
     await p.waitForSelector('#modelStage.is-ready', { timeout: 30000 });
     for (const [name, v] of [['armado', 0], ['despiece', 100]]) {
       await p.evaluate(v => { const r = document.querySelector('.car-ctl-range'); r.value = v; r.dispatchEvent(new Event('input', { bubbles: true })); }, v);
@@ -61,7 +61,7 @@ if (todo.includes('paginas')) {
       await p.screenshot({ path: `capturas/es-auto-${name}-${w}.png` });
     }
     await p.goto(`${BASE}/patrocinios/`, { waitUntil: 'networkidle0' });
-    await p.evaluate(() => document.querySelectorAll('.reveal, .card-reveal').forEach(e => e.classList.add('is-visible', 'visible', 'in')));
+    await p.evaluate(() => document.querySelectorAll('.reveal, .card-reveal').forEach(e => e.classList.add('in-view')));
     await p.evaluate(() => (document.querySelector('.sponsor-map') || document.body).scrollIntoView({ block: 'start' }));
     await new Promise(r => setTimeout(r, 800));
     await p.screenshot({ path: `capturas/es-patrocinios-mapa-${w}.png` });
