@@ -188,6 +188,7 @@
       model.traverse(function(obj){ if(obj.isMesh) meshes.push(obj); }); // lookPart agrega bujes a las llantas: se recorre una lista fija
       meshes.forEach(function(obj){
         var k = obj.name.slice(0, 2);
+        if(Look.HIDDEN.has(k)){ obj.removeFromParent(); return; } // sin halo
         Look.lookPart(obj, k, LIVERY[k] || '#CDDEEF');
         byKey[k] = obj;
         var ex = EXPLODE[k];
@@ -198,7 +199,7 @@
       });
       model.updateMatrixWorld(true);
 
-      // Logo de Striker Racing sobre el auto (pontones y cubierta del motor). Si falla la carga, el auto se ve igual.
+      // Logo de Striker Racing solo en los dos costados (pontones). Si falla la carga, el auto se ve igual.
       Look.addLogoDecals(byKey, new URL('../logo.png', import.meta.url).href).then(function(){ needsRender = true; startLoop(); }).catch(function(){});
 
       var box = new THREE.Box3().setFromObject(model);
