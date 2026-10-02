@@ -172,11 +172,8 @@ section{padding:104px 0;}
 @media (max-width:960px){
   .hero-main .model-stage{border-right:none; border-bottom:1px solid var(--border-fine); aspect-ratio:4/3; min-height:0;}
 }
-/* Viñeta de estudio: penumbra en los bordes, escultura al centro */
-.model-stage::after{
-  content:""; position:absolute; inset:0; z-index:2; pointer-events:none;
-  background:radial-gradient(ellipse at 50% 46%, transparent 42%, rgba(7,27,51,0.82) 100%);
-}
+/* Teléfono: más alto que ancho, para que quepan el auto y los dos renglones de controles */
+@media (max-width:560px){ .hero-main .model-stage{aspect-ratio:4/5;} }
 .model-stage .model-tag, .model-stage .model-hint, .model-stage .model-fallback{z-index:3;}
 .model-stage .model-tag{background:rgba(7,27,51,0.75); border-color:var(--border-fine);}
 .model-stage .model-hint{background:rgba(7,27,51,0.75); border-color:var(--border-fine);}
@@ -446,19 +443,65 @@ footer .brand-mark{height:26px;}
 
 /* ---------- Control de despiece del hero ---------- */
 .model-stage .model-hint{top:10px; bottom:auto; right:10px;}
+/* Controles propios del visor: reproducir, Armado/Despiece, deslizador con una marca por etapa, vistas y pantalla completa.
+   js/viewer.js mide la altura de .car-ctl y encuadra el auto por encima (camera.setViewOffset), así nunca lo tapa. */
 .car-ctl{
-  position:absolute; left:12px; right:12px; bottom:12px; z-index:4; display:flex; align-items:center; gap:12px;
-  padding:8px 12px; background:rgba(7,27,51,0.78); border:1px solid var(--border-fine); backdrop-filter:blur(6px);
+  position:absolute; left:12px; right:12px; bottom:12px; z-index:4; display:flex; align-items:center; flex-wrap:wrap; gap:8px 12px;
+  padding:8px 10px; background:rgba(7,27,51,0.82); border:1px solid var(--border-fine); backdrop-filter:blur(6px);
 }
-.car-ctl-play{
-  flex:none; width:32px; height:32px; display:grid; place-items:center; cursor:pointer; font-size:0.8rem; line-height:1;
-  color:var(--ice); background:transparent; border:1px solid var(--border-fine);
+.car-btn, .car-seg-btn, .car-view{
+  appearance:none; cursor:pointer; color:var(--ice); background:transparent; border:1px solid var(--border-fine);
+  font-family:var(--mono); font-size:0.62rem; letter-spacing:0.06em; text-transform:uppercase; line-height:1;
 }
-.car-ctl-play:hover{border-color:var(--emerald); color:var(--emerald);}
-.car-ctl-end{flex:none; font-family:var(--mono); font-size:0.62rem; letter-spacing:0.06em; text-transform:uppercase; color:var(--ice-dim);}
-.car-ctl-range{flex:1; min-width:0; accent-color:var(--emerald); cursor:pointer;}
-.car-ctl-play:focus-visible, .car-ctl-range:focus-visible{outline:2px solid var(--lime); outline-offset:2px;}
-@media (max-width:520px){ .car-ctl{gap:8px; padding:6px 8px;} .car-ctl-end{font-size:0.56rem;} }
+.car-btn{flex:none; width:32px; height:32px; display:grid; place-items:center; padding:0;}
+.car-btn svg{display:block;}
+.car-btn:hover, .car-seg-btn:hover, .car-view:hover{border-color:var(--emerald); color:var(--emerald);}
+.car-seg{flex:none; display:flex;}
+.car-seg-btn{height:32px; padding:0 10px;}
+.car-seg-btn + .car-seg-btn{border-left:none;}
+.car-seg-btn[aria-pressed="true"], .car-view[aria-pressed="true"]{background:var(--emerald); border-color:var(--emerald); color:var(--navy-deep);}
+.car-ctl-track{position:relative; flex:1 1 160px; min-width:120px; height:32px;}
+.car-ctl-range{
+  -webkit-appearance:none; appearance:none; position:absolute; inset:0; width:100%; height:100%; margin:0; background:transparent; cursor:pointer; --p:0%;
+}
+.car-ctl-range::-webkit-slider-runnable-track{height:2px; background:linear-gradient(90deg, var(--emerald) var(--p), var(--border-fine) var(--p));}
+.car-ctl-range::-moz-range-track{height:2px; background:var(--border-fine);}
+.car-ctl-range::-moz-range-progress{height:2px; background:var(--emerald);}
+.car-ctl-range::-webkit-slider-thumb{-webkit-appearance:none; width:14px; height:14px; margin-top:-6px; border-radius:50%; background:var(--ice); border:2px solid var(--emerald);}
+.car-ctl-range::-moz-range-thumb{width:10px; height:10px; border-radius:50%; background:var(--ice); border:2px solid var(--emerald);}
+.car-ticks{position:absolute; inset:0; pointer-events:none;}
+.car-tick{
+  position:absolute; top:50%; width:16px; height:16px; margin:-8px 0 0 -8px; padding:0; display:grid; place-items:center; pointer-events:auto; cursor:pointer;
+  font-family:var(--mono); font-size:0.56rem; line-height:1; color:var(--ice-dim); background:var(--navy-deep); border:1px solid var(--border-fine);
+}
+.car-tick:hover{border-color:var(--emerald); color:var(--emerald);}
+.car-tick.is-lit{background:var(--emerald); border-color:var(--emerald); color:var(--navy-deep);}
+.car-views{flex:none; display:flex;}
+.car-view{height:32px; padding:0 8px;}
+.car-view + .car-view{border-left:none;}
+.car-view .short{display:none;}
+.car-view-cycle{display:none; min-width:48px; padding:0 8px;}
+.car-btn:focus-visible, .car-seg-btn:focus-visible, .car-view:focus-visible, .car-tick:focus-visible, .car-ctl-range:focus-visible{outline:2px solid var(--lime); outline-offset:2px;}
+@media (max-width:760px){
+  .car-view .long{display:none;} .car-view .short{display:inline;}
+}
+@media (max-width:560px){
+  .car-ctl{left:8px; right:8px; bottom:8px; padding:6px 8px; gap:6px 8px;}
+  .car-ctl-track{order:5; flex:1 0 100%; height:28px;}
+  .car-views{display:none;}
+  .car-view-cycle{display:block; margin-left:auto;}
+  .car-seg-btn{padding:0 8px;}
+  .model-stage .model-hint{display:none;}
+  .car-label .t{display:none;}
+  .car-label{padding:3px; margin:-10px 0 0 8px;}
+}
+.model-stage.has-interacted .model-hint{opacity:0;}
+
+/* Pantalla completa (API nativa, o clase .is-fs donde no existe, p. ej. iPhone) */
+.model-stage:fullscreen, .hero-main .model-stage:fullscreen{width:100vw; height:100vh; max-width:none; aspect-ratio:auto; border:0; background-color:var(--surface);}
+.model-stage:-webkit-full-screen{width:100vw; height:100vh; aspect-ratio:auto; border:0; background-color:var(--surface);}
+.hero-main .model-stage.is-fs, .model-stage.is-fs{position:fixed; inset:0; z-index:200; width:100vw; height:100vh; height:100dvh; margin:0; aspect-ratio:auto; border:0; background-color:var(--surface);}
+html.fs-lock, html.fs-lock body{overflow:hidden;}
 
 /* Tarjetas de equipo: con puntero, la foto domina y el detalle técnico se despliega al pasar/enfocar */
 @media (hover:hover) and (min-width:801px){
@@ -584,3 +627,4 @@ html,body{overflow-x:clip;}
 .car-tip b{display:inline-grid; place-items:center; min-width:18px; height:18px; background:var(--emerald); color:var(--navy-deep); font-size:0.66rem;}
 @media (max-width:520px){ .car-tip{font-size:0.6rem;} }
 @media (prefers-reduced-motion:reduce){ .car-tip{transition:none;} }
+.model-stage.no-3d .car-ctl, .model-stage.is-lost .car-ctl, .model-stage.no-3d .car-tip{display:none;}

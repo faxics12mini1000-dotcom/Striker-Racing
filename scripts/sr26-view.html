@@ -21,7 +21,7 @@ renderer.setPixelRatio(+(q.get('dpr') || 1)); renderer.setSize(W, H); renderer.o
 Look.lookRenderer(renderer); document.body.appendChild(renderer.domElement);
 if (q.get('bg') === '1') renderer.setClearColor('#071B33', 1);
 const scene = new THREE.Scene();
-Look.lookEnvironment(renderer, scene); Look.lookLights(scene, .001);
+await Look.lookEnvironment(renderer, scene); Look.lookLights(scene, .001);
 
 window.carReady = new Promise((ok, no) => {
   const loader = new GLTFLoader().setMeshoptDecoder(MeshoptDecoder);

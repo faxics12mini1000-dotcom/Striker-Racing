@@ -15,9 +15,13 @@ import * as Look from './car-look.js';
   var EN = (document.documentElement.lang || 'es').slice(0, 2) === 'en';
   var TXT = EN
     ? { slider:'Exploded view of the car', assembled:'Assembled', exploded:'Exploded', pause:'Pause animation', play:'Play animation',
-        steps:['Wheels & axles', 'Wings & nose', 'Sidepods', 'Spine & pillar', 'CO₂ cartridge'] }
+        steps:['Wheels & axles', 'Wings & nose', 'Sidepods', 'Spine & pillar', 'CO₂ cartridge'], group:'3D viewer controls', stepGo:'Show up to step ',
+        views:{ iso:['ISO', 'ISO'], side:['SIDE', 'SIDE'], front:['FRONT', 'FRT'], top:['TOP', 'TOP'] }, viewsLabel:'Camera views', viewLabel:'View: ',
+        fsOn:'Full screen', fsOff:'Exit full screen' }
     : { slider:'Despiece del auto', assembled:'Armado', exploded:'Despiece', pause:'Pausar animación', play:'Reanudar animación',
-        steps:['Llantas y ejes', 'Alerones y nariz', 'Pontones', 'Espina y pilar', 'Cartucho CO₂'] };
+        steps:['Llantas y ejes', 'Alerones y nariz', 'Pontones', 'Espina y pilar', 'Cartucho CO₂'], group:'Controles del visor 3D', stepGo:'Ver hasta la etapa ',
+        views:{ iso:['ISO', 'ISO'], side:['LATERAL', 'LAT'], front:['FRENTE', 'FRE'], top:['ARRIBA', 'SUP'] }, viewsLabel:'Vistas de cámara', viewLabel:'Vista: ',
+        fsOn:'Pantalla completa', fsOff:'Salir de pantalla completa' };
   // Pieza que ancla la etiqueta de cada etapa (clave del nodo en el GLB)
   var LABEL_KEYS = ['17', '05', '02', '24', '15'];
   var URLS = {
@@ -147,7 +151,8 @@ import * as Look from './car-look.js';
     var RESUME_DELAY_MS = 2500;
     var orbiting = false;
     controls.addEventListener('start', function(){
-      orbiting = true; clearHover();
+      orbiting = true; clearHover(); viewTween = null; setViewUi(null); valueTween = null;
+      stage.classList.add('has-interacted');
       idleRotateAllowed = false;
       if(resumeTimer){ clearTimeout(resumeTimer); resumeTimer = null; }
     });
@@ -163,6 +168,15 @@ import * as Look from './car-look.js';
     var exploded = 0;      // valor mostrado: sigue a uTarget con suavizado cuando manda el slider
     var auto = !reduceMotion;
     var cycleT = 0;
+    var valueTween = null;   // animación de Armado/Despiece (botones y marcas): { from, to, t, dur } en ms
+    var viewTween = null, currentView = 'iso';
+    var insetPx = 0, fitScaleV = 1;   // alto que ocupan los controles; el auto se encuadra por encima de ellos
+    function easeSine(t){ return 0.5 - 0.5 * Math.cos(Math.PI * t); }
+    function animateTo(target){
+      auto = false; setPlayUi();
+      valueTween = { from:exploded, to:target, t:0, dur:Math.max(900, 3600 * Math.abs(target - exploded)) };
+      requestRender();
+    }
     // armado (3.2 s) → separa (3.6 s) → despiece (3.4 s) → arma (3.0 s). El tiempo avanza lineal: la suavidad la pone cada pieza con su easing.
     var HOLD_A = 3.2, MOVE_OUT = 3.6, HOLD_B = 3.4, MOVE_IN = 3.0, CYCLE = HOLD_A + MOVE_OUT + HOLD_B + MOVE_IN;
     var GAP = 0.50, SPAN = 0.46;   // la etapa s arranca en (s-1)/(STEPS-1)·GAP, más el retraso de la pieza; cada pieza recorre SPAN
@@ -175,6 +189,16 @@ import * as Look from './car-look.js';
       return 1 - (t - HOLD_A - MOVE_OUT - HOLD_B) / MOVE_IN;
     }
     var stepF = [0, 0, 0, 0, 0, 0];   // avance (0..1) de cada etapa: etiquetas y cámara
+    var floorY = 0, footprint = null, wheelBlobs = [], modelRef = null;
+    function updateContactShadows(){
+      if(!footprint || !modelRef) return;
+      var off = modelRef.position;
+      for(var i = 0; i < wheelBlobs.length; i++){
+        var m = wheelBlobs[i].mesh, pos = wheelBlobs[i].part.mesh.position;
+        m.position.x = pos.x + off.x; m.position.z = pos.z + off.z;
+      }
+      footprint.material.opacity = 0.75 - 0.3 * exploded;
+    }
     function applyPose(u){
       for(var s = 1; s <= STEPS; s++) stepF[s] = 0;
       for(var i = 0; i < parts.length; i++){
@@ -192,6 +216,7 @@ import * as Look from './car-look.js';
           g.visible = f > 0.02;
         }
       }
+      updateContactShadows();
     }
 
     // ---------- Encuadre: la distancia se ajusta al tamaño real (armado ↔ despiece) para que el auto siempre quepa ----------
@@ -212,29 +237,34 @@ import * as Look from './car-look.js';
     var half0 = new THREE.Vector3(), half1 = new THREE.Vector3(), cy0 = 0, cy1 = 0;
     var halfNow = new THREE.Vector3(), cyNow = 0;
     var worldUp = new THREE.Vector3(0, 1, 0);
-    var FIT_MARGIN = 1.16;
-    var corner = new THREE.Vector3();
+    var FIT_MARGIN = 1.12;
+    var fitDir = new THREE.Vector3(), fitRight = new THREE.Vector3(), fitUp = new THREE.Vector3(), fitM = new THREE.Matrix4(), fitV = new THREE.Vector3();
+    // Distancia a la que cabe el auto: se proyectan las 8 esquinas de la caja de CADA pieza en su pose actual (armado o despiece), así el
+    // encuadre es ajustado en ambos estados en vez de usar una caja global que sobra cuando las piezas se separan.
     function computeFitDistance(){
-      var dir = new THREE.Vector3().subVectors(camera.position, controls.target);
-      if(dir.lengthSq() < 1e-8) dir.set(0, 0, 1);
-      dir.normalize();
-      var right = new THREE.Vector3().crossVectors(worldUp, dir);
-      if(right.lengthSq() < 1e-8) right.set(1, 0, 0); else right.normalize();
-      var up = new THREE.Vector3().crossVectors(dir, right).normalize();
-      var maxH = 0, maxV = 0;
-      for(var sx = -1; sx <= 1; sx += 2) for(var sy = -1; sy <= 1; sy += 2) for(var sz = -1; sz <= 1; sz += 2){
-        corner.set(sx * halfNow.x, sy * halfNow.y, sz * halfNow.z).applyQuaternion(group.quaternion);
-        var h = Math.abs(corner.dot(right)), v = Math.abs(corner.dot(up));
-        if(h > maxH) maxH = h;
-        if(v > maxV) maxV = v;
+      fitDir.subVectors(camera.position, controls.target);
+      if(fitDir.lengthSq() < 1e-8) fitDir.set(0, 0, 1);
+      fitDir.normalize();
+      fitRight.crossVectors(worldUp, fitDir);
+      if(fitRight.lengthSq() < 1e-8) fitRight.set(1, 0, 0); else fitRight.normalize();
+      fitUp.crossVectors(fitDir, fitRight).normalize();
+      var maxH = 0, maxV = 0, mo = modelRef.position;
+      for(var i = 0; i < parts.length; i++){
+        var p = parts[i];
+        fitM.compose(p.mesh.position, p.mesh.quaternion, p.mesh.scale);
+        for(var j = 0; j < 8; j++){
+          fitV.copy(p.corners[j]).applyMatrix4(fitM).add(mo).applyQuaternion(group.quaternion).sub(controls.target);
+          var h = Math.abs(fitV.dot(fitRight)), v = Math.abs(fitV.dot(fitUp));
+          if(h > maxH) maxH = h;
+          if(v > maxV) maxV = v;
+        }
       }
       var vFov = THREE.MathUtils.degToRad(camera.fov / 2);
       var hFov = Math.atan(Math.tan(vFov) * camera.aspect);
-      return Math.max(maxV / Math.tan(vFov), maxH / Math.tan(hFov)) * FIT_MARGIN;
+      return Math.max(maxV / (Math.tan(vFov) * fitScaleV), maxH / Math.tan(hFov)) * FIT_MARGIN;
     }
     function applyFit(){
-      if(!half0.x) return;
-      halfNow.lerpVectors(half0, half1, exploded);
+      if(!half0.x || !modelRef) return;
       cyNow = cy0 + (cy1 - cy0) * exploded;
       controls.target.set(0, cyNow + camDy, 0);
       var dist = computeFitDistance() * camZoom;
@@ -272,7 +302,7 @@ import * as Look from './car-look.js';
         var x = (tmpV.x * 0.5 + 0.5) * w, y = (-tmpV.y * 0.5 + 0.5) * h;
         L.el.style.opacity = a;
         if(!L.w) L.w = L.el.offsetWidth;
-        L.el.style.transform = 'translate(' + Math.round(Math.min(Math.max(x, 8), w - L.w - 24)) + 'px,' + Math.round(Math.min(Math.max(y, 8), h - 56)) + 'px)';
+        L.el.style.transform = 'translate(' + Math.round(Math.min(Math.max(x, 8), w - L.w - 24)) + 'px,' + Math.round(Math.min(Math.max(y, 8), h - insetPx - 24)) + 'px)';
       }
     }
 
@@ -386,6 +416,10 @@ import * as Look from './car-look.js';
           start:spec.step ? (spec.step - 1) / (STEPS - 1) * GAP + (spec.d || 0) : 0,
           c:obj.geometry.boundingBox.getCenter(new THREE.Vector3())
         };
+        var bb = obj.geometry.boundingBox;
+        part.corners = [];
+        for(var cx = 0; cx < 2; cx++) for(var cy = 0; cy < 2; cy++) for(var cz = 0; cz < 2; cz++)
+          part.corners.push(new THREE.Vector3(cx ? bb.max.x : bb.min.x, cy ? bb.max.y : bb.min.y, cz ? bb.max.z : bb.min.z));
         obj.userData.part = part;
         parts.push(part);
         pickMeshes.push(obj);
@@ -413,7 +447,7 @@ import * as Look from './car-look.js';
       LABEL_KEYS.forEach(function(k, i){
         var el = document.createElement('span');
         el.className = 'car-label';
-        el.innerHTML = '<b>' + (i + 1) + '</b>' + TXT.steps[i];
+        el.innerHTML = '<b>' + (i + 1) + '</b><span class="t">' + TXT.steps[i] + '</span>';
         labelHost.appendChild(el);
         labels.push({ el:el, mesh:byKey[k], step:i + 1 });
       });
@@ -426,21 +460,30 @@ import * as Look from './car-look.js';
       var size = box.getSize(new THREE.Vector3());
       var center = box.getCenter(new THREE.Vector3());
       model.position.sub(center); // centra el auto armado en el origen
+      modelRef = model;
       model.updateMatrixWorld(true);
 
       group.add(model);
       ground.position.y = -size.y / 2 - 0.0002;
 
-      var shadowMesh = new THREE.Mesh(
-        new THREE.PlaneGeometry(size.x * 1.3, size.z * 1.8),
-        new THREE.MeshBasicMaterial({ map:makeContactShadowTexture(), transparent:true, opacity:0.8, depthWrite:false, toneMapped:false })
-      );
-      shadowMesh.rotation.x = -Math.PI / 2;
-      shadowMesh.position.y = -size.y / 2 + 0.0001;
-      shadowMesh.renderOrder = -1;
-      group.add(shadowMesh);
+      // Sombra de contacto falsa (no depende de sombras en tiempo real): una mancha suave bajo el cuerpo y una bajo cada llanta.
+      // Las manchas de las llantas siguen a su llanta cuando el auto se abre; el huella del cuerpo se aclara al separarse las piezas.
+      floorY = -size.y / 2;
+      var blobTex = makeContactShadowTexture();
+      footprint = new THREE.Mesh(new THREE.PlaneGeometry(size.x * 1.15, size.z * 1.9),
+        new THREE.MeshBasicMaterial({ map:blobTex, transparent:true, opacity:0.75, depthWrite:false, toneMapped:false }));
+      footprint.rotation.x = -Math.PI / 2; footprint.position.y = floorY + 0.0001; footprint.renderOrder = -1;
+      group.add(footprint);
+      parts.forEach(function(p){
+        if(!/^1[6-9]t$/.test(p.id)) return;
+        var blob = new THREE.Mesh(new THREE.PlaneGeometry(0.058, 0.034),
+          new THREE.MeshBasicMaterial({ map:blobTex, transparent:true, opacity:0.7, depthWrite:false, toneMapped:false }));
+        blob.rotation.x = -Math.PI / 2; blob.position.y = floorY + 0.00015; blob.renderOrder = -1;
+        group.add(blob); wheelBlobs.push({ part:p, mesh:blob });
+      });
+      model.updateMatrixWorld(true); updateContactShadows();
 
-      var plinthR = size.x * 0.62;
+      var plinthR = size.x * 0.54;
       var plinth = new THREE.Mesh(
         new THREE.RingGeometry(plinthR, plinthR * 1.006, 96),
         new THREE.MeshBasicMaterial({ color:0xCDDEEF, transparent:true, opacity:0.22, depthWrite:false, toneMapped:false, side:THREE.DoubleSide })
@@ -482,39 +525,149 @@ import * as Look from './car-look.js';
       Promise.all([decalsDone, compiled]).then(reveal, reveal);
     }).catch(function(e){ if(window.console) console.error('[SR-26 visor]', e); fail(); });
 
-    // ---------- Control de despiece (botón pausa + deslizador) ----------
-    var slider = null, playBtn = null, dragging = false;
+    // ---------- Controles: reproducir, Armado/Despiece, deslizador con marcas por etapa, vistas y pantalla completa ----------
+    var ICON = {
+      play:'<svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true"><path d="M4 2.5v11l9-5.5z" fill="currentColor"/></svg>',
+      pause:'<svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true"><path d="M3.5 2h3v12h-3zM9.5 2h3v12h-3z" fill="currentColor"/></svg>',
+      fsOn:'<svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true"><path d="M2 6V2h4M10 2h4v4M14 10v4h-4M6 14H2v-4" fill="none" stroke="currentColor" stroke-width="1.6"/></svg>',
+      fsOff:'<svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true"><path d="M6 2v4H2M10 2v4h4M10 14v-4h4M6 14v-4H2" fill="none" stroke="currentColor" stroke-width="1.6"/></svg>'
+    };
+    // Posición (0..1) de la marca de cada etapa: espaciadas por igual; a esa altura la etapa ya va bien avanzada y las anteriores casi terminaron.
+    var TICKS = [0, 1, 2, 3, 4].map(function(i){ return 0.3 + i * GAP / (STEPS - 1); });
+    var VIEWS = { iso:{ az:35, el:26 }, side:{ az:0, el:7 }, front:{ az:90, el:7 }, top:{ az:0, el:72 } };
+    var slider = null, playBtn = null, fsBtn = null, segBtns = [], tickEls = [], viewBtns = {}, dragging = false;
     function setPlayUi(){
       if(!playBtn) return;
-      playBtn.textContent = auto ? '❚❚' : '▶';
+      playBtn.innerHTML = auto ? ICON.pause : ICON.play;
       playBtn.setAttribute('aria-label', auto ? TXT.pause : TXT.play);
       playBtn.setAttribute('aria-pressed', auto ? 'true' : 'false');
+    }
+    var viewCycle = null, VIEW_ORDER = ['iso', 'side', 'front', 'top'];
+    function setViewUi(v){
+      currentView = v;
+      for(var k in viewBtns) viewBtns[k].setAttribute('aria-pressed', k === v ? 'true' : 'false');
+      if(viewCycle){
+        viewCycle.textContent = TXT.views[v || 'iso'][1];
+        viewCycle.setAttribute('aria-label', TXT.viewsLabel + ': ' + TXT.views[v || 'iso'][0]);
+      }
+    }
+    // Refleja el despiece en el deslizador, las marcas y Armado/Despiece
+    function updateUi(){
+      if(!slider) return;
+      if(!dragging) slider.value = Math.round(exploded * 100);
+      slider.style.setProperty('--p', (exploded * 100).toFixed(1) + '%');
+      slider.setAttribute('aria-valuetext', Math.round(exploded * 100) + ' %');
+      for(var i = 0; i < tickEls.length; i++) tickEls[i].classList.toggle('is-lit', exploded >= TICKS[i] - 0.004);
+      segBtns[0].setAttribute('aria-pressed', uTarget < 0.5 ? 'true' : 'false');
+      segBtns[1].setAttribute('aria-pressed', uTarget >= 0.5 ? 'true' : 'false');
     }
     function buildControls(){
       var bar = document.createElement('div');
       bar.className = 'car-ctl';
+      bar.setAttribute('role', 'group');
+      bar.setAttribute('aria-label', TXT.group);
+      var ticksHtml = TICKS.map(function(x, i){
+        return '<button type="button" class="car-tick" data-step="' + (i + 1) + '" style="left:calc(7px + ' + x.toFixed(3) + ' * (100% - 14px))" aria-label="' + TXT.stepGo + (i + 1) + ': ' + TXT.steps[i] + '" title="' + TXT.steps[i] + '">' + (i + 1) + '</button>';
+      }).join('');
+      var viewsHtml = Object.keys(VIEWS).map(function(k){
+        return '<button type="button" class="car-view" data-view="' + k + '" aria-pressed="false" aria-label="' + TXT.viewLabel + TXT.views[k][0] + '"><span class="long">' + TXT.views[k][0] + '</span><span class="short">' + TXT.views[k][1] + '</span></button>';
+      }).join('');
       bar.innerHTML =
-        '<button type="button" class="car-ctl-play"></button>' +
-        '<span class="car-ctl-end">' + TXT.assembled + '</span>' +
-        '<input type="range" class="car-ctl-range" min="0" max="100" step="1" value="0" aria-label="' + TXT.slider + '">' +
-        '<span class="car-ctl-end">' + TXT.exploded + '</span>';
+        '<button type="button" class="car-btn car-ctl-play"></button>' +
+        '<div class="car-seg" role="group" aria-label="' + TXT.slider + '"><button type="button" class="car-seg-btn" data-go="0">' + TXT.assembled + '</button><button type="button" class="car-seg-btn" data-go="1">' + TXT.exploded + '</button></div>' +
+        '<div class="car-ctl-track"><input type="range" class="car-ctl-range" min="0" max="100" step="1" value="0" aria-label="' + TXT.slider + '"><div class="car-ticks">' + ticksHtml + '</div></div>' +
+        '<div class="car-views" role="group" aria-label="' + TXT.viewsLabel + '">' + viewsHtml + '</div>' +
+        '<button type="button" class="car-view car-view-cycle" aria-label="' + TXT.viewsLabel + '"></button>' +
+        '<button type="button" class="car-btn car-ctl-fs"></button>';
       stage.appendChild(bar);
-      playBtn = bar.querySelector('.car-ctl-play'); slider = bar.querySelector('.car-ctl-range');
-      setPlayUi();
+      playBtn = bar.querySelector('.car-ctl-play'); slider = bar.querySelector('.car-ctl-range'); fsBtn = bar.querySelector('.car-ctl-fs');
+      segBtns = [].slice.call(bar.querySelectorAll('.car-seg-btn')); tickEls = [].slice.call(bar.querySelectorAll('.car-tick'));
+      [].forEach.call(bar.querySelectorAll('.car-view[data-view]'), function(el){ viewBtns[el.getAttribute('data-view')] = el; });
+      viewCycle = bar.querySelector('.car-view-cycle');
+      setPlayUi(); setFsUi(); setViewUi('iso'); updateUi();
       playBtn.addEventListener('click', function(){
-        auto = !auto;
+        auto = !auto; valueTween = null;
         if(auto){ cycleT = exploded < .5 ? 0 : HOLD_A + MOVE_OUT; } // sigue desde donde quedó
         setPlayUi(); requestRender();
       });
+      segBtns.forEach(function(btn){ btn.addEventListener('click', function(){ animateTo(+btn.getAttribute('data-go')); }); });
+      tickEls.forEach(function(btn){ btn.addEventListener('click', function(){ animateTo(TICKS[+btn.getAttribute('data-step') - 1]); }); });
       slider.addEventListener('input', function(){
-        auto = false; setPlayUi();
+        auto = false; valueTween = null; setPlayUi();
         uTarget = slider.value / 100;   // el valor mostrado lo alcanza con suavizado (ver tick)
         requestRender();
       });
       slider.addEventListener('pointerdown', function(){ dragging = true; });
       slider.addEventListener('pointerup', function(){ dragging = false; });
       slider.addEventListener('blur', function(){ dragging = false; });
+      Object.keys(viewBtns).forEach(function(k){ viewBtns[k].addEventListener('click', function(){ goToView(k); }); });
+      viewCycle.addEventListener('click', function(){ goToView(VIEW_ORDER[(VIEW_ORDER.indexOf(currentView || 'iso') + 1) % VIEW_ORDER.length]); });
+      fsBtn.addEventListener('click', toggleFullscreen);
+      resize();   // ya existen los controles: se mide su altura para encuadrar el auto por encima
     }
+
+    // Vistas: la cámara y el giro del auto viajan juntos al ángulo elegido; en ISO el auto vuelve a girar solo.
+    function currentAzEl(){
+      var d = new THREE.Vector3().subVectors(camera.position, controls.target).normalize();
+      return { az:Math.atan2(d.x, d.z), el:Math.asin(Math.max(-1, Math.min(1, d.y))) };
+    }
+    function shortest(from, to){ var d = (to - from) % (Math.PI * 2); if(d > Math.PI) d -= Math.PI * 2; if(d < -Math.PI) d += Math.PI * 2; return d; }
+    function goToView(name){
+      var v = VIEWS[name]; if(!v) return;
+      var cur = currentAzEl(), az1 = THREE.MathUtils.degToRad(v.az), el1 = THREE.MathUtils.degToRad(v.el);
+      viewTween = { name:name, t:0, dur:reduceMotion ? 1 : 850, az0:cur.az, el0:cur.el, daz:shortest(cur.az, az1), del:el1 - cur.el, yaw0:group.rotation.y, dyaw:shortest(group.rotation.y, 0) };
+      idleRotateAllowed = false;
+      if(resumeTimer){ clearTimeout(resumeTimer); resumeTimer = null; }
+      stage.classList.add('has-interacted');
+      setViewUi(name); clearHover(); requestRender();
+    }
+    function stepViewTween(delta){
+      var vt = viewTween; vt.t += delta * 1000;
+      var k = easeSine(clamp01(vt.t / vt.dur)), az = vt.az0 + vt.daz * k, el = vt.el0 + vt.del * k;
+      camera.position.set(Math.sin(az) * Math.cos(el), Math.sin(el), Math.cos(az) * Math.cos(el)).multiplyScalar(camera.position.distanceTo(controls.target)).add(controls.target);
+      group.rotation.y = vt.yaw0 + vt.dyaw * k;
+      if(vt.t >= vt.dur){
+        viewTween = null;
+        if(vt.name === 'iso' && !reduceMotion) resumeTimer = setTimeout(function(){ idleRotateAllowed = true; resumeTimer = null; requestRender(); }, 1200);
+      }
+    }
+
+    // Pantalla completa: API nativa si existe; si no (iPhone), el visor ocupa toda la ventana con la clase is-fs.
+    function isFullscreen(){ return document.fullscreenElement === stage || document.webkitFullscreenElement === stage || stage.classList.contains('is-fs'); }
+    function setFsUi(){
+      if(!fsBtn) return;
+      var on = isFullscreen();
+      fsBtn.innerHTML = on ? ICON.fsOff : ICON.fsOn;
+      fsBtn.setAttribute('aria-label', on ? TXT.fsOff : TXT.fsOn);
+      fsBtn.setAttribute('aria-pressed', on ? 'true' : 'false');
+    }
+    function fakeFullscreen(on){
+      stage.classList.toggle('is-fs', on); document.documentElement.classList.toggle('fs-lock', on);
+      setFsUi(); resize();
+    }
+    function toggleFullscreen(){
+      if(isFullscreen()){
+        if(stage.classList.contains('is-fs')) fakeFullscreen(false);
+        else if(document.exitFullscreen) document.exitFullscreen(); else if(document.webkitExitFullscreen) document.webkitExitFullscreen();
+        return;
+      }
+      var req = stage.requestFullscreen || stage.webkitRequestFullscreen;
+      if(!req){ fakeFullscreen(true); return; }
+      var res = req.call(stage);
+      if(res && res.catch) res.catch(function(){ fakeFullscreen(true); });
+    }
+    function onFsChange(){ setFsUi(); resize(); }
+    document.addEventListener('fullscreenchange', onFsChange);
+    document.addEventListener('webkitfullscreenchange', onFsChange);
+    document.addEventListener('keydown', function(e){ if(e.key === 'Escape' && stage.classList.contains('is-fs')) fakeFullscreen(false); });
+
+    // Si el sistema pierde el contexto WebGL (poca memoria, GPU reiniciada) se vuelve a mostrar el poster y, al recuperarlo, el visor.
+    canvas.addEventListener('webglcontextlost', function(e){
+      e.preventDefault(); stopLoop(); stage.classList.remove('is-ready'); stage.classList.add('is-lost');
+    });
+    canvas.addEventListener('webglcontextrestored', function(){
+      stage.classList.remove('is-lost'); stage.classList.add('is-ready'); requestRender();
+    });
 
     // ---------- RENDER ON-DEMAND + PAUSA FUERA DE VIEWPORT / PESTAÑA OCULTA ----------
     var inViewport = true;
@@ -543,7 +696,12 @@ import * as Look from './car-look.js';
     function resize(){
       var w = stage.clientWidth, h = stage.clientHeight;
       if(!w || !h) return;
+      var bar = stage.querySelector('.car-ctl');
+      insetPx = bar ? Math.max(0, h - bar.offsetTop + 4) : 0;
+      if(insetPx > h * 0.5) insetPx = 0;                 // visor diminuto: no se reserva nada
+      fitScaleV = (h - insetPx) / h;
       camera.aspect = w / h;
+      if(insetPx) camera.setViewOffset(w, h, 0, insetPx / 2, w, h); else camera.clearViewOffset();   // el auto sube insetPx/2 px: queda sobre los controles
       camera.updateProjectionMatrix();
       renderer.setSize(w, h, false);
       requestRender();
@@ -579,7 +737,12 @@ import * as Look from './car-look.js';
       if(auto){
         cycleT = (cycleT + delta) % CYCLE;
         uTarget = exploded = cycleValue(cycleT);
-        if(slider && !dragging) slider.value = Math.round(exploded * 100);
+        stillAnimating = true;
+      }else if(valueTween){
+        valueTween.t += delta * 1000;
+        var vk = clamp01(valueTween.t / valueTween.dur);
+        exploded = uTarget = valueTween.from + (valueTween.to - valueTween.from) * easeSine(vk);
+        if(vk >= 1) valueTween = null;
         stillAnimating = true;
       }else if(exploded !== uTarget){
         // suavizado exponencial hacia el destino del slider (sin saltos al arrastrar o soltar)
@@ -589,8 +752,9 @@ import * as Look from './car-look.js';
       }
       if(exploded !== lastU){
         applyPose(exploded); lastU = exploded; needsRender = true;
-        computeCamTarget();
+        computeCamTarget(); updateUi();
       }
+      if(viewTween){ stepViewTween(delta); needsRender = true; stillAnimating = true; }
       // la cámara persigue su objetivo (acompaña la etapa en curso) con suavizado
       if(Math.abs(camTarget.dy - camDy) > 2e-6 || Math.abs(camTarget.z - camZoom) > 2e-4){
         var k = 1 - Math.exp(-delta * 4.5);

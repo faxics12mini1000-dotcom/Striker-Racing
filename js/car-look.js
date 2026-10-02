@@ -4,7 +4,7 @@
  * de ahí `u = 0.001` en las luces. Faltan la 13 y la 14 en el modelo: nada aquí depende de que existan. */
 import * as THREE from 'three';
 
-export const COLORS = { navy:'#071B33', blue:'#183969', purple:'#7137D4', green:'#12B866', ice:'#CDDEEF', rubber:'#0E1013', steel:'#8E9AAB' };
+export const COLORS = { navy:'#071B33', blue:'#183969', purple:'#7137D4', green:'#12B866', ice:'#CDDEEF', rubber:'#0E1013', steel:'#8E9AAB', alu:'#C4CDD9', brass:'#C9A24A' };
 
 /* Librea por pieza. La clave es el prefijo numérico del nombre del nodo; el cuerpo (01) y la boca de los pontones (02/03)
  * se resuelven en el shader por posición en X (ver bodyShader), no por malla. Las llantas (16–19) llevan dos mallas:
@@ -75,8 +75,25 @@ export function pieceId(name) {
 export const EXPLODE = {};
 for (const id of Object.keys(PIECES)) { const k = id.slice(0, 2); if (!EXPLODE[k] && PIECES[id].step) EXPLODE[k] = { off: PIECES[id].off, step: PIECES[id].step }; }
 
-const PAINT = new Set(['01','02','03','04','05','06','07','08','09','10','11','12','24']);
-const WHEEL = /^1[6-9]$/;
+/* Acabado por pieza (clave de pieceId): cada familia de piezas tiene su propio material para que se lean distintas bajo la misma luz.
+ *   mate/satín  cuerpo, alerones, nariz y soportes (pintura con poco barniz)
+ *   laca        pontones, placas y espina (barniz alto: reflejan el entorno con nitidez)
+ *   caucho      llantas   ·   aluminio  rines y cartucho   ·   acero pulido  ejes   ·   latón  guías del cordón */
+const FINISH = {
+  satin:  { kind:'paint', metalness:.05, roughness:.6,  clearcoat:.3,  clearcoatRoughness:.45, envMapIntensity:.45 },
+  matte:  { kind:'paint', metalness:.03, roughness:.78, clearcoat:.12, clearcoatRoughness:.6,  envMapIntensity:.35 },
+  lacquer:{ kind:'paint', metalness:.12, roughness:.3,  clearcoat:1,   clearcoatRoughness:.07, envMapIntensity:.85 },
+  rubber: { kind:'std',   metalness:0,   roughness:.96, envMapIntensity:.25 },
+  alu:    { kind:'std',   metalness:.92, roughness:.3,  envMapIntensity:1.1,  color:COLORS.alu },
+  steel:  { kind:'std',   metalness:1,   roughness:.18, envMapIntensity:1.15, color:COLORS.steel },
+  brass:  { kind:'std',   metalness:1,   roughness:.3,  envMapIntensity:1,    color:COLORS.brass },
+};
+const FINISH_OF = {
+  '01':'satin', '04':'satin', '05':'satin', '09':'satin', '06d':'matte', '06i':'matte', '12':'matte',
+  '02':'lacquer', '03':'lacquer', '07':'lacquer', '08':'lacquer', '10':'lacquer', '11':'lacquer', '24':'lacquer',
+  '16t':'rubber', '17t':'rubber', '18t':'rubber', '19t':'rubber', '16r':'alu', '17r':'alu', '18r':'alu', '19r':'alu',
+  '15':'alu', '20':'steel', '21':'steel', '22':'brass', '23':'brass',
+};
 
 export function lookRenderer(renderer, shadows = true) {
   renderer.toneMapping = THREE.ACESFilmicToneMapping; renderer.toneMappingExposure = .92;
@@ -158,18 +175,17 @@ function bodyShader(mesh, mode) {
   };
 }
 
-/* Prepara una pieza por su nombre de nodo: normales (horneadas en el GLB), material por tipo (pintura mate/con barniz, caucho, metal) y sombras. */
+/* Prepara una pieza por su nombre de nodo: normales (horneadas en el GLB), acabado según FINISH_OF y sombras. */
 export function lookPart(mesh) {
-  const key = partKey(mesh.name), hex = colorFor(mesh.name);
+  const key = partKey(mesh.name), id = pieceId(mesh.name), hex = colorFor(mesh.name);
   // Las normales suavizadas vienen horneadas en el GLB (scripts/bake-sr26-normals.mjs); si faltan, se suaviza todo.
   if (!mesh.geometry.attributes.normal) mesh.geometry.computeVertexNormals();
-  const base = { color: new THREE.Color(hex), fog: false, polygonOffset: true, polygonOffsetFactor: 1, polygonOffsetUnits: 1 };
-  let mat;
-  if (key === '01') mat = new THREE.MeshPhysicalMaterial({ ...base, metalness: .02, roughness: .88, clearcoat: 0, envMapIntensity: .35 });   // navy mate
-  else if (PAINT.has(key)) mat = new THREE.MeshPhysicalMaterial({ ...base, metalness: .04, roughness: .62, clearcoat: .2, clearcoatRoughness: .4, envMapIntensity: .4 });
-  else if (WHEEL.test(key) && isRim(mesh.name)) mat = new THREE.MeshStandardMaterial({ ...base, metalness: .45, roughness: .5, envMapIntensity: .6 });
-  else if (WHEEL.test(key)) mat = new THREE.MeshStandardMaterial({ ...base, metalness: 0, roughness: .86, envMapIntensity: .45 });
-  else mat = new THREE.MeshStandardMaterial({ ...base, metalness: .6, roughness: .42, envMapIntensity: .7 });   // gris acero: ejes, guías, cartucho
+  const fin = FINISH[FINISH_OF[id]] || FINISH.satin;
+  const base = { color: new THREE.Color(fin.color || hex), fog: false, polygonOffset: true, polygonOffsetFactor: 1, polygonOffsetUnits: 1,
+                 metalness: fin.metalness, roughness: fin.roughness, envMapIntensity: fin.envMapIntensity };
+  const mat = fin.kind === 'paint'
+    ? new THREE.MeshPhysicalMaterial({ ...base, clearcoat: fin.clearcoat, clearcoatRoughness: fin.clearcoatRoughness })
+    : new THREE.MeshStandardMaterial(base);
   if (key === '01') mat.onBeforeCompile = bodyShader(mesh, 'body');
   else if (key === '02' || key === '03') mat.onBeforeCompile = bodyShader(mesh, 'mouth');
   mesh.material = mat; mesh.castShadow = true; mesh.receiveShadow = true;
