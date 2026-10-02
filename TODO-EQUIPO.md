@@ -31,8 +31,6 @@ diseño/copy que se tomaron por default y conviene revisar.
       mencionadas en `#herramientas`. Son inferencias razonables, no biografías dictadas por cada
       integrante — deben revisarlas y ajustarlas ellos mismos (ver modal de cada tarjeta).
 - [ ] **og-share.png**: imagen para compartir con el logo (se genera con `node scripts/generate-og-image.mjs`). Sustituir por una foto o render del monoplaza terminado cuando exista.
-      `scripts/`, pero sigue siendo un layout genérico de marca — no una fotografía real del auto
-      terminado. Sustituir cuando haya una fotografía o render final del monoplaza pintado.
 
 ## Auditoría del 24-sep-2026 (comparación commit 8a506d2 vs. HEAD)
 
