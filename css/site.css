@@ -101,7 +101,7 @@
   }
   .model-stage canvas{
     width:100% !important; height:100% !important; display:block; cursor:grab; touch-action:none;
-    opacity:0; transition:opacity .4s ease;
+    opacity:0; transition:opacity .45s ease;
   }
   .model-stage.is-ready canvas{opacity:1;}
   .model-stage canvas:active{cursor:grabbing;}
@@ -109,7 +109,8 @@
     position:absolute; inset:0; z-index:1; width:100%; height:100%; object-fit:cover; object-position:center;
     opacity:1; transition:opacity .35s ease;
   }
-  .model-stage.is-ready .model-poster{opacity:0; pointer-events:none;}
+  /* Fundido cruzado: el canvas aparece encima del poster (idéntico al primer cuadro) y el poster se retira cuando ya quedó tapado */
+  .model-stage.is-ready .model-poster{opacity:0; pointer-events:none; transition:opacity .01s linear .5s;}
   .no-3d .model-poster{opacity:1;}
   .model-stage .model-tag{
     position:absolute; top:10px; left:10px; z-index:2; pointer-events:none;
@@ -123,20 +124,17 @@
     opacity:0; transition:opacity .3s ease .15s;
   }
   .model-stage.is-ready .model-hint{opacity:1;}
+  /* Carga: barra de progreso real (la llena js/viewer.js con --p por fases: descarga, parseo, piezas, shaders) */
   .model-loader{
-    position:absolute; inset:0; z-index:3;
-    display:flex; align-items:center; justify-content:center;
+    position:absolute; left:12px; right:12px; bottom:64px; z-index:3; display:flex; align-items:center; gap:10px;
     opacity:0; transition:opacity .3s ease; pointer-events:none;
+    font-family:var(--mono); font-size:0.62rem; letter-spacing:0.06em; text-transform:uppercase; color:var(--ice-dim);
   }
   .model-stage.is-loading .model-loader{opacity:1;}
-  .model-loader .model-spinner{
-    width:32px; height:32px; border-radius:50%;
-    border:2px solid var(--border-fine); border-top-color:var(--emerald);
-  }
-  .model-stage.is-loading .model-loader .model-spinner{animation:model-spin .8s linear infinite;}
   .model-stage.is-ready .model-loader{opacity:0;}
-  @media (prefers-reduced-motion:reduce){ .model-loader .model-spinner{animation-duration:1.6s;} }
-  @keyframes model-spin{ to{ transform:rotate(360deg); } }
+  .model-bar{flex:1; max-width:260px; height:3px; background:var(--border-fine); overflow:hidden;}
+  .model-bar i{display:block; height:100%; background:var(--emerald); transform:scaleX(0); transform-origin:left center; transition:transform .25s ease;}
+  @media (prefers-reduced-motion:reduce){ .model-bar i{transition:none;} }
   .model-fallback{
     display:none; position:absolute; inset:0; z-index:2; align-items:center; justify-content:center; text-align:center;
     padding:20px; font-family:var(--mono); font-size:0.78rem; color:var(--ice); background:rgba(7,27,51,0.85);

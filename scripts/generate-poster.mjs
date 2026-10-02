@@ -1,36 +1,38 @@
-// Compone el poster estático del visor 3D (car-poster.webp): un recorte REAL del auto (PNG con
-// alpha capturado del propio renderer de three.js, ver README de la sección) sobre el mismo fondo
-// de cuadrícula navy que usa .model-stage en CSS, para que el crossfade poster -> canvas al cargar
-// three.js sea imperceptible. Uso: node scripts/generate-poster.mjs <ruta-al-PNG-capturado>
+// Genera los posters del visor 3D capturando el visor REAL congelado en su primer cuadro (/auto/?still): mismo ángulo, luces, sombra,
+// encuadre y tamaño que verá el canvas, así el fundido poster → canvas no se nota. Son PNG/WebP con alfa y se muestran sobre el
+// mismo fondo CSS del visor. Salidas: assets/img/car-poster-desktop.webp (visor ≥ 961 px, casi cuadrado) y car-poster-mobile.webp (4:3).
+// Requisitos: puppeteer-core, `node scripts/dev-server.mjs` en :8099 y Edge/Chrome (BROWSER para la ruta).
+// Uso: node scripts/generate-poster.mjs      (tras cambiar el modelo, la librea, la luz o js/viewer.js; antes corre npm run build:viewer)
+import puppeteer from 'puppeteer-core';
 import sharp from 'sharp';
-import path from 'node:path';
-import { fileURLToPath } from 'node:url';
-
-const root = path.dirname(path.dirname(fileURLToPath(import.meta.url)));
-const input = process.argv[2];
-if(!input){
-  console.error('Uso: node scripts/generate-poster.mjs <ruta-al-PNG-capturado-del-canvas>');
-  process.exit(1);
+import { existsSync, mkdirSync, statSync } from 'node:fs';
+const SITE = process.env.SITE_URL || 'http://localhost:8099';
+const BROWSER = process.env.BROWSER || ['C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe', 'C:/Program Files/Google/Chrome/Application/chrome.exe'].find(existsSync);
+const VARIANTS = [
+  { name: 'desktop', width: 1440, height: 900, dpr: 1.5 },   // el canvas del visor usa DPR hasta 1.5
+  { name: 'mobile', width: 960, height: 900, dpr: 1 },       // 4:3 (≤ 960 px el visor pasa a aspect-ratio 4/3)
+];
+// Todo transparente salvo el canvas: el poster debe llevar solo el auto y su sombra (alfa); el fondo lo pone el CSS del visor.
+const HIDE = `*,*::before,*::after{background:transparent!important;background-image:none!important;box-shadow:none!important;border-color:transparent!important}
+*::before,*::after,.model-poster,.model-tag,.model-hint,.model-loader,.car-ctl,.car-labels{display:none!important}`;
+mkdirSync('assets/img', { recursive: true });
+const browser = await puppeteer.launch({ executablePath: BROWSER, headless: 'new', args: ['--use-angle=swiftshader', '--enable-unsafe-swiftshader', '--ignore-gpu-blocklist'] });
+for (const v of VARIANTS) {
+  const p = await browser.newPage();
+  p.on('pageerror', e => console.error('pageerror:', e.message));
+  await p.setViewport({ width: v.width, height: v.height, deviceScaleFactor: v.dpr });
+  await p.goto(`${SITE}/auto/?still`, { waitUntil: 'load' });
+  await p.waitForSelector('#modelStage.is-ready', { timeout: 120000 });
+  await new Promise(r => setTimeout(r, 1200));           // un par de cuadros más, ya sin sombras pendientes
+  await p.addStyleTag({ content: HIDE });
+  await new Promise(r => setTimeout(r, 300));
+  const canvas = await p.$('#modelStage canvas');
+  const box = await canvas.boundingBox();
+  const png = await canvas.screenshot({ omitBackground: true });
+  const out = `assets/img/car-poster-${v.name}.webp`;
+  await sharp(png).webp({ quality: 80, alphaQuality: 72, effort: 6, smartSubsample: true }).toFile(out);
+  const m = await sharp(out).metadata();
+  console.log(`${out}  ${m.width}x${m.height}  ${(statSync(out).size / 1024).toFixed(1)} KB  (visor ${Math.round(box.width)}x${Math.round(box.height)} CSS px)`);
+  await p.close();
 }
-
-const W = 800, H = 550;
-
-const bgSvg = `
-<svg width="${W}" height="${H}" xmlns="http://www.w3.org/2000/svg">
-  <defs>
-    <pattern id="grid" width="24" height="24" patternUnits="userSpaceOnUse">
-      <path d="M 24 0 L 0 0 0 24" fill="none" stroke="#183969" stroke-width="1" opacity="0.5"/>
-    </pattern>
-  </defs>
-  <rect width="${W}" height="${H}" fill="#071B33"/>
-  <rect width="${W}" height="${H}" fill="url(#grid)"/>
-</svg>`;
-
-const carBuffer = await sharp(path.resolve(input)).resize(W, H, { fit: 'contain', background: { r:0, g:0, b:0, alpha:0 } }).png().toBuffer();
-
-await sharp(Buffer.from(bgSvg))
-  .composite([{ input: carBuffer, gravity: 'center' }])
-  .webp({ quality: 82 })
-  .toFile(path.join(root, 'car-poster.webp'));
-
-console.log('car-poster.webp generado (' + W + 'x' + H + ')');
+await browser.close();

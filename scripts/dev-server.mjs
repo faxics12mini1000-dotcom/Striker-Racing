@@ -35,13 +35,14 @@ http.createServer(async (req, res) => {
     var ext = path.extname(filePath);
     var headers = { 'Content-Type': types[ext] || 'application/octet-stream' };
     if(useCache){
-      if(urlPath.startsWith('/fonts/') || urlPath.startsWith('/vendor/')) headers['Cache-Control'] = 'public, max-age=31536000, immutable';
+      if(urlPath.startsWith('/fonts/') || urlPath.startsWith('/vendor/') || urlPath.startsWith('/js/dist/') || urlPath.startsWith('/assets/models/')) headers['Cache-Control'] = 'public, max-age=31536000, immutable';
       else if(['.glb', '.webp', '.png'].includes(ext)) headers['Cache-Control'] = 'public, max-age=604800';
     }
     if(compressible.has(ext) && /\bgzip\b/.test(req.headers['accept-encoding'] || '')){
       data = gzipSync(data);
       headers['Content-Encoding'] = 'gzip';
     }
+    headers['Content-Length'] = data.length;
     res.writeHead(200, headers);
     res.end(data);
   }catch(e){

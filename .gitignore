@@ -2,3 +2,6 @@ node_modules/
 team-photos.zip
 scripts/source/
 capturas/
+
+# scripts temporales de depuración
+scripts/*.tmp.mjs

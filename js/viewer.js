@@ -1,8 +1,14 @@
+import * as THREE from 'three';
+import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import { MeshoptDecoder } from 'three/addons/libs/meshopt_decoder.module.js';
+import * as Look from './car-look.js';
+
 (function(){
-  // Visor 3D del monoplaza SR-26 (assets/models/sr26.glb) en el hero: gira solo, se arma y se desarma en bucle,
+  // Visor 3D del monoplaza SR-26 (assets/models/sr26.glb) en /auto/: gira solo, se arma y se desarma en bucle,
   // y se puede arrastrar para girar o mover el control para ver el despiece. NO secuestra el scroll de la página.
-  // Perf: three.js + el .glb solo se descargan cuando el visor está por entrar en viewport y la página ya cargó;
-  // hasta entonces se muestra el poster estático (car-poster.webp).
+  // Carga: este bundle se pide con modulepreload y el GLB con preload; al terminar de pintar el poster (idéntico al primer
+  // cuadro del visor) se descargan/parsean en paralelo el GLB, el entorno horneado y el logo, y el canvas se funde sobre el poster.
   var stage = document.getElementById('modelStage');
   if(!stage) return;
   function fail(){ stage.classList.add('no-3d'); }
@@ -14,6 +20,11 @@
         steps:['Llantas y ejes', 'Alerones y nariz', 'Pontones', 'Espina y pilar', 'Cartucho CO₂'] };
   // Pieza que ancla la etiqueta de cada etapa (clave del nodo en el GLB)
   var LABEL_KEYS = ['17', '05', '02', '24', '15'];
+  var URLS = {
+    model: stage.dataset.model || '/assets/models/sr26.glb',
+    env: stage.dataset.env || '/assets/models/env-room.png',
+    logo: stage.dataset.logo || '/logo.png'
+  };
 
   try{
     var testCanvas = document.createElement('canvas');
@@ -21,50 +32,75 @@
     if(!gl) return fail();
   }catch(e){ return fail(); }
 
+  // /auto/?still congela el visor en su primer cuadro (sin giro ni ciclo): scripts/generate-poster.mjs lo captura como poster.
+  var STILL = /[?&]still(=|&|$)/.test(location.search);
+  var mark = function(n){ try{ performance.mark('sr26:' + n); }catch(e){} };
+  var barFill = stage.querySelector('.model-bar i');
+  var progress = 0;
+  // Progreso real por fases: descarga del GLB (por bytes) 5–50 %, parseo 50–62 %, piezas y logo 62–82 %, shaders 82–100 %.
+  function setProgress(p){
+    if(p <= progress) return;
+    progress = Math.min(1, p);
+    if(barFill) barFill.style.transform = 'scaleX(' + progress.toFixed(3) + ')';
+  }
+
   var booted = false;
-  function whenIdle(fn){
-    function go(){ if('requestIdleCallback' in window) requestIdleCallback(fn, { timeout:600 }); else setTimeout(fn, 100); }
+  function afterFirstPaint(fn){
+    function go(){ requestAnimationFrame(function(){ setTimeout(fn, 0); }); }
     if(document.readyState !== 'loading') go(); else document.addEventListener('DOMContentLoaded', go, { once:true });
   }
-  function bootWhenNear(){
+  function start(){
     if(booted) return;
     booted = true;
-    whenIdle(boot);
+    afterFirstPaint(boot);
   }
+  // Carga anticipada: arranca cuando el visor está a menos de 600 px de entrar (en /auto/ ya está a la vista y arranca de inmediato)
   if('IntersectionObserver' in window){
     var bootIO = new IntersectionObserver(function(entries){
       entries.forEach(function(entry){
-        if(entry.isIntersecting){ bootIO.disconnect(); bootWhenNear(); }
+        if(entry.isIntersecting){ bootIO.disconnect(); start(); }
       });
-    }, { rootMargin:'200px 0px' });
+    }, { rootMargin:'600px 0px' });
     bootIO.observe(stage);
   }else{
-    bootWhenNear();
+    start();
   }
 
-  var mark = function(n){ try{ performance.mark('sr26:' + n); }catch(e){} };
+  function fetchGlb(url, onProgress){
+    return fetch(url).then(function(res){
+      if(!res.ok) throw new Error('glb ' + res.status);
+      var total = +res.headers.get('content-length') || 0;
+      if(!res.body || !total) return res.arrayBuffer().then(function(b){ onProgress(1); return b; });
+      var reader = res.body.getReader(), chunks = [], got = 0;
+      function pump(){
+        return reader.read().then(function(r){
+          if(r.done){
+            var out = new Uint8Array(got), o = 0;
+            chunks.forEach(function(c){ out.set(c, o); o += c.length; });
+            return out.buffer;
+          }
+          chunks.push(r.value); got += r.value.length; onProgress(Math.min(1, got / total));
+          return pump();
+        });
+      }
+      return pump();
+    });
+  }
+
   async function boot(){
     mark('boot');
     stage.classList.add('is-loading');
-    var THREE, GLTFLoaderMod, OrbitControlsMod, MeshoptMod, Look;
+    setProgress(0.05);
+    // Todo lo de red arranca ya y en paralelo: GLB (con progreso), logo + fuentes de los decals y entorno horneado.
+    var glbP = fetchGlb(URLS.model, function(f){ setProgress(0.05 + f * 0.45); });
+    var decalsP = Look.preloadDecalAssets(URLS.logo).catch(function(){ return null; });
+    glbP.catch(function(){});
     try{
-      var mods = await Promise.all([
-        import('three'),
-        import('three/addons/loaders/GLTFLoader.js'),
-        import('three/addons/controls/OrbitControls.js'),
-        import('three/addons/libs/meshopt_decoder.module.js').catch(function(){ return null; }),
-        import('./car-look.js')
-      ]);
-      THREE = mods[0]; GLTFLoaderMod = mods[1]; OrbitControlsMod = mods[2]; MeshoptMod = mods[3]; Look = mods[4];
-    }catch(e){ return fail(); }
-
-    mark('modules');
-    try{
-      initViewer(THREE, GLTFLoaderMod.GLTFLoader, OrbitControlsMod.OrbitControls, MeshoptMod && MeshoptMod.MeshoptDecoder, Look);
+      initViewer(glbP, decalsP);
     }catch(e){ fail(); }
   }
 
-  function initViewer(THREE, GLTFLoader, OrbitControls, MeshoptDecoder, Look){
+  function initViewer(glbP, decalsP){
     var EXPLODE = Look.EXPLODE, STEPS = Look.EXPLODE_STEPS;
     var scene = new THREE.Scene();
     var camera = new THREE.PerspectiveCamera(30, 1, 1, 5000);
@@ -81,15 +117,15 @@
 
     // Esta escena trabaja en metros (el GLB viene en metros), de ahí u = 0.001.
     mark('renderer');
-    Look.lookEnvironment(renderer, scene);
-    mark('env');
+    // Entorno prefiltrado y horneado (16 KB); si falla se genera el PMREM en el cliente.
+    var envP = Look.lookEnvironmentBaked(scene, URLS.env).catch(function(){ return Look.lookEnvironment(renderer, scene); }).then(function(){ mark('env'); });
     var keyLight = Look.lookLights(scene, 0.001, !lowEnd);
     var ground = Look.lookGround(scene, 0.001);
 
     var group = new THREE.Group();
     scene.add(group);
 
-    var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var reduceMotion = STILL || (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
 
     var controls = new OrbitControls(camera, renderer.domElement);
     controls.enableDamping = true;
@@ -224,8 +260,12 @@
     }
 
     var loader = new GLTFLoader();
-    if(MeshoptDecoder) loader.setMeshoptDecoder(MeshoptDecoder);
-    loader.load(new URL('../assets/models/sr26.glb?v=3', import.meta.url).href, function(gltf){
+    loader.setMeshoptDecoder(MeshoptDecoder);
+    // Primero terminan todas las descargas (en paralelo y pequeñas salvo el GLB); así el trabajo de CPU queda contiguo.
+    Promise.all([glbP, envP, decalsP]).then(function(r){
+      return new Promise(function(ok, no){ loader.parse(r[0], '', ok, no); });
+    }).then(function(gltf){
+      setProgress(0.62);
       mark('glb-parsed');
       var model = gltf.scene;
 
@@ -278,7 +318,7 @@
       stage.appendChild(labelHost);
 
       // Logos dibujados en código (espina + espacios disponibles). Si falla la carga, el auto se ve igual.
-      Look.addLogoDecals(byKey, new URL('../logo.png', import.meta.url).href, EN ? 'en' : 'es').then(function(){ needsRender = true; startLoop(); }).catch(function(){});
+      var decalsDone = decalsP.then(function(assets){ return assets ? Look.addLogoDecals(byKey, Promise.resolve(assets), EN ? 'en' : 'es') : null; }).catch(function(){});
 
       var box = new THREE.Box3().setFromObject(model);
       var size = box.getSize(new THREE.Vector3());
@@ -326,15 +366,19 @@
 
       buildControls();
       mark('built');
+      setProgress(0.82);
       var reveal = function(){
         mark('compiled');
+        setProgress(1);
         stage.classList.remove('is-loading');
         stage.classList.add('is-ready');
         needsRender = true;
         startLoop();
       };
-      if(renderer.compileAsync){ renderer.compileAsync(scene, camera).then(reveal, reveal); } else reveal();
-    }, undefined, function(){ fail(); });
+      // Los shaders se compilan en paralelo mientras se pegan los logos; el poster sigue visible hasta que todo está listo.
+      var compiled = renderer.compileAsync ? renderer.compileAsync(scene, camera).catch(function(){}) : Promise.resolve();
+      Promise.all([decalsDone, compiled]).then(reveal, reveal);
+    }).catch(function(){ fail(); });
 
     // ---------- Control de despiece (botón pausa + deslizador) ----------
     var slider = null, playBtn = null, dragging = false;

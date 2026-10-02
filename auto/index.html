@@ -36,15 +36,11 @@
 <link rel="preload" href="/fonts/inter-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/fonts/oswald-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/fonts/jetbrains-mono-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
-<script type="importmap">
-{"imports":{
-  "three":"/vendor/three/build/three.module.min.js",
-  "three/addons/":"/vendor/three/examples/jsm/"
-}}
-</script>
-<link rel="modulepreload" href="/vendor/three/build/three.module.min.js">
-<link rel="modulepreload" href="/js/car-look.js">
-<link rel="preload" href="/assets/models/sr26.glb?v=3" as="fetch" type="model/gltf-binary" crossorigin>
+<!-- viewer:head:begin -->
+<link rel="modulepreload" href="/js/dist/viewer.BGTAATKM.js">
+<link rel="preload" href="/assets/models/sr26.glb?v=e992e3fa" as="fetch" type="model/gltf-binary" crossorigin>
+<link rel="preload" href="/assets/models/env-room.png?v=586e7346" as="fetch" crossorigin>
+<!-- viewer:head:end -->
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -135,11 +131,14 @@
   </div>
   <div class="wrap hero-frame">
     <div class="hero-main">
-      <div class="model-stage" id="modelStage" aria-label="Modelo 3D del SR-26, monoplaza de Striker Racing, con animación de despiece">
-        <img class="model-poster" src="/car-poster.webp" width="800" height="550" alt="Monoplaza SR-26 de Striker Racing con su librea azul marino, morada y verde esmeralda" loading="eager" fetchpriority="high">
+      <div class="model-stage" id="modelStage" data-model="/assets/models/sr26.glb?v=e992e3fa" data-env="/assets/models/env-room.png?v=586e7346" data-logo="/logo.png" aria-label="Modelo 3D del SR-26, monoplaza de Striker Racing, con animación de despiece">
+        <picture>
+          <source media="(min-width:961px)" srcset="/assets/img/car-poster-desktop.webp" width="1097" height="1094">
+          <img class="model-poster" src="/assets/img/car-poster-mobile.webp" width="910" height="681" alt="Monoplaza SR-26 de Striker Racing con su librea azul marino, morada y verde esmeralda" loading="eager" fetchpriority="high" decoding="async">
+        </picture>
         <span class="model-tag">SR-26 · Prototipo Striker Racing</span>
         <span class="model-hint">Arrastra para girar</span>
-        <div class="model-loader" aria-hidden="true"><span class="model-spinner"></span></div>
+        <div class="model-loader" aria-hidden="true"><span class="model-bar"><i></i></span></div>
         <div class="model-fallback">Tu navegador no puede mostrar el modelo 3D interactivo.<br>Consulta las cotas reglamentarias.</div>
       </div>
       <aside class="hud-panel" aria-label="Cotas reglamentarias de la categoría">
@@ -195,6 +194,6 @@
 <button id="backToTop" class="hud-top-btn" type="button" aria-label="Volver arriba">&#9650; TOP</button>
 
 <script src="/js/site.js" defer></script>
-<script type="module" src="/js/viewer.js"></script>
+<!-- viewer:script:begin --><script type="module" src="/js/dist/viewer.BGTAATKM.js"></script><!-- viewer:script:end -->
 </body>
 </html>

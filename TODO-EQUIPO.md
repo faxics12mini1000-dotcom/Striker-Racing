@@ -88,9 +88,10 @@ Diferencias de diseño respecto a 8a506d2 que conviene que el equipo confirme:
 
 ## Notas técnicas para quien mantenga el sitio
 
-- **Regenerar `car-poster.webp`** si cambia el modelo/librea: abrir el sitio, capturar el canvas
-  del visor (necesita `preserveDrawingBuffer:true` temporal en el renderer) como PNG con alpha y
-  correr `node scripts/generate-poster.mjs <captura.png>`.
+- **Visor 3D (mantenimiento)**: las páginas `/auto/` y `/en/car/` cargan un bundle único con hash (`js/dist/`). Si se toca `js/viewer.js`,
+  `js/car-look.js` o el modelo, correr en este orden: `npm run bake:glb` (solo si cambió el GLB: hornea normales), `npm run build:viewer`
+  (empaqueta y estampa los hashes en el HTML), y con `node scripts/dev-server.mjs` activo `node scripts/generate-poster.mjs`
+  (regenera `assets/img/car-poster-{desktop,mobile}.webp` capturando el visor real). El entorno de luz se rehace con `npm run bake:env`.
 - **Niveles de patrocinio**: precios y beneficios siguen el folleto del equipo (Folleto_STEM_racing.pdf). El configurador de logo y el
   diagrama de zonas se quitaron por ahora (usaban el auto anterior). Fecha límite en la web: 23 de noviembre.
 - **Visor 3D en pestañas ocultas**: el loop de render se pausa con la pestaña oculta y fuera de

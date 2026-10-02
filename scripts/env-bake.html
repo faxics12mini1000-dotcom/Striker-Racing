@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<!-- Herramienta de desarrollo: genera el PMREM (CubeUV) de RoomEnvironment y expone sus píxeles para scripts/bake-env.mjs. -->
+<html><head><meta charset="utf-8"><title>env bake</title>
+<script type="importmap">{"imports":{"three":"/vendor/three/build/three.module.min.js","three/addons/":"/vendor/three/examples/jsm/"}}</script></head>
+<body><script type="module">
+import * as THREE from 'three';
+import * as Look from '/js/car-look.js';
+const size = +(new URLSearchParams(location.search).get('size') || 64);
+const renderer = new THREE.WebGLRenderer({ antialias: false });
+const scene = new THREE.Scene();
+const rt = await Look.lookEnvironment(renderer, scene, size);
+const w = rt.width, h = rt.height, buf = new Uint16Array(w * h * 4);
+renderer.readRenderTargetPixels(rt, 0, 0, w, h, buf);
+const out = new Float32Array(w * h * 3);
+for (let i = 0; i < w * h; i++) for (let k = 0; k < 3; k++) out[i * 3 + k] = THREE.DataUtils.fromHalfFloat(buf[i * 4 + k]);
+window.envBake = { w, h, max: out.reduce((a, b) => Math.max(a, b), 0), data: Array.from(out) };
+</script></body></html>

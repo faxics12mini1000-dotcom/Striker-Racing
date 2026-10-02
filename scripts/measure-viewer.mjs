@@ -29,7 +29,7 @@ for (let i = 0; i < runs; i++) {
   rows.push(r); await ctx.close();
 }
 await browser.close();
-const keys = ['boot', 'modules', 'renderer', 'env', 'glb-parsed', 'looks', 'built', 'compiled', 'first-frame'];
+const keys = ['boot', 'modules', 'renderer', 'env-fetched', 'env-decoded', 'env-ready', 'env', 'glb-parsed', 'looks', 'built', 'compiled', 'first-frame'];
 console.log(`ruta ${route} · red ${net} · cpu x${cpu} · ${runs} corridas (ms desde navegación; mediana)`);
 const med = a => { a = a.filter(x => x != null).sort((x, y) => x - y); return a.length ? a[Math.floor(a.length / 2)] : null; };
 let prev = 0;

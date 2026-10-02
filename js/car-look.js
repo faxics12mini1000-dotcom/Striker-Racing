@@ -3,8 +3,6 @@
  * Las piezas vienen de assets/models/sr26.glb (un nodo por STL, nombre = archivo sin extensión). La escena trabaja en metros,
  * de ahí `u = 0.001` en las luces. Faltan la 13 y la 14 en el modelo: nada aquí depende de que existan. */
 import * as THREE from 'three';
-import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
-import { toCreasedNormals } from 'three/addons/utils/BufferGeometryUtils.js';
 
 export const COLORS = { navy:'#071B33', blue:'#183969', purple:'#7137D4', green:'#12B866', ice:'#CDDEEF', rubber:'#0E1013', steel:'#8E9AAB' };
 
@@ -47,8 +45,35 @@ export function lookRenderer(renderer, shadows = true) {
   renderer.toneMapping = THREE.ACESFilmicToneMapping; renderer.toneMappingExposure = .92;
   renderer.shadowMap.enabled = shadows; renderer.shadowMap.type = THREE.PCFShadowMap;
 }
-export function lookEnvironment(renderer, scene) {
-  try { const pm = new THREE.PMREMGenerator(renderer); scene.environment = pm.fromScene(new RoomEnvironment(), .04).texture; pm.dispose(); } catch (e) { /* sin entorno: quedan las luces directas */ }
+/* Entorno de estudio (RoomEnvironment) prefiltrado en CubeUV. Hornear una vez cuesta lo mismo que hacerlo en cada visita, así que:
+ *   - lookEnvironmentBaked: carga assets/models/env-room.png (scripts/bake-env.mjs), que ya trae el PMREM; no genera nada en el cliente.
+ *   - lookEnvironment: genera el PMREM en el cliente (RoomEnvironment se carga solo si hace falta). Se usa para hornear y como respaldo. */
+export async function lookEnvironment(renderer, scene, cubeSize) {
+  try {
+    const { RoomEnvironment } = await import('three/addons/environments/RoomEnvironment.js');
+    const pm = new THREE.PMREMGenerator(renderer);
+    if (cubeSize) { const set = pm._setSize; pm._setSize = function () { return set.call(this, cubeSize); }; }
+    const rt = pm.fromScene(new RoomEnvironment(), .04); scene.environment = rt.texture; pm.dispose();
+    return rt;
+  } catch (e) { /* sin entorno: quedan las luces directas */ }
+}
+/* PNG RGB: el valor lineal v (0..64) va como (v/64)^(1/3) en 8 bits; la imagen ES el render target CubeUV (mismo orden de filas). */
+export const ENV_MAX = 64;
+export async function lookEnvironmentBaked(scene, url) {
+  const mk = n => { try { performance.mark('sr26:env-' + n); } catch (e) {} };
+  const blob = await (await fetch(url)).blob(); mk('fetched');
+  const bmp = await createImageBitmap(blob, { colorSpaceConversion: 'none', premultiplyAlpha: 'none' });
+  const c = document.createElement('canvas'); c.width = bmp.width; c.height = bmp.height;
+  const g = c.getContext('2d', { willReadFrequently: true }); g.drawImage(bmp, 0, 0);
+  mk('decoded');
+  const px = g.getImageData(0, 0, c.width, c.height).data, n = c.width * c.height, half = new Uint16Array(n * 4);
+  const one = THREE.DataUtils.toHalfFloat(1);
+  for (let i = 0; i < n; i++) for (let k = 0; k < 3; k++) { const e = px[i * 4 + k] / 255; half[i * 4 + k] = THREE.DataUtils.toHalfFloat(e * e * e * ENV_MAX); half[i * 4 + 3] = one; }
+  const tex = new THREE.DataTexture(half, c.width, c.height, THREE.RGBAFormat, THREE.HalfFloatType);
+  tex.mapping = THREE.CubeUVReflectionMapping; tex.minFilter = tex.magFilter = THREE.LinearFilter; tex.generateMipmaps = false;
+  tex.colorSpace = THREE.LinearSRGBColorSpace; tex.needsUpdate = true;
+  scene.environment = tex; mk('ready');
+  return tex;
 }
 /* u = unidades de escena por mm (0.001 en el hero, que trabaja en metros). */
 export function lookLights(scene, u = 1, shadows = true) {
@@ -96,10 +121,11 @@ function bodyShader(mesh, mode) {
   };
 }
 
-/* Prepara una pieza por su nombre de nodo: normales suavizadas, material por tipo (pintura mate/con barniz, caucho, metal) y sombras. */
+/* Prepara una pieza por su nombre de nodo: normales (horneadas en el GLB), material por tipo (pintura mate/con barniz, caucho, metal) y sombras. */
 export function lookPart(mesh) {
   const key = partKey(mesh.name), hex = colorFor(mesh.name);
-  mesh.geometry = toCreasedNormals(mesh.geometry, THREE.MathUtils.degToRad(38));
+  // Las normales suavizadas vienen horneadas en el GLB (scripts/bake-sr26-normals.mjs); si faltan, se suaviza todo.
+  if (!mesh.geometry.attributes.normal) mesh.geometry.computeVertexNormals();
   const base = { color: new THREE.Color(hex), fog: false, polygonOffset: true, polygonOffsetFactor: 1, polygonOffsetUnits: 1 };
   let mat;
   if (key === '01') mat = new THREE.MeshPhysicalMaterial({ ...base, metalness: .02, roughness: .88, clearcoat: 0, envMapIntensity: .35 });   // navy mate
@@ -122,7 +148,7 @@ export const SLOT_TEXT = {
   en:{ ally:'TECHNICAL ALLY', partner:'STRATEGIC PARTNER', wing:['TECHNICAL', 'ALLY'] },
 };
 const FONT = '600 {s}px Oswald, "Arial Narrow", Impact, sans-serif';
-async function fonts() { try { await document.fonts.load('700 120px Oswald'); await document.fonts.load('600 40px Oswald'); } catch (e) { /* queda la fuente de respaldo */ } }
+export async function fonts() { try { await document.fonts.load('700 120px Oswald'); await document.fonts.load('600 40px Oswald'); } catch (e) { /* queda la fuente de respaldo */ } }
 const canvasOf = (w, h) => { const c = document.createElement('canvas'); c.width = w; c.height = h; return c; };
 
 function drawLockup(img) {
@@ -173,10 +199,13 @@ export const SLOTS = {
 
 /* parts: { '02': mesh, '03': mesh, ... } con las matrices del mundo ya actualizadas. lang: 'es' | 'en'.
  * Devuelve la lista de decals { kind, mesh }; si falta una pieza (p. ej. no existe la 13/14) simplemente se omite. */
+/* Fuentes + imagen del logo; se puede llamar antes de tener el modelo para que la descarga corra en paralelo. */
+export function preloadDecalAssets(logoUrl) {
+  return Promise.all([fonts(), new Promise((ok, no) => { const i = new Image(); i.onload = () => ok(i); i.onerror = no; i.src = logoUrl; })]).then(r => r[1]);
+}
 export async function addLogoDecals(parts, logoUrl, lang = 'es') {
   const T = SLOT_TEXT[lang] || SLOT_TEXT.es;
-  await fonts();
-  const img = await new Promise((ok, no) => { const i = new Image(); i.onload = () => ok(i); i.onerror = no; i.src = logoUrl; });
+  const img = await (typeof logoUrl === 'string' ? preloadDecalAssets(logoUrl) : logoUrl);   // logoUrl puede ser la promesa de preloadDecalAssets
   const lockup = decalMaterial(drawLockup(img));
   const ally = decalMaterial(drawSlot(1024, 284, [T.ally], 96));
   const partner = decalMaterial(drawSlot(1024, 188, [T.partner], 82));

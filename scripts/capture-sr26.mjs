@@ -1,5 +1,5 @@
 // Genera los recursos visuales del SR-26 renderizando el modelo real en un navegador (Chrome/Edge) sin interfaz:
-//   poster : car-poster.webp (+ og-preview.png con generate-og-image.mjs)
+//   poster : assets/img/car-poster-{desktop,mobile}.webp (+ og-preview.png con generate-og-image.mjs)
 //   mapa   : assets/img/sponsor-map-{top,side}-{es,en}.webp (vistas para /patrocinios/) e imprime la posición (%) de cada marcador
 //   paginas: capturas/*.png de /auto/ (armado y despiece) y /patrocinios/ a 1440 y 375 px
 // Requisitos: `npm i --no-save puppeteer-core`, `node scripts/dev-server.mjs` corriendo en :8099 y un Chrome/Edge (variable BROWSER para la ruta).
@@ -30,10 +30,7 @@ async function render(query, w, h) {
 }
 
 if (todo.includes('poster')) {
-  const { png } = await render('view=iso', 800, 550);
-  const tmp = path.join(os.tmpdir(), 'sr26-poster.png');
-  await sharp(png).toFile(tmp);
-  execFileSync('node', ['scripts/generate-poster.mjs', tmp], { stdio: 'inherit' });
+  execFileSync('node', ['scripts/generate-poster.mjs'], { stdio: 'inherit' });
   execFileSync('node', ['scripts/generate-og-image.mjs'], { stdio: 'inherit' });
 }
 
