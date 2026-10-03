@@ -115,6 +115,7 @@
   ]
 }
 </script>
+<!-- viewer:head:begin --><!-- viewer:head:end -->
 <link rel="stylesheet" href="/css/site.css">
 <link rel="stylesheet" href="/css/gallery.css">
 </head>
@@ -137,7 +138,8 @@
         <div class="lang-switch" role="group" aria-label="Language">
           <a href="/" lang="es" hreflang="es-mx">ES</a><span aria-hidden="true">|</span><a href="/en/" aria-current="true" lang="en" hreflang="en">EN</a>
         </div>
-        <a class="contact-cta" href="https://wa.me/525511839779?text=Hi%2C%20I%27m%20interested%20in%20sponsoring%20Striker%20Racing%2C%20could%20we%20talk%3F" target="_blank" rel="noopener">Contact us</a>
+        <a class="contact-cta is-sponsor" href="/en/sponsorship/">Sponsor</a>
+        <a class="contact-cta is-ghost" href="https://wa.me/525511839779?text=Hi%2C%20I%27m%20interested%20in%20sponsoring%20Striker%20Racing%2C%20could%20we%20talk%3F" target="_blank" rel="noopener">Contact us</a>
       </div>
     </div>
   </div>
@@ -145,7 +147,7 @@
 
 <main id="main" tabindex="-1">
 
-<header class="gallery-hero hero-short" id="home">
+<header class="gallery-hero hero-short hero-home" id="home">
   <div class="wrap">
     <div class="hero-top">
       <div>
@@ -155,34 +157,57 @@
       <div>
         <p class="hero-lead">We design, build and race a scale Formula 1 car. Development Category · High school, Preparatoria Celta, Querétaro.</p>
         <div class="cta-row">
-          <a class="btn btn-solid" href="#team">Meet the team</a>
-          <a class="btn" href="/en/sponsorship/">View sponsorship</a>
+          <a class="btn btn-solid" href="/en/sponsorship/">View sponsorship</a>
+          <a class="btn" href="#team">Meet the team</a>
         </div>
       </div>
     </div>
+  </div>
+  <div class="wrap hero-frame">
+    <div class="hero-visuals">
+      <figure class="hero-team">
+        <picture>
+          <source type="image/avif" srcset="/team/grupo-640.avif 640w, /team/grupo-960.avif 960w, /team/grupo-1280.avif 1280w" sizes="(max-width:960px) 100vw, 600px">
+          <source type="image/webp" srcset="/team/grupo-640.webp 640w, /team/grupo-960.webp 960w, /team/grupo.webp 1280w" sizes="(max-width:960px) 100vw, 600px">
+          <img src="/team/grupo.webp" width="1280" height="720" fetchpriority="high" decoding="async" alt="Striker Racing team members with their mentor, Preparatoria Celta">
+        </picture>
+        <figcaption class="hero-cap">Preparatoria Celta · Querétaro</figcaption>
+      </figure>
+      <div class="model-stage" id="modelStage" data-defer="idle" data-viewer="/js/dist/viewer.2QW7CRSW.js" data-model="/assets/models/sr26.glb?v=e992e3fa" data-video-mp4="" data-video-webm="" data-env="/assets/models/env-room.png?v=586e7346" data-logo="/logo.png" aria-label="3D model of the SR-26, the Striker Racing car, with an exploded-view animation">
+        <picture>
+          <source media="(min-width:561px)" srcset="/assets/img/car-poster-tablet.webp?v=83268480" width="910" height="681">
+          <img class="model-poster" src="/assets/img/car-poster-phone.webp?v=1c66b85a" width="510" height="636" alt="Striker Racing SR-26 car in its navy blue, purple and emerald green livery" loading="lazy" decoding="async">
+        </picture>
+        <span class="model-tag">SR-26 · Striker Racing prototype</span>
+        <span class="model-hint">Drag to rotate</span>
+        <div class="model-loader" aria-hidden="true"><span class="model-bar"><i></i></span></div>
+        <div class="model-fallback">Your browser can't display the interactive 3D model.</div>
+      </div>
+    </div>
+    <p class="hero-more"><a href="/en/car/">See the SR-26 in detail</a></p>
+    <!-- facts:begin -->
+    <dl class="hero-facts" aria-label="Team and 3D model facts">
+      <div class="hero-fact"><dt>Members</dt><dd>5</dd></div>
+      <div class="hero-fact"><dt>Certified mentor</dt><dd>1</dd></div>
+      <div class="hero-fact"><dt>Parts modeled in 3D</dt><dd>27</dd></div>
+      <div class="hero-fact"><dt>Model length, without cartridge</dt><dd>208<span class="unit">mm</span></dd></div>
+    </dl>
+    <p class="hero-facts-note">Length and parts: measured on the SR-26 3D model (visual prototype).</p>
+    <!-- facts:end -->
   </div>
 </header>
 
 <section id="team" class="blueprint">
   <div class="wrap">
-    <figure class="team-hero">
-      <img src="/team/grupo.webp" width="1280" height="720" loading="lazy" decoding="async" alt="Striker Racing team members with their mentor, Preparatoria Celta">
-      <figcaption class="team-hero-text">
-        <div class="eyebrow-tag">Preparatoria Celta · Querétaro</div>
-        <h2>Five members.<br>Five fronts of work.</h2>
-      </figcaption>
-    </figure>
+    <div class="team-head">
+      <div class="eyebrow-tag">Preparatoria Celta · Querétaro</div>
+      <h2>Five members.<br>Five fronts of work.</h2>
+    </div>
     <div class="team-below">
       <div class="team-group-text">
         <p>We design a CO₂-powered car using professional engineering tools (CAD, CAM, CFD) under a strict technical regulation.</p>
         <p>We run the team like a real company: managing budget, brand identity and business plans, aiming to represent Mexico at the world final.</p>
       </div>
-      <dl class="team-stats" aria-label="Team facts">
-        <div class="team-stat"><dt>Members</dt><dd>5</dd></div>
-        <div class="team-stat"><dt>Certified mentor</dt><dd>1</dd></div>
-        <div class="team-stat"><dt>Category</dt><dd>Development</dd></div>
-        <div class="team-stat"><dt>Season</dt><dd>2026–27</dd></div>
-      </dl>
     </div>
     <p class="team-cards-intro">The team's spec sheet: official role, hard skills and tools for each member, plus their full technical credential in the viewer.</p>
     <div class="pass-grid">
@@ -433,9 +458,11 @@
   </div>
 </footer>
 
+<a class="sticky-cta" id="stickyCta" href="/en/sponsorship/">Sponsor</a>
 <button id="backToTop" class="hud-top-btn" type="button" aria-label="Back to top">&#9650; TOP</button>
 
 <script src="/js/site.js" defer></script>
 <script src="/js/cv-viewer.js" defer></script>
+<!-- viewer:script:begin --><script type="module" src="/js/dist/stage.2QROKCPJ.js"></script><!-- viewer:script:end -->
 </body>
 </html>

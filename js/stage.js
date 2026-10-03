@@ -32,6 +32,12 @@
     function go(){ requestAnimationFrame(function(){ setTimeout(fn, 0); }); }
     if(document.readyState !== 'loading') go(); else document.addEventListener('DOMContentLoaded', go, { once:true });
   }
+  // data-defer="idle" (inicio): el 3D no compite con el LCP; espera a que cargue la página y a un momento de reposo del hilo principal.
+  function whenReady(fn){
+    if(ds.defer !== 'idle') return afterFirstPaint(fn);
+    function idle(){ (window.requestIdleCallback || function(f){ setTimeout(f, 600); })(function(){ afterFirstPaint(fn); }, { timeout:2500 }); }
+    if(document.readyState === 'complete') idle(); else window.addEventListener('load', idle, { once:true });
+  }
   // Descargas del modelo y del entorno: se inician una sola vez y se entregan al visor ya en curso.
   function prefetch(){
     if(pre) return pre;
@@ -109,10 +115,11 @@
   }else if('IntersectionObserver' in window){
     // Carga anticipada: la descarga arranca al estar a menos de 600 px de entrar; el visor se monta tras el primer pintado.
     var io = new IntersectionObserver(function(es){
-      es.forEach(function(e){ if(e.isIntersecting){ io.disconnect(); prefetch(); afterFirstPaint(load3d); } });
+      es.forEach(function(e){ if(e.isIntersecting){ io.disconnect(); if(ds.defer !== 'idle') prefetch(); whenReady(load3d); } });
     }, { rootMargin:'600px 0px' });
     io.observe(stage);
   }else{
-    prefetch(); afterFirstPaint(load3d);
+    if(ds.defer !== 'idle') prefetch();
+    whenReady(load3d);
   }
 })();

@@ -115,6 +115,7 @@
   ]
 }
 </script>
+<!-- viewer:head:begin --><!-- viewer:head:end -->
 <link rel="stylesheet" href="/css/site.css">
 <link rel="stylesheet" href="/css/gallery.css">
 </head>
@@ -137,7 +138,8 @@
         <div class="lang-switch" role="group" aria-label="Idioma">
           <a href="/" aria-current="true" lang="es" hreflang="es-mx">ES</a><span aria-hidden="true">|</span><a href="/en/" lang="en" hreflang="en">EN</a>
         </div>
-        <a class="contact-cta" href="https://wa.me/525511839779?text=Hola%2C%20me%20interesa%20patrocinar%20a%20Striker%20Racing%2C%20%C2%BFpodemos%20platicar%3F" target="_blank" rel="noopener">Escríbenos</a>
+        <a class="contact-cta is-sponsor" href="/patrocinios/">Patrocinar</a>
+        <a class="contact-cta is-ghost" href="https://wa.me/525511839779?text=Hola%2C%20me%20interesa%20patrocinar%20a%20Striker%20Racing%2C%20%C2%BFpodemos%20platicar%3F" target="_blank" rel="noopener">Escríbenos</a>
       </div>
     </div>
   </div>
@@ -145,7 +147,7 @@
 
 <main id="main" tabindex="-1">
 
-<header class="gallery-hero hero-short" id="inicio">
+<header class="gallery-hero hero-short hero-home" id="inicio">
   <div class="wrap">
     <div class="hero-top">
       <div>
@@ -155,34 +157,57 @@
       <div>
         <p class="hero-lead">Diseñamos, fabricamos y corremos un auto de Fórmula 1 a escala. Categoría Desarrollo (Development) · Bachillerato, Preparatoria Celta, Querétaro.</p>
         <div class="cta-row">
-          <a class="btn btn-solid" href="#equipo">Conocer la escudería</a>
-          <a class="btn" href="/patrocinios/">Ver patrocinios</a>
+          <a class="btn btn-solid" href="/patrocinios/">Ver patrocinios</a>
+          <a class="btn" href="#equipo">Conocer la escudería</a>
         </div>
       </div>
     </div>
+  </div>
+  <div class="wrap hero-frame">
+    <div class="hero-visuals">
+      <figure class="hero-team">
+        <picture>
+          <source type="image/avif" srcset="/team/grupo-640.avif 640w, /team/grupo-960.avif 960w, /team/grupo-1280.avif 1280w" sizes="(max-width:960px) 100vw, 600px">
+          <source type="image/webp" srcset="/team/grupo-640.webp 640w, /team/grupo-960.webp 960w, /team/grupo.webp 1280w" sizes="(max-width:960px) 100vw, 600px">
+          <img src="/team/grupo.webp" width="1280" height="720" fetchpriority="high" decoding="async" alt="Integrantes de Striker Racing junto con su mentor, Preparatoria Celta">
+        </picture>
+        <figcaption class="hero-cap">Preparatoria Celta · Querétaro</figcaption>
+      </figure>
+      <div class="model-stage" id="modelStage" data-defer="idle" data-viewer="/js/dist/viewer.2QW7CRSW.js" data-model="/assets/models/sr26.glb?v=e992e3fa" data-video-mp4="" data-video-webm="" data-env="/assets/models/env-room.png?v=586e7346" data-logo="/logo.png" aria-label="Modelo 3D del SR-26, monoplaza de Striker Racing, con animación de despiece">
+        <picture>
+          <source media="(min-width:561px)" srcset="/assets/img/car-poster-tablet.webp?v=83268480" width="910" height="681">
+          <img class="model-poster" src="/assets/img/car-poster-phone.webp?v=1c66b85a" width="510" height="636" alt="Monoplaza SR-26 de Striker Racing con su librea azul marino, morada y verde esmeralda" loading="lazy" decoding="async">
+        </picture>
+        <span class="model-tag">SR-26 · Prototipo Striker Racing</span>
+        <span class="model-hint">Arrastra para girar</span>
+        <div class="model-loader" aria-hidden="true"><span class="model-bar"><i></i></span></div>
+        <div class="model-fallback">Tu navegador no puede mostrar el modelo 3D interactivo.</div>
+      </div>
+    </div>
+    <p class="hero-more"><a href="/auto/">Ver el SR-26 en detalle</a></p>
+    <!-- facts:begin -->
+    <dl class="hero-facts" aria-label="Datos del equipo y del modelo 3D">
+      <div class="hero-fact"><dt>Integrantes</dt><dd>5</dd></div>
+      <div class="hero-fact"><dt>Mentor certificado</dt><dd>1</dd></div>
+      <div class="hero-fact"><dt>Piezas modeladas en 3D</dt><dd>27</dd></div>
+      <div class="hero-fact"><dt>Largo del modelo, sin cartucho</dt><dd>208<span class="unit">mm</span></dd></div>
+    </dl>
+    <p class="hero-facts-note">Largo y piezas: medidos en el modelo 3D del SR-26 (prototipo visual).</p>
+    <!-- facts:end -->
   </div>
 </header>
 
 <section id="equipo" class="blueprint">
   <div class="wrap">
-    <figure class="team-hero">
-      <img src="/team/grupo.webp" width="1280" height="720" loading="lazy" decoding="async" alt="Integrantes de Striker Racing junto con su mentor, Preparatoria Celta">
-      <figcaption class="team-hero-text">
-        <div class="eyebrow-tag">Preparatoria Celta · Querétaro</div>
-        <h2>Cinco integrantes.<br>Cinco frentes de trabajo.</h2>
-      </figcaption>
-    </figure>
+    <div class="team-head">
+      <div class="eyebrow-tag">Preparatoria Celta · Querétaro</div>
+      <h2>Cinco integrantes.<br>Cinco frentes de trabajo.</h2>
+    </div>
     <div class="team-below">
       <div class="team-group-text">
         <p>Diseñamos un monoplaza impulsado por CO₂ utilizando herramientas de ingeniería profesional (CAD, CAM, CFD) bajo un reglamento técnico estricto.</p>
         <p>Gestionamos la escudería como una empresa real: administramos presupuesto, identidad de marca y planes de negocio, buscando representar a México en la final mundial.</p>
       </div>
-      <dl class="team-stats" aria-label="Datos del equipo">
-        <div class="team-stat"><dt>Integrantes</dt><dd>5</dd></div>
-        <div class="team-stat"><dt>Mentor certificado</dt><dd>1</dd></div>
-        <div class="team-stat"><dt>Categoría</dt><dd>Desarrollo</dd></div>
-        <div class="team-stat"><dt>Temporada</dt><dd>2026–27</dd></div>
-      </dl>
     </div>
     <p class="team-cards-intro">Ficha técnica de la escudería: rol oficial, competencias duras y herramientas de cada integrante, más su credencial técnica completa en el visor.</p>
     <div class="pass-grid">
@@ -433,9 +458,11 @@
   </div>
 </footer>
 
+<a class="sticky-cta" id="stickyCta" href="/patrocinios/">Patrocinar</a>
 <button id="backToTop" class="hud-top-btn" type="button" aria-label="Volver arriba">&#9650; TOP</button>
 
 <script src="/js/site.js" defer></script>
 <script src="/js/cv-viewer.js" defer></script>
+<!-- viewer:script:begin --><script type="module" src="/js/dist/stage.2QROKCPJ.js"></script><!-- viewer:script:end -->
 </body>
 </html>

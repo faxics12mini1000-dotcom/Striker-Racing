@@ -1,7 +1,7 @@
 // Empaqueta el cargador (js/stage.js, ~2 KB) y el visor 3D (js/viewer.js + js/car-look.js + three.js recortado + GLTFLoader/OrbitControls/meshopt)
 // en js/dist/ con hash en el nombre, y estampa en las páginas del visor las URLs versionadas (cargador, visor, GLB, entorno y video) para
-// poder cachearlas un año (immutable). Páginas: auto/index.html y en/car/index.html. Marcadores que busca en el HTML:
-//   <!-- viewer:head:begin --> … <!-- viewer:head:end -->      script en línea que precarga visor + GLB + entorno (solo donde se usará el 3D de inmediato)
+// poder cachearlas un año (immutable). Páginas: auto/index.html, en/car/index.html, index.html y en/index.html. Marcadores que busca en el HTML:
+//   <!-- viewer:head:begin --> … <!-- viewer:head:end -->      script en línea que precarga el módulo del visor (solo donde el 3D se usará de inmediato)
 //   <!-- viewer:script:begin --> … <!-- viewer:script:end -->  <script type="module"> del cargador
 //   id="modelStage" con data-viewer / data-model / data-env / data-video-mp4 / data-video-webm
 // Video de Fusion para teléfono (opcional): dejar assets/video/sr26-phone.mp4 y/o sr26-phone.webm y correr este script.
@@ -11,7 +11,8 @@ import { createHash } from 'node:crypto';
 import { readFileSync, writeFileSync, rmSync, existsSync, statSync } from 'node:fs';
 import { gzipSync } from 'node:zlib';
 
-const PAGES = ['auto/index.html', 'en/car/index.html'];
+// preload: el módulo del visor se precarga solo donde el 3D es lo principal; en el inicio el 3D espera a que la página esté en reposo.
+const PAGES = [{ page: 'auto/index.html', preload: true }, { page: 'en/car/index.html', preload: true }, { page: 'index.html' }, { page: 'en/index.html' }];
 const ASSETS = { model: 'assets/models/sr26.glb', env: 'assets/models/env-room.png' };
 const VIDEO = { mp4: 'assets/video/sr26-phone.mp4', webm: 'assets/video/sr26-phone.webm' };
 const hash = f => createHash('sha1').update(readFileSync(f)).digest('hex').slice(0, 8);
@@ -36,14 +37,16 @@ const hasVideo = !!(urls.mp4 || urls.webm);
 const preload = `(function(){var c=navigator.connection||{};if(c.saveData||/2g/.test(c.effectiveType||'')||matchMedia('(max-width:560px)').matches)return;`
   + `var e=document.createElement('link');e.rel='modulepreload';e.href='${urls.viewer}';document.head.appendChild(e)})();`;
 
-for (const page of PAGES) {
+for (const { page, preload: withPreload } of PAGES) {
   let html = readFileSync(page, 'utf8'); const crlf = html.includes('\r\n'); html = html.replace(/\r\n/g, '\n');
   const swap = (begin, end, body) => {
     const a = html.indexOf(begin), b = html.indexOf(end);
     if (a < 0 || b < a) throw new Error(`${page}: faltan los marcadores ${begin}`);
     html = html.slice(0, a + begin.length) + body + html.slice(b);
   };
-  swap('<!-- viewer:head:begin -->', '<!-- viewer:head:end -->', `\n<script>${preload}</script>\n`);
+  swap('<!-- viewer:head:begin -->', '<!-- viewer:head:end -->', withPreload ? `
+<script>${preload}</script>
+` : '');
   swap('<!-- viewer:script:begin -->', '<!-- viewer:script:end -->', `<script type="module" src="${urls.stage}"></script>`);
   const attr = (name, val) => {
     const re = new RegExp(`data-${name}="[^"]*"`);

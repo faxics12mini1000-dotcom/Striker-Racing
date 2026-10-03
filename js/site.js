@@ -60,13 +60,25 @@
     });
   });
 
-  // ---------- VOLVER ARRIBA ----------
+  // ---------- VOLVER ARRIBA + BOTÓN FIJO «PATROCINAR» (móvil) ----------
+  // Una sola lectura de scrollY por cuadro (rAF) y ninguna lectura al cargar: así no se fuerza un layout antes del primer pintado.
+  // El botón fijo no aparece mientras el visor 3D está en pantalla (taparía sus controles) ni en pantalla completa.
   var backToTop = document.getElementById('backToTop');
-  if(backToTop){
-    var updateTop = function(){ backToTop.classList.toggle('is-visible', window.scrollY > 400); };
-    window.addEventListener('scroll', updateTop, { passive: true });
-    updateTop();
-    backToTop.addEventListener('click', function(){ window.scrollTo({ top: 0, behavior: 'smooth' }); });
+  var stickyCta = document.getElementById('stickyCta');
+  var stageEl = document.getElementById('modelStage'), stageOn = false, ticking = false;
+  function updateFloating(){
+    ticking = false;
+    var y = window.scrollY;
+    if(backToTop) backToTop.classList.toggle('is-visible', y > 400);
+    if(stickyCta) stickyCta.classList.toggle('is-visible', y > 480 && !stageOn);
+  }
+  if(backToTop || stickyCta){
+    window.addEventListener('scroll', function(){ if(!ticking){ ticking = true; requestAnimationFrame(updateFloating); } }, { passive: true });
+    requestAnimationFrame(updateFloating);
+    if(backToTop) backToTop.addEventListener('click', function(){ window.scrollTo({ top: 0, behavior: 'smooth' }); });
+    if(stickyCta && stageEl && 'IntersectionObserver' in window){
+      new IntersectionObserver(function(es){ stageOn = es[0].isIntersecting; updateFloating(); }, { threshold: 0.15 }).observe(stageEl);
+    }
   }
 
   // ---------- HIDRATA TEXTO DESDE window.STRIKER_CONFIG ----------

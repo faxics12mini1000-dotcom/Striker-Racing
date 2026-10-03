@@ -19,7 +19,8 @@
     "serve": "node scripts/dev-server.mjs 8099 . cache",
     "qa:reveal": "node qa/reveal.test.mjs",
     "qa:axe": "node qa/axe.mjs",
-    "qa:lighthouse": "node qa/lighthouse.mjs"
+    "qa:lighthouse": "node qa/lighthouse.mjs",
+    "build:facts": "node scripts/build-facts.mjs"
   },
   "devDependencies": {
     "@axe-core/playwright": "^4.13.0",

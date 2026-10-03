@@ -650,3 +650,65 @@ html,body{overflow-x:clip;}
 .car-cta-btn:focus-visible{outline:2px solid var(--lime); outline-offset:2px;}
 .model-stage.is-idle .model-hint{display:none;}
 @media (prefers-reduced-motion:reduce){ .model-video{transition:none;} }
+
+/* ---------- Inicio: foto del equipo + SR-26 en 3D, y franja de datos ---------- */
+.hero-home .hero-top{padding-bottom:48px;}
+.hero-visuals{position:relative; z-index:2; display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); border:1px solid var(--border-fine); background:var(--surface);}
+.hero-team{position:relative; margin:0; border-right:1px solid var(--border-fine); overflow:hidden;}
+.hero-team img{display:block; width:100%; height:100%; aspect-ratio:4/3; object-fit:cover; object-position:38% 50%;}
+.hero-cap{
+  position:absolute; left:12px; top:12px; z-index:2; pointer-events:none;
+  font-family:var(--mono); font-size:0.64rem; letter-spacing:0.06em; text-transform:uppercase;
+  color:var(--ice); background:rgba(7,27,51,0.82); padding:4px 8px; border:1px solid var(--border-fine);
+}
+.hero-visuals .model-stage{margin:0; aspect-ratio:4/3; min-height:0; border:none; background-color:var(--surface); background-size:32px 32px;}
+.hero-visuals .model-stage .model-hint{top:10px; bottom:auto;}
+.hero-more{position:relative; z-index:2; margin:14px 0 0; text-align:right;}
+.hero-more a{
+  font-family:var(--mono); font-size:0.74rem; letter-spacing:0.1em; text-transform:uppercase; color:var(--emerald); text-decoration:none;
+  display:inline-flex; gap:10px; align-items:center; padding:8px 0;
+}
+.hero-more a::after{content:"→"; transition:transform .2s ease;}
+.hero-more a:hover::after{transform:translateX(6px);}
+.hero-facts{
+  position:relative; z-index:2; margin:36px 0 0; display:grid; grid-template-columns:repeat(4,minmax(0,1fr));
+  border:1px solid var(--border-fine); background:var(--surface);
+}
+.hero-fact{display:flex; flex-direction:column-reverse; justify-content:flex-end; gap:8px; margin:0; padding:20px 22px; border-left:1px solid var(--border-fine);}
+.hero-fact:first-child{border-left:none;}
+.hero-fact dt{font-family:var(--mono); font-size:0.7rem; letter-spacing:0.08em; text-transform:uppercase; color:var(--ice-dim);}
+.hero-fact dd{margin:0; font-family:var(--mono); font-weight:700; font-size:clamp(1.6rem,3vw,2.4rem); line-height:1; letter-spacing:-0.02em; color:var(--ice);}
+.hero-fact dd .unit{font-size:0.8rem; margin-left:6px;}
+.hero-facts-note{position:relative; z-index:2; margin:10px 0 0; font-size:0.78rem; color:var(--ice-dim);}
+@media (max-width:960px){
+  .hero-visuals{grid-template-columns:1fr;}
+  .hero-team{border-right:none; border-bottom:1px solid var(--border-fine);}
+  .hero-more{text-align:left;}
+  .hero-facts{grid-template-columns:repeat(2,minmax(0,1fr));}
+  .hero-fact:nth-child(3){border-left:none;}
+  .hero-fact:nth-child(n+3){border-top:1px solid var(--border-fine);}
+}
+@media (max-width:560px){
+  .hero-team img{aspect-ratio:13/12;}
+  .hero-visuals .model-stage{aspect-ratio:4/5;}
+  .hero-fact{padding:16px;}
+}
+.hero-home .model-stage .car-ctl{left:8px; right:8px; bottom:8px; padding:6px 8px; gap:6px 8px;}
+
+/* ---------- Botón fijo «Patrocinar» ---------- */
+.contact-cta.is-ghost{background:transparent; color:var(--ice); border-color:var(--border-fine);}
+.contact-cta.is-ghost:hover{border-color:var(--emerald); color:var(--emerald); filter:none;}
+.sticky-cta{
+  position:fixed; left:16px; bottom:16px; z-index:45; display:none; align-items:center; min-height:48px; padding:0 22px;
+  background:var(--emerald); color:var(--navy-deep); border:1px solid var(--emerald); text-decoration:none;
+  font-family:var(--mono); font-weight:700; font-size:0.8rem; letter-spacing:0.1em; text-transform:uppercase;
+  opacity:0; pointer-events:none; transform:translateY(8px); transition:opacity .2s ease, transform .2s ease;
+}
+.sticky-cta.is-visible{opacity:1; pointer-events:auto; transform:none;}
+.sticky-cta:hover{filter:brightness(1.1);}
+@media (max-width:900px){
+  .sticky-cta{display:inline-flex;}
+  footer{padding-bottom:84px;}
+}
+html.fs-lock .sticky-cta{display:none;}
+@media (prefers-reduced-motion:reduce){ .sticky-cta{transition:none;} }
