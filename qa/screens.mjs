@@ -1,7 +1,8 @@
-// Capturas de cada página (ES y EN) en 320, 390, 768, 1280 y 1920 px → qa/screens/<id>-<es|en>-<ancho>.png
+// Capturas de cada página (ES y EN) en 320, 390, 768, 1280 y 1920 px → qa/screens/<id>-<es|en>-<ancho>.webp
 // Se usa prefers-reduced-motion (el visor queda quieto en su primer cuadro) y se recorre la página para que se revelen las secciones.
 // Uso: node qa/screens.mjs [id ...] [--widths=320,1280]     (id: inicio, auto, presupuesto, patrocinios, dossier, bitacora)
 import { mkdirSync } from 'node:fs';
+import sharp from 'sharp';
 import { launch, ensureServer, BASE, VIEWPORTS } from './lib.mjs';
 import { pairs } from '../scripts/lib/pages.mjs';
 
@@ -25,8 +26,9 @@ for (const p of list) {
       });
       if (w >= 561) await page.waitForSelector('#modelStage.is-ready', { timeout: 25000 }).catch(() => {});
       await page.waitForTimeout(500);
-      const out = `qa/screens/${p.id}-${lang}-${w}.png`;
-      await page.screenshot({ path: out, fullPage: true });
+      const out = `qa/screens/${p.id}-${lang}-${w}.webp`;
+      const png = await page.screenshot({ fullPage: true });
+      await sharp(png).webp({ quality: 70, effort: 4 }).toFile(out);   // WebP para que las 60 capturas pesen poco en git
       console.log(out);
       await ctx.close();
     }

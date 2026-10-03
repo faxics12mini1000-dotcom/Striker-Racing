@@ -1,0 +1,41 @@
+{
+  "/auto/": {
+    "perf": 98,
+    "a11y": 100,
+    "bp": 100,
+    "seo": 100,
+    "lcp": 2123,
+    "cls": 0,
+    "tbt": 15,
+    "fcp": 1388,
+    "bytes": 172,
+    "fails": [
+      "label-content-name-mismatch(0)",
+      "bf-cache(0)",
+      "cache-insight(0)",
+      "network-dependency-tree-insight(0)",
+      "render-blocking-insight(0.5)"
+    ]
+  },
+  "/en/car/": {
+    "perf": 96,
+    "a11y": 100,
+    "bp": 100,
+    "seo": 100,
+    "lcp": 2053,
+    "cls": 0,
+    "tbt": 0,
+    "fcp": 1553,
+    "bytes": 172,
+    "fails": [
+      "speed-index(0.74)",
+      "mainthread-work-breakdown(0.5)",
+      "label-content-name-mismatch(0)",
+      "bf-cache(0)",
+      "cache-insight(0.5)",
+      "lcp-breakdown-insight(0)",
+      "network-dependency-tree-insight(0)",
+      "render-blocking-insight(0.5)"
+    ]
+  }
+}

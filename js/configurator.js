@@ -6,7 +6,13 @@
 import DATA from '../data/zonas.json';
 
 const root = document.getElementById('configurador');
-if (root) init();
+// El configurador (canvas, fuentes) arranca cuando está a punto de verse, no al cargar la página: así no suma trabajo al primer pintado.
+if (root) {
+  if ('IntersectionObserver' in window) {
+    const io = new IntersectionObserver(es => { if (es.some(e => e.isIntersecting)) { io.disconnect(); init(); } }, { rootMargin: '300px 0px' });
+    io.observe(root);
+  } else init();
+}
 zonesPanel();
 
 /* Panel «Zonas de patrocinio»: el botón resalta A–D sobre el auto 3D (y lo carga si aún no está listo); al pasar o enfocar una fila se resalta solo esa zona. */

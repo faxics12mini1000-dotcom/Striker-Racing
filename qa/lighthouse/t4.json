@@ -1,0 +1,41 @@
+{
+  "/": {
+    "perf": 86,
+    "a11y": 100,
+    "bp": 100,
+    "seo": 100,
+    "lcp": 2277,
+    "cls": 0,
+    "tbt": 472,
+    "fcp": 1391,
+    "bytes": 427,
+    "fails": [
+      "total-blocking-time(0.61)",
+      "max-potential-fid(0.03)",
+      "mainthread-work-breakdown(0)",
+      "cache-insight(0)",
+      "network-dependency-tree-insight(0)",
+      "render-blocking-insight(0)"
+    ]
+  },
+  "/en/": {
+    "perf": 81,
+    "a11y": 100,
+    "bp": 100,
+    "seo": 100,
+    "lcp": 2263,
+    "cls": 0,
+    "tbt": 584,
+    "fcp": 1369,
+    "bytes": 427,
+    "fails": [
+      "speed-index(0.72)",
+      "total-blocking-time(0.51)",
+      "max-potential-fid(0)",
+      "cache-insight(0)",
+      "lcp-breakdown-insight(0)",
+      "network-dependency-tree-insight(0)",
+      "render-blocking-insight(0)"
+    ]
+  }
+}

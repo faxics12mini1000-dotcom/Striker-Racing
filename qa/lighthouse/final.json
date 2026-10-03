@@ -1,0 +1,162 @@
+{
+  "/": {
+    "perf": 91,
+    "a11y": 100,
+    "bp": 100,
+    "seo": 100,
+    "lcp": 2281,
+    "cls": 0,
+    "tbt": 305,
+    "fcp": 1569,
+    "bytes": 427,
+    "fails": [
+      "total-blocking-time(0.78)",
+      "max-potential-fid(0.18)",
+      "mainthread-work-breakdown(0)",
+      "cache-insight(0)",
+      "forced-reflow-insight(0)",
+      "network-dependency-tree-insight(0)",
+      "render-blocking-insight(0.5)"
+    ]
+  },
+  "/en/": {
+    "perf": 89,
+    "a11y": 100,
+    "bp": 100,
+    "seo": 100,
+    "lcp": 2269,
+    "cls": 0,
+    "tbt": 307,
+    "fcp": 1378,
+    "bytes": 427,
+    "fails": [
+      "speed-index(0.76)",
+      "total-blocking-time(0.78)",
+      "max-potential-fid(0.07)",
+      "cache-insight(0)",
+      "lcp-breakdown-insight(0)",
+      "network-dependency-tree-insight(0)",
+      "render-blocking-insight(0)"
+    ]
+  },
+  "/auto/": {
+    "perf": 67,
+    "a11y": 100,
+    "bp": 100,
+    "seo": 100,
+    "lcp": 2812,
+    "cls": 0.031,
+    "tbt": 1914,
+    "fcp": 1496,
+    "bytes": 172,
+    "fails": [
+      "largest-contentful-paint(0.83)",
+      "total-blocking-time(0.08)",
+      "max-potential-fid(0)",
+      "mainthread-work-breakdown(0)",
+      "bootup-time(0)",
+      "label-content-name-mismatch(0)",
+      "bf-cache(0)",
+      "cache-insight(0.5)",
+      "forced-reflow-insight(0)",
+      "network-dependency-tree-insight(0)",
+      "render-blocking-insight(0)"
+    ]
+  },
+  "/en/car/": {
+    "perf": 75,
+    "a11y": 100,
+    "bp": 100,
+    "seo": 100,
+    "lcp": 2350,
+    "cls": 0,
+    "tbt": 867,
+    "fcp": 1504,
+    "bytes": 172,
+    "fails": [
+      "speed-index(0.73)",
+      "total-blocking-time(0.33)",
+      "max-potential-fid(0)",
+      "mainthread-work-breakdown(0)",
+      "bootup-time(0)",
+      "label-content-name-mismatch(0)",
+      "bf-cache(0)",
+      "cache-insight(0)",
+      "forced-reflow-insight(0)",
+      "lcp-breakdown-insight(0)",
+      "network-dependency-tree-insight(0)",
+      "render-blocking-insight(0)"
+    ]
+  },
+  "/presupuesto/": {
+    "perf": 95,
+    "a11y": 100,
+    "bp": 100,
+    "seo": 100,
+    "lcp": 1811,
+    "cls": 0,
+    "tbt": 218,
+    "fcp": 1367,
+    "bytes": 145,
+    "fails": [
+      "total-blocking-time(0.88)",
+      "max-potential-fid(0.47)",
+      "unused-css-rules(0.5)",
+      "cache-insight(0.5)",
+      "forced-reflow-insight(0)",
+      "network-dependency-tree-insight(0)",
+      "render-blocking-insight(0)"
+    ]
+  },
+  "/en/budget/": {
+    "perf": 96,
+    "a11y": 100,
+    "bp": 100,
+    "seo": 100,
+    "lcp": 1812,
+    "cls": 0,
+    "tbt": 176,
+    "fcp": 1368,
+    "bytes": 145,
+    "fails": [
+      "max-potential-fid(0.52)",
+      "unused-css-rules(0.5)",
+      "cache-insight(0.5)",
+      "forced-reflow-insight(0)",
+      "network-dependency-tree-insight(0)",
+      "render-blocking-insight(0)"
+    ]
+  },
+  "/patrocinios/": {
+    "perf": 99,
+    "a11y": 100,
+    "bp": 100,
+    "seo": 100,
+    "lcp": 1887,
+    "cls": 0,
+    "tbt": 0,
+    "fcp": 1367,
+    "bytes": 188,
+    "fails": [
+      "cache-insight(0.5)",
+      "network-dependency-tree-insight(0)",
+      "render-blocking-insight(0)"
+    ]
+  },
+  "/en/sponsorship/": {
+    "perf": 99,
+    "a11y": 100,
+    "bp": 100,
+    "seo": 100,
+    "lcp": 1958,
+    "cls": 0,
+    "tbt": 0,
+    "fcp": 1363,
+    "bytes": 224,
+    "fails": [
+      "cache-insight(0.5)",
+      "network-dependency-tree-insight(0)",
+      "render-blocking-insight(0)"
+    ]
+  }
+}

@@ -25,7 +25,16 @@
     "build:poster": "node scripts/generate-poster.mjs && node scripts/stamp-images.mjs",
     "vendor:model-viewer": "node scripts/vendor-model-viewer.mjs",
     "build:content": "node scripts/build-content.mjs",
-    "build": "node scripts/build-model.mjs && node scripts/build-facts.mjs && node scripts/build-viewer.mjs && node scripts/build-content.mjs && node scripts/stamp-images.mjs"
+    "build": "node scripts/build-model.mjs && node scripts/build-facts.mjs && node scripts/build-viewer.mjs && node scripts/build-content.mjs && node scripts/stamp-images.mjs",
+    "qa:screens": "node qa/screens.mjs",
+    "qa:links": "node qa/links.mjs",
+    "qa:parity": "node qa/parity.mjs",
+    "qa:smoke": "node qa/smoke.mjs",
+    "qa:viewer": "node qa/viewer.test.mjs && node qa/viewer-features.test.mjs",
+    "qa:configurator": "node qa/configurator.test.mjs",
+    "qa:ar": "node qa/ar-cfd.test.mjs",
+    "qa:content": "node qa/content.test.mjs",
+    "qa": "node qa/reveal.test.mjs && node qa/smoke.mjs && node qa/viewer.test.mjs && node qa/viewer-features.test.mjs && node qa/configurator.test.mjs && node qa/ar-cfd.test.mjs && node qa/content.test.mjs && node qa/links.mjs && node qa/parity.mjs && node qa/axe.mjs && node scripts/check-budget.mjs"
   },
   "devDependencies": {
     "@axe-core/playwright": "^4.13.0",

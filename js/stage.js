@@ -30,11 +30,8 @@
   stage.appendChild(msg);
   function say(text, visible){ msg.textContent = text; msg.classList.toggle('sr-only', !visible); }
   say('', false);
-  function fail(){ stage.classList.add('no-3d'); }
-  try{
-    var c = document.createElement('canvas');
-    if(!(c.getContext('webgl') || c.getContext('experimental-webgl'))) return fail();
-  }catch(e){ return fail(); }
+  // La comprobación de WebGL la hace el visor (js/viewer.js) cuando se va a usar: crear un contexto WebGL al cargar la página cuesta cientos de ms en equipos
+  // sin GPU (y suma al bloqueo del hilo principal); sin WebGL el visor marca .no-3d y queda el póster.
 
   function afterFirstPaint(fn){
     function go(){ requestAnimationFrame(function(){ setTimeout(fn, 0); }); }

@@ -12,7 +12,7 @@ export function mount(stage, pre){
   // Carga: este bundle se pide con modulepreload (solo en pantallas > 560 px y sin ahorro de datos) y js/stage.js ya inició la descarga del GLB
   // y del entorno; al terminar de pintar el poster (idéntico al primer cuadro del visor) se parsean en paralelo con el logo y el canvas se funde
   // sobre el poster. fail() = sin WebGL (definitivo, queda el póster); loadError() = fallo de red o de datos (se ofrece reintentar).
-  function fail(){ stage.classList.add('no-3d'); }
+  function fail(){ stage.classList.remove('is-loading'); stage.classList.add('no-3d'); }
   function loadError(){ stage.classList.remove('is-loading'); stage.dispatchEvent(new CustomEvent('sr26-error')); }
   var EN = (document.documentElement.lang || 'es').slice(0, 2) === 'en';
   var TXT = EN

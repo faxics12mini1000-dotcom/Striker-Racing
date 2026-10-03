@@ -4,7 +4,17 @@
   if(!modal || typeof modal.showModal !== 'function') return;
 
   var title = document.getElementById('cvTitle');
-  var iframe = document.getElementById('cvIframe');
+  // El <iframe> se crea al abrir el primer documento: tenerlo en el HTML cuesta ~120 ms de layout en cada carga del inicio.
+  var iframe = null;
+  function frame(){
+    if(!iframe){
+      iframe = document.createElement('iframe');
+      iframe.id = 'cvIframe'; iframe.width = '100%'; iframe.height = '100%'; iframe.setAttribute('frameborder', '0'); iframe.hidden = true;
+      iframe.title = (modal.querySelector('.cv-dialog-title .micro') || {}).textContent || '';
+      imgWrap.parentNode.insertBefore(iframe, imgWrap);
+    }
+    return iframe;
+  }
   var img = document.getElementById('cvImg');
   var imgWrap = document.getElementById('cvImgWrap');
   var fallback = document.getElementById('cvFallback');
@@ -19,8 +29,8 @@
 
   // Libera el documento/imagen: se ejecuta al cerrar (Esc, botón o backdrop) y antes de cada apertura.
   function reset(){
-    iframe.hidden = true; imgWrap.hidden = true; fallback.hidden = true;
-    iframe.setAttribute('src', 'about:blank');
+    if(iframe){ iframe.hidden = true; iframe.setAttribute('src', 'about:blank'); }
+    imgWrap.hidden = true; fallback.hidden = true;
     img.removeAttribute('src');
     imgWrap.scrollTop = 0;
   }
@@ -33,8 +43,9 @@
     newTab.href = file;
     var ext = extOf(file);
     if(ext === 'pdf'){
-      iframe.setAttribute('src', file + '#toolbar=0&navpanes=0');
-      iframe.hidden = false;
+      var fr = frame();
+      fr.setAttribute('src', file + '#toolbar=0&navpanes=0');
+      fr.hidden = false;
     }else if(ext === 'jpg' || ext === 'jpeg' || ext === 'png'){
       img.alt = (name ? name + ' · ' : '') + img.getAttribute('data-alt');
       img.setAttribute('src', file);
