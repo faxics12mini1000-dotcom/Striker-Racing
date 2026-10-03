@@ -5,3 +5,6 @@ capturas/
 
 # scripts temporales de depuración
 scripts/*.tmp.mjs
+
+# video final y cuadros temporales (fuera del deploy)
+video/

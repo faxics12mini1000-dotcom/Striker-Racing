@@ -602,7 +602,13 @@ html.fs-lock, html.fs-lock body{overflow:hidden;}
 .team-below{margin-top:40px;}
 .team-below .team-group-text{margin-bottom:40px;}
 .team-below .team-stats{max-width:none; margin:0 0 64px;}
-@media (max-width:800px){ .team-hero img{aspect-ratio:auto; height:540px; object-position:46% 100%;} .team-below{margin-top:28px;} }
+/* Móvil: el texto va arriba de la foto (no encima) y el encuadre abarca a todo el equipo, que ocupa ~57 % del ancho de la imagen, en vertical y en horizontal */
+@media (max-width:800px){
+  .team-hero::before{display:none;}
+  .team-hero-text{position:static; padding:28px 24px 20px;}
+  .team-hero img{aspect-ratio:13/12; height:auto; object-position:36% 50%;}
+  .team-below{margin-top:28px;}
+}
 
 /* Despiece: etiquetas por etapa ancladas a las piezas */
 .car-labels{position:absolute; inset:0; z-index:3; pointer-events:none; overflow:hidden;}

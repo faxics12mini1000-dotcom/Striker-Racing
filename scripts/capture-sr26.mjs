@@ -22,6 +22,7 @@ async function render(query, w, h) {
   p.on('pageerror', e => console.error('pageerror:', e.message));
   await p.setViewport({ width: w, height: h });
   await p.goto(`${BASE}/scripts/sr26-view.html?${query}&w=${w}&h=${h}`);
+  await p.waitForFunction('window.carReady', { timeout: 60000 });   // el módulo tarda en crear la promesa (top-level await)
   await p.evaluate(() => window.carReady);
   const markers = await p.evaluate(() => window.carMarkers);
   const png = await p.screenshot({ omitBackground: true });

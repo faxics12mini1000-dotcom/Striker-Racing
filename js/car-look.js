@@ -212,6 +212,7 @@ function drawLockup(img) {
   g.fillStyle = COLORS.green; g.fillText('RACING', 380, 340);
   return c;
 }
+function drawStem(img) { const c = canvasOf(img.width, img.height); c.getContext('2d').drawImage(img, 0, 0); return c; }
 /* Recuadro disponible: contorno fino en hielo y texto chico centrado (lines = 1 o 2 renglones). */
 function drawSlot(w, h, lines, size) {
   const c = canvasOf(w, h), g = c.getContext('2d'), lw = Math.max(3, Math.round(h / 60));
@@ -253,16 +254,19 @@ export const SLOTS = {
 /* parts: { '02': mesh, '03': mesh, ... } con las matrices del mundo ya actualizadas. lang: 'es' | 'en'.
  * Devuelve la lista de decals { kind, mesh }; si falta una pieza (p. ej. no existe la 13/14) simplemente se omite. */
 /* Fuentes + imagen del logo; se puede llamar antes de tener el modelo para que la descarga corra en paralelo. */
+export const STEM_LOGO = '/assets/img/stem-racing-white.png';   // logo oficial de STEM Racing (versión blanca, recortado sin el "Supported by F1")
+const loadImg = src => new Promise((ok, no) => { const i = new Image(); i.onload = () => ok(i); i.onerror = no; i.src = src; });
 export function preloadDecalAssets(logoUrl) {
-  return Promise.all([fonts(), new Promise((ok, no) => { const i = new Image(); i.onload = () => ok(i); i.onerror = no; i.src = logoUrl; })]).then(r => r[1]);
+  return Promise.all([fonts(), loadImg(logoUrl), loadImg(STEM_LOGO).catch(() => null)]).then(r => ({ logo: r[1], stem: r[2] }));
 }
 export async function addLogoDecals(parts, logoUrl, lang = 'es') {
   const T = SLOT_TEXT[lang] || SLOT_TEXT.es;
-  const img = await (typeof logoUrl === 'string' ? preloadDecalAssets(logoUrl) : logoUrl);   // logoUrl puede ser la promesa de preloadDecalAssets
+  const { logo: img, stem } = await (typeof logoUrl === 'string' ? preloadDecalAssets(logoUrl) : logoUrl);   // logoUrl puede ser la promesa de preloadDecalAssets
   const lockup = decalMaterial(drawLockup(img));
   const ally = decalMaterial(drawSlot(1024, 284, [T.ally], 96));
   const partner = decalMaterial(drawSlot(1024, 188, [T.partner], 82));
   const wing = decalMaterial(drawWingSlots(T.wing));
+  const stemMat = stem ? decalMaterial(drawStem(stem)) : null;
   const out = [], S = SLOTS;
   /* espina: el lockup va inclinado siguiendo la caída del lomo; a cada lado se mira desde afuera */
   const sp = parts['24'];
@@ -273,8 +277,9 @@ export async function addLogoDecals(parts, logoUrl, lang = 'es') {
   });
   ['02', '03'].forEach((k, i) => {   // 02 = pontón derecho (+z), 03 = izquierdo (-z)
     const m = parts[k]; if (!m) return; const side = i === 0 ? 1 : -1;
-    const d = stick(m, ally, S.ponton.w * .001, S.ponton.h * .001, mm(S.ponton.x, S.ponton.y, side * 200), V(0, 0, -side), V(0, 1, 0));
-    if (d) out.push({ kind:'ally', mesh:d });
+    // Zona B: el logo de STEM Racing (obligatorio en el auto) ocupa el panel del pontón en lugar del recuadro "aliado técnico"
+    const d = stick(m, stemMat || ally, (stemMat ? S.ponton.h * stem.width / stem.height : S.ponton.w) * .001, S.ponton.h * .001, mm(S.ponton.x, S.ponton.y, side * 200), V(0, 0, -side), V(0, 1, 0));
+    if (d) out.push({ kind: stemMat ? 'stem' : 'ally', mesh:d });
   });
   if (parts['04']) { const d = stick(parts['04'], partner, S.nariz.w * .001, S.nariz.h * .001, mm(S.nariz.x, 200, 0), V(0, -1, 0), V(0, 0, -1)); if (d) out.push({ kind:'partner', mesh:d }); }
   if (parts['09']) { const d = stick(parts['09'], wing, S.aleron.w * .001, S.aleron.h * .001, mm(S.aleron.x, 200, 0), V(0, -1, 0), V(1, 0, 0)); if (d) out.push({ kind:'wing', mesh:d }); }

@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<!-- Escena del video del SR-26 (scripts/render-video.mjs). Determinista: window.frame(t) pinta el cuadro del segundo t.
+     Servir con: node scripts/dev-server.mjs   →   /scripts/video-scene.html?w=1920&h=1080
+     Línea de tiempo (25 s):  0–8 órbita con el auto armado · 8–10 cámara al encuadre del despiece · 9–18 despiece escalonado en 5 etapas
+     (cada pieza saca su etiqueta al empezar a moverse) · 18–19.4 pausa · 19.4–21.4 el auto se rearma · 21.4–25 cierre con los logos. -->
+<html lang="es"><head><meta charset="utf-8"><title>SR-26 · video</title>
+<script type="importmap">{"imports":{"three":"/vendor/three/build/three.module.min.js","three/addons/":"/vendor/three/examples/jsm/"}}</script>
+<style>
+@font-face{font-family:Oswald;src:url(/fonts/oswald-latin-wght-normal.woff2) format('woff2');font-weight:200 700}
+@font-face{font-family:Inter;src:url(/fonts/inter-latin-wght-normal.woff2) format('woff2');font-weight:100 900}
+@font-face{font-family:'JetBrains Mono';src:url(/fonts/jetbrains-mono-latin-wght-normal.woff2) format('woff2');font-weight:100 800}
+:root{--bg:#071B33;--card:#0D2745;--ice:#CDDEEF;--green:#12B866;--purple:#7137D4;--mute:#8FA6C2}
+html,body{margin:0;background:var(--bg);overflow:hidden}
+#root{position:relative;width:1920px;height:1080px;background:var(--bg);overflow:hidden;font-family:Inter,sans-serif;color:var(--ice)}
+canvas{position:absolute;inset:0;display:block}
+#lines{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+.card{position:absolute;width:372px;box-sizing:border-box;padding:6px 12px 7px 14px;background:var(--card);border-left:3px solid var(--green);opacity:0;will-change:opacity,transform}
+.card.r{border-left:0;border-right:3px solid var(--green);text-align:right}
+.card b{display:block;font:600 19px/23px Oswald,sans-serif;letter-spacing:.02em;text-transform:uppercase;color:#fff}
+.card i{display:block;font:500 13px/17px 'JetBrains Mono',monospace;font-style:normal;color:var(--green);letter-spacing:.01em}
+.card span{display:block;font:400 14px/18px Inter,sans-serif;color:var(--ice)}
+.card .n{font-family:'JetBrains Mono',monospace;color:var(--mute);font-weight:500;margin-right:8px}
+#title{position:absolute;left:96px;bottom:84px;opacity:0}
+#title h1{margin:0;font:700 150px/1 Oswald,sans-serif;color:#fff;letter-spacing:.01em}
+#title p{margin:10px 0 0;font:500 28px/1.3 Inter,sans-serif;color:var(--ice)}
+#title p em{font-style:normal;color:var(--green)}
+#hud{position:absolute;right:56px;top:44px;font:500 18px 'JetBrains Mono',monospace;color:var(--mute);letter-spacing:.08em;opacity:0}
+#end{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;opacity:0}
+#end .brand{display:flex;align-items:center;gap:36px}
+#end .brand img{height:210px;width:auto}
+#end .brand h2{margin:0;font:700 150px/.95 Oswald,sans-serif;letter-spacing:.01em;color:var(--ice)}
+#end .brand h2 span{display:block;color:var(--green)}
+#end p{margin:56px 0 0;font:500 30px/1.3 Inter,sans-serif;color:var(--ice);letter-spacing:.04em}
+#end .rule{width:640px;height:2px;background:var(--ice);opacity:.25;margin:46px 0 40px}
+#end .stem{height:104px;width:auto}
+</style></head>
+<body>
+<div id="root">
+  <svg id="lines"></svg>
+  <div id="title"><h1>SR-26</h1><p>Striker Racing &nbsp;·&nbsp; <em>STEM Racing México</em></p></div>
+  <div id="hud"></div>
+  <div id="end">
+    <div class="brand"><img src="/logo.png" alt=""><h2>STRIKER<span>RACING</span></h2></div>
+    <div class="rule"></div>
+    <img class="stem" src="/assets/img/stem-racing-white.png" alt="">
+    <p>SR-26 · STEM Racing México</p>
+  </div>
+</div>
+<script type="module">
+import * as THREE from 'three';
+import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+import { MeshoptDecoder } from 'three/addons/libs/meshopt_decoder.module.js';
+import * as Look from '/js/car-look.js';
+
+const q = new URLSearchParams(location.search);
+const W = +(q.get('w') || 1920), H = +(q.get('h') || 1080), DUR = 25;
+const root = document.getElementById('root');
+root.style.width = W + 'px'; root.style.height = H + 'px';
+const BG = '#071B33';
+const clamp01 = x => Math.min(1, Math.max(0, x));
+const ease = t => t < .5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;      // mismo easing del visor
+const easeOut = t => 1 - Math.pow(1 - t, 3);
+const lerp = (a, b, k) => a + (b - a) * k;
+const seg = (t, a, b) => clamp01((t - a) / (b - a));
+
+/* Etiquetas técnicas: nombre, material (acabado del modelo 3D, ver FINISH en js/car-look.js) y función. 23 piezas: las 22 numeradas con la 06 en sus dos soportes. */
+const LABELS = {
+  '01':['Cuerpo', 'Pintura satinada', 'Chasis principal: aloja el cartucho y une todo'],
+  '16':['Rueda delantera izq.', 'Caucho · rin de aluminio', 'Apoya y rueda con baja fricción'],
+  '17':['Rueda delantera der.', 'Caucho · rin de aluminio', 'Apoya y rueda con baja fricción'],
+  '18':['Rueda trasera izq.', 'Caucho · rin de aluminio', 'Apoya y rueda con baja fricción'],
+  '19':['Rueda trasera der.', 'Caucho · rin de aluminio', 'Apoya y rueda con baja fricción'],
+  '20':['Eje delantero', 'Acero pulido', 'Sostiene las ruedas delanteras'],
+  '21':['Eje trasero', 'Acero pulido', 'Sostiene las ruedas traseras'],
+  '22':['Guía delantera', 'Latón', 'Conduce el cordón de lanzamiento'],
+  '23':['Guía trasera', 'Latón', 'Conduce el cordón de lanzamiento'],
+  '04':['Nariz', 'Pintura satinada', 'Parte el aire y sostiene el alerón'],
+  '06d':['Soporte alerón del. (der.)', 'Pintura mate', 'Une el alerón delantero a la nariz'],
+  '06i':['Soporte alerón del. (izq.)', 'Pintura mate', 'Une el alerón delantero a la nariz'],
+  '05':['Alerón delantero', 'Pintura satinada', 'Genera carga en el eje delantero'],
+  '07':['Placa delantera der.', 'Laca brillante', 'Encauza el aire alrededor de la rueda'],
+  '08':['Placa delantera izq.', 'Laca brillante', 'Encauza el aire alrededor de la rueda'],
+  '09':['Alerón trasero', 'Pintura satinada', 'Genera carga y estabiliza la cola'],
+  '10':['Placa trasera der.', 'Laca brillante', 'Evita fugas de aire en la punta del alerón'],
+  '11':['Placa trasera izq.', 'Laca brillante', 'Evita fugas de aire en la punta del alerón'],
+  '02':['Pontón derecho', 'Laca brillante', 'Ordena el flujo lateral junto a la rueda'],
+  '03':['Pontón izquierdo', 'Laca brillante', 'Ordena el flujo lateral junto a la rueda'],
+  '24':['Espina', 'Laca brillante', 'Refuerza el lomo y lleva la librea'],
+  '12':['Pilar del alerón trasero', 'Pintura mate', 'Sostiene el alerón trasero sobre la espina'],
+  '15':['Cartucho de CO₂', 'Aluminio', 'Almacena el gas que impulsa el auto'],
+};
+const groupOf = id => /^1[6-9][tr]$/.test(id) ? id.slice(0, 2) : id;
+
+/* Línea de tiempo del despiece */
+const EX0 = 9, EX1 = 18, RE0 = 19.4, RE1 = 21.4;     // el despiece va de u=0 a u=1 entre EX0 y EX1; se rearma entre RE0 y RE1
+const GAP = .5, SPAN = .46;                           // mismos parámetros del visor del sitio
+const uAt = t => t < EX0 ? 0 : t < EX1 ? (t - EX0) / (EX1 - EX0) : t < RE0 ? 1 : t < RE1 ? 1 - ease(seg(t, RE0, RE1)) : 0;
+
+const renderer = new THREE.WebGLRenderer({ antialias:true, alpha:true, preserveDrawingBuffer:true });
+renderer.setPixelRatio(1); renderer.setSize(W, H); renderer.outputColorSpace = THREE.SRGBColorSpace;
+Look.lookRenderer(renderer, true);
+root.insertBefore(renderer.domElement, root.firstChild);
+const scene = new THREE.Scene();
+await Look.lookEnvironmentBaked(scene, '/assets/models/env-room.png');
+Look.lookLights(scene, .001, true);                   // sin plano de sombra: el fondo queda plano
+const camera = new THREE.PerspectiveCamera(30, W / H, .01, 20);
+
+const gltf = await new Promise((ok, no) => new GLTFLoader().setMeshoptDecoder(MeshoptDecoder).load('/assets/models/sr26.glb', ok, undefined, no));
+const model = gltf.scene, meshes = [], byKey = {}, parts = [];
+model.traverse(o => { if (o.isMesh) meshes.push(o); });
+for (const o of meshes) {
+  const k = Look.partKey(o.name);
+  if (Look.HIDDEN.has(k)) { o.removeFromParent(); continue; }
+  Look.lookPart(o); byKey[k] = o;
+  const id = Look.pieceId(o.name), spec = Look.PIECES[id]; if (!spec) continue;
+  const rot = spec.rot || [0, 0, 0];
+  parts.push({ mesh:o, id, step:spec.step, home:o.position.clone(),
+    off:new THREE.Vector3(...spec.off).multiplyScalar(.001), rot:new THREE.Vector3(...rot).multiplyScalar(Math.PI / 180),
+    arc:(spec.arc || 0) * .001, start: spec.step ? (spec.step - 1) / (Look.EXPLODE_STEPS - 1) * GAP + (spec.d || 0) : 0 });
+}
+model.updateMatrixWorld(true);
+const [logoImg, stemImg] = await Promise.all([Look.preloadDecalAssets('/logo.png')]).then(r => [r[0].logo, r[0].stem]);
+await Look.addLogoDecals(byKey, Promise.resolve({ logo:logoImg, stem:stemImg }), 'es');
+const box0 = new THREE.Box3().setFromObject(model), c0 = box0.getCenter(new THREE.Vector3());
+model.position.sub(c0); scene.add(model);
+await document.fonts.ready;
+
+function applyPose(u) {
+  for (const p of parts) {
+    const f = p.step ? ease(clamp01((u - p.start) / SPAN)) : 0;
+    p.f = f;
+    p.mesh.position.copy(p.home).addScaledVector(p.off, f);
+    if (p.arc) p.mesh.position.y += Math.sin(Math.PI * f) * p.arc;
+    p.mesh.rotation.set(p.rot.x * f, p.rot.y * f, p.rot.z * f);
+  }
+  model.updateMatrixWorld(true);
+}
+const bboxOf = list => { const b = new THREE.Box3(); list.forEach(p => b.expandByObject(p.mesh)); return b; };
+
+/* Encuadre: distancia para que el auto (armado o despiece) quepa en un rectángulo de pantalla. dir = azimut/elevación. */
+const dirOf = (az, el) => new THREE.Vector3(Math.sin(az) * Math.cos(el), Math.sin(el), Math.cos(az) * Math.cos(el));
+function fit(box, az, el, wPx, hPx) {
+  const dir = dirOf(az, el), right = new THREE.Vector3().crossVectors(new THREE.Vector3(0, 1, 0), dir).normalize(), up = new THREE.Vector3().crossVectors(dir, right);
+  const c = box.getCenter(new THREE.Vector3()); let mh = 0, mv = 0;
+  for (const x of [box.min.x, box.max.x]) for (const y of [box.min.y, box.max.y]) for (const z of [box.min.z, box.max.z]) {
+    const k = new THREE.Vector3(x, y, z).sub(c); mh = Math.max(mh, Math.abs(k.dot(right))); mv = Math.max(mv, Math.abs(k.dot(up)));
+  }
+  const vf = THREE.MathUtils.degToRad(15), asp = W / H, hf = Math.atan(Math.tan(vf) * asp);
+  const needV = mv / Math.tan(vf) / (hPx / H), needH = mh / Math.tan(hf) / (wPx / W);
+  return { dist: Math.max(needV, needH), center: c };
+}
+const AZ_EX = THREE.MathUtils.degToRad(24), EL_EX = THREE.MathUtils.degToRad(15), EL_AS = THREE.MathUtils.degToRad(17);
+applyPose(0); const boxA = bboxOf(parts);
+applyPose(1); const boxE = bboxOf(parts);
+const fitA = fit(boxA, THREE.MathUtils.degToRad(20), EL_AS, W * .74, H * .74);
+const fitE = fit(boxE, AZ_EX, EL_EX, W - 2 * (372 + 70), H * .78);
+
+function placeCamera(t) {
+  const uc = ease(seg(t, 7.2, 9.6)) * (1 - ease(seg(t, RE0, RE1 + .4)));      // 0 = encuadre armado, 1 = encuadre del despiece
+  const az = t < 8 ? lerp(THREE.MathUtils.degToRad(-40), THREE.MathUtils.degToRad(22), easeOut(seg(t, 0, 8)) * .55 + seg(t, 0, 8) * .45)
+           : lerp(THREE.MathUtils.degToRad(22), THREE.MathUtils.degToRad(AZ_DEG_END), seg(t, 8, 21.4));
+  const el = lerp(EL_AS, EL_EX, uc);
+  const dist = lerp(fitA.dist, fitE.dist, uc), tgt = fitA.center.clone().lerp(fitE.center, uc);
+  const azz = lerp(az, az + (AZ_EX - THREE.MathUtils.degToRad(22)) * .0, uc);
+  camera.position.copy(tgt).addScaledVector(dirOf(azz, el), dist); camera.lookAt(tgt); camera.updateMatrixWorld(true);
+}
+const AZ_DEG_END = 30;
+
+/* Tarjetas: columna izquierda / derecha según la posición en pantalla de cada pieza en el despiece completo (cámara de reserva). */
+const groups = {};
+for (const p of parts) (groups[groupOf(p.id)] = groups[groupOf(p.id)] || []).push(p);
+const anchor = (list, v = new THREE.Vector3()) => bboxOf(list).getCenter(v).project(camera);
+const ids = Object.keys(LABELS).filter(k => groups[k]);
+placeCamera(18.5); applyPose(1);
+const refPos = Object.fromEntries(ids.map(k => { const a = anchor(groups[k]); return [k, { x:(a.x + 1) / 2 * W, y:(1 - a.y) / 2 * H }]; }));
+const byX = [...ids].sort((a, b) => refPos[a].x - refPos[b].x);
+const nL = Math.ceil(ids.length / 2), side = {};
+byX.forEach((k, i) => side[k] = i < nL ? 'l' : 'r');
+const cards = {}, CH = 66, CG = 6, hostL = ids.filter(k => side[k] === 'l'), hostR = ids.filter(k => side[k] === 'r');
+const svg = document.getElementById('lines'); svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
+[[hostL, 'l', 44], [hostR, 'r', W - 44 - 372]].forEach(([list, s, x]) => {
+  list.sort((a, b) => refPos[a].y - refPos[b].y);
+  const total = list.length * CH + (list.length - 1) * CG, y0 = (H - total) / 2 + 6;
+  list.forEach((k, i) => {
+    const el = document.createElement('div'); el.className = 'card ' + s;
+    const L = LABELS[k];
+    el.innerHTML = `<b><span class="n" style="display:inline">${k.slice(0, 2)}</span>${L[0]}</b><i>${L[1]}</i><span>${L[2]}</span>`;
+    el.style.left = x + 'px'; el.style.top = (y0 + i * (CH + CG)) + 'px'; root.appendChild(el);
+    const ln = document.createElementNS('http://www.w3.org/2000/svg', 'polyline'); ln.setAttribute('fill', 'none'); ln.setAttribute('stroke', '#CDDEEF'); ln.setAttribute('stroke-width', '1.2');
+    const dot = document.createElementNS('http://www.w3.org/2000/svg', 'circle'); dot.setAttribute('r', '4.5'); dot.setAttribute('fill', '#12B866');
+    svg.appendChild(ln); svg.appendChild(dot);
+    cards[k] = { el, ln, dot, s, x, y:y0 + i * (CH + CG), t0: EX0 + Math.min(...groups[k].map(p => p.start)) * (EX1 - EX0) + .15 };
+  });
+});
+
+const title = document.getElementById('title'), end = document.getElementById('end'), hud = document.getElementById('hud');
+const FADE_OUT = 19.4;
+window.frame = t => {
+  const u = uAt(t);
+  applyPose(u); placeCamera(t);
+  const carA = 1 - seg(t, 21.0, 21.9);
+  renderer.domElement.style.opacity = carA; renderer.domElement.style.visibility = carA > 0 ? 'visible' : 'hidden';
+  renderer.render(scene, camera);
+  // título y HUD
+  title.style.opacity = seg(t, .4, 1.4) * (1 - seg(t, 6.2, 7.2));
+  title.style.transform = `translateY(${(1 - easeOut(seg(t, .4, 1.6))) * 24}px)`;
+  hud.textContent = u > 0.001 ? 'DESPIECE · ' + String(Math.round(Math.min(1, u) * 100)).padStart(3, '0') + '%' : 'SR-26';
+  hud.style.opacity = seg(t, 1.5, 2.2) * (1 - seg(t, 21, 21.6)) * (t > 7.2 ? 1 : 0);
+  // tarjetas y líneas guía
+  const cardA = seg(t, 0, 1) && (1 - seg(t, FADE_OUT, FADE_OUT + .6));
+  for (const k of ids) {
+    const c = cards[k], a = easeOut(seg(t, c.t0, c.t0 + .4)) * cardA;
+    c.el.style.opacity = a; c.el.style.transform = `translateX(${(1 - a) * (c.s === 'l' ? -22 : 22)}px)`;
+    const v = a > .01;
+    c.ln.style.display = c.dot.style.display = v ? '' : 'none';
+    if (!v) continue;
+    const an = anchor(groups[k]), ax = (an.x + 1) / 2 * W, ay = (1 - an.y) / 2 * H;
+    const ex = c.s === 'l' ? c.x + 372 : c.x, ey = c.y + CH / 2, mx = ex + (c.s === 'l' ? 26 : -26);
+    c.ln.setAttribute('points', `${ex},${ey} ${mx},${ey} ${ax},${ay}`); c.ln.setAttribute('opacity', (.4 * a).toFixed(3));
+    c.dot.setAttribute('cx', ax); c.dot.setAttribute('cy', ay); c.dot.setAttribute('opacity', a.toFixed(3));
+  }
+  end.style.opacity = easeOut(seg(t, 21.5, 22.6));
+  end.style.transform = `scale(${lerp(.985, 1, easeOut(seg(t, 21.5, 24.5)))})`;
+};
+window.DUR = DUR;
+window.frame(0);
+window.sceneReady = true;
+</script></body></html>
