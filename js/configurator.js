@@ -41,21 +41,23 @@ function init() {
   const T = lang === 'en' ? {
     errType: 'Use a PNG or SVG file.', errSize: 'The file is larger than 2 MB. Use a lighter version.', errRead: 'That file could not be read as an image.',
     opaque: 'Your logo has an opaque background. It is shown as is; a PNG or SVG with a transparent background looks better.',
-    transparent: 'Transparent background detected.', noCar: 'This tier has no place on the car: your brand goes on the uniform and the Pit Display (mock-ups below).',
-    onCar: 'Your logo is on the car’s Strategic Partner spaces (A nose, C rear wing, D front wing).', carWait: 'Open the 3D viewer to see it on the car.',
-    front: 'Front', back: 'Back', uniform: 'Uniform', pit: 'Pit Display', car: 'Car (3D)', title: 'Brand proposal', tier: 'Tier',
-    fine: 'Illustrative proposal on a visual prototype. It is not an agreement and does not confirm any placement; current tiers and benefits are on the sponsorship page.',
+    transparent: 'Transparent background detected.', noCar: 'This tier has no place on the car: your brand could go on the uniform and the Pit Display (example mock-ups below).',
+    onCar: 'Example: your logo in the selected zone. Placement ideas only; the final design is agreed with the team.', carWait: 'Open the 3D viewer to see it on the car.',
+    front: 'Front', back: 'Back', uniform: 'Uniform · example placements', pit: 'Pit Display · example', car: 'Car (3D)', title: 'Brand proposal (placement ideas)', tier: 'Tier',
+    fine: 'Placement ideas on a visual prototype. The final design is agreed with the team. It is not an agreement and does not confirm any placement; current tiers and benefits are on the sponsorship page.',
     noPhoto: 'Open the 3D viewer to include the car', saved: 'Proposal downloaded.', cleared: 'Logo removed.', loaded: 'Logo loaded.',
   } : {
     errType: 'Usa un archivo PNG o SVG.', errSize: 'El archivo pesa más de 2 MB. Usa una versión más ligera.', errRead: 'No se pudo leer ese archivo como imagen.',
     opaque: 'Tu logo tiene fondo opaco. Se muestra tal cual; un PNG o SVG con fondo transparente se ve mejor.',
-    transparent: 'Fondo transparente detectado.', noCar: 'Este nivel no tiene lugar en el auto: tu marca va en el uniforme y en el Pit Display (maquetas de abajo).',
-    onCar: 'Tu logo está en los espacios del auto del Partner Estratégico (A nariz, C alerón trasero, D alerón delantero).', carWait: 'Abre el visor 3D para verlo sobre el auto.',
-    front: 'Frente', back: 'Espalda', uniform: 'Uniforme', pit: 'Pit Display', car: 'Auto (3D)', title: 'Propuesta de marca', tier: 'Nivel',
-    fine: 'Propuesta ilustrativa sobre un prototipo visual. No es un acuerdo ni confirma ubicaciones; los niveles y beneficios vigentes están en la página de patrocinios.',
+    transparent: 'Fondo transparente detectado.', noCar: 'Este nivel no tiene lugar en el auto: tu marca podría ir en el uniforme y en el Pit Display (maquetas de ejemplo abajo).',
+    onCar: 'Ejemplo: tu logo en la zona elegida. Son ideas de ubicación; el diseño final se acuerda con el equipo.', carWait: 'Abre el visor 3D para verlo sobre el auto.',
+    front: 'Frente', back: 'Espalda', uniform: 'Uniforme · ubicaciones de ejemplo', pit: 'Pit Display · ejemplo', car: 'Auto (3D)', title: 'Propuesta de marca (ideas de ubicación)', tier: 'Nivel',
+    fine: 'Ideas de ubicación sobre un prototipo visual. El diseño final se acuerda con el equipo. No es un acuerdo ni confirma ubicaciones; los niveles y beneficios vigentes están en la página de patrocinios.',
     noPhoto: 'Abre el visor 3D para incluir el auto', saved: 'Propuesta descargada.', cleared: 'Logo quitado.', loaded: 'Logo cargado.',
   };
   const $ = id => document.getElementById(id);
+  const zoneSel = $('cfgZone');
+  DATA.carZones.forEach(z => { const o = document.createElement('option'); o.value = z.id; o.textContent = z.name[lang]; zoneSel.appendChild(o); });
   const file = $('cfgFile'), levelSel = $('cfgLevel'), status = $('cfgStatus'), info = $('cfgInfo'), clearBtn = $('cfgClear'), dlBtn = $('cfgDownload'), see3d = $('cfgSee3d');
   const cUni = $('cfgUniform'), cPit = $('cfgPit');
   const stage = document.getElementById('modelStage');
@@ -114,6 +116,7 @@ function init() {
   file.addEventListener('change', onFile);
   clearBtn.addEventListener('click', () => { logo = null; file.value = ''; say(T.cleared); refresh(); });
   levelSel.addEventListener('change', refresh);
+  zoneSel.addEventListener('change', refresh);
   root.querySelectorAll('input[name="cfgBg"]').forEach(r => r.addEventListener('change', () => { bg = r.value; if (r.checked) refresh(); }));
   see3d.addEventListener('click', () => {
     if (!stage) return;
@@ -124,8 +127,8 @@ function init() {
   // ---------- 3D ----------
   function sendToCar() {
     const lv = level(), img = logo && lv.car ? logo : null;
-    window.__srLogo = img;
-    if (stage) stage.dispatchEvent(new CustomEvent('sr26-logo', { detail: { img } }));
+    window.__srLogo = img ? { img, zone: zoneSel.value } : null;
+    if (stage) stage.dispatchEvent(new CustomEvent('sr26-logo', { detail: { img, zone: zoneSel.value } }));
     if (!logo) info.textContent = '';
     else info.textContent = lv.car ? (stage && stage.classList.contains('is-ready') ? T.onCar : T.onCar + ' ' + T.carWait) : T.noCar;
   }

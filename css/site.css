@@ -149,8 +149,7 @@
   .hud-top-btn{
     position:fixed; bottom:24px; right:24px; z-index:40; cursor:pointer;
     font-family:var(--mono); font-size:0.75rem; color:var(--emerald);
-    border:1px solid var(--border-fine); background:rgba(7,27,51,0.85);
-    -webkit-backdrop-filter:blur(8px); backdrop-filter:blur(8px); padding:10px 14px;
+    border:1px solid var(--border-fine); background:rgba(7,27,51,0.85); padding:10px 14px;
     opacity:0; pointer-events:none; transition:opacity .25s ease;
   }
   .hud-top-btn.is-visible{opacity:1; pointer-events:auto;}

@@ -27,6 +27,7 @@
     "build:content": "node scripts/build-content.mjs",
     "build": "node scripts/build-model.mjs && node scripts/build-facts.mjs && node scripts/build-viewer.mjs && node scripts/build-content.mjs && node scripts/stamp-images.mjs",
     "qa:screens": "node qa/screens.mjs",
+    "qa:screens-ui": "node qa/screens-ui.mjs",
     "qa:links": "node qa/links.mjs",
     "qa:parity": "node qa/parity.mjs",
     "qa:smoke": "node qa/smoke.mjs",

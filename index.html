@@ -126,6 +126,7 @@
     <a href="/" id="brandHome" class="brand-link" aria-label="Striker Racing, inicio">
       <span class="brand"><img class="brand-mark" src="/logo-64.webp" width="34" height="32" alt="">STRIKER RACING</span>
     </a>
+    <a class="contact-cta is-sponsor-m" href="/patrocinios/">Patrocinar</a>
     <button class="nav-toggle" id="navToggle" type="button" aria-label="Abrir menú" data-label-open="Abrir menú" data-label-close="Cerrar menú" aria-expanded="false" aria-controls="navPanel"><span></span></button>
     <div class="nav-panel" id="navPanel">
       <ul class="cockpit-links">
@@ -148,43 +149,40 @@
 
 <main id="main" tabindex="-1">
 
-<header class="gallery-hero hero-short hero-home" id="inicio">
-  <div class="wrap">
-    <div class="hero-top">
-      <div>
-        <div class="room-tag micro">Desafío STEM Racing México · Temporada 2026–2027</div>
-        <h1><em>Ingeniería mexicana</em> en la pista de STEM Racing México.</h1>
-      </div>
-      <div>
-        <p class="hero-lead">Diseñamos, fabricamos y corremos un auto de Fórmula 1 a escala. Categoría Desarrollo (Development) · Bachillerato, Preparatoria Celta, Querétaro.</p>
-        <div class="cta-row">
+<header class="gallery-hero hero-photo" id="inicio">
+  <div class="hero-bg">
+    <picture>
+          <source type="image/avif" srcset="/team/grupo-640.avif 640w, /team/grupo-960.avif 960w, /team/grupo-1280.avif 1280w" sizes="100vw">
+          <source type="image/webp" srcset="/team/grupo-640.webp 640w, /team/grupo-960.webp 960w, /team/grupo.webp 1280w" sizes="100vw">
+          <img src="/team/grupo.webp" width="1280" height="720" fetchpriority="high" decoding="async" alt="Integrantes de Striker Racing junto con su mentor, Preparatoria Celta">
+        </picture>
+  </div>
+  <div class="wrap hero-copy">
+    <div class="room-tag micro">Desafío STEM Racing México · Temporada 2026–2027</div>
+    <h1><em>Ingeniería mexicana</em> en la pista de STEM Racing México.</h1>
+    <p class="hero-lead">Diseñamos, fabricamos y corremos un auto de Fórmula 1 a escala. Categoría Desarrollo (Development) · Bachillerato, Preparatoria Celta, Querétaro.</p>
+    <div class="cta-row">
           <a class="btn btn-solid" href="/patrocinios/">Ver patrocinios</a>
           <a class="btn" href="#equipo">Conocer la escudería</a>
         </div>
-      </div>
-    </div>
   </div>
-  <div class="wrap hero-frame">
-    <div class="hero-visuals">
-      <figure class="hero-team">
+  <a class="hero-scroll" href="#sr26"><span>Ver el auto</span></a>
+</header>
+
+<section class="viewer-band" id="sr26" aria-label="SR-26">
+  <div class="viewer-full">
+    <div class="model-stage" id="modelStage" data-defer="idle" data-viewer="/js/dist/viewer.6JBCKFAM.js" data-model="/assets/models/sr26.glb?v=e992e3fa" data-video-mp4="" data-video-webm="" data-env="/assets/models/env-room.png?v=586e7346" data-logo="/logo.png" aria-label="Modelo 3D del SR-26, monoplaza de Striker Racing, con animación de despiece">
         <picture>
-          <source type="image/avif" srcset="/team/grupo-640.avif 640w, /team/grupo-960.avif 960w, /team/grupo-1280.avif 1280w" sizes="(max-width:960px) 100vw, 600px">
-          <source type="image/webp" srcset="/team/grupo-640.webp 640w, /team/grupo-960.webp 960w, /team/grupo.webp 1280w" sizes="(max-width:960px) 100vw, 600px">
-          <img src="/team/grupo.webp" width="1280" height="720" fetchpriority="high" decoding="async" alt="Integrantes de Striker Racing junto con su mentor, Preparatoria Celta">
-        </picture>
-        <figcaption class="hero-cap">Preparatoria Celta · Querétaro</figcaption>
-      </figure>
-      <div class="model-stage" id="modelStage" data-defer="idle" data-viewer="/js/dist/viewer.MGNPPDHT.js" data-model="/assets/models/sr26.glb?v=e992e3fa" data-video-mp4="" data-video-webm="" data-env="/assets/models/env-room.png?v=586e7346" data-logo="/logo.png" aria-label="Modelo 3D del SR-26, monoplaza de Striker Racing, con animación de despiece">
-        <picture>
-          <source media="(min-width:561px)" srcset="/assets/img/car-poster-tablet.webp?v=6baede2f" width="910" height="681">
-          <img class="model-poster" src="/assets/img/car-poster-phone.webp?v=825b7315" width="510" height="636" alt="Monoplaza SR-26 de Striker Racing con su librea azul marino, morada y verde esmeralda" loading="lazy" decoding="async">
+          <source media="(min-width:561px)" srcset="/assets/img/car-poster-tablet.webp?v=47b8488d" width="910" height="681">
+          <img class="model-poster" src="/assets/img/car-poster-phone.webp?v=54a9057e" width="510" height="636" alt="Monoplaza SR-26 de Striker Racing con su librea azul marino, morada y verde esmeralda" loading="lazy" decoding="async">
         </picture>
         <span class="model-tag">SR-26 · Prototipo Striker Racing</span>
         <span class="model-hint">Arrastra para girar</span>
         <div class="model-loader" aria-hidden="true"><span class="model-bar"><i></i></span></div>
         <div class="model-fallback">Tu navegador no puede mostrar el modelo 3D interactivo.</div>
       </div>
-    </div>
+  </div>
+  <div class="wrap">
     <p class="hero-more"><a href="/auto/">Ver el SR-26 en detalle</a></p>
     <!-- facts:begin -->
     <dl class="hero-facts" aria-label="Datos del equipo y del modelo 3D">
@@ -196,7 +194,7 @@
     <p class="hero-facts-note">Largo y piezas: medidos en el modelo 3D del SR-26 (prototipo visual).</p>
     <!-- facts:end -->
   </div>
-</header>
+</section>
 
 <section id="equipo" class="blueprint">
   <div class="wrap">
@@ -461,7 +459,6 @@
   </div>
 </footer>
 
-<a class="sticky-cta" id="stickyCta" href="/patrocinios/">Patrocinar</a>
 <button id="backToTop" class="hud-top-btn" type="button" aria-label="Volver arriba">&#9650; TOP</button>
 
 <!-- analytics:begin --><!-- analytics:end -->

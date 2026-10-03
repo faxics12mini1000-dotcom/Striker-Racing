@@ -13,6 +13,7 @@ import path from 'node:path';
 
 const BASE = process.env.BASE || 'http://localhost:8099';
 const BROWSER = process.env.BROWSER || ['C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe', 'C:/Program Files/Google/Chrome/Application/chrome.exe'].find(existsSync);
+execFileSync('node', ['scripts/lib/bundle-look.mjs'], { stdio: 'inherit' });
 const todo = process.argv.length > 2 ? process.argv.slice(2) : ['poster', 'mapa', 'paginas'];
 const browser = await puppeteer.launch({ executablePath: BROWSER, headless: 'new', args: ['--use-angle=swiftshader', '--enable-unsafe-swiftshader', '--ignore-gpu-blocklist'] });
 

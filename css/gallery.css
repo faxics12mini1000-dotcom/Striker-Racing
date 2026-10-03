@@ -63,8 +63,8 @@ section{padding:104px 0;}
 .cockpit{position:sticky; top:0; z-index:60; border-bottom:1px solid var(--border-fine);}
 .cockpit::before{
   content:""; position:absolute; inset:0; z-index:-1;
-  background:rgba(7,27,51,0.85);
-  -webkit-backdrop-filter:blur(12px); backdrop-filter:blur(12px);
+  background:rgba(7,27,51,0.97);
+
 }
 .cockpit-bar{
   position:relative; max-width:1320px; margin:0 auto; padding:0 24px; min-height:64px;
@@ -110,7 +110,6 @@ section{padding:104px 0;}
     display:none; position:absolute; top:100%; left:0; right:0;
     flex-direction:column; gap:20px; padding:12px 24px 24px;
     background:rgba(7,27,51,0.98);
-    -webkit-backdrop-filter:blur(12px); backdrop-filter:blur(12px);
     border-bottom:1px solid var(--border-fine);
   }
   .nav-panel.open{display:flex;}
@@ -342,7 +341,7 @@ dialog.cv-dialog{
   background:var(--navy-deep); border:1px solid var(--border-fine);
 }
 dialog.cv-dialog[open]{display:flex; flex-direction:column;}
-dialog.cv-dialog::backdrop{background:rgba(7,27,51,0.85); -webkit-backdrop-filter:blur(6px); backdrop-filter:blur(6px);}
+dialog.cv-dialog::backdrop{background:rgba(7,27,51,0.85);}
 .cv-dialog-head{
   flex:none; display:flex; align-items:center; justify-content:space-between; gap:16px;
   padding:14px 20px; border-bottom:1px solid var(--border-fine); background:var(--surface);
@@ -400,7 +399,7 @@ dialog.cv-dialog::backdrop{background:rgba(7,27,51,0.85); -webkit-backdrop-filte
 .faq-title{text-transform:uppercase; font-weight:600; margin-top:72px;}
 
 dialog.profile-dialog{margin:auto; max-height:calc(100vh - 32px); overflow:auto; background:var(--surface); border:1px solid var(--border-fine); border-top:1px solid var(--border-fine);}
-dialog.profile-dialog::backdrop{background:rgba(7,27,51,0.85); -webkit-backdrop-filter:blur(6px); backdrop-filter:blur(6px);}
+dialog.profile-dialog::backdrop{background:rgba(7,27,51,0.85);}
 .profile-close, .profile-btn{border-color:var(--border-fine);}
 
 /* ---------- Contacto y footer ---------- */
@@ -447,7 +446,7 @@ footer .brand-mark{height:26px;}
    js/viewer.js mide la altura de .car-ctl y encuadra el auto por encima (camera.setViewOffset), así nunca lo tapa. */
 .car-ctl{
   position:absolute; left:12px; right:12px; bottom:12px; z-index:4; display:flex; align-items:center; flex-wrap:wrap; gap:8px 12px;
-  padding:8px 10px; background:rgba(7,27,51,0.82); border:1px solid var(--border-fine); backdrop-filter:blur(6px);
+  padding:8px 10px; background:rgba(7,27,51,0.94); border:1px solid var(--border-fine);
 }
 .car-btn, .car-seg-btn, .car-view{
   appearance:none; cursor:pointer; color:var(--ice); background:transparent; border:1px solid var(--border-fine);
@@ -641,8 +640,8 @@ html,body{overflow-x:clip;}
 .car-cta{position:absolute; left:12px; right:12px; bottom:12px; z-index:4; display:flex; flex-wrap:wrap; justify-content:center; gap:8px;}
 .car-cta[hidden]{display:none;}
 .car-cta-btn{
-  appearance:none; cursor:pointer; height:40px; padding:0 18px; color:var(--ice); background:rgba(7,27,51,0.86); border:1px solid var(--border-fine);
-  font-family:var(--mono); font-size:0.7rem; letter-spacing:0.07em; text-transform:uppercase; backdrop-filter:blur(6px);
+  appearance:none; cursor:pointer; height:44px; padding:0 18px; color:var(--ice); background:rgba(7,27,51,0.86); border:1px solid var(--border-fine);
+  font-family:var(--mono); font-size:0.7rem; letter-spacing:0.07em; text-transform:uppercase;
 }
 .car-cta-btn:hover{border-color:var(--emerald); color:var(--emerald);}
 .car-cta-btn.is-primary{background:var(--emerald); border-color:var(--emerald); color:var(--navy-deep);}
@@ -850,3 +849,70 @@ dialog.ar-dialog::backdrop{background:rgba(7,27,51,0.85);}
 .sw-list img{max-width:100%; max-height:64px; width:auto; height:auto; object-fit:contain;}
 .sw-list a:hover, .sw-list a:focus-visible{outline-offset:6px;}
 .car-ar{margin:18px 0 0;}
+
+/* ---------- Inicio: hero con foto a todo el ancho y visor del SR-26 grande ---------- */
+.hero-photo{position:relative; display:flex; align-items:flex-end; min-height:calc(100vh - 64px); min-height:calc(100svh - 64px); padding:0; border-bottom:1px solid var(--border-fine);}
+.hero-photo::before{display:none;}
+.hero-bg{position:absolute; inset:0; z-index:0;}
+.hero-bg picture, .hero-bg img{display:block; width:100%; height:100%;}
+.hero-bg img{object-fit:cover; object-position:38% 40%;}
+.hero-bg::after{content:""; position:absolute; inset:0; background:rgba(7,27,51,0.6); pointer-events:none;}   /* overlay navy plano */
+.hero-copy{position:relative; z-index:2; width:100%; padding-top:96px; padding-bottom:clamp(40px,6vh,64px);}
+.hero-copy > *{max-width:980px;}
+.hero-copy h1{font-family:'Oswald', system-ui, sans-serif; font-weight:600; text-transform:uppercase; font-size:clamp(2.2rem,4.6vw,4.2rem); line-height:1; color:var(--ice); margin:0 0 16px;}
+.hero-copy h1 em{font-style:normal; color:var(--purple-text);}
+.hero-copy .hero-lead{color:var(--ice); max-width:64ch; margin-bottom:24px;}
+.hero-copy .room-tag{margin-bottom:18px; color:var(--ice);}
+.hero-scroll{
+  position:absolute; right:24px; bottom:24px; z-index:2; display:inline-flex; align-items:center; gap:10px; min-height:44px; padding:0 4px; text-decoration:none;
+  font-family:var(--mono); font-size:0.72rem; letter-spacing:0.12em; text-transform:uppercase; color:var(--ice);
+}
+.hero-scroll::after{content:""; width:9px; height:9px; border-right:2px solid var(--emerald); border-bottom:2px solid var(--emerald); transform:rotate(45deg) translateY(-2px);}
+@media (max-width:640px){
+  .hero-photo{display:block; min-height:0; background:var(--navy-deep);}
+  .hero-bg{inset:0 0 auto 0; height:max(62svh, 420px);}
+  .hero-bg img{object-position:54% 0;}
+  .hero-bg::after{background:rgba(7,27,51,0.55);}
+  .hero-copy{padding-top:max(36svh, 250px); padding-bottom:72px;}
+  .hero-copy::before{content:""; position:absolute; left:0; right:0; top:max(34svh, 238px); bottom:0; background:rgba(7,27,51,0.82); z-index:-1;}   /* panel navy plano bajo el texto */
+  .hero-scroll{left:16px; right:auto; bottom:12px;}
+}
+.viewer-band{padding:0; background:var(--navy-deep);}
+.viewer-full .model-stage{margin:0; width:100%; aspect-ratio:auto; min-height:80vh; min-height:80svh; border:none; border-bottom:1px solid var(--border-fine); background-color:var(--surface); background-size:32px 32px;}
+.viewer-full .model-poster{object-fit:contain;}
+.viewer-full .model-stage .model-hint{top:10px; bottom:auto;}
+@media (max-width:640px){ .viewer-full .model-stage{min-height:0; aspect-ratio:4/5;} }
+.viewer-band .hero-more{margin:16px 0 0; text-align:right;}
+.viewer-band .hero-facts{margin:20px 0 0;}
+.viewer-band .hero-facts-note{margin-bottom:56px;}
+@media (prefers-reduced-motion:reduce){ .hero-scroll::after{transform:rotate(45deg);} }
+.car-plan-line{margin:0; padding:12px 16px; font-family:var(--mono); font-size:0.72rem; line-height:1.5; letter-spacing:0.03em; color:var(--ice); background:var(--surface); border:1px solid var(--border-fine); border-top:none;}
+.hero-frame > .car-plan-line, .viewer-full + .car-plan-line{margin-top:0;}
+.car-zones-tag{position:absolute; left:12px; top:44px; z-index:5; max-width:calc(100% - 24px); padding:5px 9px; pointer-events:none; font-family:var(--mono); font-size:0.66rem; letter-spacing:0.04em; color:var(--ice); background:rgba(7,27,51,0.9); border:1px dashed var(--lime);}
+.cfg-ideas{margin:0 0 8px; font-family:var(--mono); font-size:0.72rem; letter-spacing:0.05em; text-transform:uppercase; color:var(--lime);}
+.cfg-controls{grid-template-columns:minmax(0,1.4fr) repeat(3,minmax(0,1fr));}
+@media (max-width:900px){ .cfg-controls{grid-template-columns:1fr;} }
+
+/* ---------- «Patrocinar» siempre visible en el menú fijo ---------- */
+.contact-cta.is-sponsor-m{display:none;}
+@media (max-width:900px){
+  .cockpit-bar{grid-template-columns:1fr auto auto; gap:12px;}
+  .contact-cta.is-sponsor-m{display:inline-flex; align-items:center; min-height:44px; padding:0 14px;}
+  .nav-panel .is-sponsor{display:none;}
+  .nav-toggle{min-width:44px; min-height:44px;}
+}
+.contact-cta{min-height:44px; display:inline-flex; align-items:center;}
+.sticky-cta{display:none !important;}
+
+/* ---------- Botones solo-icono del visor: objetivo táctil de 44 px ---------- */
+.car-btn{width:44px; height:44px;}
+.car-tools{gap:6px;}
+@media (max-width:560px){ .car-tools .car-btn{width:44px; height:44px;} .car-tools{gap:4px;} }
+
+/* ---------- Escala de espaciado única entre secciones ---------- */
+:root{--sp-section:clamp(56px, 7vw, 96px);}
+section{padding:var(--sp-section) 0;}
+.zones-panel, .cfg, .cfd, .sponsor-wall{padding:var(--sp-section) 0;}
+.log-list-wrap, .log-entry{padding:calc(var(--sp-section) * .75) 0 var(--sp-section);}
+.viewer-band, .gates{padding:0;}
+.section-head{margin-bottom:clamp(32px,4vw,56px);}

@@ -50,7 +50,7 @@ for (const [url, lang] of [['/auto/', 'es'], ['/en/car/', 'en']]) {
   // plano técnico
   await page.getByRole('button', { name: L.plan }).click(); await page.waitForTimeout(2500);
   check(await page.locator('#modelStage.is-plan').count() === 1, `${url} modo plano técnico activo`);
-  const legend = await page.locator('.car-plan-legend').innerText();
+  const legend = await page.locator('.car-plan-line').innerText();
   check(legend.includes(MODEL.lengthMm.toFixed(1) + ' mm'), `${url} cota de largo = ${MODEL.lengthMm.toFixed(1)} mm (GLB, sin cartucho)`);
   check(legend.includes(MODEL.widthMm.toFixed(1) + ' mm'), `${url} cota de ancho = ${MODEL.widthMm.toFixed(1)} mm`);
   check(legend.includes(MODEL.wheelbaseMm.toFixed(1) + ' mm'), `${url} distancia entre ejes = ${MODEL.wheelbaseMm.toFixed(1)} mm`);

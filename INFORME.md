@@ -25,3 +25,19 @@ Rendimiento: inicio 90/91, /auto/ 98/98, presupuesto 99/99, patrocinios 99/99. A
 - La frase «se valida en Ansys Student CFD» sigue en `/auto/` hasta que el equipo decida (CAMBIOS A1).
 - Las calcomanías del visor ahora sí se ven (antes no se pegaban): revisar que el aspecto guste.
 - En teléfono el 3D arranca al tocar «Explorar en 3D» (decisión de rendimiento, CAMBIOS B3).
+
+## Pasada de UI y ubicaciones como ideas (3-oct, segunda tanda)
+
+| # | Cambio | Dónde |
+|---|---|---|
+| 9 | Hero de inicio: foto del equipo a todo el ancho (mín. 88 vh) con velo navy plano al 60 %, texto abajo a la izquierda e indicador «Ver el auto»; visor 3D del SR-26 a ancho completo (mín. 80 vh) debajo. En 390 px el grupo completo queda arriba y el texto sobre un panel navy plano | `/`, `/en/` |
+| 10 | Plano técnico: sin tarjeta sobre el dibujo; cotas como etiquetas sobre sus líneas; valores y nota en una línea debajo del visor; más aristas dibujadas (umbral 4°) | `/auto/` y `/en/car/` → botón de cota |
+| 11 | Ubicación de logos = ideas: sin rótulos pintados, «Ver zonas posibles» (contornos punteados A nariz, B pontones, C alerón trasero, D alerón delantero, E cápsula), logo del configurador en UNA zona elegida, etiqueta «Ideas de ubicación · el diseño final se acuerda con el equipo»; polo = «Ubicaciones de ejemplo». Mapa de Patrocinios y pósters regenerados | `/auto/#zonas`, `#configurador`, `/patrocinios/` |
+| 12 | Copy suavizado («podría ir en», «ideas») en configurador, Patrocinios (mapa) y propuesta descargable; el texto de beneficios del equipo no se tocó (CAMBIOS A5) | ES/EN |
+| 13 | Categoría: Desarrollo (Development) en todo el sitio; no hay menciones a «Entry» (CAMBIOS A7) | — |
+| 14 | UI: botones del visor con aria-label + tooltip y 44 px; «Patrocinar» siempre visible en el menú fijo; escala de espaciado única (`--sp-section`); se quitó el desenfoque (`backdrop-filter`) del menú, diálogos y etiquetas (sin glassmorphism); `prefers-reduced-motion` respetado | `css/gallery.css` |
+| 15 | Herramienta de capturas: `scripts/sr26-view.html` volvía a funcionar (empaqueta `car-look.js`); `qa/screens-ui.mjs` captura hero, visor, plano y configurador (auto y polo) a 1440/1024/390 | `qa/screens/ui-*.png` |
+
+**Fallas encontradas y corregidas:** configurador sin inicializar en la prueba (el render por software tarda ~5 s en liberar el hilo; la prueba ahora espera a que existan los niveles), prueba de enlaces de zonas (ahora A, C, D y E), botón «Patrocinar» móvil visible en escritorio (regla CSS pisada) y mapa de Patrocinios con rótulos horneados.
+
+**Aviso:** la foto del equipo mide 1280 × 720 px (< 2000 px); a pantalla completa en monitores grandes se ve algo suave. No se escaló con IA (CAMBIOS B14).

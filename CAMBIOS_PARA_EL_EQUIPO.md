@@ -31,6 +31,20 @@ Hoy el aviso dice que «no usa cookies de rastreo ni herramientas de analítica 
 ### A4. Fotos del equipo: textos alternativos
 Se conservaron los `alt` existentes. Si prefieren describir mejor la foto de grupo para lectores de pantalla («Los cinco integrantes y su mentor de pie frente a un muro de bloques»), cambiar el `alt` de `/team/grupo.webp` en ambos idiomas (hoy: «Integrantes de Striker Racing junto con su mentor, Preparatoria Celta»).
 
+### A5. Texto de beneficios que promete ubicación (NO editado; decide el equipo)
+El sitio ahora presenta las ubicaciones en el auto como **ideas** («podría ir en…», «el diseño final se acuerda con el equipo»). Estas frases de beneficios decididas por el equipo suenan más firmes y chocan con ese tono; no se tocaron:
+- **Partner Estratégico, «Auto»** (`/patrocinios/`, `/en/sponsorship/`, dossier): «es el único nivel con lugar en el auto: nariz / trompa frontal y alerón trasero, más alerón delantero según propuesta». *Propuesto:* «contempla lugar en el auto (ideas: nariz, alerón trasero, alerón delantero, cápsula); la ubicación final se acuerda con el equipo».
+- **Uniforme, todos los niveles** («logotipo en cuadrante inferior de espalda», «patrocinador central en el pecho», etc.): el configurador los marca como «ubicaciones de ejemplo». *Propuesto:* anteponer «ejemplo:» o «según propuesta» si no están confirmadas con el proveedor del uniforme.
+- **«Tu logo va en un proyecto real de ingeniería»** (Patrocinios, encabezado de beneficios): es figurativo, no una ubicación; se puede dejar.
+- **«fotos del pit display con tu marca»** (FAQ de reportes): promete una foto con la marca; confirmar que el Pit Display llevará a todos los patrocinadores.
+- **Zona B (pontones):** el reglamento la reserva al logo oficial de STEM Racing. Se muestra solo como idea de ejemplo y con esa aclaración; si prefieren no mostrarla, quitar la zona `B` de `data/zonas.json` (`carZones`) y su fila en las páginas.
+
+### A6. Halo y casco aún no están modelados
+El reglamento Development 2026–27 exige halo y casco, y el sitio lo afirma. **El SR-26 3D que se muestra todavía no los incluye: falta el CAD oficial.** El visor ya está listo para mostrarlos si el GLB trae `13_Halo` / `14_Casco` (ver B1). Mientras tanto, el prototipo visual debe seguir presentándose como tal.
+
+### A7. Categoría
+El equipo compite en **Desarrollo (Development), Bachillerato**. Se revisaron ES/EN, meta, OG, JSON-LD, dossier, `data/*.json` y README: todas las menciones dicen Desarrollo/Development y no queda ninguna a «Entry» (la única aparición de «entry fee» en `/en/` es la cuota de inscripción). No se cambió nada.
+
 ## B. Decisiones de código que conviene confirmar (sí aplicadas, fáciles de revertir)
 
 | # | Qué se hizo | Por qué | Cómo revertir |
@@ -47,6 +61,11 @@ Se conservaron los `alt` existentes. Si prefieren describir mejor la foto de gru
 | B10 | **`data/zonas.json` repite los nombres de nivel** (Colaborador, Impulsor, Aliado Técnico, Partner Estratégico y sus equivalentes en inglés) para el configurador. `qa/parity.mjs` falla si dejan de coincidir con las páginas de Patrocinios. | El configurador vive en `/auto/`, que no contiene esos nombres. | — |
 | B11 | **Traducción al inglés:** el texto nuevo (configurador, zonas, AR, plano técnico, dossier, mensajes) lo escribió el asistente; no es traducción certificada. | Igual que el resto de `/en/`. | Que alguien bilingüe del equipo lo revise antes de enviarlo a patrocinadores internacionales. |
 | B12 | **Meta y recaudado:** sin cambios (`$65,450` y `$0`, `js/config.js`). | Regla A. | — |
+| B13 | **Inicio:** el encabezado es ahora la foto del equipo a todo el ancho (mín. 88 % de alto de pantalla) con velo navy plano al 60 %, título abajo a la izquierda e indicador «Ver el auto»; el visor 3D del SR-26 va debajo, a ancho completo (mín. 80 % de alto). El texto y los botones son los de siempre. | Pedido del encargo. | `git revert` |
+| B14 | **La foto del equipo mide 1280 × 720 px** (menos de 2000 px de ancho): a pantalla completa en monitores grandes se ve algo suave. No se escaló con IA. | Aviso. | Enviar una foto original ≥ 2400 px de ancho y correr `npm run build:images` |
+| B15 | **Ubicación de logos = ideas.** Se quitaron los rótulos «PARTNER ESTRATÉGICO» pintados en el render; el botón «Ver zonas posibles» dibuja contornos punteados (A nariz, B pontones, C alerón trasero, D alerón delantero, E cápsula) y el configurador pone el logo en UNA zona elegida como ejemplo. Mapa de Patrocinios y pósters regenerados sin rótulos. | Pedido del encargo. | `js/car-look.js` (`blank`) |
+| B16 | **Plano técnico:** se quitó la tarjeta sobre el modelo; los valores y la nota viajan en una línea debajo del visor. | Pedido del encargo. | `js/viewer.js` (`car-plan-line`) |
+| B17 | **«Patrocinar» siempre visible** en el menú fijo (escritorio y móvil); se retiró la barra flotante inferior (era redundante). | Pedido del encargo. | Restaurar `#stickyCta` |
 
 ## C. Pendientes que solo el equipo puede resolver
 

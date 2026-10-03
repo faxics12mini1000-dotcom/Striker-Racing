@@ -11,7 +11,7 @@
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { MeshoptDecoder } from 'three/addons/libs/meshopt_decoder.module.js';
-import * as Look from '/js/car-look.js';
+import * as Look from '/scripts/.car-look.bundle.js';
 
 const q = new URLSearchParams(location.search);
 const view = q.get('view') || 'iso', lang = q.get('lang') || 'es', ex = +(q.get('ex') || 0);
@@ -66,7 +66,7 @@ window.carReady = new Promise((ok, no) => {
     // marcadores (centro de cada espacio) en % del lienzo
     const pct = (x, y, z) => { const p = new THREE.Vector3(x, y, z).multiplyScalar(.001).add(model.position).project(cam); return [ +((p.x + 1) / 2 * 100).toFixed(2), +((1 - p.y) / 2 * 100).toFixed(2) ]; };
     const S = Look.SLOTS;
-    window.carMarkers = { nariz:pct(S.nariz.x, S.nariz.y, 0), aleron:pct(S.aleron.x, S.aleron.y, 0), ponton:pct(S.ponton.x, S.ponton.y, S.ponton.z), espina:pct(S.espina.x, S.espina.y, S.espina.z), alaDel:pct(S.alaDel.x, S.alaDel.y, S.alaDel.z) };
+    window.carMarkers = { nariz:pct(S.nariz.x, S.nariz.y, 0), aleron:pct(S.aleron.x, S.aleron.y, 0), ponton:pct(S.ponton.x, S.ponton.y, S.ponton.z), espina:pct(S.espina.x, S.espina.y, S.espina.z), alaDel:pct(S.alaDel.x, S.alaDel.y, S.alaDel.z), ponEj:pct(S.ponEj.x, S.ponEj.y, S.ponEj.z), capsula:pct(S.capsula.x, S.capsula.y, S.capsula.z) };
     renderer.render(scene, cam); ok(true);
   }, undefined, no);
 });

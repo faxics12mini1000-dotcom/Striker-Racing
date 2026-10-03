@@ -54,7 +54,9 @@ for (const lang of ['es', 'en']) {
   await page.keyboard.press('Escape');
   check(await page.locator('#navPanel.open').count() === 0, 'móvil: Escape cierra el menú');
   await page.evaluate(() => scrollTo(0, 900)); await page.waitForTimeout(600);
-  check(await page.locator('#stickyCta.is-visible').count() === 1, 'móvil: el botón fijo «Patrocinar» aparece al bajar');
+  const sp = page.locator('nav a.is-sponsor-m');
+  const box = await sp.boundingBox();
+  check(await sp.isVisible() && box && box.y >= 0 && box.height >= 44, 'móvil: «Patrocinar» está siempre visible en el menú fijo (≥44 px)');
   await ctx.close();
 }
 await browser.close(); stop(); finish();

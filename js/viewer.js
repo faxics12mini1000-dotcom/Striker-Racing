@@ -28,12 +28,12 @@ export function mount(stage, pre){
     ? { rear:['REAR', 'REAR'], notesOn:'Show part numbers', notesOff:'Hide part numbers', planOn:'Technical drawing', planOff:'Exit technical drawing',
         photo:'Car photo (transparent PNG)', share:'Share', copied:'Link copied', saved:'Photo saved', planTag:'Technical drawing · visual prototype',
         dLength:'Length (no cartridge)', dWidth:'Width', dWheelbase:'Wheelbase', measured:'Measured on the 3D model. Visual prototype, not the final car.',
-        zonesOn:'Highlight sponsorship zones', zonesOff:'Hide sponsorship zones',
+        zonesOn:'Show possible zones', zonesOff:'Hide possible zones', zonesNote:'Placement ideas · the final design is agreed with the team',
         keys:'Use the arrow keys to rotate, Home for the ISO view.', parts:'Car parts', shareTitle:'SR-26 · Striker Racing', shareText:'The Striker Racing SR-26, a visual prototype.' }
     : { rear:['TRASERA', 'TRA'], notesOn:'Mostrar numeración de piezas', notesOff:'Ocultar numeración de piezas', planOn:'Plano técnico', planOff:'Salir del plano técnico',
         photo:'Foto del auto (PNG transparente)', share:'Compartir', copied:'Enlace copiado', saved:'Foto guardada', planTag:'Plano técnico · prototipo visual',
         dLength:'Largo (sin cartucho)', dWidth:'Ancho', dWheelbase:'Entre ejes', measured:'Medido en el modelo 3D. Prototipo visual, no es el auto final.',
-        zonesOn:'Resaltar zonas de patrocinio', zonesOff:'Ocultar zonas de patrocinio',
+        zonesOn:'Ver zonas posibles', zonesOff:'Ocultar zonas posibles', zonesNote:'Ideas de ubicación · el diseño final se acuerda con el equipo',
         keys:'Usa las flechas para girar y Inicio para la vista ISO.', parts:'Piezas del auto', shareTitle:'SR-26 · Striker Racing', shareText:'El SR-26 de Striker Racing, un prototipo visual.' });
   TXT.views.rear = TXT.rear; TXT.views.plan = ['PLAN', 'PLAN'];
   // Pieza que ancla la etiqueta de cada etapa (clave del nodo en el GLB)
@@ -285,7 +285,7 @@ export function mount(stage, pre){
       return new THREE.CanvasTexture(c);
     }
 
-    var zonesOn = false, zoneHost = null, zoneEls = [], userLogoActive = false;
+    var zoneTag = null, zonesOn = false, zoneHost = null, zoneEls = [], userLogoActive = false;
     var decor = [], decals = [], notesOn = false, noteHost = null, notes = [], planOn = false, plan = null, lastBlob = null;
     var labelHost = null, labels = [];
     var tmpBox = new THREE.Box3(), tmpV = new THREE.Vector3();
@@ -516,7 +516,7 @@ export function mount(stage, pre){
         stage.classList.remove('is-loading');
         stage.classList.add('is-ready');
         stage.sr26 = { photo:function(){ return capturePhoto(false, true); } };   // js/configurator.js pide la foto del auto con el logo puesto
-        if(window.__srLogo) applyLogo(window.__srLogo);
+        if(window.__srLogo) applyLogo(window.__srLogo.img, window.__srLogo.zone);
         if(location.hash === '#zonas' || window.__srZones) setZones(true);
         stage.dispatchEvent(new CustomEvent('sr26-ready'));   // js/stage.js retira el video/CTA si los había
         needsRender = true;
@@ -549,6 +549,7 @@ export function mount(stage, pre){
       playBtn.innerHTML = auto ? ICON.pause : ICON.play;
       playBtn.setAttribute('aria-label', auto ? TXT.pause : TXT.play);
       playBtn.setAttribute('aria-pressed', auto ? 'true' : 'false');
+      playBtn.setAttribute('title', auto ? TXT.pause : TXT.play);
     }
     var viewCycle = null, VIEW_ORDER = ['iso', 'side', 'front', 'rear', 'top'];
     function setViewUi(v){
@@ -556,7 +557,7 @@ export function mount(stage, pre){
       for(var k in viewBtns) viewBtns[k].setAttribute('aria-pressed', k === v ? 'true' : 'false');
       if(viewCycle){
         viewCycle.textContent = TXT.views[v || 'iso'][1];
-        viewCycle.setAttribute('aria-label', TXT.viewsLabel + ': ' + TXT.views[v || 'iso'][0]);
+        viewCycle.setAttribute('aria-label', TXT.viewsLabel + ': ' + TXT.views[v || 'iso'][0]); viewCycle.setAttribute('title', TXT.viewsLabel + ': ' + TXT.views[v || 'iso'][0]);
       }
     }
     // Refleja el despiece en el deslizador, las marcas y Armado/Despiece
@@ -664,6 +665,7 @@ export function mount(stage, pre){
       fsBtn.innerHTML = on ? ICON.fsOff : ICON.fsOn;
       fsBtn.setAttribute('aria-label', on ? TXT.fsOff : TXT.fsOn);
       fsBtn.setAttribute('aria-pressed', on ? 'true' : 'false');
+      fsBtn.setAttribute('title', on ? TXT.fsOff : TXT.fsOn);
     }
     function fakeFullscreen(on){
       stage.classList.toggle('is-fs', on); document.documentElement.classList.toggle('fs-lock', on);
@@ -861,7 +863,7 @@ export function mount(stage, pre){
       out.flat = new THREE.MeshBasicMaterial({ color:cssColor('--surface', '#0E223D'), polygonOffset:true, polygonOffsetFactor:1, polygonOffsetUnits:1, toneMapped:false });
       parts.forEach(function(p){
         p.planMat = p.mesh.material;
-        p.planEdges = new THREE.LineSegments(new THREE.EdgesGeometry(p.mesh.geometry, 24), new THREE.LineBasicMaterial({ color:ice, toneMapped:false }));
+        p.planEdges = new THREE.LineSegments(new THREE.EdgesGeometry(p.mesh.geometry, 4), new THREE.LineBasicMaterial({ color:ice, toneMapped:false }));
         p.planEdges.renderOrder = 4; p.planEdges.visible = false; p.mesh.add(p.planEdges);
       });
       // rótulos (HTML) y recuadro con los valores
@@ -870,12 +872,11 @@ export function mount(stage, pre){
         m.el = document.createElement('span'); m.el.className = 'car-dim'; m.el.textContent = m.mm.toFixed(1) + ' mm'; out.host.appendChild(m.el);
       });
       stage.appendChild(out.host);
-      out.legend = document.createElement('div'); out.legend.className = 'car-plan-legend';
-      out.legend.innerHTML = '<b></b><dl></dl><p></p>';
-      out.legend.firstChild.textContent = TXT.planTag;
-      out.dims.forEach(function(m){ var dt = document.createElement('dt'), dd = document.createElement('dd'); dt.textContent = TXT[m.key]; dd.textContent = m.mm.toFixed(1) + ' mm'; out.legend.querySelector('dl').appendChild(dt); out.legend.querySelector('dl').appendChild(dd); });
-      out.legend.lastChild.textContent = TXT.measured;
-      stage.appendChild(out.legend);
+      // Valores y nota: una línea FUERA del visor (debajo), nunca encima del modelo
+      out.legend = document.createElement('p'); out.legend.className = 'car-plan-line'; out.legend.setAttribute('role', 'status');
+      out.legend.textContent = TXT.planTag + ' · ' + out.dims.map(function(m){ return TXT[m.key] + ' ' + m.mm.toFixed(1) + ' mm'; }).join(' · ') + ' · ' + TXT.measured;
+      var anchor = stage.closest('.hero-main') || stage;
+      anchor.parentNode.insertBefore(out.legend, anchor.nextSibling);
       return out;
     }
     function setPlan(on){
@@ -914,20 +915,24 @@ export function mount(stage, pre){
     function ensureZones(){
       if(zoneEls.length || !decals.length) return;
       zoneHost = document.createElement('div'); zoneHost.className = 'car-notes'; zoneHost.setAttribute('aria-hidden', 'true');
-      var lime = cssColor('--lime', '#7FD9B0'), ice = cssColor('--ice', '#CDDEEF');
+      var lime = cssColor('--lime', '#7FD9B0');
       decals.forEach(function(d){
         if(!d.zone) return;
-        d.line = new THREE.LineSegments(new THREE.EdgesGeometry(d.mesh.geometry), new THREE.LineBasicMaterial({ color:d.zone === 'B' ? ice : lime, depthTest:false, depthWrite:false, toneMapped:false }));
-        d.line.renderOrder = 9; d.line.visible = false; d.mesh.add(d.line);
+        // contorno PUNTEADO del espacio posible (no es una promesa de ubicación)
+        d.line = new THREE.LineSegments(new THREE.EdgesGeometry(d.mesh.geometry), new THREE.LineDashedMaterial({ color:lime, dashSize:0.0016, gapSize:0.0011, depthTest:false, depthWrite:false, toneMapped:false }));
+        d.line.computeLineDistances(); d.line.renderOrder = 9; d.line.visible = false; d.mesh.add(d.line);
         var el = document.createElement('span'); el.className = 'car-note car-zone'; el.textContent = d.zone; el.style.display = 'none';
         zoneHost.appendChild(el); zoneEls.push({ el:el, d:d });
       });
       stage.appendChild(zoneHost);
+      zoneTag = document.createElement('div'); zoneTag.className = 'car-zones-tag'; zoneTag.textContent = TXT.zonesNote; zoneTag.style.display = 'none';
+      stage.appendChild(zoneTag);
     }
     function setZones(on, only){
       ensureZones();
       zonesOn = on;
       zoneEls.forEach(function(z){ var v = on && (!only || z.d.zone === only); z.d.line.visible = v; z.el.style.display = v ? '' : 'none'; });
+      if(zoneTag) zoneTag.style.display = on ? '' : 'none';
       var b = stage.querySelector('.car-ctl-zones');
       if(b && !only){ b.setAttribute('aria-pressed', on ? 'true' : 'false'); var t = on ? TXT.zonesOff : TXT.zonesOn; b.setAttribute('aria-label', t); b.setAttribute('title', t); }
       requestRender();
@@ -942,20 +947,22 @@ export function mount(stage, pre){
         z.el.style.opacity = (tmpV.z > 1 || (-tmpV.y * 0.5 + 0.5) * h > h - insetPx) ? 0 : 1;
       }
     }
-    // El logo que carga el visitante (js/configurator.js) se pega en los espacios del auto del nivel Partner Estratégico (A, C y D). Todo local.
-    function applyLogo(img){
-      window.__srLogo = img || null;
+    // El logo que carga el visitante (js/configurator.js) se pega, COMO EJEMPLO, en UNA de las zonas posibles (A nariz, B pontones, C alerón trasero,
+    // D alerón delantero, E cápsula). Todo local; el diseño final se acuerda con el equipo.
+    function applyLogo(img, zone){
+      window.__srLogo = img ? { img:img, zone:zone } : null;
       decals.forEach(function(d){
-        if(d.zone !== 'A' && d.zone !== 'C' && d.zone !== 'D') return;
+        if(!/^[A-E]$/.test(d.zone)) return;
         if(!d.origMat) d.origMat = d.mesh.material;
         if(d.userMat){ if(d.userMat.map) d.userMat.map.dispose(); d.userMat.dispose(); d.userMat = null; }
-        if(img){ d.userMat = Look.userLogoMaterial(Look.slotCanvas(d.zone, img)); d.mesh.material = d.userMat; }
+        if(img && d.zone === zone){ d.userMat = Look.userLogoMaterial(Look.slotCanvas(d.zone, img)); d.mesh.material = d.userMat; }
         else d.mesh.material = d.origMat;
       });
       userLogoActive = !!img;
+      if(img) setZones(true, zone); else if(zoneEls.length) setZones(!!window.__srZones);
       requestRender();
     }
-    stage.addEventListener('sr26-logo', function(e){ applyLogo(e.detail && e.detail.img); });
+    stage.addEventListener('sr26-logo', function(e){ applyLogo(e.detail && e.detail.img, e.detail && e.detail.zone); });
     stage.addEventListener('sr26-zones', function(e){ setZones(!!(e.detail && e.detail.on), e.detail && e.detail.only); });
 
     // ---------- RENDER ON-DEMAND + PAUSA FUERA DE VIEWPORT / PESTAÑA OCULTA ----------

@@ -255,6 +255,8 @@ export const SLOTS = {
   alaDel:{ x:198.5, y:9.8, z:21, w:20, h:14 },         // cara superior del alerón delantero, a cada lado de la nariz (Partner Estratégico, a negociar)
   nariz:{ x:191, y:20.4, z:0, w:23, h:4.2 },           // panel plano sobre la nariz
   aleron:{ x:13.5, y:57, z:0, w:62, h:17 },            // cara superior del alerón trasero (4 recuadros)
+  ponEj:{ x:124, y:14.2, z:31, w:24, h:12 },            // IDEA de ubicación en el costado del pontón (hoy reservado al logo oficial de STEM Racing)
+  capsula:{ x:140, y:30, z:0, w:30, h:10 },            // IDEA de ubicación sobre el cuerpo/cápsula, entre la espina y la nariz
   espina:{ x:57, y:49.6, z:1.2, w:40, h:40 * 320 / 1792, tilt:12 },   // lockup de Striker Racing sobre la espina, inclinado con la caída del lomo
 };
 
@@ -270,10 +272,12 @@ export async function addLogoDecals(parts, logoUrl, lang = 'es', origin = null) 
   ORIGIN = origin ? origin.clone() : new THREE.Vector3();
   const { logo: img } = await (typeof logoUrl === 'string' ? preloadDecalAssets(logoUrl) : logoUrl);   // logoUrl puede ser la promesa de preloadDecalAssets
   const lockup = decalMaterial(drawLockup(img));
-  const partner = decalMaterial(drawSlot(1024, 188, [T.partner], 82));
-  const wing = decalMaterial(drawWingSlots(T.wing));
+  // Las zonas de patrocinio son IDEAS: por defecto no llevan rótulo pintado, solo un ancla invisible (material no visible) que el visor puede contornear
+  // con línea punteada o llenar con el logo que cargue el visitante.
+  const blank = new THREE.MeshBasicMaterial({ visible:false });
+  const partner = blank, wing = blank;
   const stemMat = decalMaterial(drawStem());
-  const wingFront = decalMaterial(drawSlot(700, Math.round(700 * SLOTS.alaDel.h / SLOTS.alaDel.w), [T.partnerShort], 70));
+  const wingFront = blank;
   const out = [], S = SLOTS;
   /* espina: el lockup va inclinado siguiendo la caída del lomo; a cada lado se mira desde afuera */
   const sp = parts['24'];
@@ -286,7 +290,7 @@ export async function addLogoDecals(parts, logoUrl, lang = 'es', origin = null) 
     const m = parts[k]; if (!m) return; const side = i === 0 ? 1 : -1;
     // Zona B: el costado es solo del logo de STEM Racing (obligatorio a cada lado, entre las ruedas), con las letras oficiales
     const d = stick(m, stemMat, S.ponton.w * .001, S.ponton.h * .001, mm(S.ponton.x, S.ponton.y, side * 200), V(0, 0, -side), V(0, 1, 0));
-    if (d) out.push({ kind:'stem', zone:'B', mesh:d });
+    if (d) out.push({ kind:'stem', zone:'', mesh:d });
   });
   if (parts['05']) [1, -1].forEach(side => {   // alerón delantero: un recuadro a cada lado de la nariz
     const d = stick(parts['05'], wingFront, S.alaDel.w * .001, S.alaDel.h * .001, mm(S.alaDel.x, 200, side * S.alaDel.z), V(0, -1, 0), V(1, 0, 0));
@@ -294,13 +298,20 @@ export async function addLogoDecals(parts, logoUrl, lang = 'es', origin = null) 
   });
   if (parts['04']) { const d = stick(parts['04'], partner, S.nariz.w * .001, S.nariz.h * .001, mm(S.nariz.x, 200, 0), V(0, -1, 0), V(0, 0, -1)); if (d) out.push({ kind:'partner', zone:'A', mesh:d }); }
   if (parts['09']) { const d = stick(parts['09'], wing, S.aleron.w * .001, S.aleron.h * .001, mm(S.aleron.x, 200, 0), V(0, -1, 0), V(1, 0, 0)); if (d) out.push({ kind:'wing', zone:'C', mesh:d }); }
+  // Ideas extra: costado del pontón (B, ambos lados) y cápsula/cuerpo (E)
+  ['02', '03'].forEach((k, i) => {
+    const m = parts[k]; if (!m) return; const side = i === 0 ? 1 : -1;
+    const d = stick(m, blank, S.ponEj.w * .001, S.ponEj.h * .001, mm(S.ponEj.x, S.ponEj.y, side * 200), V(0, 0, -side), V(0, 1, 0));
+    if (d) out.push({ kind:'idea', zone:'B', mesh:d });
+  });
+  if (parts['01']) { const d = stick(parts['01'], blank, S.capsula.w * .001, S.capsula.h * .001, mm(S.capsula.x, 200, 0), V(0, -1, 0), V(1, 0, 0)); if (d) out.push({ kind:'idea', zone:'E', mesh:d }); }
   return out;
 }
 
 /* ───────────── logo del visitante (configurador) ─────────────
  * slotCanvas(zona, imagen): dibuja el logo (PNG/SVG con o sin fondo transparente) dentro del espacio de la zona A (nariz), C (alerón trasero, 2 recuadros) o D
  * (alerón delantero, a cada lado de la nariz), con el mismo contorno fino de los recuadros. Todo ocurre en el navegador; el archivo nunca se envía a ningún lado. */
-const SLOT_PX = { A:[1024, Math.round(1024 * SLOTS.nariz.h / SLOTS.nariz.w)], C:[1024, 280], D:[700, Math.round(700 * SLOTS.alaDel.h / SLOTS.alaDel.w)] };
+const SLOT_PX = { A:[1024, Math.round(1024 * SLOTS.nariz.h / SLOTS.nariz.w)], C:[1024, 280], B:[1024, 512], E:[1024, 341], D:[700, Math.round(700 * SLOTS.alaDel.h / SLOTS.alaDel.w)] };
 function fitLogo(g, img, x, y, w, h) {
   const pad = Math.min(w, h) * .14, bw = w - 2 * pad, bh = h - 2 * pad, k = Math.min(bw / img.width, bh / img.height);
   g.drawImage(img, x + (w - img.width * k) / 2, y + (h - img.height * k) / 2, img.width * k, img.height * k);

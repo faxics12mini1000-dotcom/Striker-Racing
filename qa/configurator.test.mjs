@@ -27,7 +27,7 @@ for (const [url, lang] of [['/auto/', 'es'], ['/en/car/', 'en']]) {
   const posts = []; page.on('request', r => { if (r.method() !== 'GET') posts.push(r.method() + ' ' + r.url()); });
   await page.goto(BASE + url);
   await page.waitForSelector('#modelStage.is-ready', { timeout: 60000 });
-  await page.locator('#configurador').scrollIntoViewIfNeeded(); await page.waitForTimeout(800);   // el configurador arranca al acercarse
+  await page.evaluate(() => { document.documentElement.style.scrollBehavior = 'auto'; document.getElementById('configurador').scrollIntoView(); }); await page.waitForFunction(() => document.getElementById('cfgLevel').options.length > 0, null, { timeout: 60000 });   // el configurador arranca al acercarse
   const before = await nonBlank(page, '#cfgUniform');
   check(before >= 2, `${url} maqueta del uniforme se dibuja sin logo (${before} colores)`);
   const levels = await page.locator('#cfgLevel option').allTextContents();
@@ -57,6 +57,10 @@ for (const [url, lang] of [['/auto/', 'es'], ['/en/car/', 'en']]) {
   await page.setInputFiles('#cfgFile', 'qa/tmp/logo.svg'); await page.waitForTimeout(800);
   check(await page.locator('#cfgStatus.is-bad').count() === 0 && await page.locator('#cfgDownload').isEnabled(), `${url} acepta SVG`);
 
+  // zona de ejemplo: el logo va en UNA zona elegida
+  await page.selectOption('#cfgZone', 'E'); await page.waitForTimeout(500);
+  check(await page.locator('.car-zone:visible').count() === 1 && (await page.locator('.car-zone:visible').innerText()) === 'E', `${url} el logo se muestra solo en la zona elegida (E)`);
+  check(await page.locator('.car-zones-tag:visible').count() === 1, `${url} etiqueta «Ideas de ubicación» visible`);
   // fondo claro
   await page.locator('input[name="cfgBg"][value="light"]').check(); await page.waitForTimeout(200);
 
@@ -78,7 +82,7 @@ for (const [url, lang] of [['/auto/', 'es'], ['/en/car/', 'en']]) {
   const zones1 = await page.locator('.car-zone:visible').count();
   check(zones0 === 0 && zones1 >= 5, `${url} el botón resalta las zonas (${zones0} → ${zones1} letras)`);
   const letters = [...new Set(await page.locator('.car-zone:visible').allTextContents())].sort().join('');
-  check(letters === 'ABCD', `${url} letras de zona A–D: ${letters}`);
+  check(letters === 'ABCDE', `${url} letras de zona A–E: ${letters}`);
   check(await page.locator('#zonas a[href*="niveles"], #zonas a[href*="tiers"]').count() >= 4, `${url} cada zona enlaza a su nivel`);
 
   check(posts.length === 0, `${url} ninguna petición POST/PUT (privacidad): ${posts.join(', ')}`);
@@ -95,7 +99,7 @@ for (const [url, lang] of [['/auto/', 'es'], ['/en/car/', 'en']]) {
   check(await page.locator('.car-zone:visible').count() >= 5, '/auto/#zonas abre con las zonas resaltadas');
   await page.goto(BASE + '/patrocinios/');
   check(await page.locator('a[href="/auto/#zonas"]').count() === 1, '/patrocinios/ enlaza a /auto/#zonas');
-  check(await page.locator('.sm-legend a[href="#niveles"]').count() === 3, '/patrocinios/ enlaza las zonas A, C y D a #niveles');
+  check(await page.locator('.sm-legend a[href="#niveles"]').count() === 4, '/patrocinios/ enlaza las zonas A, C, D y E a #niveles');
   await ctx.close();
 }
 await browser.close();
