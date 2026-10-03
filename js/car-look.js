@@ -244,7 +244,9 @@ function stick(mesh, mat, w, h, from, dir, up) {
   plane.position.copy(o.position); plane.quaternion.copy(o.quaternion);
   mesh.attach(plane); return plane;
 }
-const mm = (x, y, z) => new THREE.Vector3(x, y, z).multiplyScalar(.001);
+/* Los puntos de pegado están en el marco del modelo (mm, origen en la cola). Si el visor ya centró el auto, ORIGIN (la posición del modelo) los lleva al mundo. */
+let ORIGIN = new THREE.Vector3();
+const mm = (x, y, z) => new THREE.Vector3(x, y, z).multiplyScalar(.001).add(ORIGIN);
 const V = (x, y, z) => new THREE.Vector3(x, y, z);
 
 /* Posiciones de los espacios (mm, marco del modelo). Se exportan para dibujar marcadores sobre capturas. */
@@ -263,8 +265,9 @@ const loadImg = src => new Promise((ok, no) => { const i = new Image(); i.onload
 export function preloadDecalAssets(logoUrl) {
   return Promise.all([fonts(), loadImg(logoUrl)]).then(r => ({ logo: r[1] }));
 }
-export async function addLogoDecals(parts, logoUrl, lang = 'es') {
+export async function addLogoDecals(parts, logoUrl, lang = 'es', origin = null) {
   const T = SLOT_TEXT[lang] || SLOT_TEXT.es;
+  ORIGIN = origin ? origin.clone() : new THREE.Vector3();
   const { logo: img } = await (typeof logoUrl === 'string' ? preloadDecalAssets(logoUrl) : logoUrl);   // logoUrl puede ser la promesa de preloadDecalAssets
   const lockup = decalMaterial(drawLockup(img));
   const partner = decalMaterial(drawSlot(1024, 188, [T.partner], 82));
@@ -277,19 +280,35 @@ export async function addLogoDecals(parts, logoUrl, lang = 'es') {
   if (sp) [1, -1].forEach(side => {
     const a = THREE.MathUtils.degToRad(S.espina.tilt), up = V(Math.sin(a), Math.cos(a), 0);
     const d = stick(sp, lockup, S.espina.w * .001, S.espina.h * .001, mm(S.espina.x, S.espina.y, side * 40), V(0, 0, -side), up);
-    if (d) out.push({ kind:'logo', mesh:d });
+    if (d) out.push({ kind:'logo', zone:'', mesh:d });
   });
   ['02', '03'].forEach((k, i) => {   // 02 = pontón derecho (+z), 03 = izquierdo (-z)
     const m = parts[k]; if (!m) return; const side = i === 0 ? 1 : -1;
     // Zona B: el costado es solo del logo de STEM Racing (obligatorio a cada lado, entre las ruedas), con las letras oficiales
     const d = stick(m, stemMat, S.ponton.w * .001, S.ponton.h * .001, mm(S.ponton.x, S.ponton.y, side * 200), V(0, 0, -side), V(0, 1, 0));
-    if (d) out.push({ kind:'stem', mesh:d });
+    if (d) out.push({ kind:'stem', zone:'B', mesh:d });
   });
   if (parts['05']) [1, -1].forEach(side => {   // alerón delantero: un recuadro a cada lado de la nariz
     const d = stick(parts['05'], wingFront, S.alaDel.w * .001, S.alaDel.h * .001, mm(S.alaDel.x, 200, side * S.alaDel.z), V(0, -1, 0), V(1, 0, 0));
-    if (d) out.push({ kind:'partner', mesh:d });
+    if (d) out.push({ kind:'partner', zone:'D', mesh:d });
   });
-  if (parts['04']) { const d = stick(parts['04'], partner, S.nariz.w * .001, S.nariz.h * .001, mm(S.nariz.x, 200, 0), V(0, -1, 0), V(0, 0, -1)); if (d) out.push({ kind:'partner', mesh:d }); }
-  if (parts['09']) { const d = stick(parts['09'], wing, S.aleron.w * .001, S.aleron.h * .001, mm(S.aleron.x, 200, 0), V(0, -1, 0), V(1, 0, 0)); if (d) out.push({ kind:'wing', mesh:d }); }
+  if (parts['04']) { const d = stick(parts['04'], partner, S.nariz.w * .001, S.nariz.h * .001, mm(S.nariz.x, 200, 0), V(0, -1, 0), V(0, 0, -1)); if (d) out.push({ kind:'partner', zone:'A', mesh:d }); }
+  if (parts['09']) { const d = stick(parts['09'], wing, S.aleron.w * .001, S.aleron.h * .001, mm(S.aleron.x, 200, 0), V(0, -1, 0), V(1, 0, 0)); if (d) out.push({ kind:'wing', zone:'C', mesh:d }); }
   return out;
 }
+
+/* ───────────── logo del visitante (configurador) ─────────────
+ * slotCanvas(zona, imagen): dibuja el logo (PNG/SVG con o sin fondo transparente) dentro del espacio de la zona A (nariz), C (alerón trasero, 2 recuadros) o D
+ * (alerón delantero, a cada lado de la nariz), con el mismo contorno fino de los recuadros. Todo ocurre en el navegador; el archivo nunca se envía a ningún lado. */
+const SLOT_PX = { A:[1024, Math.round(1024 * SLOTS.nariz.h / SLOTS.nariz.w)], C:[1024, 280], D:[700, Math.round(700 * SLOTS.alaDel.h / SLOTS.alaDel.w)] };
+function fitLogo(g, img, x, y, w, h) {
+  const pad = Math.min(w, h) * .14, bw = w - 2 * pad, bh = h - 2 * pad, k = Math.min(bw / img.width, bh / img.height);
+  g.drawImage(img, x + (w - img.width * k) / 2, y + (h - img.height * k) / 2, img.width * k, img.height * k);
+}
+export function slotCanvas(zone, img) {
+  const [W, H] = SLOT_PX[zone], c = canvasOf(W, H), g = c.getContext('2d'), lw = Math.max(3, Math.round(H / 60));
+  const box = (x, w) => { g.save(); g.strokeStyle = COLORS.ice; g.globalAlpha = .55; g.lineWidth = lw; g.strokeRect(x + lw, lw, w - 2 * lw, H - 2 * lw); g.restore(); fitLogo(g, img, x, 0, w, H); };
+  if (zone === 'C') { const gap = 70, bw = (W - gap) / 2; box(0, bw); box(bw + gap, bw); } else box(0, W);
+  return c;
+}
+export const userLogoMaterial = canvas => decalMaterial(canvas);

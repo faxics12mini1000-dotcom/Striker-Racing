@@ -773,3 +773,44 @@ html.fs-lock .sticky-cta{display:none;}
 }
 .car-part b{display:inline-grid; place-items:center; min-width:24px; height:20px; flex:none; font-family:var(--mono); font-size:0.68rem; color:var(--navy-deep); background:var(--lime);}
 .car-part:hover, .car-part:focus-visible{color:var(--ice); border-color:var(--emerald);}
+.car-zone{background:var(--emerald); width:18px; height:18px;}
+
+/* ---------- Zonas de patrocinio y configurador de marca (/auto/) ---------- */
+.zones-panel{padding:72px 0 24px; background:var(--navy-deep);}
+.zones-h{font-family:'Oswald', system-ui, sans-serif; text-transform:uppercase; font-weight:600; font-size:clamp(1.8rem,3.6vw,2.8rem); line-height:1; margin:10px 0 14px;}
+.zones-p{max-width:68ch; color:var(--ice-dim); margin:0 0 24px;}
+.zone-list{list-style:none; margin:0 0 20px; padding:0; display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px;}
+@media (max-width:760px){ .zone-list{grid-template-columns:1fr;} }
+.zone-list li{display:grid; grid-template-columns:minmax(0,1fr); gap:4px; border:1px solid var(--border-fine); padding:12px; background:var(--surface);}
+.zone-list li b{font-weight:600; color:var(--emerald); padding-left:34px;}
+.zone-list li b a{color:var(--emerald);}
+.zone-row{display:flex; gap:10px; align-items:center; min-height:32px; background:transparent; border:none; color:var(--ice); text-align:left; cursor:pointer; padding:0;}
+.zone-row:hover span:last-child, .zone-row:focus-visible span:last-child{text-decoration:underline;}
+.zones-panel .sm-note{max-width:80ch;}
+.zones-panel .cta-row{margin-top:20px;}
+.zones-panel .btn[aria-pressed="true"]{background:var(--ice); border-color:var(--ice); color:var(--navy-deep);}
+.cfg{padding:72px 0 88px;}
+.cfg-controls{display:grid; grid-template-columns:minmax(0,1.4fr) minmax(0,1fr) minmax(0,1fr); gap:16px; margin-bottom:12px;}
+@media (max-width:900px){ .cfg-controls{grid-template-columns:1fr;} }
+.cfg-field{display:flex; flex-direction:column; gap:8px; padding:0; border:none; font-size:0.9rem; color:var(--ice-dim);}
+.cfg-field > span, .cfg-field legend{font-family:var(--mono); font-size:0.7rem; letter-spacing:0.08em; text-transform:uppercase; color:var(--ice-dim); padding:0;}
+.cfg-field select, .cfg-field input[type="file"]{
+  min-height:44px; padding:8px 10px; color:var(--ice); background:var(--surface); border:1px solid var(--border-fine); font-size:0.92rem;
+}
+.cfg-field input[type="file"]::file-selector-button{margin-right:12px; padding:6px 12px; cursor:pointer; color:var(--navy-deep); background:var(--emerald); border:none; font-family:var(--mono); font-weight:700; font-size:0.74rem; text-transform:uppercase;}
+.cfg-bg{flex-direction:row; flex-wrap:wrap; align-items:center; gap:6px 18px;}
+.cfg-bg legend{width:100%; margin-bottom:8px;}
+.cfg-bg label{display:inline-flex; gap:8px; align-items:center; min-height:44px; color:var(--ice); cursor:pointer;}
+.cfg-status{min-height:1.4em; margin:6px 0 0; font-size:0.9rem; color:var(--ice);}
+.cfg-status.is-bad{color:var(--lime); font-weight:600;}
+.cfg-mocks{display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:16px; margin:20px 0 24px;}
+@media (max-width:760px){ .cfg-mocks{grid-template-columns:1fr;} }
+.cfg-mocks figure{margin:0; border:1px solid var(--border-fine); background:var(--surface);}
+.cfg-mocks canvas{display:block; width:100%; height:auto;}
+.cfg-mocks figcaption{padding:8px 12px; border-top:1px solid var(--border-fine);}
+.btn:disabled{opacity:0.45; cursor:not-allowed;}
+.btn:disabled:hover{background:transparent; border-color:var(--border-fine); color:var(--ice);}
+.btn.btn-solid:disabled:hover{background:var(--emerald); border-color:var(--emerald); color:var(--navy-deep);}
+button.btn{cursor:pointer;}
+.sm-legend li b a{color:inherit; text-decoration:underline; text-underline-offset:3px;}
+.sm-link a{color:var(--emerald); font-weight:600;}

@@ -1,0 +1,22 @@
+{
+  "_ayuda": "Datos del configurador de marca (js/configurator.js). Los nombres de nivel son EXACTAMENTE los de /patrocinios/ y /en/sponsorship/ (qa/parity.mjs lo comprueba); no se cambian aquí. 'uniform' dice en qué regiones del uniforme va cada nivel, 'pit' el tratamiento en el Pit Display y 'car' si el nivel tiene lugar en el auto (solo Partner Estratégico: zonas A nariz, C alerón trasero y D alerón delantero, como en el mapa de patrocinios).",
+  "limits": { "maxBytes": 2097152, "types": ["image/png", "image/svg+xml"] },
+  "levels": [
+    { "key": "colaborador", "name": { "es": "Colaborador", "en": "Collaborator" }, "uniform": ["backLow"], "pit": "perimeter", "car": false },
+    { "key": "impulsor", "name": { "es": "Impulsor", "en": "Booster" }, "uniform": ["backUpper"], "pit": "featured", "car": false },
+    { "key": "aliado", "name": { "es": "Aliado Técnico", "en": "Technical Ally" }, "uniform": ["sleeve"], "pit": "featured", "car": false },
+    { "key": "partner", "name": { "es": "Partner Estratégico", "en": "Strategic Partner" }, "uniform": ["chest", "backMain"], "pit": "custom", "car": true }
+  ],
+  "regions": {
+    "chest": { "es": "Pecho", "en": "Chest" },
+    "backMain": { "es": "Dorsal principal", "en": "Main back" },
+    "backLow": { "es": "Cuadrante inferior de espalda", "en": "Lower back" },
+    "backUpper": { "es": "Omóplatos / espalda alta", "en": "Shoulder blades / upper back" },
+    "sleeve": { "es": "Manga", "en": "Sleeve" }
+  },
+  "pit": {
+    "perimeter": { "es": "Mención perimetral", "en": "Perimeter mention" },
+    "featured": { "es": "Pit Display destacado", "en": "Featured Pit Display" },
+    "custom": { "es": "A la medida", "en": "Tailor-made" }
+  }
+}

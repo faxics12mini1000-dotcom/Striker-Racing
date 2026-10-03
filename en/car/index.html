@@ -45,7 +45,7 @@
 <link rel="preload" href="/fonts/inter-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/fonts/oswald-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
 <!-- viewer:head:begin -->
-<script>(function(){var c=navigator.connection||{};if(c.saveData||/2g/.test(c.effectiveType||'')||matchMedia('(max-width:560px)').matches)return;var e=document.createElement('link');e.rel='modulepreload';e.href='/js/dist/viewer.ERF4W42U.js';document.head.appendChild(e)})();</script>
+<script>(function(){var c=navigator.connection||{};if(c.saveData||/2g/.test(c.effectiveType||'')||matchMedia('(max-width:560px)').matches)return;var e=document.createElement('link');e.rel='modulepreload';e.href='/js/dist/viewer.Z6MBVPBO.js';document.head.appendChild(e)})();</script>
 <!-- viewer:head:end -->
 <script type="application/ld+json">
 {
@@ -138,11 +138,11 @@
   </div>
   <div class="wrap hero-frame">
     <div class="hero-main">
-      <div class="model-stage" id="modelStage" data-viewer="/js/dist/viewer.ERF4W42U.js" data-model="/assets/models/sr26.glb?v=e992e3fa" data-video-mp4="" data-video-webm="" data-env="/assets/models/env-room.png?v=586e7346" data-logo="/logo.png" aria-label="3D model of the SR-26, the Striker Racing car, with an exploded-view animation">
+      <div class="model-stage" id="modelStage" data-viewer="/js/dist/viewer.Z6MBVPBO.js" data-model="/assets/models/sr26.glb?v=e992e3fa" data-video-mp4="" data-video-webm="" data-env="/assets/models/env-room.png?v=586e7346" data-logo="/logo.png" aria-label="3D model of the SR-26, the Striker Racing car, with an exploded-view animation">
         <picture>
-          <source media="(min-width:961px)" srcset="/assets/img/car-poster-desktop.webp?v=42a933a6" width="1097" height="1094">
-          <source media="(min-width:561px)" srcset="/assets/img/car-poster-tablet.webp?v=a9a0f183" width="910" height="681">
-          <img class="model-poster" src="/assets/img/car-poster-phone.webp?v=1f574e2a" width="510" height="636" alt="Striker Racing SR-26 car in its navy blue, purple and emerald green livery" loading="eager" fetchpriority="high" decoding="async">
+          <source media="(min-width:961px)" srcset="/assets/img/car-poster-desktop.webp?v=9293a1dc" width="1097" height="1094">
+          <source media="(min-width:561px)" srcset="/assets/img/car-poster-tablet.webp?v=6baede2f" width="910" height="681">
+          <img class="model-poster" src="/assets/img/car-poster-phone.webp?v=825b7315" width="510" height="636" alt="Striker Racing SR-26 car in its navy blue, purple and emerald green livery" loading="eager" fetchpriority="high" decoding="async">
         </picture>
         <span class="model-tag">SR-26 · Striker Racing prototype</span>
         <span class="model-hint">Drag to rotate</span>
@@ -179,6 +179,53 @@
     </div>
   </div>
 </header>
+
+<section id="zonas" class="zones-panel">
+  <div class="wrap">
+    <div class="eyebrow-tag">Sponsorship zones</div>
+    <h2 class="zones-h">Where your brand goes on the car</h2>
+    <p class="zones-p">Visual prototype of the SR-26: the outlined boxes are the Strategic Partner spaces, the only tier with a place on the car. Those marked “negotiable” are agreed according to the proposal.</p>
+    <ul class="zone-list">
+        <li><button type="button" class="zone-row" data-zone="A" aria-label="Highlight zone A: Nose"><span class="sm-pin" aria-hidden="true">A</span><span>Nose</span></button><b><a href="/en/sponsorship/#tiers">Strategic Partner</a></b></li>
+        <li><button type="button" class="zone-row" data-zone="B" aria-label="Highlight zone B: Sidepods, both sides"><span class="sm-pin" aria-hidden="true">B</span><span>Sidepods, both sides</span></button><b>Official STEM Racing logo (regulations)</b></li>
+        <li><button type="button" class="zone-row" data-zone="C" aria-label="Highlight zone C: Rear wing, 2 boxes"><span class="sm-pin" aria-hidden="true">C</span><span>Rear wing, 2 boxes</span></button><b><a href="/en/sponsorship/#tiers">Strategic Partner</a></b></li>
+        <li><button type="button" class="zone-row" data-zone="D" aria-label="Highlight zone D: Front wing, either side of the nose"><span class="sm-pin" aria-hidden="true">D</span><span>Front wing, either side of the nose</span></button><b><a href="/en/sponsorship/#tiers">Strategic Partner</a> · negotiable</b></li>
+    </ul>
+    <p class="sm-note">Collaborator, Booster and Technical Ally place their brand on the uniform and the Pit Display. The spine carries the team logo and the sides (sidepods) are reserved for the official STEM Racing logo only.</p>
+    <div class="cta-row">
+      <button type="button" class="btn btn-solid" id="zonesToggle" aria-pressed="false">Highlight zones on the car</button>
+      <a class="btn" href="/en/sponsorship/#tiers">View sponsorship tiers</a>
+    </div>
+  </div>
+</section>
+
+<section id="configurador" class="cfg blueprint">
+  <div class="wrap">
+    <div class="eyebrow-tag">Brand configurator</div>
+    <h2 class="zones-h">Try your logo on the SR-26</h2>
+    <p class="zones-p">Upload your logo (PNG or SVG, up to 2 MB) and see it on the car, the uniform and the Pit Display for each tier. Your file stays in your browser: it is not uploaded to any server.</p>
+    <div class="cfg-controls">
+      <label class="cfg-field cfg-file"><span>Your logo (PNG or SVG, max. 2 MB)</span><input type="file" id="cfgFile" accept=".png,.svg,image/png,image/svg+xml"></label>
+      <label class="cfg-field"><span>Tier</span><select id="cfgLevel"></select></label>
+      <fieldset class="cfg-field cfg-bg"><legend>Preview background</legend>
+        <label><input type="radio" name="cfgBg" value="dark" checked> Dark</label>
+        <label><input type="radio" name="cfgBg" value="light"> Light</label>
+      </fieldset>
+    </div>
+    <p id="cfgStatus" class="cfg-status" role="status" aria-live="polite"></p>
+    <p id="cfgInfo" class="cfg-status" aria-live="polite"></p>
+    <div class="cfg-mocks">
+      <figure><canvas id="cfgUniform" width="760" height="400" role="img" aria-label="Uniform"></canvas><figcaption class="micro">Uniform</figcaption></figure>
+      <figure><canvas id="cfgPit" width="760" height="400" role="img" aria-label="Pit Display"></canvas><figcaption class="micro">Pit Display</figcaption></figure>
+    </div>
+    <div class="cta-row">
+      <button type="button" class="btn" id="cfgSee3d">See it on the 3D car</button>
+      <button type="button" class="btn btn-solid" id="cfgDownload" disabled>Download proposal</button>
+      <button type="button" class="btn" id="cfgClear" disabled>Remove logo</button>
+    </div>
+    <p class="sm-note">Illustrative proposal on a visual prototype: it does not confirm any placement. Current tiers and benefits are on the <a href="/en/sponsorship/">Sponsorship</a>.</p>
+  </div>
+</section>
 
 </main>
 
@@ -219,6 +266,7 @@
 <button id="backToTop" class="hud-top-btn" type="button" aria-label="Back to top">&#9650; TOP</button>
 
 <script src="/js/site.js" defer></script>
+<!-- config:script:begin --><script type="module" src="/js/dist/configurator.LPNIGJP2.js"></script><!-- config:script:end -->
 <!-- viewer:script:begin --><script type="module" src="/js/dist/stage.P6COPG2T.js"></script><!-- viewer:script:end -->
 </body>
 </html>

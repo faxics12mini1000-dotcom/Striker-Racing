@@ -19,14 +19,14 @@ const hash = f => createHash('sha1').update(readFileSync(f)).digest('hex').slice
 
 rmSync('js/dist', { recursive: true, force: true });
 const res = await build({
-  entryPoints: ['js/stage.js', 'js/viewer.js'], bundle: true, splitting: false, format: 'esm', outdir: 'js/dist',
+  entryPoints: ['js/stage.js', 'js/viewer.js', 'js/configurator.js'], bundle: true, splitting: false, format: 'esm', outdir: 'js/dist',
   entryNames: '[name].[hash]', minify: true, target: 'es2020', legalComments: 'none', metafile: true, logLevel: 'warning',
 });
 const outs = Object.entries(res.metafile.outputs);
 const outOf = entryPoint => '/' + outs.find(([, o]) => o.entryPoint === entryPoint)[0].replace(/\\/g, '/');
 const v = { model: hash(ASSETS.model), env: hash(ASSETS.env) };
 const urls = {
-  stage: outOf('js/stage.js'), viewer: outOf('js/viewer.js'),
+  stage: outOf('js/stage.js'), viewer: outOf('js/viewer.js'), config: outOf('js/configurator.js'),
   model: `/${ASSETS.model}?v=${v.model}`, env: `/${ASSETS.env}?v=${v.env}`,
   mp4: existsSync(VIDEO.mp4) ? `/${VIDEO.mp4}?v=${hash(VIDEO.mp4)}` : '',
   webm: existsSync(VIDEO.webm) ? `/${VIDEO.webm}?v=${hash(VIDEO.webm)}` : '',
@@ -48,6 +48,7 @@ for (const { page, preload: withPreload } of PAGES) {
 <script>${preload}</script>
 ` : '');
   swap('<!-- viewer:script:begin -->', '<!-- viewer:script:end -->', `<script type="module" src="${urls.stage}"></script>`);
+  if (html.includes('<!-- config:script:begin -->')) swap('<!-- config:script:begin -->', '<!-- config:script:end -->', `<script type="module" src="${urls.config}"></script>`);
   const attr = (name, val) => {
     const re = new RegExp(`data-${name}="[^"]*"`);
     if (!re.test(html)) throw new Error(`${page}: falta data-${name} en #modelStage`);

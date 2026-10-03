@@ -28,10 +28,12 @@ export function mount(stage, pre){
     ? { rear:['REAR', 'REAR'], notesOn:'Show part numbers', notesOff:'Hide part numbers', planOn:'Technical drawing', planOff:'Exit technical drawing',
         photo:'Car photo (transparent PNG)', share:'Share', copied:'Link copied', saved:'Photo saved', planTag:'Technical drawing · visual prototype',
         dLength:'Length (no cartridge)', dWidth:'Width', dWheelbase:'Wheelbase', measured:'Measured on the 3D model. Visual prototype, not the final car.',
+        zonesOn:'Highlight sponsorship zones', zonesOff:'Hide sponsorship zones',
         keys:'Use the arrow keys to rotate, Home for the ISO view.', parts:'Car parts', shareTitle:'SR-26 · Striker Racing', shareText:'The Striker Racing SR-26, a visual prototype.' }
     : { rear:['TRASERA', 'TRA'], notesOn:'Mostrar numeración de piezas', notesOff:'Ocultar numeración de piezas', planOn:'Plano técnico', planOff:'Salir del plano técnico',
         photo:'Foto del auto (PNG transparente)', share:'Compartir', copied:'Enlace copiado', saved:'Foto guardada', planTag:'Plano técnico · prototipo visual',
         dLength:'Largo (sin cartucho)', dWidth:'Ancho', dWheelbase:'Entre ejes', measured:'Medido en el modelo 3D. Prototipo visual, no es el auto final.',
+        zonesOn:'Resaltar zonas de patrocinio', zonesOff:'Ocultar zonas de patrocinio',
         keys:'Usa las flechas para girar y Inicio para la vista ISO.', parts:'Piezas del auto', shareTitle:'SR-26 · Striker Racing', shareText:'El SR-26 de Striker Racing, un prototipo visual.' });
   TXT.views.rear = TXT.rear; TXT.views.plan = ['PLAN', 'PLAN'];
   // Pieza que ancla la etiqueta de cada etapa (clave del nodo en el GLB)
@@ -283,6 +285,7 @@ export function mount(stage, pre){
       return new THREE.CanvasTexture(c);
     }
 
+    var zonesOn = false, zoneHost = null, zoneEls = [], userLogoActive = false;
     var decor = [], decals = [], notesOn = false, noteHost = null, notes = [], planOn = false, plan = null, lastBlob = null;
     var labelHost = null, labels = [];
     var tmpBox = new THREE.Box3(), tmpV = new THREE.Vector3();
@@ -448,7 +451,7 @@ export function mount(stage, pre){
       stage.appendChild(labelHost);
 
       // Logos dibujados en código (espina + espacios disponibles). Si falla la carga, el auto se ve igual.
-      var decalsDone = decalsP.then(function(assets){ return assets ? Look.addLogoDecals(byKey, Promise.resolve(assets), EN ? 'en' : 'es') : null; }).then(function(list){ decals = list || []; }).catch(function(){});
+      var decalsDone = decalsP.then(function(assets){ return assets ? Look.addLogoDecals(byKey, Promise.resolve(assets), EN ? 'en' : 'es', model.position) : null; }).then(function(list){ decals = list || []; }).catch(function(){});
 
       var box = new THREE.Box3().setFromObject(model);
       var size = box.getSize(new THREE.Vector3());
@@ -512,6 +515,9 @@ export function mount(stage, pre){
         setProgress(1);
         stage.classList.remove('is-loading');
         stage.classList.add('is-ready');
+        stage.sr26 = { photo:function(){ return capturePhoto(false, true); } };   // js/configurator.js pide la foto del auto con el logo puesto
+        if(window.__srLogo) applyLogo(window.__srLogo);
+        if(location.hash === '#zonas' || window.__srZones) setZones(true);
         stage.dispatchEvent(new CustomEvent('sr26-ready'));   // js/stage.js retira el video/CTA si los había
         needsRender = true;
         startLoop();
@@ -527,6 +533,7 @@ export function mount(stage, pre){
       pause:'<svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true"><path d="M3.5 2h3v12h-3zM9.5 2h3v12h-3z" fill="currentColor"/></svg>',
       fsOn:'<svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true"><path d="M2 6V2h4M10 2h4v4M14 10v4h-4M6 14H2v-4" fill="none" stroke="currentColor" stroke-width="1.6"/></svg>',
       fsOff:'<svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true"><path d="M6 2v4H2M10 2v4h4M10 14v-4h4M6 14v-4H2" fill="none" stroke="currentColor" stroke-width="1.6"/></svg>',
+      zones:'<svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true"><path d="M2.5 14V2.5h9l-1.6 3 1.6 3h-9" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>',
       notes:'<svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true"><path d="M2 3.5h2M6 3.5h8M2 8h2M6 8h8M2 12.5h2M6 12.5h8" fill="none" stroke="currentColor" stroke-width="1.6"/></svg>',
       plan:'<svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true"><path d="M1.5 5v6M14.5 5v6M1.5 8h13M4 6l-2.5 2L4 10M12 6l2.5 2-2.5 2" fill="none" stroke="currentColor" stroke-width="1.4"/></svg>',
       photo:'<svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true"><path d="M1.5 4.5h3l1-1.5h5l1 1.5h3v8h-13z" fill="none" stroke="currentColor" stroke-width="1.4"/><circle cx="8" cy="8.5" r="2.4" fill="none" stroke="currentColor" stroke-width="1.4"/></svg>',
@@ -581,6 +588,7 @@ export function mount(stage, pre){
         '<div class="car-views" role="group" aria-label="' + TXT.viewsLabel + '">' + viewsHtml + '</div>' +
         '<button type="button" class="car-view car-view-cycle" aria-label="' + TXT.viewsLabel + '"></button>' +
         '<div class="car-tools" role="group" aria-label="' + TXT.tools + '">' +
+          '<button type="button" class="car-btn car-ctl-zones" aria-pressed="false">' + ICON.zones + '</button>' +
           '<button type="button" class="car-btn car-ctl-notes" aria-pressed="false">' + ICON.notes + '</button>' +
           '<button type="button" class="car-btn car-ctl-plan" aria-pressed="false">' + ICON.plan + '</button>' +
           '<button type="button" class="car-btn car-ctl-photo">' + ICON.photo + '</button>' +
@@ -588,9 +596,10 @@ export function mount(stage, pre){
           '<button type="button" class="car-btn car-ctl-fs"></button>' +
         '</div>';
       stage.appendChild(bar);
-      [['notes', 'notesOn'], ['plan', 'planOn'], ['photo', 'photo'], ['share', 'share']].forEach(function(t){
+      [['zones', 'zonesOn'], ['notes', 'notesOn'], ['plan', 'planOn'], ['photo', 'photo'], ['share', 'share']].forEach(function(t){
         var b = bar.querySelector('.car-ctl-' + t[0]); b.setAttribute('aria-label', TXT[t[1]]); b.setAttribute('title', TXT[t[1]]);
       });
+      bar.querySelector('.car-ctl-zones').addEventListener('click', function(){ setZones(!zonesOn); });
       bar.querySelector('.car-ctl-notes').addEventListener('click', function(){ setNotes(!notesOn); });
       bar.querySelector('.car-ctl-plan').addEventListener('click', function(){ setPlan(!planOn); });
       bar.querySelector('.car-ctl-photo').addEventListener('click', function(){ capturePhoto(true); });
@@ -717,9 +726,11 @@ export function mount(stage, pre){
 
     // ---------- FOTO DEL AUTO (PNG con fondo transparente) y COMPARTIR ----------
     // Se dibuja un cuadro aparte de 1800×1100 sin piso, sombra ni anillo, solo el auto, y se devuelve el tamaño del visor.
-    function capturePhoto(download){
+    function capturePhoto(download, assembled){
       return new Promise(function(done){
         if(!modelRef) return done(null);
+        var poseU = exploded;
+        if(assembled && exploded > 0){ applyPose(0); modelRef.updateMatrixWorld(true); }   // la propuesta de marca siempre muestra el auto armado
         var size = renderer.getSize(new THREE.Vector2()), pr = renderer.getPixelRatio(), W = 1800, H = 1100;
         var vis = decor.map(function(m){ return m.visible; });
         decor.forEach(function(m){ m.visible = false; });
@@ -737,6 +748,7 @@ export function mount(stage, pre){
           done(blob);
         }, 'image/png');
         decor.forEach(function(m, i){ m.visible = vis[i]; });
+        if(assembled && poseU > 0){ applyPose(poseU); modelRef.updateMatrixWorld(true); }
         renderer.setPixelRatio(pr); renderer.setSize(size.x, size.y, false);
         resize();
       });
@@ -898,6 +910,54 @@ export function mount(stage, pre){
       });
     }
 
+    // ---------- ZONAS DE PATROCINIO: contorno y letra (A nariz, B pontones, C alerón trasero, D alerón delantero), como en el mapa de /patrocinios/ ----------
+    function ensureZones(){
+      if(zoneEls.length || !decals.length) return;
+      zoneHost = document.createElement('div'); zoneHost.className = 'car-notes'; zoneHost.setAttribute('aria-hidden', 'true');
+      var lime = cssColor('--lime', '#7FD9B0'), ice = cssColor('--ice', '#CDDEEF');
+      decals.forEach(function(d){
+        if(!d.zone) return;
+        d.line = new THREE.LineSegments(new THREE.EdgesGeometry(d.mesh.geometry), new THREE.LineBasicMaterial({ color:d.zone === 'B' ? ice : lime, depthTest:false, depthWrite:false, toneMapped:false }));
+        d.line.renderOrder = 9; d.line.visible = false; d.mesh.add(d.line);
+        var el = document.createElement('span'); el.className = 'car-note car-zone'; el.textContent = d.zone; el.style.display = 'none';
+        zoneHost.appendChild(el); zoneEls.push({ el:el, d:d });
+      });
+      stage.appendChild(zoneHost);
+    }
+    function setZones(on, only){
+      ensureZones();
+      zonesOn = on;
+      zoneEls.forEach(function(z){ var v = on && (!only || z.d.zone === only); z.d.line.visible = v; z.el.style.display = v ? '' : 'none'; });
+      var b = stage.querySelector('.car-ctl-zones');
+      if(b && !only){ b.setAttribute('aria-pressed', on ? 'true' : 'false'); var t = on ? TXT.zonesOff : TXT.zonesOn; b.setAttribute('aria-label', t); b.setAttribute('title', t); }
+      requestRender();
+    }
+    function updateZones(){
+      if(!zonesOn) return;
+      var w = stage.clientWidth, h = stage.clientHeight;
+      for(var i = 0; i < zoneEls.length; i++){
+        var z = zoneEls[i]; if(z.el.style.display === 'none') continue;
+        tmpV.setFromMatrixPosition(z.d.mesh.matrixWorld).project(camera);
+        z.el.style.transform = 'translate(' + Math.round((tmpV.x * 0.5 + 0.5) * w - 9) + 'px,' + Math.round((-tmpV.y * 0.5 + 0.5) * h - 24) + 'px)';
+        z.el.style.opacity = (tmpV.z > 1 || (-tmpV.y * 0.5 + 0.5) * h > h - insetPx) ? 0 : 1;
+      }
+    }
+    // El logo que carga el visitante (js/configurator.js) se pega en los espacios del auto del nivel Partner Estratégico (A, C y D). Todo local.
+    function applyLogo(img){
+      window.__srLogo = img || null;
+      decals.forEach(function(d){
+        if(d.zone !== 'A' && d.zone !== 'C' && d.zone !== 'D') return;
+        if(!d.origMat) d.origMat = d.mesh.material;
+        if(d.userMat){ if(d.userMat.map) d.userMat.map.dispose(); d.userMat.dispose(); d.userMat = null; }
+        if(img){ d.userMat = Look.userLogoMaterial(Look.slotCanvas(d.zone, img)); d.mesh.material = d.userMat; }
+        else d.mesh.material = d.origMat;
+      });
+      userLogoActive = !!img;
+      requestRender();
+    }
+    stage.addEventListener('sr26-logo', function(e){ applyLogo(e.detail && e.detail.img); });
+    stage.addEventListener('sr26-zones', function(e){ setZones(!!(e.detail && e.detail.on), e.detail && e.detail.only); });
+
     // ---------- RENDER ON-DEMAND + PAUSA FUERA DE VIEWPORT / PESTAÑA OCULTA ----------
     var inViewport = true;
     var pageVisible = document.visibilityState !== 'hidden';
@@ -1004,7 +1064,7 @@ export function mount(stage, pre){
         applyFit();
         renderer.render(scene, camera);
         if(firstFrame && stage.classList.contains('is-ready')){ firstFrame = false; mark('first-frame'); }
-        updateLabels(); updateNotes(); updateDims();
+        updateLabels(); updateNotes(); updateZones(); updateDims();
         needsRender = false;
         if(perfStage < 2 && ++perfFrames > 8){   // se ignoran los primeros cuadros (calentamiento)
           perfTime += performance.now() - t0;
