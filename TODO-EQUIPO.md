@@ -121,3 +121,4 @@ Diferencias de diseño respecto a 8a506d2 que conviene que el equipo confirme:
 - Meta de la temporada: $65,450 MXN, con aportaciones de todos los tamaños. Una mezcla de ejemplo (a ajustar con el equipo): 1–2 Partner ($10–15 mil c/u), 3 Aliado Técnico (~$7 mil), 4 Impulsor (~$4 mil), 6–8 Colaborador (~$2 mil) y en especie.
 - Aliado Técnico, Impulsor y Colaborador ya no incluyen el auto; sus beneficios son uniforme, Pit Display y reportes.
 - El logo de STEM Racing se limita a la zona plana del costado del pontón (x 79–107 mm, z 9.4–19 mm), 28 mm de largo, para que no se doble sobre la curva.
+- **Caché de imágenes**: Vercel entrega `/assets/img/` con caché de 7 días; si una imagen cambia con el mismo nombre, los visitantes (y el equipo) siguen viendo la vieja. Por eso las páginas citan las imágenes con `?v=<hash>`. Después de regenerar pósters o mapas (`generate-poster.mjs`, `capture-sr26.mjs mapa`) correr `npm run stamp:img` y subir los HTML.
