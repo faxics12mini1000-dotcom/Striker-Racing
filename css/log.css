@@ -1,0 +1,20 @@
+/* Bitácora (/bitacora/, /en/log/) y muro de patrocinadores. Solo tokens de color de css/site.css. */
+.log-list-wrap, .log-entry{padding:56px 0 88px; background:var(--navy-deep);}
+.log-list{list-style:none; margin:0; padding:0; border-top:1px solid var(--border-fine);}
+.log-item{padding:28px 0; border-bottom:1px solid var(--border-fine); display:grid; grid-template-columns:200px minmax(0,1fr); gap:6px 32px;}
+@media (max-width:700px){ .log-item{grid-template-columns:1fr;} }
+.log-item time{font-family:var(--mono); font-size:0.78rem; letter-spacing:0.08em; text-transform:uppercase; color:var(--ice-dim); grid-row:span 2;}
+@media (max-width:700px){ .log-item time{grid-row:auto;} }
+.log-item h2{font-family:'Oswald', system-ui, sans-serif; font-weight:600; text-transform:uppercase; font-size:clamp(1.4rem,2.6vw,2rem); line-height:1.05;}
+.log-item h2 a{text-decoration:none;}
+.log-item h2 a:hover{color:var(--emerald);}
+.log-item p{color:var(--ice-dim); max-width:68ch;}
+.log-body{max-width:72ch;}
+.log-body p, .log-body ul, .log-body ol{margin:0 0 1.1em; color:var(--ice-dim); font-size:1.05rem;}
+.log-body h2, .log-body h3{margin:1.6em 0 0.6em; font-weight:600;}
+.log-body a{color:var(--emerald);}
+.log-body img{max-width:100%; height:auto; border:1px solid var(--border-fine);}
+.log-fig{margin:0 0 28px; max-width:72ch;}
+.log-fig img{width:100%; height:auto; border:1px solid var(--border-fine);}
+.log-back{margin-top:36px; font-family:var(--mono); font-size:0.8rem; text-transform:uppercase; letter-spacing:0.08em;}
+.log-back a{color:var(--emerald);}

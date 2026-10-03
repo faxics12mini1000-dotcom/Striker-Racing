@@ -56,4 +56,18 @@
     <xhtml:link rel="alternate" hreflang="en" href="https://strikerracing.com/en/sponsorship/"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://strikerracing.com/patrocinios/"/>
   </url>
+  <url>
+    <loc>https://strikerracing.com/dossier/</loc>
+    <lastmod>2026-10-03</lastmod>
+    <xhtml:link rel="alternate" hreflang="es-mx" href="https://strikerracing.com/dossier/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://strikerracing.com/en/dossier/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://strikerracing.com/dossier/"/>
+  </url>
+  <url>
+    <loc>https://strikerracing.com/en/dossier/</loc>
+    <lastmod>2026-10-03</lastmod>
+    <xhtml:link rel="alternate" hreflang="es-mx" href="https://strikerracing.com/dossier/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://strikerracing.com/en/dossier/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://strikerracing.com/dossier/"/>
+  </url>
 </urlset>

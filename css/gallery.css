@@ -839,3 +839,13 @@ dialog.ar-dialog::backdrop{background:rgba(7,27,51,0.85);}
 .cfd-table tbody th{font-family:var(--mono); color:var(--ice); white-space:nowrap;}
 .cfd-table td{color:var(--ice-dim);}
 @media (max-width:640px){ .cfd-table th, .cfd-table td{padding:10px 8px; font-size:0.88rem;} }
+
+/* ---------- Muro de patrocinadores (solo aparece con data/sponsors.json encendido y con datos) ---------- */
+.sponsor-wall{padding:72px 0; background:var(--navy-deep); border-top:1px solid var(--border-fine);}
+.sw-group{margin-top:24px;}
+.sw-group h3{margin:0 0 12px;}
+.sw-list{list-style:none; margin:0; padding:0; display:grid; grid-template-columns:repeat(auto-fill,minmax(180px,1fr)); gap:12px;}
+.sw-list li{display:grid; place-items:center; min-height:96px; padding:16px; background:var(--surface); border:1px solid var(--border-fine);}
+.sw-list a{display:grid; place-items:center; width:100%; min-height:64px; color:var(--ice);}
+.sw-list img{max-width:100%; max-height:64px; width:auto; height:auto; object-fit:contain;}
+.sw-list a:hover, .sw-list a:focus-visible{outline-offset:6px;}

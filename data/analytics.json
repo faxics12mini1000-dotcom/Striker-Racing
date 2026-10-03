@@ -1,0 +1,7 @@
+{
+  "_ayuda": "Analítica opcional, APAGADA por defecto. Para encenderla: \"enabled\": true y un \"endpoint\" https (modo \"plausible\": https://plausible.io/api/event o tu instancia; modo \"beacon\": un endpoint propio que reciba JSON {event, path, lang}). Sin cookies, sin identificadores y respeta «No rastrear». Antes de encenderla, actualiza el aviso de privacidad (texto propuesto en CAMBIOS_PARA_EL_EQUIPO.md). Después: npm run build:content. Guía: docs/ANALITICA.md.",
+  "enabled": false,
+  "mode": "plausible",
+  "endpoint": "",
+  "domain": "strikerracing.com"
+}

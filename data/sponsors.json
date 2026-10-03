@@ -1,0 +1,5 @@
+{
+  "_ayuda": "Muro de patrocinadores. Oculto mientras esté vacío o \"show\" sea false. Cada patrocinador: { \"name\": \"Nombre\", \"logo\": \"/assets/sponsors/archivo.svg\" (PNG/SVG/WebP en assets/sponsors/), \"url\": \"https://…\" (opcional), \"level\": \"colaborador|impulsor|aliado|partner\" }. Solo patrocinadores reales que hayan aceptado aparecer. Después: npm run build:content. Guía: docs/CONTENIDO.md.",
+  "show": false,
+  "sponsors": []
+}

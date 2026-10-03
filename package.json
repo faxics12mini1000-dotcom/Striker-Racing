@@ -24,7 +24,8 @@
     "build:model": "node scripts/build-model.mjs && node scripts/build-facts.mjs && node scripts/build-viewer.mjs",
     "build:poster": "node scripts/generate-poster.mjs && node scripts/stamp-images.mjs",
     "vendor:model-viewer": "node scripts/vendor-model-viewer.mjs",
-    "build:content": "node scripts/build-content.mjs"
+    "build:content": "node scripts/build-content.mjs",
+    "build": "node scripts/build-model.mjs && node scripts/build-facts.mjs && node scripts/build-viewer.mjs && node scripts/build-content.mjs && node scripts/stamp-images.mjs"
   },
   "devDependencies": {
     "@axe-core/playwright": "^4.13.0",
