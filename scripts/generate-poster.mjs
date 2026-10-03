@@ -2,9 +2,10 @@
 // encuadre y tamaño que verá el canvas, así el fundido poster → canvas no se nota. Son PNG/WebP con alfa y se muestran sobre el
 // mismo fondo CSS del visor. Salidas (una por forma del visor): assets/img/car-poster-desktop.webp (≥ 961 px, casi cuadrado), -tablet.webp (561–960 px, 4:3)
 // y -phone.webp (≤ 560 px, 4:5). Los controles se dejan en el DOM (invisibles) porque el visor encuadra el auto por encima de ellos.
-// Requisitos: puppeteer-core, `node scripts/dev-server.mjs` en :8099 y Edge/Chrome (BROWSER para la ruta).
+// Requisitos: Playwright (devDependency) y Chrome/Edge instalados (BROWSER para la ruta). Si no hay servidor en SITE_URL, levanta scripts/dev-server.mjs.
 // Uso: node scripts/generate-poster.mjs      (tras cambiar el modelo, la librea, la luz o js/viewer.js; antes corre npm run build:viewer)
-import puppeteer from 'puppeteer-core';
+import { chromium } from 'playwright';
+import { spawn } from 'node:child_process';
 import sharp from 'sharp';
 import { existsSync, mkdirSync, statSync } from 'node:fs';
 const SITE = process.env.SITE_URL || 'http://localhost:8099';
@@ -19,12 +20,16 @@ const HIDE = `*,*::before,*::after{background:transparent!important;background-i
 *::before,*::after,.model-poster,.model-tag,.model-hint,.model-loader,.car-labels,.car-tip{display:none!important}
 .car-ctl,.car-ctl *{visibility:hidden!important}`;
 mkdirSync('assets/img', { recursive: true });
-const browser = await puppeteer.launch({ executablePath: BROWSER, headless: 'new', args: ['--use-angle=swiftshader', '--enable-unsafe-swiftshader', '--ignore-gpu-blocklist'] });
+// servidor local si hace falta
+let server = null;
+try { await fetch(SITE + '/'); } catch { server = spawn(process.execPath, ['scripts/dev-server.mjs', new URL(SITE).port || '8099', '.'], { stdio: 'ignore' }); await new Promise(r => setTimeout(r, 1200)); }
+const browser = await chromium.launch({ executablePath: BROWSER, headless: true, args: ['--use-angle=swiftshader', '--enable-unsafe-swiftshader', '--ignore-gpu-blocklist'] });
 for (const v of VARIANTS) {
-  const p = await browser.newPage();
+  const ctx = await browser.newContext({ viewport: { width: v.width, height: v.height }, deviceScaleFactor: v.dpr, reducedMotion: 'reduce' });
+  const p = await ctx.newPage();
   p.on('pageerror', e => console.error('pageerror:', e.message));
-  await p.setViewport({ width: v.width, height: v.height, deviceScaleFactor: v.dpr });
   await p.goto(`${SITE}/auto/?still`, { waitUntil: 'load' });
+  if (v.width <= 560) await p.getByRole('button', { name: 'Explorar en 3D' }).click();   // en teléfono el 3D espera al toque
   await p.waitForSelector('#modelStage.is-ready', { timeout: 120000 });
   await new Promise(r => setTimeout(r, 1200));           // un par de cuadros más, ya sin sombras pendientes
   await p.addStyleTag({ content: HIDE });
@@ -36,6 +41,7 @@ for (const v of VARIANTS) {
   await sharp(png).webp({ quality: 80, alphaQuality: 72, effort: 6, smartSubsample: true }).toFile(out);
   const m = await sharp(out).metadata();
   console.log(`${out}  ${m.width}x${m.height}  ${(statSync(out).size / 1024).toFixed(1)} KB  (visor ${Math.round(box.width)}x${Math.round(box.height)} CSS px)`);
-  await p.close();
+  await ctx.close();
 }
 await browser.close();
+if (server) server.kill();

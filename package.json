@@ -20,7 +20,9 @@
     "qa:reveal": "node qa/reveal.test.mjs",
     "qa:axe": "node qa/axe.mjs",
     "qa:lighthouse": "node qa/lighthouse.mjs",
-    "build:facts": "node scripts/build-facts.mjs"
+    "build:facts": "node scripts/build-facts.mjs",
+    "build:model": "node scripts/build-model.mjs && node scripts/build-facts.mjs && node scripts/build-viewer.mjs",
+    "build:poster": "node scripts/generate-poster.mjs && node scripts/stamp-images.mjs"
   },
   "devDependencies": {
     "@axe-core/playwright": "^4.13.0",
@@ -35,6 +37,7 @@
     "cheerio": "^1.2.0",
     "chrome-launcher": "^1.2.2",
     "esbuild": "^0.28.2",
+    "gltf-validator": "^2.0.0-dev.3.10",
     "lighthouse": "^13.5.0",
     "marked": "^18.0.14",
     "meshoptimizer": "^0.22.0",

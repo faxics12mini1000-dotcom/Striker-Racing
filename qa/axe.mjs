@@ -16,7 +16,7 @@ for (const [w, h] of [[390, 844], [1280, 800]]) {
     if (!res || res.status() >= 400) { await ctx.close(); continue; }   // páginas opcionales que aún no existen
     await page.waitForTimeout(1500);
     // el contenido que se revela al hacer scroll se evalúa ya visible
-    await page.addStyleTag({ content: '.reveal,.card-reveal{opacity:1!important;transform:none!important}' });
+    await page.addStyleTag({ content: '.reveal,.card-reveal{opacity:1!important;transform:none!important;transition:none!important}' }); await page.waitForTimeout(300);
     const r = await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa']).analyze();
     check(r.violations.length === 0, `${u} ${w}px: ${r.violations.length} violaciones`);
     for (const v of r.violations) console.log(`      - ${v.id} (${v.impact}): ${v.help} · ${v.nodes.length} nodo(s) · ${v.nodes[0].target.join(' ')}`);

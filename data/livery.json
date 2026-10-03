@@ -1,0 +1,45 @@
+{
+  "_ayuda": "Librea del SR-26: pieza -> color (token del CSS) y acabado. Los colores de la paleta NO se escriben aquí: 'tokens' dice qué variable de css/site.css usa cada nombre, así la paleta se cambia en un solo lugar. 'materials' son colores físicos (hule, metal), no de marca. La clave de 'pieces' es el id de pieza (prefijo numérico del nodo del GLB; llantas 't' y rines 'r'). Ver docs/PIPELINE_GLB.md.",
+  "tokens": { "navy": "--navy-deep", "blue": "--border-fine", "purple": "--purple", "green": "--emerald", "ice": "--ice" },
+  "materials": { "rubber": "#0E1013", "steel": "#8E9AAB", "alu": "#C4CDD9", "brass": "#C9A24A" },
+  "finishes": {
+    "satin":   { "kind": "paint", "metalness": 0.05, "roughness": 0.6,  "clearcoat": 0.3,  "clearcoatRoughness": 0.45, "envMapIntensity": 0.45 },
+    "matte":   { "kind": "paint", "metalness": 0.03, "roughness": 0.78, "clearcoat": 0.12, "clearcoatRoughness": 0.6,  "envMapIntensity": 0.35 },
+    "lacquer": { "kind": "paint", "metalness": 0.12, "roughness": 0.3,  "clearcoat": 1,    "clearcoatRoughness": 0.07, "envMapIntensity": 0.85 },
+    "rubber":  { "kind": "std",   "metalness": 0,    "roughness": 0.96, "envMapIntensity": 0.25, "material": "rubber" },
+    "alu":     { "kind": "std",   "metalness": 0.92, "roughness": 0.3,  "envMapIntensity": 1.1,  "material": "alu" },
+    "steel":   { "kind": "std",   "metalness": 1,    "roughness": 0.18, "envMapIntensity": 1.15, "material": "steel" },
+    "brass":   { "kind": "std",   "metalness": 1,    "roughness": 0.3,  "envMapIntensity": 1,    "material": "brass" }
+  },
+  "zones": {
+    "body":  { "cut": 0.55,  "skew": 0.55, "stripe": 0.035, "a": "navy",   "b": "blue", "g": "green" },
+    "mouth": { "cut": 0.895, "skew": 0,    "stripe": 0,     "a": "purple", "b": "navy", "g": "green" }
+  },
+  "pieces": {
+    "01":  { "color": "blue",   "finish": "satin",   "zones": "body" },
+    "02":  { "color": "purple", "finish": "lacquer", "zones": "mouth" },
+    "03":  { "color": "purple", "finish": "lacquer", "zones": "mouth" },
+    "04":  { "color": "blue",   "finish": "satin" },
+    "05":  { "color": "blue",   "finish": "satin" },
+    "06d": { "color": "navy",   "finish": "matte" },
+    "06i": { "color": "navy",   "finish": "matte" },
+    "07":  { "color": "green",  "finish": "lacquer" },
+    "08":  { "color": "green",  "finish": "lacquer" },
+    "09":  { "color": "blue",   "finish": "satin" },
+    "10":  { "color": "green",  "finish": "lacquer" },
+    "11":  { "color": "green",  "finish": "lacquer" },
+    "12":  { "color": "navy",   "finish": "matte" },
+    "13":  { "color": "navy",   "finish": "matte",   "optional": true },
+    "14":  { "color": "ice",    "finish": "satin",   "optional": true },
+    "15":  { "color": "ice",    "finish": "alu" },
+    "16t": { "finish": "rubber" }, "17t": { "finish": "rubber" }, "18t": { "finish": "rubber" }, "19t": { "finish": "rubber" },
+    "16r": { "color": "ice", "finish": "alu" }, "17r": { "color": "ice", "finish": "alu" }, "18r": { "color": "ice", "finish": "alu" }, "19r": { "color": "ice", "finish": "alu" },
+    "20":  { "finish": "steel" },
+    "21":  { "finish": "steel" },
+    "22":  { "finish": "brass" },
+    "23":  { "finish": "brass" },
+    "24":  { "color": "purple", "finish": "lacquer" },
+    "buje": { "finish": "steel", "optional": true },
+    "tubo": { "finish": "steel", "optional": true }
+  }
+}

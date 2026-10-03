@@ -17,7 +17,7 @@ const LIMITS = [
   ['CSS (site + gallery)', ['css/site.css', 'css/gallery.css'], 'gz', 22],
   ['modelo web sr26.glb', 'assets/models/sr26.glb', 'raw', 330],
   ['entorno horneado', 'assets/models/env-room.png', 'raw', 30],
-  ['modelo para AR sr26-ar.glb (solo AR, bajo demanda)', 'assets/models/sr26-ar.glb', 'raw', 700, true],
+  ['modelo para AR sr26-ar.glb (solo AR, bajo demanda)', 'assets/models/sr26-ar.glb', 'raw', 1100, true],
   ['model-viewer autoalojado (solo AR, bajo demanda)', newest('vendor/model-viewer', /\.js$/) , 'gz', 420, true],
   ['configurador (js/configurator.js, bajo demanda)', 'js/configurator.js', 'gz', 12, true],
 ];

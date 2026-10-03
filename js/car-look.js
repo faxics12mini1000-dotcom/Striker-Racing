@@ -4,24 +4,23 @@
  * de ahí `u = 0.001` en las luces. Faltan la 13 y la 14 en el modelo: nada aquí depende de que existan. */
 import * as THREE from 'three';
 import { STEM_BOX, STEM_MARK, STEM_WORD, STEM_GRADIENT, STEM_GRADIENT_LINE } from './stem-logo.js';
+import DATA from '../data/livery.json';
+import { partKey, isRim, pieceId } from './piece-id.js';
+export { partKey, isRim, pieceId };
 
-export const COLORS = { navy:'#071B33', blue:'#183969', purple:'#7137D4', green:'#12B866', ice:'#CDDEEF', rubber:'#0E1013', steel:'#8E9AAB', alu:'#C4CDD9', brass:'#C9A24A' };
-
-/* Librea por pieza. La clave es el prefijo numérico del nombre del nodo; el cuerpo (01) y la boca de los pontones (02/03)
- * se resuelven en el shader por posición en X (ver bodyShader), no por malla. Las llantas (16–19) llevan dos mallas:
- * __Llanta_* (caucho) y __Rin_* (hielo), por eso `colorFor` mira también el nombre completo. */
-export const LIVERY = {
-  '01':COLORS.blue, '02':COLORS.purple, '03':COLORS.purple, '04':COLORS.blue,
-  '05':COLORS.blue, '06':COLORS.navy, '07':COLORS.green, '08':COLORS.green,
-  '09':COLORS.blue, '10':COLORS.green, '11':COLORS.green, '12':COLORS.navy,
-  '15':COLORS.steel, '16':COLORS.rubber, '17':COLORS.rubber, '18':COLORS.rubber, '19':COLORS.rubber,
-  '20':COLORS.steel, '21':COLORS.steel, '22':COLORS.steel, '23':COLORS.steel, '24':COLORS.purple, 
-};
-export const partKey = name => name.slice(0, 2);
-export const isRim = name => /__Rin_/.test(name);
-export const colorFor = name => isRim(name) ? COLORS.ice : (LIVERY[partKey(name)] || COLORS.ice);
-/* Piezas que no se dibujan (el halo 13 ya no viene en el modelo; se deja por si reaparece). */
-export const HIDDEN = new Set(['13']);
+/* La librea vive en data/livery.json (pieza → color y acabado). Los colores de marca salen de los tokens de css/site.css (variables --navy-deep, --emerald…),
+ * la única fuente de la paleta: si cambia allí, el auto cambia solo. Los valores de respaldo solo se usan si la hoja de estilos no está disponible
+ * (p. ej. scripts/sr26-view.html). Hule y metales (data/livery.json → materials) son materiales físicos, no colores de marca. */
+const FALLBACK = { navy:'#071B33', blue:'#183969', purple:'#7137D4', green:'#12B866', ice:'#CDDEEF' };
+function readPalette() {
+  const out = {};
+  let cs = null; try { cs = getComputedStyle(document.documentElement); } catch (e) { /* sin DOM */ }
+  for (const [name, token] of Object.entries(DATA.tokens)) out[name] = (cs && cs.getPropertyValue(token).trim()) || FALLBACK[name];
+  return Object.assign(out, DATA.materials);
+}
+export const COLORS = readPalette();
+/* Piezas que no se dibujan. Vacío: el halo (13) y el casco (14) se muestran si vienen en el GLB (ver docs/PIPELINE_GLB.md). */
+export const HIDDEN = new Set();
 
 /* Despiece: cada una de las 27 mallas del GLB tiene su propio vector de separación (mm; x = largo, +x al frente; y = alto; z = ancho, +z = derecha),
  * su etapa (1–5), un retraso dentro de la etapa, un giro y un arco. El cuerpo (01) queda fijo y es la referencia.
@@ -62,16 +61,14 @@ export const PIECES = {
   // etapa 4 · espina y pilar hacia arriba
   '24':{ step:4, off:[0, 46, 0],       d:.00, name:{ es:'Espina', en:'Spine' } },
   '12':{ step:4, off:[-14, 60, 0],     d:.06, rot:[0, 0, 0], name:{ es:'Pilar del alerón trasero', en:'Rear wing pillar' } },
+  // opcionales (solo si el GLB las trae): halo y casco suben con la espina; bujes y tubos de eje bajan con los ejes
+  '13':{ step:4, off:[0, 52, 0],       d:.03, name:{ es:'Halo', en:'Halo' } },
+  '14':{ step:4, off:[0, 58, 0],       d:.09, name:{ es:'Casco', en:'Helmet' } },
+  'buje':{ step:1, off:[0, -30, 0],    d:.07, guide:false, name:{ es:'Buje de eje', en:'Axle bushing' } },
+  'tubo':{ step:1, off:[0, -30, 0],    d:.07, guide:false, name:{ es:'Tubo de eje', en:'Axle tube' } },
   // etapa 5 · el cartucho sale hacia atrás girando sobre su eje
   '15':{ step:5, off:[-98, 12, 0],     d:.03, rot:[360, 0, 0], arc:0, name:{ es:'Cartucho de CO₂', en:'CO₂ cartridge' } },
 };
-export function pieceId(name) {
-  const k = partKey(name);
-  if (/__Rin_/.test(name)) return k + 'r';
-  if (/__Llanta_/.test(name)) return k + 't';
-  if (k === '06') return /Izq$/.test(name) ? '06i' : '06d';
-  return k;
-}
 /* Compatibilidad (scripts/sr26-view.html): despiece por prefijo numérico, con el vector de la primera pieza de cada clave. */
 export const EXPLODE = {};
 for (const id of Object.keys(PIECES)) { const k = id.slice(0, 2); if (!EXPLODE[k] && PIECES[id].step) EXPLODE[k] = { off: PIECES[id].off, step: PIECES[id].step }; }
@@ -80,21 +77,12 @@ for (const id of Object.keys(PIECES)) { const k = id.slice(0, 2); if (!EXPLODE[k
  *   mate/satín  cuerpo, alerones, nariz y soportes (pintura con poco barniz)
  *   laca        pontones, placas y espina (barniz alto: reflejan el entorno con nitidez)
  *   caucho      llantas   ·   aluminio  rines y cartucho   ·   acero pulido  ejes   ·   latón  guías del cordón */
-const FINISH = {
-  satin:  { kind:'paint', metalness:.05, roughness:.6,  clearcoat:.3,  clearcoatRoughness:.45, envMapIntensity:.45 },
-  matte:  { kind:'paint', metalness:.03, roughness:.78, clearcoat:.12, clearcoatRoughness:.6,  envMapIntensity:.35 },
-  lacquer:{ kind:'paint', metalness:.12, roughness:.3,  clearcoat:1,   clearcoatRoughness:.07, envMapIntensity:.85 },
-  rubber: { kind:'std',   metalness:0,   roughness:.96, envMapIntensity:.25 },
-  alu:    { kind:'std',   metalness:.92, roughness:.3,  envMapIntensity:1.1,  color:COLORS.alu },
-  steel:  { kind:'std',   metalness:1,   roughness:.18, envMapIntensity:1.15, color:COLORS.steel },
-  brass:  { kind:'std',   metalness:1,   roughness:.3,  envMapIntensity:1,    color:COLORS.brass },
-};
-const FINISH_OF = {
-  '01':'satin', '04':'satin', '05':'satin', '09':'satin', '06d':'matte', '06i':'matte', '12':'matte',
-  '02':'lacquer', '03':'lacquer', '07':'lacquer', '08':'lacquer', '10':'lacquer', '11':'lacquer', '24':'lacquer',
-  '16t':'rubber', '17t':'rubber', '18t':'rubber', '19t':'rubber', '16r':'alu', '17r':'alu', '18r':'alu', '19r':'alu',
-  '15':'alu', '20':'steel', '21':'steel', '22':'brass', '23':'brass',
-};
+/* Acabados y asignación por pieza: data/livery.json (finishes, pieces). */
+const FINISH = {};
+for (const [k, v] of Object.entries(DATA.finishes)) FINISH[k] = Object.assign({}, v, v.material ? { color: COLORS[v.material] } : {});
+const spec = id => DATA.pieces[id] || {};
+/* Color de una pieza: el del acabado (metal, hule) o el token de la librea; hielo si no hay dato. */
+export const colorFor = name => { const id = pieceId(name), p = spec(id), f = FINISH[p.finish]; return (f && f.color) || COLORS[p.color] || COLORS.ice; };
 
 export function lookRenderer(renderer, shadows = true) {
   renderer.toneMapping = THREE.ACESFilmicToneMapping; renderer.toneMappingExposure = .92;
@@ -154,13 +142,13 @@ export function lookGround(scene, u = 1, y = -.3) {
  *   pontones (02/03): morados, con la boca frontal (el último tramo hacia el frente) en navy. */
 function bodyShader(mesh, mode) {
   mesh.geometry.computeBoundingBox();
-  const bb = mesh.geometry.boundingBox, len = bb.max.x - bb.min.x;
+  const bb = mesh.geometry.boundingBox, len = bb.max.x - bb.min.x, Z = DATA.zones[mode];
   const U = {
-    uMinX:{ value:bb.min.x }, uLen:{ value:len }, uCut:{ value: mode === 'body' ? .55 : .895 },
-    uSkew:{ value: mode === 'body' ? .55 : 0 }, uStripe:{ value: mode === 'body' ? .035 : 0 },
-    uA:{ value:new THREE.Color(mode === 'body' ? COLORS.navy : COLORS.purple) },
-    uB:{ value:new THREE.Color(mode === 'body' ? COLORS.blue : COLORS.navy) },
-    uG:{ value:new THREE.Color(COLORS.green) },
+    uMinX:{ value:bb.min.x }, uLen:{ value:len }, uCut:{ value:Z.cut },
+    uSkew:{ value:Z.skew }, uStripe:{ value:Z.stripe },
+    uA:{ value:new THREE.Color(COLORS[Z.a]) },
+    uB:{ value:new THREE.Color(COLORS[Z.b]) },
+    uG:{ value:new THREE.Color(COLORS[Z.g]) },
   };
   return shader => {
     Object.assign(shader.uniforms, U);
@@ -178,19 +166,18 @@ function bodyShader(mesh, mode) {
   };
 }
 
-/* Prepara una pieza por su nombre de nodo: normales (horneadas en el GLB), acabado según FINISH_OF y sombras. */
+/* Prepara una pieza por su nombre de nodo: normales (horneadas en el GLB), acabado según data/livery.json y sombras. */
 export function lookPart(mesh) {
   const key = partKey(mesh.name), id = pieceId(mesh.name), hex = colorFor(mesh.name);
   // Las normales suavizadas vienen horneadas en el GLB (scripts/bake-sr26-normals.mjs); si faltan, se suaviza todo.
   if (!mesh.geometry.attributes.normal) mesh.geometry.computeVertexNormals();
-  const fin = FINISH[FINISH_OF[id]] || FINISH.satin;
+  const fin = FINISH[spec(id).finish] || FINISH.satin;
   const base = { color: new THREE.Color(fin.color || hex), fog: false, polygonOffset: true, polygonOffsetFactor: 1, polygonOffsetUnits: 1,
                  metalness: fin.metalness, roughness: fin.roughness, envMapIntensity: fin.envMapIntensity };
   const mat = fin.kind === 'paint'
     ? new THREE.MeshPhysicalMaterial({ ...base, clearcoat: fin.clearcoat, clearcoatRoughness: fin.clearcoatRoughness })
     : new THREE.MeshStandardMaterial(base);
-  if (key === '01') mat.onBeforeCompile = bodyShader(mesh, 'body');
-  else if (key === '02' || key === '03') mat.onBeforeCompile = bodyShader(mesh, 'mouth');
+  if (spec(id).zones) mat.onBeforeCompile = bodyShader(mesh, spec(id).zones);
   mesh.material = mat; mesh.castShadow = true; mesh.receiveShadow = true;
 }
 
