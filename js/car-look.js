@@ -3,6 +3,7 @@
  * Las piezas vienen de assets/models/sr26.glb (un nodo por STL, nombre = archivo sin extensión). La escena trabaja en metros,
  * de ahí `u = 0.001` en las luces. La 13 (halo) y la 14 (casco) son piezas estándar del reglamento; nada aquí depende de que existan. */
 import * as THREE from 'three';
+import { STEM_BOX, STEM_MARK, STEM_WORD, STEM_GRADIENT, STEM_GRADIENT_LINE } from './stem-logo.js';
 
 export const COLORS = { navy:'#071B33', blue:'#183969', purple:'#7137D4', green:'#12B866', ice:'#CDDEEF', rubber:'#0E1013', steel:'#8E9AAB', alu:'#C4CDD9', brass:'#C9A24A' };
 
@@ -14,7 +15,7 @@ export const LIVERY = {
   '05':COLORS.blue, '06':COLORS.navy, '07':COLORS.green, '08':COLORS.green,
   '09':COLORS.blue, '10':COLORS.green, '11':COLORS.green, '12':COLORS.navy, '13':COLORS.alu, '14':COLORS.green,
   '15':COLORS.steel, '16':COLORS.rubber, '17':COLORS.rubber, '18':COLORS.rubber, '19':COLORS.rubber,
-  '20':COLORS.steel, '21':COLORS.steel, '22':COLORS.steel, '23':COLORS.steel, '24':COLORS.purple,
+  '20':COLORS.steel, '21':COLORS.steel, '22':COLORS.steel, '23':COLORS.steel, 
 };
 export const partKey = name => name.slice(0, 2);
 export const isRim = name => /__Rin_/.test(name);
@@ -24,7 +25,7 @@ export const HIDDEN = new Set();
 
 /* Despiece: cada una de las 27 mallas del GLB tiene su propio vector de separación (mm; x = largo, +x al frente; y = alto; z = ancho, +z = derecha),
  * su etapa (1–5), un retraso dentro de la etapa, un giro y un arco. El cuerpo (01) queda fijo y es la referencia.
- *   etapa 1 llantas, rines, ejes y guías · 2 nariz, alerones, placas y soportes · 3 pontones · 4 espina, pilar, halo y casco · 5 cartucho
+ *   etapa 1 llantas, rines, ejes y guías · 2 nariz, alerones, placas y soportes · 3 pontones · 4 pilar, halo y casco · 5 cartucho
  * pieceId(nombre del nodo) devuelve la clave de esta tabla: llanta (t) y rin (r) se separan, igual que el soporte der./izq. del alerón.
  *   off  [x,y,z] mm a despiece completo        d    retraso dentro de la etapa (fracción del recorrido, 0–0.1)
  *   rot  [x,y,z] grados a despiece completo    arc  mm que se eleva a mitad del recorrido (trayectoria curva)
@@ -58,9 +59,8 @@ export const PIECES = {
   // etapa 3 · pontones a los lados
   '02':{ step:3, off:[5, 2, 50],       d:.00, arc:4, name:{ es:'Pontón derecho', en:'Right sidepod' } },
   '03':{ step:3, off:[5, 2, -50],      d:.04, arc:4, name:{ es:'Pontón izquierdo', en:'Left sidepod' } },
-  // etapa 4 · espina y pilar hacia arriba
-  '24':{ step:4, off:[0, 46, 0],       d:.00, name:{ es:'Espina', en:'Spine' } },
-  '12':{ step:4, off:[-14, 60, 0],     d:.06, rot:[0, 0, 0], name:{ es:'Pilar del alerón trasero', en:'Rear wing pillar' } },
+  // etapa 4 · pilar hacia arriba
+  '12':{ step:4, off:[-14, 60, 0],     d:.00, rot:[0, 0, 0], name:{ es:'Pilar del alerón trasero', en:'Rear wing pillar' } },
   // etapa 4 (cont.) · el casco sube un poco y el halo mucho más, para que el aro libere al casco
   '14':{ step:4, off:[0, 30, 0],       d:.02, arc:0, name:{ es:'Casco del piloto', en:'Driver helmet' } },
   '13':{ step:4, off:[6, 66, 0],       d:.10, arc:0, name:{ es:'Halo', en:'Halo' } },
@@ -80,7 +80,7 @@ for (const id of Object.keys(PIECES)) { const k = id.slice(0, 2); if (!EXPLODE[k
 
 /* Acabado por pieza (clave de pieceId): cada familia de piezas tiene su propio material para que se lean distintas bajo la misma luz.
  *   mate/satín  cuerpo, alerones, nariz y soportes (pintura con poco barniz)
- *   laca        pontones, placas y espina (barniz alto: reflejan el entorno con nitidez)
+ *   laca        pontones y placas (barniz alto: reflejan el entorno con nitidez)
  *   caucho      llantas   ·   aluminio  rines y cartucho   ·   acero pulido  ejes   ·   latón  guías del cordón */
 const FINISH = {
   satin:  { kind:'paint', metalness:.05, roughness:.6,  clearcoat:.3,  clearcoatRoughness:.45, envMapIntensity:.45 },
@@ -94,7 +94,7 @@ const FINISH = {
 const FINISH_OF = {
   '01':'satin', '04':'satin', '05':'satin', '09':'satin', '06d':'matte', '06i':'matte', '12':'matte',
   '13':'alu', '14':'lacquer',
-  '02':'lacquer', '03':'lacquer', '07':'lacquer', '08':'lacquer', '10':'lacquer', '11':'lacquer', '24':'lacquer',
+  '02':'lacquer', '03':'lacquer', '07':'lacquer', '08':'lacquer', '10':'lacquer', '11':'lacquer',
   '16t':'rubber', '17t':'rubber', '18t':'rubber', '19t':'rubber', '16r':'alu', '17r':'alu', '18r':'alu', '19r':'alu',
   '15':'alu', '20':'steel', '21':'steel', '22':'brass', '23':'brass',
 };
@@ -196,14 +196,14 @@ export function lookPart(mesh) {
 }
 
 /* ───────────── logos dibujados en código ─────────────
- * - Espina (24), ambos lados: lockup de Striker Racing en versión clara, en una línea (STRIKER en hielo, RACING en esmeralda).
- * - Zona B, panel plano de cada pontón: calcomanía oficial de STEM Racing (reglamento D1.14 y D4.5: 30 × 15 mm, blanca sobre vinilo negro con filete de 1 mm).
- * - Espacios disponibles, solo del nivel más alto (contorno fino en hielo + texto chico): panel plano sobre la nariz → PARTNER ESTRATÉGICO;
- *   cara superior del alerón trasero → 2 recuadros, segundo espacio principal del Partner Estratégico (opcional, según propuesta).
+ * - Costado del cuerpo (01), ambos lados: lockup de Striker Racing en una línea (STRIKER en hielo, RACING en esmeralda).
+ * - Zona B, panel plano de cada pontón: logo oficial de STEM Racing en vector (obligatorio a cada lado, entre las ruedas).
+ * - Espacios del Partner Estratégico, el único nivel con lugar en el auto (contorno fino en hielo + texto chico): nariz (A), alerón trasero, 2 recuadros (C),
+ *   alerón delantero a cada lado de la nariz (D), placas traseras (E) y segundo recuadro del pontón (F). Los de D, E y F son a negociar según la propuesta.
  * Los puntos de pegado vienen en mm del modelo (x = largo, y = alto, z = ancho; +z = lado derecho). */
 export const SLOT_TEXT = {
-  es:{ partner:'PARTNER ESTRATÉGICO', wing:['PARTNER', 'ESTRATÉGICO'] },
-  en:{ partner:'STRATEGIC PARTNER', wing:['STRATEGIC', 'PARTNER'] },
+  es:{ partner:'PARTNER ESTRATÉGICO', partnerShort:'PARTNER', wing:['PARTNER', 'ESTRATÉGICO'] },
+  en:{ partner:'STRATEGIC PARTNER', partnerShort:'PARTNER', wing:['STRATEGIC', 'PARTNER'] },
 };
 const FONT = '600 {s}px Oswald, "Arial Narrow", Impact, sans-serif';
 export async function fonts() { try { await document.fonts.load('700 120px Oswald'); await document.fonts.load('600 40px Oswald'); } catch (e) { /* queda la fuente de respaldo */ } }
@@ -219,13 +219,14 @@ function drawLockup(img) {
   const w = g.measureText('STRIKER ').width; g.fillStyle = COLORS.green; g.fillText('RACING', 350 + w, 244);
   return c;
 }
-/* Calcomanía oficial: 30 × 15 mm (600 × 300 px, 20 px por mm), vinilo negro, filete blanco de 1 mm y el logo centrado. */
-function drawStem(img) {
-  const c = canvasOf(600, 300), g = c.getContext('2d');
-  g.fillStyle = '#000'; g.fillRect(0, 0, 600, 300);
-  g.strokeStyle = '#fff'; g.lineWidth = 20; g.strokeRect(10, 10, 580, 280);
-  const pad = 46, k = Math.min((600 - 2 * pad) / img.width, (300 - 2 * pad) / img.height), w = img.width * k, h = img.height * k;
-  g.drawImage(img, (600 - w) / 2, (300 - h) / 2, w, h);
+/* Logo oficial de STEM Racing dibujado en vector (js/stem-logo.js, de la guía de marca): emblema SR con su degradado y rótulo blanco con las letras oficiales. Sin imagen ni fondo. */
+function drawStem() {
+  const B = STEM_BOX, k = 2400 / B.w, c = canvasOf(2400, Math.round(B.h * k)), g = c.getContext('2d');
+  g.scale(k, k); g.translate(-B.x, -B.y);
+  const [x1, y1, x2, y2] = STEM_GRADIENT_LINE, gr = g.createLinearGradient(x1, y1, x2, y2);
+  STEM_GRADIENT.forEach(([o, col]) => gr.addColorStop(o, col));
+  g.fillStyle = gr; g.fill(new Path2D(STEM_MARK));
+  g.fillStyle = '#fff'; g.fill(new Path2D(STEM_WORD));
   return c;
 }
 /* Recuadro disponible: contorno fino en hielo y texto chico centrado (lines = 1 o 2 renglones). */
@@ -260,41 +261,56 @@ const V = (x, y, z) => new THREE.Vector3(x, y, z);
 
 /* Posiciones de los espacios (mm, marco del modelo). Se exportan para dibujar marcadores sobre capturas. */
 export const SLOTS = {
-  ponton:{ x:92, y:15.2, z:31, w:30, h:15 },           // calcomanía STEM Racing 30 × 15 mm en el panel plano exterior de cada pontón (z = ±31)
+  ponton:{ x:86, y:14.6, z:31, w:30, h:30 * STEM_BOX.h / STEM_BOX.w },   // logo STEM Racing (30 mm de largo) en el panel plano exterior de cada pontón (z = ±31)
+  pontonB:{ x:118, y:14.6, z:31, w:22, h:7 },          // segundo recuadro del pontón, hacia el frente (Partner Estratégico, a negociar)
+  alaDel:{ x:198.5, y:9.8, z:21, w:20, h:14 },         // cara superior del alerón delantero, a cada lado de la nariz (Partner Estratégico, a negociar)
+  placaTras:{ x:15, y:54, z:34, w:23, h:9 },           // cara exterior de cada placa trasera (Partner Estratégico, a negociar)
   nariz:{ x:191, y:20.4, z:0, w:23, h:4.2 },           // panel plano sobre la nariz
   aleron:{ x:13.5, y:57, z:0, w:62, h:17 },            // cara superior del alerón trasero (4 recuadros)
-  espina:{ x:57, y:49.6, z:1.2, w:40, h:7.2, tilt:12 },
+  logo:{ x:60, y:34, z:15, w:44, h:44 * 320 / 1792, tilt:6 },   // lockup de Striker Racing en el costado del cuerpo, detrás del pontón
 };
 
 /* parts: { '02': mesh, '03': mesh, ... } con las matrices del mundo ya actualizadas. lang: 'es' | 'en'.
  * Devuelve la lista de decals { kind, mesh }; si falta una pieza (p. ej. no existe la 13/14) simplemente se omite. */
 /* Fuentes + imagen del logo; se puede llamar antes de tener el modelo para que la descarga corra en paralelo. */
-export const STEM_LOGO = '/assets/img/stem-racing-white.png';   // logo oficial de STEM Racing (versión blanca, recortado sin el "Supported by F1")
 const loadImg = src => new Promise((ok, no) => { const i = new Image(); i.onload = () => ok(i); i.onerror = no; i.src = src; });
 export function preloadDecalAssets(logoUrl) {
-  return Promise.all([fonts(), loadImg(logoUrl), loadImg(STEM_LOGO).catch(() => null)]).then(r => ({ logo: r[1], stem: r[2] }));
+  return Promise.all([fonts(), loadImg(logoUrl)]).then(r => ({ logo: r[1] }));
 }
 export async function addLogoDecals(parts, logoUrl, lang = 'es') {
   const T = SLOT_TEXT[lang] || SLOT_TEXT.es;
-  const { logo: img, stem } = await (typeof logoUrl === 'string' ? preloadDecalAssets(logoUrl) : logoUrl);   // logoUrl puede ser la promesa de preloadDecalAssets
+  const { logo: img } = await (typeof logoUrl === 'string' ? preloadDecalAssets(logoUrl) : logoUrl);   // logoUrl puede ser la promesa de preloadDecalAssets
   const lockup = decalMaterial(drawLockup(img));
   const partner = decalMaterial(drawSlot(1024, 188, [T.partner], 82));
   const wing = decalMaterial(drawWingSlots(T.wing));
-  const stemMat = stem ? decalMaterial(drawStem(stem)) : null;
+  const stemMat = decalMaterial(drawStem());
+  const small = decalMaterial(drawSlot(1024, Math.round(1024 * SLOTS.pontonB.h / SLOTS.pontonB.w), [T.partnerShort], 120));
+  const plate = decalMaterial(drawSlot(1024, Math.round(1024 * SLOTS.placaTras.h / SLOTS.placaTras.w), [T.partnerShort], 140));
+  const wingFront = decalMaterial(drawSlot(700, Math.round(700 * SLOTS.alaDel.h / SLOTS.alaDel.w), [T.partnerShort], 70));
   const out = [], S = SLOTS;
-  /* espina: el lockup va inclinado siguiendo la caída del lomo; a cada lado se mira desde afuera */
-  const sp = parts['24'];
-  if (sp) [1, -1].forEach(side => {
-    const a = THREE.MathUtils.degToRad(S.espina.tilt), up = V(Math.sin(a), Math.cos(a), 0);
-    const d = stick(sp, lockup, S.espina.w * .001, S.espina.w * .001 * 320 / 1792, mm(S.espina.x, S.espina.y, side * 40), V(0, 0, -side), up);
+  /* lockup de Striker Racing en el costado del cuerpo (01), a cada lado, inclinado con la caída del lomo y visto desde afuera */
+  const body = parts['01'];
+  if (body) [1, -1].forEach(side => {
+    const a = THREE.MathUtils.degToRad(S.logo.tilt), up = V(Math.sin(a), Math.cos(a), 0);
+    const d = stick(body, lockup, S.logo.w * .001, S.logo.h * .001, mm(S.logo.x, S.logo.y, side * 60), V(0, 0, -side), up);
     if (d) out.push({ kind:'logo', mesh:d });
   });
   ['02', '03'].forEach((k, i) => {   // 02 = pontón derecho (+z), 03 = izquierdo (-z)
     const m = parts[k]; if (!m) return; const side = i === 0 ? 1 : -1;
-    // Zona B: calcomanía oficial de STEM Racing (obligatoria a cada lado, entre las ruedas), a su tamaño real de 30 × 15 mm
-    if (!stemMat) return;
-    const d = stick(m, stemMat, S.ponton.w * .001, S.ponton.h * .001, mm(S.ponton.x, S.ponton.y, side * 200), V(0, 0, -side), V(0, 1, 0));
+    // Zona B: logo de STEM Racing (obligatorio a cada lado, entre las ruedas) con las letras oficiales, y un segundo recuadro hacia el frente
+    let d = stick(m, stemMat, S.ponton.w * .001, S.ponton.h * .001, mm(S.ponton.x, S.ponton.y, side * 200), V(0, 0, -side), V(0, 1, 0));
     if (d) out.push({ kind:'stem', mesh:d });
+    d = stick(m, small, S.pontonB.w * .001, S.pontonB.h * .001, mm(S.pontonB.x, S.pontonB.y, side * 200), V(0, 0, -side), V(0, 1, 0));
+    if (d) out.push({ kind:'partner', mesh:d });
+  });
+  ['10', '11'].forEach((k, i) => {   // placas traseras: 10 = derecha (+z), 11 = izquierda (-z)
+    const m = parts[k]; if (!m) return; const side = i === 0 ? 1 : -1;
+    const d = stick(m, plate, S.placaTras.w * .001, S.placaTras.h * .001, mm(S.placaTras.x, S.placaTras.y, side * 200), V(0, 0, -side), V(0, 1, 0));
+    if (d) out.push({ kind:'partner', mesh:d });
+  });
+  if (parts['05']) [1, -1].forEach(side => {   // alerón delantero: un recuadro a cada lado de la nariz
+    const d = stick(parts['05'], wingFront, S.alaDel.w * .001, S.alaDel.h * .001, mm(S.alaDel.x, 200, side * S.alaDel.z), V(0, -1, 0), V(1, 0, 0));
+    if (d) out.push({ kind:'partner', mesh:d });
   });
   if (parts['04']) { const d = stick(parts['04'], partner, S.nariz.w * .001, S.nariz.h * .001, mm(S.nariz.x, 200, 0), V(0, -1, 0), V(0, 0, -1)); if (d) out.push({ kind:'partner', mesh:d }); }
   if (parts['09']) { const d = stick(parts['09'], wing, S.aleron.w * .001, S.aleron.h * .001, mm(S.aleron.x, 200, 0), V(0, -1, 0), V(1, 0, 0)); if (d) out.push({ kind:'wing', mesh:d }); }

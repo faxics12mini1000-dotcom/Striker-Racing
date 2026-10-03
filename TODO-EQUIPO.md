@@ -114,7 +114,14 @@ Diferencias de diseño respecto a 8a506d2 que conviene que el equipo confirme:
 - El modelo 3D incluye ya el **halo (13)** y el **casco (14)**, piezas estándar obligatorias (D4.3 y D4.4). Salen de `scripts/source/13_Halo.stl` y `14_Casco.stl`;
   `scripts/build-sr26-glb.mjs` los coloca (tabla `PLACE`) y los simplifica. **La posición es una estimación visual**: el halo con sus espigas en x = 130 y 170 mm y la base a 24.5 mm, el casco centrado.
   Hay que cotejarla con el Fusion del equipo: la muesca circular del halo debe quedar a 34.0 ± 1.0 mm de la pista (D4.3.3).
-- Halo visible (D4.3.2): nada debe tapar el halo en vista frontal, lateral y superior; hoy la espina termina en x = 104 mm y el halo empieza en 125 mm. Revisar al cerrar el diseño final.
-- **Calcomanía STEM Racing** (D1.14, D4.5): 30 × 15 mm, a cada lado entre las ruedas. En el visor va en la zona B (pontón) a ese tamaño real; el pontón mide 14.4 mm de alto, así que la calcomanía lo rebasa ~1 mm. Confirmar dónde se pegará físicamente.
+- Halo visible (D4.3.2): nada debe tapar el halo en vista frontal, lateral y superior. Se quitó la espina morada del modelo (`SKIP` en `scripts/build-sr26-glb.mjs`); el logo de Striker pasó al costado del cuerpo.
+- El casco se movió 7 mm hacia atrás dentro del aro del halo (primero quedaba pegado al pilar delantero); su frente (visor y barbilla) apunta hacia +x, al frente del auto. Verificar contra el CAD.
+- **Logo STEM Racing** (D1.14, D4.5): ahora es el logo oficial en vector (`js/stem-logo.js` y `assets/img/stem-racing-logo.svg`, extraídos de la guía de marca oficial: rótulo con las letras oficiales y emblema SR), sin imagen ni fondo, 30 mm de largo en la zona B. **Ojo:** el reglamento pide la calcomanía oficial (30 × 15 mm sobre vinilo blanco o negro con filete de 1 mm); en el auto físico va esa calcomanía, que entrega STEM Racing en el registro o se imprime con su arte oficial.
 - Patrocinios: **solo Partner Estratégico tiene lugar en el auto** (nariz y, opcional, alerón trasero). Aliado Técnico ya no promete logo en el auto; su segundo beneficio ("Presencia: Pit Display destacado, memoria técnica, reporte por etapa") es una propuesta, confirmarla con el equipo.
 - El video `video/sr26-despiece.mp4` se hizo con el modelo anterior (sin halo ni casco); hay que volver a renderizarlo.
+
+## Patrocinio del nivel más alto (3-oct-2026)
+
+- Partner Estratégico (+ $10,000) es el único nivel con lugar en el auto y el más negociable. Espacios dibujados en el visor y el mapa: A nariz, C alerón trasero (2 recuadros), y a negociar: D alerón delantero (a cada lado de la nariz), E placas traseras, F tramo delantero de los pontones. Se pueden ofrecer más (placas delanteras, halo) y activaciones.
+- Meta de la temporada: $65,450 MXN, con aportaciones de todos los tamaños. Una mezcla de ejemplo (a ajustar con el equipo): 1–2 Partner ($10–15 mil c/u), 3 Aliado Técnico (~$7 mil), 4 Impulsor (~$4 mil), 6–8 Colaborador (~$2 mil) y en especie.
+- Aliado Técnico, Impulsor y Colaborador ya no incluyen el auto; sus beneficios son uniforme, Pit Display y reportes.

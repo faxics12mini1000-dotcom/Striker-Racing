@@ -66,7 +66,7 @@ window.carReady = new Promise((ok, no) => {
     // marcadores (centro de cada espacio) en % del lienzo
     const pct = (x, y, z) => { const p = new THREE.Vector3(x, y, z).multiplyScalar(.001).add(model.position).project(cam); return [ +((p.x + 1) / 2 * 100).toFixed(2), +((1 - p.y) / 2 * 100).toFixed(2) ]; };
     const S = Look.SLOTS;
-    window.carMarkers = { nariz:pct(S.nariz.x, S.nariz.y, 0), aleron:pct(S.aleron.x, S.aleron.y, 0), ponton:pct(S.ponton.x, S.ponton.y, S.ponton.z), espina:pct(S.espina.x, S.espina.y, S.espina.z) };
+    window.carMarkers = { nariz:pct(S.nariz.x, S.nariz.y, 0), aleron:pct(S.aleron.x, S.aleron.y, 0), ponton:pct(S.ponton.x, S.ponton.y, S.ponton.z), logo:pct(S.logo.x, S.logo.y, S.logo.z), pontonB:pct(S.pontonB.x, S.pontonB.y, S.pontonB.z), alaDel:pct(S.alaDel.x, S.alaDel.y, S.alaDel.z), placaTras:pct(S.placaTras.x, S.placaTras.y, S.placaTras.z) };
     renderer.render(scene, cam); ok(true);
   }, undefined, no);
 });

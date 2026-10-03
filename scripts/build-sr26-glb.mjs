@@ -21,9 +21,11 @@ const out = 'assets/models/sr26.glb';
 /* Piezas que el reglamento da ya hechas (halo y casco de STEM Racing): vienen en su propio marco de CAD y se llevan al del auto (mm, marco STL).
  *  - halo: gira 180° sobre la vertical (el pilar delantero angosto queda al frente) y sus dos espigas quedan en x = 130 y 170 (40 mm entre sí, como pide el reglamento)
  *  - casco: se centra sobre el halo, dentro del aro. `z` es la altura de la base de cada pieza sobre la pista. */
+/* Piezas del STL que ya no van en el modelo (se quitó la espina morada: el logo de Striker pasó al costado del cuerpo). */
+const SKIP = new Set(['24_Espina']);
 const PLACE = {
   '13_Halo':  { keep: .45, map: ([x, y, z]) => [125 - x, -y, z + 24.5] },
-  '14_Casco': { keep: .2, map: ([x, y, z]) => [x + 181, y, z + 136 + 23.5] },
+  '14_Casco': { keep: .2, map: ([x, y, z]) => [x + 174, y, z + 136 + 23.5] },
 };
 
 /* Devuelve los vértices (3 por triángulo) del STL, binario o ASCII. */
@@ -48,6 +50,7 @@ let tris = 0;
 
 for (const f of readdirSync(dir).filter(f => f.toLowerCase().endsWith('.stl')).sort()) {
   const name = path.basename(f, path.extname(f));
+  if (SKIP.has(name)) continue;
   const src = readStl(path.join(dir, f));
   if (PLACE[name]) for (let i = 0; i < src.length; i += 3) { const q = PLACE[name].map([src[i], src[i + 1], src[i + 2]]); src[i] = q[0]; src[i + 1] = q[1]; src[i + 2] = q[2]; }
   const pos = new Float32Array(src.length);
