@@ -117,6 +117,7 @@ Diferencias de diseño respecto a 8a506d2 que conviene que el equipo confirme:
 
 ## Patrocinio del nivel más alto (3-oct-2026)
 
-- Partner Estratégico (+ $10,000) es el único nivel con lugar en el auto y el más negociable. Espacios dibujados en el visor y el mapa: A nariz, C alerón trasero (2 recuadros) y, a negociar, D alerón delantero (a cada lado de la nariz) y E placas traseras. Los costados son solo del logo de STEM Racing; la espina lleva el logo de Striker. Se pueden ofrecer más (placas delanteras) y activaciones.
+- Partner Estratégico (+ $10,000) es el único nivel con lugar en el auto y el más negociable. Espacios dibujados en el visor y el mapa: A nariz, C alerón trasero (2 recuadros) y, a negociar, D alerón delantero (a cada lado de la nariz). Las placas traseras se quitaron: el diseño aún no es final. Los costados son solo del logo de STEM Racing; la espina lleva el logo de Striker. Se pueden ofrecer más (placas) y activaciones cuando el diseño sea el final.
 - Meta de la temporada: $65,450 MXN, con aportaciones de todos los tamaños. Una mezcla de ejemplo (a ajustar con el equipo): 1–2 Partner ($10–15 mil c/u), 3 Aliado Técnico (~$7 mil), 4 Impulsor (~$4 mil), 6–8 Colaborador (~$2 mil) y en especie.
 - Aliado Técnico, Impulsor y Colaborador ya no incluyen el auto; sus beneficios son uniforme, Pit Display y reportes.
+- El logo de STEM Racing se limita a la zona plana del costado del pontón (x 79–107 mm, z 9.4–19 mm), 28 mm de largo, para que no se doble sobre la curva.

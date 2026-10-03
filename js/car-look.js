@@ -196,7 +196,7 @@ export function lookPart(mesh) {
  * - Espina (24), ambos lados: lockup de Striker Racing en una línea (STRIKER en hielo, RACING en esmeralda).
  * - Zona B, los costados (pontones): reservados por completo al logo oficial de STEM Racing en vector (obligatorio a cada lado, entre las ruedas).
  * - Espacios del Partner Estratégico, el único nivel con lugar en el auto (contorno fino en hielo + texto chico): nariz (A), alerón trasero, 2 recuadros (C),
- *   alerón delantero a cada lado de la nariz (D) y placas traseras (E). D y E son a negociar según la propuesta.
+ *   alerón delantero a cada lado de la nariz (D), a negociar según la propuesta. Las placas traseras quedan sin recuadro (diseño aún no final).
  * Los puntos de pegado vienen en mm del modelo (x = largo, y = alto, z = ancho; +z = lado derecho). */
 export const SLOT_TEXT = {
   es:{ partner:'PARTNER ESTRATÉGICO', partnerShort:'PARTNER', wing:['PARTNER', 'ESTRATÉGICO'] },
@@ -260,9 +260,8 @@ const V = (x, y, z) => new THREE.Vector3(x, y, z);
 
 /* Posiciones de los espacios (mm, marco del modelo). Se exportan para dibujar marcadores sobre capturas. */
 export const SLOTS = {
-  ponton:{ x:88, y:14.8, z:31, w:36, h:36 * STEM_BOX.h / STEM_BOX.w },   // logo STEM Racing (36 mm de largo, más que los 30 del reglamento) que ocupa el panel plano exterior de cada pontón (z = ±31)
+  ponton:{ x:93, y:14.2, z:31, w:28, h:28 * STEM_BOX.h / STEM_BOX.w },   // logo STEM Racing: el rectángulo más grande que cabe del todo en la parte plana del costado del pontón (x 79–107, z 9.4–19, z = ±31)
   alaDel:{ x:198.5, y:9.8, z:21, w:20, h:14 },         // cara superior del alerón delantero, a cada lado de la nariz (Partner Estratégico, a negociar)
-  placaTras:{ x:15, y:54, z:34, w:23, h:9 },           // cara exterior de cada placa trasera (Partner Estratégico, a negociar)
   nariz:{ x:191, y:20.4, z:0, w:23, h:4.2 },           // panel plano sobre la nariz
   aleron:{ x:13.5, y:57, z:0, w:62, h:17 },            // cara superior del alerón trasero (4 recuadros)
   espina:{ x:57, y:49.6, z:1.2, w:40, h:40 * 320 / 1792, tilt:12 },   // lockup de Striker Racing sobre la espina, inclinado con la caída del lomo
@@ -282,7 +281,6 @@ export async function addLogoDecals(parts, logoUrl, lang = 'es') {
   const partner = decalMaterial(drawSlot(1024, 188, [T.partner], 82));
   const wing = decalMaterial(drawWingSlots(T.wing));
   const stemMat = decalMaterial(drawStem());
-  const plate = decalMaterial(drawSlot(1024, Math.round(1024 * SLOTS.placaTras.h / SLOTS.placaTras.w), [T.partnerShort], 140));
   const wingFront = decalMaterial(drawSlot(700, Math.round(700 * SLOTS.alaDel.h / SLOTS.alaDel.w), [T.partnerShort], 70));
   const out = [], S = SLOTS;
   /* espina: el lockup va inclinado siguiendo la caída del lomo; a cada lado se mira desde afuera */
@@ -297,11 +295,6 @@ export async function addLogoDecals(parts, logoUrl, lang = 'es') {
     // Zona B: el costado es solo del logo de STEM Racing (obligatorio a cada lado, entre las ruedas), con las letras oficiales
     const d = stick(m, stemMat, S.ponton.w * .001, S.ponton.h * .001, mm(S.ponton.x, S.ponton.y, side * 200), V(0, 0, -side), V(0, 1, 0));
     if (d) out.push({ kind:'stem', mesh:d });
-  });
-  ['10', '11'].forEach((k, i) => {   // placas traseras: 10 = derecha (+z), 11 = izquierda (-z)
-    const m = parts[k]; if (!m) return; const side = i === 0 ? 1 : -1;
-    const d = stick(m, plate, S.placaTras.w * .001, S.placaTras.h * .001, mm(S.placaTras.x, S.placaTras.y, side * 200), V(0, 0, -side), V(0, 1, 0));
-    if (d) out.push({ kind:'partner', mesh:d });
   });
   if (parts['05']) [1, -1].forEach(side => {   // alerón delantero: un recuadro a cada lado de la nariz
     const d = stick(parts['05'], wingFront, S.alaDel.w * .001, S.alaDel.h * .001, mm(S.alaDel.x, 200, side * S.alaDel.z), V(0, -1, 0), V(1, 0, 0));
