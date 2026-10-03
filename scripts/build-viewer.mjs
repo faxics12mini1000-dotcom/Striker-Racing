@@ -14,6 +14,7 @@ import { gzipSync } from 'node:zlib';
 // preload: el módulo del visor se precarga solo donde el 3D es lo principal; en el inicio el 3D espera a que la página esté en reposo.
 const PAGES = [{ page: 'auto/index.html', preload: true }, { page: 'en/car/index.html', preload: true }, { page: 'index.html' }, { page: 'en/index.html' }];
 const ASSETS = { model: 'assets/models/sr26.glb', env: 'assets/models/env-room.png' };
+const AR = { model: 'assets/models/sr26-ar.glb', usdz: 'assets/models/sr26.usdz' };   // el USDZ (iPhone, plan B) es opcional: ver docs/AR_Y_CFD.md
 const VIDEO = { mp4: 'assets/video/sr26-phone.mp4', webm: 'assets/video/sr26-phone.webm' };
 const hash = f => createHash('sha1').update(readFileSync(f)).digest('hex').slice(0, 8);
 
@@ -55,6 +56,14 @@ for (const { page, preload: withPreload } of PAGES) {
     html = html.replace(re, `data-${name}="${val}"`);
   };
   attr('viewer', urls.viewer); attr('model', urls.model); attr('env', urls.env); attr('video-mp4', urls.mp4); attr('video-webm', urls.webm);
+  if (html.includes('id="arBtn"')) {
+    const set = (name, val) => {
+      const re = new RegExp(`data-${name}="[^"]*"`);
+      if (!re.test(html)) throw new Error(`${page}: falta data-${name} en #arBtn`);
+      html = html.replace(re, `data-${name}="${val}"`);
+    };
+    set('ar-model', `/${AR.model}?v=${hash(AR.model)}`); set('ar-usdz', existsSync(AR.usdz) ? `/${AR.usdz}?v=${hash(AR.usdz)}` : '');
+  }
   if (crlf) html = html.replace(/\n/g, '\r\n');
   writeFileSync(page, html);
 }

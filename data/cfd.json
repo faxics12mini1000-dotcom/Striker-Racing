@@ -1,0 +1,6 @@
+{
+  "_ayuda": "Sección «Aerodinámica» de /auto/ y /en/car/. Vacía = oculta. Para mostrarla llena 'media' (imagen o video), 'method' (una línea) y/o 'iterations'. Todo texto lleva español (es) e inglés (en). Después corre `npm run build:content`. Guía completa: docs/AR_Y_CFD.md. Ejemplo de entrada (no se publica nada hasta que lo llenes): media = { \"type\": \"image\", \"src\": \"/assets/cfd/v1-presion.webp\", \"width\": 1600, \"height\": 900, \"alt\": { \"es\": \"...\", \"en\": \"...\" }, \"caption\": { \"es\": \"...\", \"en\": \"...\" } }; iterations = [ { \"version\": \"v1\", \"result\": { \"es\": \"...\", \"en\": \"...\" }, \"date\": \"2026-12-01\" } ]; method = { \"es\": \"...\", \"en\": \"...\" }.",
+  "media": null,
+  "method": null,
+  "iterations": []
+}

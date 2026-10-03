@@ -814,3 +814,28 @@ html.fs-lock .sticky-cta{display:none;}
 button.btn{cursor:pointer;}
 .sm-legend li b a{color:inherit; text-decoration:underline; text-underline-offset:3px;}
 .sm-link a{color:var(--emerald); font-weight:600;}
+
+/* ---------- «Ver en tu mesa» (AR) ---------- */
+.btn[hidden]{display:none !important;}
+dialog.ar-dialog{width:min(640px, calc(100% - 32px)); margin:auto; padding:20px; color:var(--ice); background:var(--surface); border:1px solid var(--border-fine);}
+dialog.ar-dialog::backdrop{background:rgba(7,27,51,0.85);}
+.ar-head{display:flex; justify-content:space-between; align-items:center; gap:12px; margin-bottom:8px;}
+.ar-head h2{font-family:'Oswald', system-ui, sans-serif; font-weight:600; font-size:1.3rem; text-transform:uppercase;}
+.ar-close{min-height:44px; padding:0 14px; cursor:pointer; color:var(--ice); background:transparent; border:1px solid var(--border-fine); font-family:var(--mono); font-size:0.74rem; text-transform:uppercase; letter-spacing:0.08em;}
+.ar-close:hover{border-color:var(--emerald); color:var(--emerald);}
+.ar-hint{margin:0 0 12px; color:var(--ice-dim); font-size:0.92rem;}
+.ar-stage model-viewer{display:block; width:100%; height:min(52vh, 380px); background:var(--navy-deep); border:1px solid var(--border-fine); --poster-color:transparent;}
+.ar-msg{min-height:1.4em; margin:10px 0 0; font-size:0.9rem; color:var(--ice);}
+.ar-actions{margin-top:8px;}
+
+/* ---------- Aerodinámica (CFD): solo aparece si data/cfd.json trae datos ---------- */
+.cfd{padding:72px 0 88px; background:var(--navy-deep); border-top:1px solid var(--border-fine);}
+.cfd-media{margin:0 0 28px; border:1px solid var(--border-fine); background:var(--surface);}
+.cfd-media img, .cfd-media video{display:block; width:100%; height:auto;}
+.cfd-media figcaption{padding:10px 14px; border-top:1px solid var(--border-fine); font-size:0.88rem; color:var(--ice-dim);}
+.cfd-table{width:100%; border-collapse:collapse; font-size:0.95rem;}
+.cfd-table th, .cfd-table td{padding:12px 14px; text-align:left; vertical-align:top; border-bottom:1px solid var(--border-fine);}
+.cfd-table thead th{font-family:var(--mono); font-size:0.7rem; letter-spacing:0.08em; text-transform:uppercase; color:var(--ice-dim); font-weight:500;}
+.cfd-table tbody th{font-family:var(--mono); color:var(--ice); white-space:nowrap;}
+.cfd-table td{color:var(--ice-dim);}
+@media (max-width:640px){ .cfd-table th, .cfd-table td{padding:10px 8px; font-size:0.88rem;} }
