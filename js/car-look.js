@@ -1,7 +1,7 @@
 /* Striker Racing · SR-26 · acabado compartido del auto 3D (visor del hero y vista de patrocinios)
  * Un solo lugar para: librea por pieza, offsets del despiece, entorno/luces/sombras, materiales y los logos dibujados en código (decals).
  * Las piezas vienen de assets/models/sr26.glb (un nodo por STL, nombre = archivo sin extensión). La escena trabaja en metros,
- * de ahí `u = 0.001` en las luces. La 13 (halo) y la 14 (casco) son piezas estándar del reglamento; nada aquí depende de que existan. */
+ * de ahí `u = 0.001` en las luces. Faltan la 13 y la 14 en el modelo: nada aquí depende de que existan. */
 import * as THREE from 'three';
 import { STEM_BOX, STEM_MARK, STEM_WORD, STEM_GRADIENT, STEM_GRADIENT_LINE } from './stem-logo.js';
 
@@ -13,19 +13,19 @@ export const COLORS = { navy:'#071B33', blue:'#183969', purple:'#7137D4', green:
 export const LIVERY = {
   '01':COLORS.blue, '02':COLORS.purple, '03':COLORS.purple, '04':COLORS.blue,
   '05':COLORS.blue, '06':COLORS.navy, '07':COLORS.green, '08':COLORS.green,
-  '09':COLORS.blue, '10':COLORS.green, '11':COLORS.green, '12':COLORS.navy, '13':COLORS.alu, '14':COLORS.green,
+  '09':COLORS.blue, '10':COLORS.green, '11':COLORS.green, '12':COLORS.navy,
   '15':COLORS.steel, '16':COLORS.rubber, '17':COLORS.rubber, '18':COLORS.rubber, '19':COLORS.rubber,
-  '20':COLORS.steel, '21':COLORS.steel, '22':COLORS.steel, '23':COLORS.steel, 
+  '20':COLORS.steel, '21':COLORS.steel, '22':COLORS.steel, '23':COLORS.steel, '24':COLORS.purple, 
 };
 export const partKey = name => name.slice(0, 2);
 export const isRim = name => /__Rin_/.test(name);
 export const colorFor = name => isRim(name) ? COLORS.ice : (LIVERY[partKey(name)] || COLORS.ice);
-/* Piezas que no se dibujan (ninguna por ahora: el halo 13 y el casco 14 ya vienen en el modelo). */
-export const HIDDEN = new Set();
+/* Piezas que no se dibujan (el halo 13 ya no viene en el modelo; se deja por si reaparece). */
+export const HIDDEN = new Set(['13']);
 
 /* Despiece: cada una de las 27 mallas del GLB tiene su propio vector de separación (mm; x = largo, +x al frente; y = alto; z = ancho, +z = derecha),
  * su etapa (1–5), un retraso dentro de la etapa, un giro y un arco. El cuerpo (01) queda fijo y es la referencia.
- *   etapa 1 llantas, rines, ejes y guías · 2 nariz, alerones, placas y soportes · 3 pontones · 4 pilar, halo y casco · 5 cartucho
+ *   etapa 1 llantas, rines, ejes y guías · 2 nariz, alerones, placas y soportes · 3 pontones · 4 espina y pilar · 5 cartucho
  * pieceId(nombre del nodo) devuelve la clave de esta tabla: llanta (t) y rin (r) se separan, igual que el soporte der./izq. del alerón.
  *   off  [x,y,z] mm a despiece completo        d    retraso dentro de la etapa (fracción del recorrido, 0–0.1)
  *   rot  [x,y,z] grados a despiece completo    arc  mm que se eleva a mitad del recorrido (trayectoria curva)
@@ -59,11 +59,9 @@ export const PIECES = {
   // etapa 3 · pontones a los lados
   '02':{ step:3, off:[5, 2, 50],       d:.00, arc:4, name:{ es:'Pontón derecho', en:'Right sidepod' } },
   '03':{ step:3, off:[5, 2, -50],      d:.04, arc:4, name:{ es:'Pontón izquierdo', en:'Left sidepod' } },
-  // etapa 4 · pilar hacia arriba
-  '12':{ step:4, off:[-14, 60, 0],     d:.00, rot:[0, 0, 0], name:{ es:'Pilar del alerón trasero', en:'Rear wing pillar' } },
-  // etapa 4 (cont.) · el casco sube un poco y el halo mucho más, para que el aro libere al casco
-  '14':{ step:4, off:[0, 30, 0],       d:.02, arc:0, name:{ es:'Casco del piloto', en:'Driver helmet' } },
-  '13':{ step:4, off:[6, 66, 0],       d:.10, arc:0, name:{ es:'Halo', en:'Halo' } },
+  // etapa 4 · espina y pilar hacia arriba
+  '24':{ step:4, off:[0, 46, 0],       d:.00, name:{ es:'Espina', en:'Spine' } },
+  '12':{ step:4, off:[-14, 60, 0],     d:.06, rot:[0, 0, 0], name:{ es:'Pilar del alerón trasero', en:'Rear wing pillar' } },
   // etapa 5 · el cartucho sale hacia atrás girando sobre su eje
   '15':{ step:5, off:[-98, 12, 0],     d:.03, rot:[360, 0, 0], arc:0, name:{ es:'Cartucho de CO₂', en:'CO₂ cartridge' } },
 };
@@ -80,7 +78,7 @@ for (const id of Object.keys(PIECES)) { const k = id.slice(0, 2); if (!EXPLODE[k
 
 /* Acabado por pieza (clave de pieceId): cada familia de piezas tiene su propio material para que se lean distintas bajo la misma luz.
  *   mate/satín  cuerpo, alerones, nariz y soportes (pintura con poco barniz)
- *   laca        pontones y placas (barniz alto: reflejan el entorno con nitidez)
+ *   laca        pontones, placas y espina (barniz alto: reflejan el entorno con nitidez)
  *   caucho      llantas   ·   aluminio  rines y cartucho   ·   acero pulido  ejes   ·   latón  guías del cordón */
 const FINISH = {
   satin:  { kind:'paint', metalness:.05, roughness:.6,  clearcoat:.3,  clearcoatRoughness:.45, envMapIntensity:.45 },
@@ -93,8 +91,7 @@ const FINISH = {
 };
 const FINISH_OF = {
   '01':'satin', '04':'satin', '05':'satin', '09':'satin', '06d':'matte', '06i':'matte', '12':'matte',
-  '13':'alu', '14':'lacquer',
-  '02':'lacquer', '03':'lacquer', '07':'lacquer', '08':'lacquer', '10':'lacquer', '11':'lacquer',
+  '02':'lacquer', '03':'lacquer', '07':'lacquer', '08':'lacquer', '10':'lacquer', '11':'lacquer', '24':'lacquer',
   '16t':'rubber', '17t':'rubber', '18t':'rubber', '19t':'rubber', '16r':'alu', '17r':'alu', '18r':'alu', '19r':'alu',
   '15':'alu', '20':'steel', '21':'steel', '22':'brass', '23':'brass',
 };
@@ -196,10 +193,10 @@ export function lookPart(mesh) {
 }
 
 /* ───────────── logos dibujados en código ─────────────
- * - Costado del cuerpo (01), ambos lados: lockup de Striker Racing en una línea (STRIKER en hielo, RACING en esmeralda).
- * - Zona B, panel plano de cada pontón: logo oficial de STEM Racing en vector (obligatorio a cada lado, entre las ruedas).
+ * - Espina (24), ambos lados: lockup de Striker Racing en una línea (STRIKER en hielo, RACING en esmeralda).
+ * - Zona B, los costados (pontones): reservados por completo al logo oficial de STEM Racing en vector (obligatorio a cada lado, entre las ruedas).
  * - Espacios del Partner Estratégico, el único nivel con lugar en el auto (contorno fino en hielo + texto chico): nariz (A), alerón trasero, 2 recuadros (C),
- *   alerón delantero a cada lado de la nariz (D), placas traseras (E) y segundo recuadro del pontón (F). Los de D, E y F son a negociar según la propuesta.
+ *   alerón delantero a cada lado de la nariz (D) y placas traseras (E). D y E son a negociar según la propuesta.
  * Los puntos de pegado vienen en mm del modelo (x = largo, y = alto, z = ancho; +z = lado derecho). */
 export const SLOT_TEXT = {
   es:{ partner:'PARTNER ESTRATÉGICO', partnerShort:'PARTNER', wing:['PARTNER', 'ESTRATÉGICO'] },
@@ -221,11 +218,13 @@ function drawLockup(img) {
 }
 /* Logo oficial de STEM Racing dibujado en vector (js/stem-logo.js, de la guía de marca): emblema SR con su degradado y rótulo blanco con las letras oficiales. Sin imagen ni fondo. */
 function drawStem() {
-  const B = STEM_BOX, k = 2400 / B.w, c = canvasOf(2400, Math.round(B.h * k)), g = c.getContext('2d');
+  const B = STEM_BOX, k = 4096 / B.w, c = canvasOf(4096, Math.round(B.h * k)), g = c.getContext('2d');
   g.scale(k, k); g.translate(-B.x, -B.y);
   const [x1, y1, x2, y2] = STEM_GRADIENT_LINE, gr = g.createLinearGradient(x1, y1, x2, y2);
   STEM_GRADIENT.forEach(([o, col]) => gr.addColorStop(o, col));
-  g.fillStyle = gr; g.fill(new Path2D(STEM_MARK));
+  const mk = new Path2D(STEM_MARK);
+  g.lineJoin = 'round'; g.lineWidth = 3.2; g.strokeStyle = COLORS.navy; g.stroke(mk);   // filete oscuro: el emblema se separa del pontón morado
+  g.fillStyle = gr; g.fill(mk);
   g.fillStyle = '#fff'; g.fill(new Path2D(STEM_WORD));
   return c;
 }
@@ -244,7 +243,7 @@ function drawWingSlots(lines) {
   return c;
 }
 function decalMaterial(canvas) {
-  const tex = new THREE.CanvasTexture(canvas); tex.colorSpace = THREE.SRGBColorSpace; tex.anisotropy = 8;
+  const tex = new THREE.CanvasTexture(canvas); tex.colorSpace = THREE.SRGBColorSpace; tex.anisotropy = 16;
   return new THREE.MeshBasicMaterial({ map: tex, transparent: true, polygonOffset: true, polygonOffsetFactor: -3, polygonOffsetUnits: -3, depthWrite: false, toneMapped: false, fog: false });
 }
 /* Pega un decal a `mesh` donde un rayo (en mundo) toca la pieza. `up` orienta el decal. Devuelve el mesh del decal o null. */
@@ -261,13 +260,12 @@ const V = (x, y, z) => new THREE.Vector3(x, y, z);
 
 /* Posiciones de los espacios (mm, marco del modelo). Se exportan para dibujar marcadores sobre capturas. */
 export const SLOTS = {
-  ponton:{ x:86, y:14.6, z:31, w:30, h:30 * STEM_BOX.h / STEM_BOX.w },   // logo STEM Racing (30 mm de largo) en el panel plano exterior de cada pontón (z = ±31)
-  pontonB:{ x:118, y:14.6, z:31, w:22, h:7 },          // segundo recuadro del pontón, hacia el frente (Partner Estratégico, a negociar)
+  ponton:{ x:88, y:14.8, z:31, w:36, h:36 * STEM_BOX.h / STEM_BOX.w },   // logo STEM Racing (36 mm de largo, más que los 30 del reglamento) que ocupa el panel plano exterior de cada pontón (z = ±31)
   alaDel:{ x:198.5, y:9.8, z:21, w:20, h:14 },         // cara superior del alerón delantero, a cada lado de la nariz (Partner Estratégico, a negociar)
   placaTras:{ x:15, y:54, z:34, w:23, h:9 },           // cara exterior de cada placa trasera (Partner Estratégico, a negociar)
   nariz:{ x:191, y:20.4, z:0, w:23, h:4.2 },           // panel plano sobre la nariz
   aleron:{ x:13.5, y:57, z:0, w:62, h:17 },            // cara superior del alerón trasero (4 recuadros)
-  logo:{ x:60, y:34, z:15, w:44, h:44 * 320 / 1792, tilt:6 },   // lockup de Striker Racing en el costado del cuerpo, detrás del pontón
+  espina:{ x:57, y:49.6, z:1.2, w:40, h:40 * 320 / 1792, tilt:12 },   // lockup de Striker Racing sobre la espina, inclinado con la caída del lomo
 };
 
 /* parts: { '02': mesh, '03': mesh, ... } con las matrices del mundo ya actualizadas. lang: 'es' | 'en'.
@@ -284,24 +282,21 @@ export async function addLogoDecals(parts, logoUrl, lang = 'es') {
   const partner = decalMaterial(drawSlot(1024, 188, [T.partner], 82));
   const wing = decalMaterial(drawWingSlots(T.wing));
   const stemMat = decalMaterial(drawStem());
-  const small = decalMaterial(drawSlot(1024, Math.round(1024 * SLOTS.pontonB.h / SLOTS.pontonB.w), [T.partnerShort], 120));
   const plate = decalMaterial(drawSlot(1024, Math.round(1024 * SLOTS.placaTras.h / SLOTS.placaTras.w), [T.partnerShort], 140));
   const wingFront = decalMaterial(drawSlot(700, Math.round(700 * SLOTS.alaDel.h / SLOTS.alaDel.w), [T.partnerShort], 70));
   const out = [], S = SLOTS;
-  /* lockup de Striker Racing en el costado del cuerpo (01), a cada lado, inclinado con la caída del lomo y visto desde afuera */
-  const body = parts['01'];
-  if (body) [1, -1].forEach(side => {
-    const a = THREE.MathUtils.degToRad(S.logo.tilt), up = V(Math.sin(a), Math.cos(a), 0);
-    const d = stick(body, lockup, S.logo.w * .001, S.logo.h * .001, mm(S.logo.x, S.logo.y, side * 60), V(0, 0, -side), up);
+  /* espina: el lockup va inclinado siguiendo la caída del lomo; a cada lado se mira desde afuera */
+  const sp = parts['24'];
+  if (sp) [1, -1].forEach(side => {
+    const a = THREE.MathUtils.degToRad(S.espina.tilt), up = V(Math.sin(a), Math.cos(a), 0);
+    const d = stick(sp, lockup, S.espina.w * .001, S.espina.h * .001, mm(S.espina.x, S.espina.y, side * 40), V(0, 0, -side), up);
     if (d) out.push({ kind:'logo', mesh:d });
   });
   ['02', '03'].forEach((k, i) => {   // 02 = pontón derecho (+z), 03 = izquierdo (-z)
     const m = parts[k]; if (!m) return; const side = i === 0 ? 1 : -1;
-    // Zona B: logo de STEM Racing (obligatorio a cada lado, entre las ruedas) con las letras oficiales, y un segundo recuadro hacia el frente
-    let d = stick(m, stemMat, S.ponton.w * .001, S.ponton.h * .001, mm(S.ponton.x, S.ponton.y, side * 200), V(0, 0, -side), V(0, 1, 0));
+    // Zona B: el costado es solo del logo de STEM Racing (obligatorio a cada lado, entre las ruedas), con las letras oficiales
+    const d = stick(m, stemMat, S.ponton.w * .001, S.ponton.h * .001, mm(S.ponton.x, S.ponton.y, side * 200), V(0, 0, -side), V(0, 1, 0));
     if (d) out.push({ kind:'stem', mesh:d });
-    d = stick(m, small, S.pontonB.w * .001, S.pontonB.h * .001, mm(S.pontonB.x, S.pontonB.y, side * 200), V(0, 0, -side), V(0, 1, 0));
-    if (d) out.push({ kind:'partner', mesh:d });
   });
   ['10', '11'].forEach((k, i) => {   // placas traseras: 10 = derecha (+z), 11 = izquierda (-z)
     const m = parts[k]; if (!m) return; const side = i === 0 ? 1 : -1;

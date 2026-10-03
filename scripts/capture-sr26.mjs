@@ -20,8 +20,8 @@ const browser = await puppeteer.launch({ executablePath: BROWSER, headless: 'new
 async function render(query, w, h) {
   const p = await browser.newPage();
   p.on('pageerror', e => console.error('pageerror:', e.message));
-  await p.setViewport({ width: w, height: h });
-  await p.goto(`${BASE}/scripts/sr26-view.html?${query}&w=${w}&h=${h}`);
+  await p.setViewport({ width: w, height: h, deviceScaleFactor: 2 });   // 2x: los logos pequeños salen nítidos
+  await p.goto(`${BASE}/scripts/sr26-view.html?${query}&w=${w}&h=${h}&dpr=2`);
   await p.waitForFunction('window.carReady', { timeout: 60000 });   // el módulo tarda en crear la promesa (top-level await)
   await p.evaluate(() => window.carReady);
   const markers = await p.evaluate(() => window.carMarkers);
@@ -39,7 +39,7 @@ if (todo.includes('mapa')) {
   mkdirSync('assets/img', { recursive: true });
   for (const lang of ['es', 'en']) for (const view of ['top', 'side']) {
     const { png, markers } = await render(`view=${view}&lang=${lang}`, 1000, 400);
-    await sharp(png).webp({ quality: 86, alphaQuality: 90 }).toFile(`assets/img/sponsor-map-${view}-${lang}.webp`);
+    await sharp(png).webp({ quality: 90, alphaQuality: 95 }).toFile(`assets/img/sponsor-map-${view}-${lang}.webp`);
     if (lang === 'es') console.log(view, JSON.stringify(markers));
   }
 }

@@ -63,7 +63,7 @@ const easeOut = t => 1 - Math.pow(1 - t, 3);
 const lerp = (a, b, k) => a + (b - a) * k;
 const seg = (t, a, b) => clamp01((t - a) / (b - a));
 
-/* Etiquetas técnicas: nombre, material (acabado del modelo 3D, ver FINISH en js/car-look.js) y función. 24 piezas: las 23 numeradas (sin la 24) con la 06 en sus dos soportes. */
+/* Etiquetas técnicas: nombre, material (acabado del modelo 3D, ver FINISH en js/car-look.js) y función. 23 piezas: las 22 numeradas con la 06 en sus dos soportes. */
 const LABELS = {
   '01':['Cuerpo', 'Pintura satinada', 'Chasis principal: aloja el cartucho y une todo'],
   '16':['Rueda delantera izq.', 'Caucho · rin de aluminio', 'Apoya y rueda con baja fricción'],
@@ -85,9 +85,8 @@ const LABELS = {
   '11':['Placa trasera izq.', 'Laca brillante', 'Evita fugas de aire en la punta del alerón'],
   '02':['Pontón derecho', 'Laca brillante', 'Ordena el flujo lateral junto a la rueda'],
   '03':['Pontón izquierdo', 'Laca brillante', 'Ordena el flujo lateral junto a la rueda'],
-  '13':['Halo', 'Aluminio', 'Protege la cabeza del piloto'],
-  '14':['Casco del piloto', 'Laca brillante', 'Pieza estándar del reglamento, va bajo el halo'],
-  '12':['Pilar del alerón trasero', 'Pintura mate', 'Sostiene el alerón trasero sobre el cuerpo'],
+  '24':['Espina', 'Laca brillante', 'Refuerza el lomo y lleva la librea'],
+  '12':['Pilar del alerón trasero', 'Pintura mate', 'Sostiene el alerón trasero sobre la espina'],
   '15':['Cartucho de CO₂', 'Aluminio', 'Almacena el gas que impulsa el auto'],
 };
 const groupOf = id => /^1[6-9][tr]$/.test(id) ? id.slice(0, 2) : id;

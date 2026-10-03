@@ -15,11 +15,11 @@ export function mount(stage){
   var EN = (document.documentElement.lang || 'es').slice(0, 2) === 'en';
   var TXT = EN
     ? { slider:'Exploded view of the car', assembled:'Assembled', exploded:'Exploded', pause:'Pause animation', play:'Play animation',
-        steps:['Wheels & axles', 'Wings & nose', 'Sidepods', 'Pillar, halo & helmet', 'CO₂ cartridge'], group:'3D viewer controls', stepGo:'Show up to step ',
+        steps:['Wheels & axles', 'Wings & nose', 'Sidepods', 'Spine & pillar', 'CO₂ cartridge'], group:'3D viewer controls', stepGo:'Show up to step ',
         views:{ iso:['ISO', 'ISO'], side:['SIDE', 'SIDE'], front:['FRONT', 'FRT'], top:['TOP', 'TOP'] }, viewsLabel:'Camera views', viewLabel:'View: ',
         fsOn:'Full screen', fsOff:'Exit full screen' }
     : { slider:'Despiece del auto', assembled:'Armado', exploded:'Despiece', pause:'Pausar animación', play:'Reanudar animación',
-        steps:['Llantas y ejes', 'Alerones y nariz', 'Pontones', 'Pilar, halo y casco', 'Cartucho CO₂'], group:'Controles del visor 3D', stepGo:'Ver hasta la etapa ',
+        steps:['Llantas y ejes', 'Alerones y nariz', 'Pontones', 'Espina y pilar', 'Cartucho CO₂'], group:'Controles del visor 3D', stepGo:'Ver hasta la etapa ',
         views:{ iso:['ISO', 'ISO'], side:['LATERAL', 'LAT'], front:['FRENTE', 'FRE'], top:['ARRIBA', 'SUP'] }, viewsLabel:'Vistas de cámara', viewLabel:'Vista: ',
         fsOn:'Pantalla completa', fsOff:'Salir de pantalla completa' };
   // Pieza que ancla la etiqueta de cada etapa (clave del nodo en el GLB)
