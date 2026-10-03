@@ -19,11 +19,21 @@ export function mount(stage, pre){
     ? { slider:'Exploded view of the car', assembled:'Assembled', exploded:'Exploded', pause:'Pause animation', play:'Play animation',
         steps:['Wheels & axles', 'Wings & nose', 'Sidepods', 'Spine & pillar', 'CO₂ cartridge'], group:'3D viewer controls', stepGo:'Show up to step ',
         views:{ iso:['ISO', 'ISO'], side:['SIDE', 'SIDE'], front:['FRONT', 'FRT'], top:['TOP', 'TOP'] }, viewsLabel:'Camera views', viewLabel:'View: ',
-        fsOn:'Full screen', fsOff:'Exit full screen' }
+        fsOn:'Full screen', fsOff:'Exit full screen', tools:'Tools' }
     : { slider:'Despiece del auto', assembled:'Armado', exploded:'Despiece', pause:'Pausar animación', play:'Reanudar animación',
         steps:['Llantas y ejes', 'Alerones y nariz', 'Pontones', 'Espina y pilar', 'Cartucho CO₂'], group:'Controles del visor 3D', stepGo:'Ver hasta la etapa ',
         views:{ iso:['ISO', 'ISO'], side:['LATERAL', 'LAT'], front:['FRENTE', 'FRE'], top:['ARRIBA', 'SUP'] }, viewsLabel:'Vistas de cámara', viewLabel:'Vista: ',
-        fsOn:'Pantalla completa', fsOff:'Salir de pantalla completa' };
+        fsOn:'Pantalla completa', fsOff:'Salir de pantalla completa', tools:'Herramientas' };
+  Object.assign(TXT, EN
+    ? { rear:['REAR', 'REAR'], notesOn:'Show part numbers', notesOff:'Hide part numbers', planOn:'Technical drawing', planOff:'Exit technical drawing',
+        photo:'Car photo (transparent PNG)', share:'Share', copied:'Link copied', saved:'Photo saved', planTag:'Technical drawing · visual prototype',
+        dLength:'Length (no cartridge)', dWidth:'Width', dWheelbase:'Wheelbase', measured:'Measured on the 3D model. Visual prototype, not the final car.',
+        keys:'Use the arrow keys to rotate, Home for the ISO view.', parts:'Car parts', shareTitle:'SR-26 · Striker Racing', shareText:'The Striker Racing SR-26, a visual prototype.' }
+    : { rear:['TRASERA', 'TRA'], notesOn:'Mostrar numeración de piezas', notesOff:'Ocultar numeración de piezas', planOn:'Plano técnico', planOff:'Salir del plano técnico',
+        photo:'Foto del auto (PNG transparente)', share:'Compartir', copied:'Enlace copiado', saved:'Foto guardada', planTag:'Plano técnico · prototipo visual',
+        dLength:'Largo (sin cartucho)', dWidth:'Ancho', dWheelbase:'Entre ejes', measured:'Medido en el modelo 3D. Prototipo visual, no es el auto final.',
+        keys:'Usa las flechas para girar y Inicio para la vista ISO.', parts:'Piezas del auto', shareTitle:'SR-26 · Striker Racing', shareText:'El SR-26 de Striker Racing, un prototipo visual.' });
+  TXT.views.rear = TXT.rear; TXT.views.plan = ['PLAN', 'PLAN'];
   // Pieza que ancla la etiqueta de cada etapa (clave del nodo en el GLB)
   var LABEL_KEYS = ['17', '05', '02', '24', '15'];
   var URLS = {
@@ -99,6 +109,9 @@ export function mount(stage, pre){
     Look.lookRenderer(renderer, !lowEnd);
     stage.appendChild(renderer.domElement);
     var canvas = renderer.domElement;
+    canvas.tabIndex = 0;
+    canvas.setAttribute('role', 'application');
+    canvas.setAttribute('aria-label', (stage.getAttribute('aria-label') || 'SR-26') + '. ' + TXT.keys);
 
     // Esta escena trabaja en metros (el GLB viene en metros), de ahí u = 0.001.
     mark('renderer');
@@ -270,6 +283,7 @@ export function mount(stage, pre){
       return new THREE.CanvasTexture(c);
     }
 
+    var decor = [], decals = [], notesOn = false, noteHost = null, notes = [], planOn = false, plan = null, lastBlob = null;
     var labelHost = null, labels = [];
     var tmpBox = new THREE.Box3(), tmpV = new THREE.Vector3();
     function updateLabels(){
@@ -434,7 +448,7 @@ export function mount(stage, pre){
       stage.appendChild(labelHost);
 
       // Logos dibujados en código (espina + espacios disponibles). Si falla la carga, el auto se ve igual.
-      var decalsDone = decalsP.then(function(assets){ return assets ? Look.addLogoDecals(byKey, Promise.resolve(assets), EN ? 'en' : 'es') : null; }).catch(function(){});
+      var decalsDone = decalsP.then(function(assets){ return assets ? Look.addLogoDecals(byKey, Promise.resolve(assets), EN ? 'en' : 'es') : null; }).then(function(list){ decals = list || []; }).catch(function(){});
 
       var box = new THREE.Box3().setFromObject(model);
       var size = box.getSize(new THREE.Vector3());
@@ -453,13 +467,13 @@ export function mount(stage, pre){
       footprint = new THREE.Mesh(new THREE.PlaneGeometry(size.x * 1.15, size.z * 1.9),
         new THREE.MeshBasicMaterial({ map:blobTex, transparent:true, opacity:0.75, depthWrite:false, toneMapped:false }));
       footprint.rotation.x = -Math.PI / 2; footprint.position.y = floorY + 0.0001; footprint.renderOrder = -1;
-      group.add(footprint);
+      group.add(footprint); decor.push(footprint);
       parts.forEach(function(p){
         if(!/^1[6-9]t$/.test(p.id)) return;
         var blob = new THREE.Mesh(new THREE.PlaneGeometry(0.058, 0.034),
           new THREE.MeshBasicMaterial({ map:blobTex, transparent:true, opacity:0.7, depthWrite:false, toneMapped:false }));
         blob.rotation.x = -Math.PI / 2; blob.position.y = floorY + 0.00015; blob.renderOrder = -1;
-        group.add(blob); wheelBlobs.push({ part:p, mesh:blob });
+        group.add(blob); wheelBlobs.push({ part:p, mesh:blob }); decor.push(blob);
       });
       model.updateMatrixWorld(true); updateContactShadows();
 
@@ -471,7 +485,7 @@ export function mount(stage, pre){
       plinth.rotation.x = -Math.PI / 2;
       plinth.position.y = -size.y / 2 + 0.0002;
       plinth.renderOrder = -1;
-      group.add(plinth);
+      group.add(plinth); decor.push(plinth, ground);
 
       // Medidas del auto armado y del despiece completo (para encuadrar sin saltos mientras se abre)
       function extents(){
@@ -490,6 +504,7 @@ export function mount(stage, pre){
       exploded = 0; uTarget = 0; applyFit(); controls.update();
 
       buildControls();
+      buildPartsPanel();
       mark('built');
       setProgress(0.82);
       var reveal = function(){
@@ -511,11 +526,16 @@ export function mount(stage, pre){
       play:'<svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true"><path d="M4 2.5v11l9-5.5z" fill="currentColor"/></svg>',
       pause:'<svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true"><path d="M3.5 2h3v12h-3zM9.5 2h3v12h-3z" fill="currentColor"/></svg>',
       fsOn:'<svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true"><path d="M2 6V2h4M10 2h4v4M14 10v4h-4M6 14H2v-4" fill="none" stroke="currentColor" stroke-width="1.6"/></svg>',
-      fsOff:'<svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true"><path d="M6 2v4H2M10 2v4h4M10 14v-4h4M6 14v-4H2" fill="none" stroke="currentColor" stroke-width="1.6"/></svg>'
+      fsOff:'<svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true"><path d="M6 2v4H2M10 2v4h4M10 14v-4h4M6 14v-4H2" fill="none" stroke="currentColor" stroke-width="1.6"/></svg>',
+      notes:'<svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true"><path d="M2 3.5h2M6 3.5h8M2 8h2M6 8h8M2 12.5h2M6 12.5h8" fill="none" stroke="currentColor" stroke-width="1.6"/></svg>',
+      plan:'<svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true"><path d="M1.5 5v6M14.5 5v6M1.5 8h13M4 6l-2.5 2L4 10M12 6l2.5 2-2.5 2" fill="none" stroke="currentColor" stroke-width="1.4"/></svg>',
+      photo:'<svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true"><path d="M1.5 4.5h3l1-1.5h5l1 1.5h3v8h-13z" fill="none" stroke="currentColor" stroke-width="1.4"/><circle cx="8" cy="8.5" r="2.4" fill="none" stroke="currentColor" stroke-width="1.4"/></svg>',
+      share:'<svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true"><circle cx="3.5" cy="8" r="1.6" fill="currentColor"/><circle cx="12.5" cy="3.5" r="1.6" fill="currentColor"/><circle cx="12.5" cy="12.5" r="1.6" fill="currentColor"/><path d="M5 7.2l6-3M5 8.8l6 3" stroke="currentColor" stroke-width="1.3"/></svg>'
     };
     // Posición (0..1) de la marca de cada etapa: espaciadas por igual; a esa altura la etapa ya va bien avanzada y las anteriores casi terminaron.
     var TICKS = [0, 1, 2, 3, 4].map(function(i){ return 0.3 + i * GAP / (STEPS - 1); });
-    var VIEWS = { iso:{ az:35, el:26 }, side:{ az:0, el:7 }, front:{ az:90, el:7 }, top:{ az:0, el:72 } };
+    var VIEWS = { iso:{ az:35, el:26 }, side:{ az:0, el:7 }, front:{ az:90, el:7 }, rear:{ az:-90, el:7 }, top:{ az:0, el:72 } };
+    var stepLegend = [].slice.call(document.querySelectorAll('[data-step-legend] [data-step]'));
     var slider = null, playBtn = null, fsBtn = null, segBtns = [], tickEls = [], viewBtns = {}, dragging = false;
     function setPlayUi(){
       if(!playBtn) return;
@@ -523,7 +543,7 @@ export function mount(stage, pre){
       playBtn.setAttribute('aria-label', auto ? TXT.pause : TXT.play);
       playBtn.setAttribute('aria-pressed', auto ? 'true' : 'false');
     }
-    var viewCycle = null, VIEW_ORDER = ['iso', 'side', 'front', 'top'];
+    var viewCycle = null, VIEW_ORDER = ['iso', 'side', 'front', 'rear', 'top'];
     function setViewUi(v){
       currentView = v;
       for(var k in viewBtns) viewBtns[k].setAttribute('aria-pressed', k === v ? 'true' : 'false');
@@ -539,6 +559,7 @@ export function mount(stage, pre){
       slider.style.setProperty('--p', (exploded * 100).toFixed(1) + '%');
       slider.setAttribute('aria-valuetext', Math.round(exploded * 100) + ' %');
       for(var i = 0; i < tickEls.length; i++) tickEls[i].classList.toggle('is-lit', exploded >= TICKS[i] - 0.004);
+      for(var j = 0; j < stepLegend.length; j++){ var sf = stepF[+stepLegend[j].getAttribute('data-step')]; stepLegend[j].classList.toggle('is-active', sf > 0.02 && sf < 0.98); stepLegend[j].classList.toggle('is-done', sf >= 0.98); }
       segBtns[0].setAttribute('aria-pressed', uTarget < 0.5 ? 'true' : 'false');
       segBtns[1].setAttribute('aria-pressed', uTarget >= 0.5 ? 'true' : 'false');
     }
@@ -559,8 +580,21 @@ export function mount(stage, pre){
         '<div class="car-ctl-track"><input type="range" class="car-ctl-range" min="0" max="100" step="1" value="0" aria-label="' + TXT.slider + '"><div class="car-ticks">' + ticksHtml + '</div></div>' +
         '<div class="car-views" role="group" aria-label="' + TXT.viewsLabel + '">' + viewsHtml + '</div>' +
         '<button type="button" class="car-view car-view-cycle" aria-label="' + TXT.viewsLabel + '"></button>' +
-        '<button type="button" class="car-btn car-ctl-fs"></button>';
+        '<div class="car-tools" role="group" aria-label="' + TXT.tools + '">' +
+          '<button type="button" class="car-btn car-ctl-notes" aria-pressed="false">' + ICON.notes + '</button>' +
+          '<button type="button" class="car-btn car-ctl-plan" aria-pressed="false">' + ICON.plan + '</button>' +
+          '<button type="button" class="car-btn car-ctl-photo">' + ICON.photo + '</button>' +
+          '<button type="button" class="car-btn car-ctl-share">' + ICON.share + '</button>' +
+          '<button type="button" class="car-btn car-ctl-fs"></button>' +
+        '</div>';
       stage.appendChild(bar);
+      [['notes', 'notesOn'], ['plan', 'planOn'], ['photo', 'photo'], ['share', 'share']].forEach(function(t){
+        var b = bar.querySelector('.car-ctl-' + t[0]); b.setAttribute('aria-label', TXT[t[1]]); b.setAttribute('title', TXT[t[1]]);
+      });
+      bar.querySelector('.car-ctl-notes').addEventListener('click', function(){ setNotes(!notesOn); });
+      bar.querySelector('.car-ctl-plan').addEventListener('click', function(){ setPlan(!planOn); });
+      bar.querySelector('.car-ctl-photo').addEventListener('click', function(){ capturePhoto(true); });
+      bar.querySelector('.car-ctl-share').addEventListener('click', shareCar);
       playBtn = bar.querySelector('.car-ctl-play'); slider = bar.querySelector('.car-ctl-range'); fsBtn = bar.querySelector('.car-ctl-fs');
       segBtns = [].slice.call(bar.querySelectorAll('.car-seg-btn')); tickEls = [].slice.call(bar.querySelectorAll('.car-tick'));
       [].forEach.call(bar.querySelectorAll('.car-view[data-view]'), function(el){ viewBtns[el.getAttribute('data-view')] = el; });
@@ -649,6 +683,220 @@ export function mount(stage, pre){
     canvas.addEventListener('webglcontextrestored', function(){
       stage.classList.remove('is-lost'); stage.classList.add('is-ready'); requestRender();
     });
+
+    // ---------- TECLADO: flechas giran el auto, Inicio vuelve a la vista ISO ----------
+    canvas.addEventListener('keydown', function(e){
+      var d = THREE.MathUtils.degToRad, handled = true;
+      if(e.key === 'ArrowLeft') nudge(-d(12), 0);
+      else if(e.key === 'ArrowRight') nudge(d(12), 0);
+      else if(e.key === 'ArrowUp') nudge(0, d(8));
+      else if(e.key === 'ArrowDown') nudge(0, -d(8));
+      else if(e.key === 'Home') goToView('iso');
+      else handled = false;
+      if(handled) e.preventDefault();
+    });
+    function nudge(dYaw, dEl){
+      idleRotateAllowed = false; if(resumeTimer){ clearTimeout(resumeTimer); resumeTimer = null; }
+      viewTween = null; setViewUi(null); stage.classList.add('has-interacted');
+      group.rotation.y += dYaw;
+      if(dEl){
+        var c = currentAzEl(), el = Math.min(planOn ? 1.55 : THREE.MathUtils.degToRad(75), Math.max(0.12, c.el + dEl));
+        camera.position.set(Math.sin(c.az) * Math.cos(el), Math.sin(el), Math.cos(c.az) * Math.cos(el)).multiplyScalar(camera.position.distanceTo(controls.target)).add(controls.target);
+      }
+      requestRender();
+    }
+
+    // ---------- Aviso breve (lector de pantalla y texto visible un momento) ----------
+    var toastTimer = null;
+    function toast(text){
+      var m = stage.querySelector('.model-msg'); if(!m) return;
+      m.textContent = text; m.classList.remove('sr-only');
+      if(toastTimer) clearTimeout(toastTimer);
+      toastTimer = setTimeout(function(){ m.classList.add('sr-only'); }, 2600);
+    }
+
+    // ---------- FOTO DEL AUTO (PNG con fondo transparente) y COMPARTIR ----------
+    // Se dibuja un cuadro aparte de 1800×1100 sin piso, sombra ni anillo, solo el auto, y se devuelve el tamaño del visor.
+    function capturePhoto(download){
+      return new Promise(function(done){
+        if(!modelRef) return done(null);
+        var size = renderer.getSize(new THREE.Vector2()), pr = renderer.getPixelRatio(), W = 1800, H = 1100;
+        var vis = decor.map(function(m){ return m.visible; });
+        decor.forEach(function(m){ m.visible = false; });
+        clearHover();
+        renderer.setPixelRatio(1); renderer.setSize(W, H, false);
+        camera.aspect = W / H; camera.clearViewOffset(); fitScaleV = 1; camera.updateProjectionMatrix();
+        applyFit(); renderer.render(scene, camera);
+        canvas.toBlob(function(blob){
+          lastBlob = blob;
+          if(download && blob){
+            var a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'sr26-striker-racing.png';
+            document.body.appendChild(a); a.click(); a.remove(); setTimeout(function(){ URL.revokeObjectURL(a.href); }, 4000);
+            toast(TXT.saved);
+          }
+          done(blob);
+        }, 'image/png');
+        decor.forEach(function(m, i){ m.visible = vis[i]; });
+        renderer.setPixelRatio(pr); renderer.setSize(size.x, size.y, false);
+        resize();
+      });
+    }
+    function shareCar(){
+      var data = { title:TXT.shareTitle, text:TXT.shareText, url:location.origin + location.pathname };
+      capturePhoto(false).then(function(blob){
+        var file = blob && window.File ? new File([blob], 'sr26-striker-racing.png', { type:'image/png' }) : null;
+        if(navigator.canShare && file && navigator.canShare({ files:[file] })) data.files = [file];
+        if(navigator.share) return navigator.share(data).catch(function(){});
+        if(navigator.clipboard && navigator.clipboard.writeText) return navigator.clipboard.writeText(data.url).then(function(){ toast(TXT.copied); }, function(){});
+      });
+    }
+
+    // ---------- NUMERACIÓN DE PIEZAS (anotaciones) y panel de piezas ----------
+    function idLabel(p){ return /^\d\d/.test(p.id) ? p.id.slice(0, 2) : '·'; }
+    function setNotes(on){
+      notesOn = on;
+      var b = stage.querySelector('.car-ctl-notes');
+      if(b){ b.setAttribute('aria-pressed', on ? 'true' : 'false'); var t = on ? TXT.notesOff : TXT.notesOn; b.setAttribute('aria-label', t); b.setAttribute('title', t); }
+      if(on && !noteHost){
+        noteHost = document.createElement('div'); noteHost.className = 'car-notes'; noteHost.setAttribute('aria-hidden', 'true');
+        parts.forEach(function(p){
+          if(/^\d\dr$/.test(p.id)) return;   // el rin comparte número con su llanta
+          var el = document.createElement('span'); el.className = 'car-note'; el.textContent = idLabel(p);
+          noteHost.appendChild(el); notes.push({ el:el, p:p });
+        });
+        stage.appendChild(noteHost);
+      }
+      if(noteHost) noteHost.style.display = on ? '' : 'none';
+      requestRender();
+    }
+    function updateNotes(){
+      if(!notesOn || !noteHost) return;
+      var w = stage.clientWidth, h = stage.clientHeight;
+      for(var i = 0; i < notes.length; i++){
+        var n = notes[i];
+        tmpV.copy(n.p.c).applyMatrix4(n.p.mesh.matrixWorld).project(camera);
+        var x = (tmpV.x * 0.5 + 0.5) * w, y = (-tmpV.y * 0.5 + 0.5) * h;
+        n.el.style.transform = 'translate(' + Math.round(x - 9) + 'px,' + Math.round(y - 9) + 'px)';
+        n.el.style.opacity = (tmpV.z > 1 || y > h - insetPx) ? 0 : 1;
+      }
+    }
+    function projectPart(p){
+      var r = stage.getBoundingClientRect();
+      tmpV.copy(p.c).applyMatrix4(p.mesh.matrixWorld).project(camera);
+      return { x:r.left + (tmpV.x * 0.5 + 0.5) * r.width, y:r.top + (-tmpV.y * 0.5 + 0.5) * r.height };
+    }
+    function buildPartsPanel(){
+      var host = document.getElementById('carParts'); if(!host) return;
+      var list = host.querySelector('ul'); if(!list) return;
+      list.textContent = '';
+      parts.slice().sort(function(a, b){ return a.id < b.id ? -1 : a.id > b.id ? 1 : 0; }).forEach(function(p){
+        var li = document.createElement('li'), btn = document.createElement('button');
+        btn.type = 'button'; btn.className = 'car-part'; btn.innerHTML = '<b>' + idLabel(p) + '</b><span></span>'; btn.lastChild.textContent = p.name;
+        function on(){ var c = projectPart(p); showHover(p, c.x, c.y); }
+        btn.addEventListener('mouseenter', on); btn.addEventListener('focus', on);
+        btn.addEventListener('mouseleave', clearHover); btn.addEventListener('blur', clearHover);
+        li.appendChild(btn); list.appendChild(li);
+      });
+      host.hidden = false;
+    }
+
+    // ---------- PLANO TÉCNICO: vista superior casi ortogonal, líneas y cotas calculadas del GLB ----------
+    function cssColor(token, fallback){
+      try{ return getComputedStyle(document.documentElement).getPropertyValue(token).trim() || fallback; }catch(e){ return fallback; }
+    }
+    // Caja del auto armado SIN cartucho (pieza 15) y centros de los ejes, en el marco del modelo (metros).
+    function modelDims(){
+      var yaw = group.rotation.y, u = exploded;
+      group.rotation.y = 0; applyPose(0); group.updateMatrixWorld(true);
+      var box = new THREE.Box3(), b = new THREE.Box3(), ax = {};
+      parts.forEach(function(p){
+        b.copy(p.mesh.geometry.boundingBox).applyMatrix4(p.mesh.matrixWorld);
+        if(p.id !== '15') box.union(b);
+        if(p.id === '20' || p.id === '21') ax[p.id] = (b.min.x + b.max.x) / 2;
+      });
+      applyPose(u); group.rotation.y = yaw; group.updateMatrixWorld(true);
+      var o = modelRef.position;   // el grupo no tiene escala ni giro en reposo: local = mundo − posición del modelo
+      var hasAxles = ax['20'] != null && ax['21'] != null;
+      return { minX:box.min.x - o.x, maxX:box.max.x - o.x, minY:box.min.y - o.y, minZ:box.min.z - o.z, maxZ:box.max.z - o.z,
+               front:hasAxles ? ax['20'] - o.x : null, rear:hasAxles ? ax['21'] - o.x : null };
+    }
+    function buildPlan(){
+      var d = modelDims(), y = d.minY + 0.0003, off = 0.014, tk = 0.0035, pos = [];
+      function seg(a, b){ pos.push(a[0], a[1], a[2], b[0], b[1], b[2]); }
+      var out = { dims:[], d:d };
+      // largo (sin cartucho), a un costado
+      var zL = d.maxZ + off;
+      seg([d.minX, y, zL], [d.maxX, y, zL]); seg([d.minX, y, d.maxZ], [d.minX, y, zL + tk]); seg([d.maxX, y, d.maxZ], [d.maxX, y, zL + tk]);
+      seg([d.minX, y, zL - tk], [d.minX, y, zL + tk]); seg([d.maxX, y, zL - tk], [d.maxX, y, zL + tk]);
+      out.dims.push({ key:'dLength', mm:(d.maxX - d.minX) * 1000, at:new THREE.Vector3((d.minX + d.maxX) / 2, y, zL) });
+      // ancho, detrás de la cola
+      var xW = d.minX - off;
+      seg([xW, y, d.minZ], [xW, y, d.maxZ]); seg([d.minX, y, d.minZ], [xW - tk, y, d.minZ]); seg([d.minX, y, d.maxZ], [xW - tk, y, d.maxZ]);
+      seg([xW - tk, y, d.minZ], [xW + tk, y, d.minZ]); seg([xW - tk, y, d.maxZ], [xW + tk, y, d.maxZ]);
+      out.dims.push({ key:'dWidth', mm:(d.maxZ - d.minZ) * 1000, at:new THREE.Vector3(xW, y, (d.minZ + d.maxZ) / 2) });
+      // distancia entre ejes, del otro costado
+      if(d.front != null){
+        var zB = d.minZ - off;
+        seg([d.rear, y, zB], [d.front, y, zB]); seg([d.rear, y, d.minZ], [d.rear, y, zB - tk]); seg([d.front, y, d.minZ], [d.front, y, zB - tk]);
+        seg([d.rear, y, zB - tk], [d.rear, y, zB + tk]); seg([d.front, y, zB - tk], [d.front, y, zB + tk]);
+        out.dims.push({ key:'dWheelbase', mm:Math.abs(d.front - d.rear) * 1000, at:new THREE.Vector3((d.front + d.rear) / 2, y, zB) });
+      }
+      var geo = new THREE.BufferGeometry(); geo.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3));
+      var ice = cssColor('--ice', '#CDDEEF');
+      out.lines = new THREE.LineSegments(geo, new THREE.LineBasicMaterial({ color:ice, depthTest:false, depthWrite:false, toneMapped:false }));
+      out.lines.renderOrder = 8; out.lines.frustumCulled = false; out.lines.visible = false;
+      modelRef.add(out.lines);
+      out.flat = new THREE.MeshBasicMaterial({ color:cssColor('--surface', '#0E223D'), polygonOffset:true, polygonOffsetFactor:1, polygonOffsetUnits:1, toneMapped:false });
+      parts.forEach(function(p){
+        p.planMat = p.mesh.material;
+        p.planEdges = new THREE.LineSegments(new THREE.EdgesGeometry(p.mesh.geometry, 24), new THREE.LineBasicMaterial({ color:ice, toneMapped:false }));
+        p.planEdges.renderOrder = 4; p.planEdges.visible = false; p.mesh.add(p.planEdges);
+      });
+      // rótulos (HTML) y recuadro con los valores
+      out.host = document.createElement('div'); out.host.className = 'car-dims'; out.host.setAttribute('aria-hidden', 'true');
+      out.dims.forEach(function(m){
+        m.el = document.createElement('span'); m.el.className = 'car-dim'; m.el.textContent = m.mm.toFixed(1) + ' mm'; out.host.appendChild(m.el);
+      });
+      stage.appendChild(out.host);
+      out.legend = document.createElement('div'); out.legend.className = 'car-plan-legend';
+      out.legend.innerHTML = '<b></b><dl></dl><p></p>';
+      out.legend.firstChild.textContent = TXT.planTag;
+      out.dims.forEach(function(m){ var dt = document.createElement('dt'), dd = document.createElement('dd'); dt.textContent = TXT[m.key]; dd.textContent = m.mm.toFixed(1) + ' mm'; out.legend.querySelector('dl').appendChild(dt); out.legend.querySelector('dl').appendChild(dd); });
+      out.legend.lastChild.textContent = TXT.measured;
+      stage.appendChild(out.legend);
+      return out;
+    }
+    function setPlan(on){
+      if(on === planOn || !modelRef) return;
+      planOn = on;
+      var b = stage.querySelector('.car-ctl-plan');
+      if(b){ b.setAttribute('aria-pressed', on ? 'true' : 'false'); var t = on ? TXT.planOff : TXT.planOn; b.setAttribute('aria-label', t); b.setAttribute('title', t); }
+      stage.classList.toggle('is-plan', on);
+      if(on && !plan) plan = buildPlan();
+      parts.forEach(function(p){ p.mesh.material = on ? plan.flat : p.planMat; p.planEdges.visible = on; });
+      decals.forEach(function(dc){ dc.mesh.visible = !on; });
+      decor.forEach(function(m){ m.visible = !on; });
+      plan.lines.visible = on; plan.host.style.display = on ? '' : 'none'; plan.legend.style.display = on ? '' : 'none';
+      if(on){
+        auto = false; setPlayUi(); animateTo(0);
+        camera.fov = 8; controls.minPolarAngle = 0.0001; FIT_MARGIN = 1.6;   // aire para las cotas y el recuadro de valores
+        VIEWS.plan = { az:0, el:89 }; goToView('plan'); setViewUi(null);
+      }else{
+        camera.fov = 30; controls.minPolarAngle = THREE.MathUtils.degToRad(15); FIT_MARGIN = 1.12;
+        goToView('iso');
+      }
+      requestRender();
+    }
+    function updateDims(){
+      if(!planOn || !plan) return;
+      var show = exploded < 0.02, w = stage.clientWidth, h = stage.clientHeight;
+      plan.lines.visible = show; plan.host.style.display = show ? '' : 'none';
+      if(!show) return;
+      plan.dims.forEach(function(m){
+        tmpV.copy(m.at); modelRef.localToWorld(tmpV); tmpV.project(camera);
+        m.el.style.transform = 'translate(' + Math.round((tmpV.x * 0.5 + 0.5) * w) + 'px,' + Math.round((-tmpV.y * 0.5 + 0.5) * h) + 'px) translate(-50%,-50%)';
+      });
+    }
 
     // ---------- RENDER ON-DEMAND + PAUSA FUERA DE VIEWPORT / PESTAÑA OCULTA ----------
     var inViewport = true;
@@ -756,7 +1004,7 @@ export function mount(stage, pre){
         applyFit();
         renderer.render(scene, camera);
         if(firstFrame && stage.classList.contains('is-ready')){ firstFrame = false; mark('first-frame'); }
-        updateLabels();
+        updateLabels(); updateNotes(); updateDims();
         needsRender = false;
         if(perfStage < 2 && ++perfFrames > 8){   // se ignoran los primeros cuadros (calentamiento)
           perfTime += performance.now() - t0;

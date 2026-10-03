@@ -12,8 +12,10 @@
   if(!stage) return;
   var EN = (document.documentElement.lang || 'es').slice(0, 2) === 'en';
   var T = EN
-    ? { video:'Watch video', d3:'Explore in 3D', load3d:'View in 3D', retry:'Try again', vlabel:'Video of the SR-26 exploded view', pause:'Tap to pause or play' }
-    : { video:'Ver video', d3:'Explorar en 3D', load3d:'Ver en 3D', retry:'Reintentar', vlabel:'Video del despiece del SR-26', pause:'Toca para pausar o reanudar' };
+    ? { loading:'Loading the 3D model…', error:'The 3D model could not be loaded. Check your connection and try again.', ready:'3D model ready. Use the arrow keys to rotate it, Home for the ISO view.',
+        video:'Watch video', d3:'Explore in 3D', load3d:'View in 3D', retry:'Try again', vlabel:'Video of the SR-26 exploded view', pause:'Tap to pause or play' }
+    : { loading:'Cargando el modelo 3D…', error:'No se pudo cargar el modelo 3D. Revisa tu conexión e inténtalo de nuevo.', ready:'Modelo 3D listo. Usa las flechas para girarlo y Inicio para la vista ISO.',
+        video:'Ver video', d3:'Explorar en 3D', load3d:'Ver en 3D', retry:'Reintentar', vlabel:'Video del despiece del SR-26', pause:'Toca para pausar o reanudar' };
   var ds = stage.dataset;
   var conn = navigator.connection || {};
   var saveData = !!conn.saveData, slow = /(^|-)2g$/.test(conn.effectiveType || '');
@@ -22,6 +24,12 @@
   var hasVideo = !!(ds.videoMp4 || ds.videoWebm);
   var loaded = false, video = null, cta = null, userPaused = false, pre = null;
 
+  // Mensaje de estado (visible al cargar o fallar; al terminar queda solo para lectores de pantalla)
+  var msg = document.createElement('div');
+  msg.className = 'model-msg'; msg.setAttribute('role', 'status'); msg.setAttribute('aria-live', 'polite');
+  stage.appendChild(msg);
+  function say(text, visible){ msg.textContent = text; msg.classList.toggle('sr-only', !visible); }
+  say('', false);
   function fail(){ stage.classList.add('no-3d'); }
   try{
     var c = document.createElement('canvas');
@@ -50,6 +58,7 @@
     loaded = true;
     stage.classList.add('is-loading');
     stage.classList.remove('has-error');
+    say(T.loading, true);
     var bar = stage.querySelector('.model-bar i');
     if(bar) bar.style.transform = 'scaleX(0.05)';
     if(cta) cta.hidden = true;
@@ -60,6 +69,7 @@
   function onError(){
     loaded = false; pre = null;
     stage.classList.remove('is-loading'); stage.classList.add('has-error');
+    say(T.error, true);
     showCta([button(T.retry, load3d, 'is-primary')]);
   }
   stage.addEventListener('sr26-error', onError);
@@ -68,6 +78,7 @@
     if(video){ video.pause(); video.remove(); video = null; }
     if(cta){ cta.remove(); cta = null; }
     stage.classList.remove('is-idle', 'has-error');
+    say(T.ready, false);
   });
 
   function button(label, onClick, cls){

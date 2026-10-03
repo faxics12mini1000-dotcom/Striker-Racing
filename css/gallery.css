@@ -712,3 +712,64 @@ html,body{overflow-x:clip;}
 }
 html.fs-lock .sticky-cta{display:none;}
 @media (prefers-reduced-motion:reduce){ .sticky-cta{transition:none;} }
+
+/* ---------- Visor: mensajes de estado y accesibilidad ---------- */
+.sr-only{position:absolute !important; width:1px; height:1px; margin:-1px; padding:0; overflow:hidden; clip:rect(0 0 0 0); clip-path:inset(50%); white-space:nowrap; border:0;}
+.model-msg{
+  position:absolute; left:12px; top:44px; z-index:5; max-width:calc(100% - 24px); pointer-events:none;
+  font-family:var(--mono); font-size:0.7rem; letter-spacing:0.05em; color:var(--ice); background:rgba(7,27,51,0.9); padding:6px 10px; border:1px solid var(--border-fine);
+}
+.model-stage.has-error .model-msg{border-color:var(--emerald);}
+.model-stage canvas:focus-visible{outline:2px solid var(--lime); outline-offset:-4px;}
+
+/* ---------- Visor: herramientas, numeración, plano técnico, piezas y etapas ---------- */
+.car-tools{flex:none; display:flex; gap:6px; margin-left:auto;}
+.car-btn[aria-pressed="true"]{background:var(--emerald); border-color:var(--emerald); color:var(--navy-deep);}
+.car-notes, .car-dims{position:absolute; inset:0; z-index:3; pointer-events:none; overflow:hidden;}
+.car-note{
+  position:absolute; left:0; top:0; width:18px; height:18px; display:grid; place-items:center; will-change:transform;
+  font-family:var(--mono); font-size:0.62rem; font-weight:700; color:var(--navy-deep); background:var(--lime);
+}
+.car-dim{
+  position:absolute; left:0; top:0; white-space:nowrap; padding:3px 7px; will-change:transform;
+  font-family:var(--mono); font-size:0.66rem; letter-spacing:0.04em; color:var(--ice); background:var(--surface); border:1px solid var(--ice);
+}
+.car-plan-legend{
+  position:absolute; left:12px; top:80px; z-index:5; max-width:min(300px, calc(100% - 24px)); padding:10px 12px; pointer-events:none;
+  background:rgba(7,27,51,0.92); border:1px solid var(--border-fine); font-family:var(--mono); font-size:0.66rem; letter-spacing:0.04em; color:var(--ice);
+}
+.car-plan-legend b{display:block; margin-bottom:6px; text-transform:uppercase; color:var(--lime);}
+.car-plan-legend dl{display:grid; grid-template-columns:1fr auto; gap:2px 14px; margin:0;}
+.car-plan-legend dd{margin:0; text-align:right; color:var(--ice);}
+.car-plan-legend dt{color:var(--ice-dim);}
+.car-plan-legend p{margin:8px 0 0; font-family:'Inter', system-ui, sans-serif; font-size:0.68rem; letter-spacing:0; color:var(--ice-dim); line-height:1.4;}
+.model-stage.is-plan .car-tip{display:none;}
+@media (max-width:560px){
+  .car-tools{gap:4px; order:6; margin-left:0;}
+  .car-tools .car-btn{width:28px; height:28px;}
+  .car-ctl-track{order:5; flex:1 1 192px; min-width:192px;}
+  .car-plan-legend{top:40px; left:8px; padding:6px 8px; font-size:0.58rem;}
+  .car-plan-legend p{display:none;}
+  .car-plan-legend b{margin-bottom:3px;}
+  .model-msg{top:36px;}
+}
+
+/* Pasos del despiece (leyenda) y panel de piezas, bajo el visor de /auto/ */
+.car-info{margin-top:0; display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); gap:0; border:1px solid var(--border-fine); border-top:none; background:var(--surface);}
+@media (max-width:760px){ .car-info{grid-template-columns:1fr;} }
+.car-info > section{padding:20px 24px;}
+.car-info > section + section{border-left:1px solid var(--border-fine);}
+@media (max-width:760px){ .car-info > section + section{border-left:none; border-top:1px solid var(--border-fine);} }
+.car-info h2{font-family:'Inter', system-ui, sans-serif; font-size:0.75rem; font-weight:600; letter-spacing:0.12em; text-transform:uppercase; color:var(--purple-text); margin:0 0 14px;}
+.car-steps{list-style:none; margin:0; padding:0; display:grid; gap:8px;}
+.car-steps li{display:flex; gap:12px; align-items:center; font-size:0.95rem; color:var(--ice-dim); padding:4px 0; border-left:3px solid transparent; padding-left:10px;}
+.car-steps li b{display:inline-grid; place-items:center; width:24px; height:24px; flex:none; font-family:var(--mono); font-size:0.75rem; color:var(--ice); border:1px solid var(--border-fine);}
+.car-steps li.is-active{color:var(--ice); border-left-color:var(--emerald);}
+.car-steps li.is-active b, .car-steps li.is-done b{background:var(--emerald); border-color:var(--emerald); color:var(--navy-deep);}
+.car-parts ul{list-style:none; margin:0; padding:0; display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:4px 12px;}
+.car-part{
+  display:flex; gap:10px; align-items:center; width:100%; min-height:32px; padding:4px 8px; text-align:left; cursor:default;
+  background:transparent; color:var(--ice-dim); border:1px solid transparent; font-size:0.85rem;
+}
+.car-part b{display:inline-grid; place-items:center; min-width:24px; height:20px; flex:none; font-family:var(--mono); font-size:0.68rem; color:var(--navy-deep); background:var(--lime);}
+.car-part:hover, .car-part:focus-visible{color:var(--ice); border-color:var(--emerald);}
