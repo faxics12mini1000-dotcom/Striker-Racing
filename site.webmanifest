@@ -1,0 +1,23 @@
+{
+  "name": "Striker Racing",
+  "short_name": "Striker Racing",
+  "description": "Striker Racing · Preparatoria Celta · STEM Racing México 2026–2027",
+  "start_url": "/",
+  "scope": "/",
+  "display": "browser",
+  "lang": "es-MX",
+  "theme_color": "#071B33",
+  "background_color": "#071B33",
+  "icons": [
+    {
+      "src": "/favicon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/favicon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

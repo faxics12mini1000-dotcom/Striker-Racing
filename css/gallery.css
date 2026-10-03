@@ -460,7 +460,7 @@ footer .brand-mark{height:26px;}
 .car-seg-btn{height:32px; padding:0 10px;}
 .car-seg-btn + .car-seg-btn{border-left:none;}
 .car-seg-btn[aria-pressed="true"], .car-view[aria-pressed="true"]{background:var(--emerald); border-color:var(--emerald); color:var(--navy-deep);}
-.car-ctl-track{position:relative; flex:1 1 160px; min-width:120px; height:32px;}
+.car-ctl-track{position:relative; flex:1 1 220px; min-width:200px; height:32px;}
 .car-ctl-range{
   -webkit-appearance:none; appearance:none; position:absolute; inset:0; width:100%; height:100%; margin:0; background:transparent; cursor:pointer; --p:0%;
 }
@@ -471,8 +471,8 @@ footer .brand-mark{height:26px;}
 .car-ctl-range::-moz-range-thumb{width:10px; height:10px; border-radius:50%; background:var(--ice); border:2px solid var(--emerald);}
 .car-ticks{position:absolute; inset:0; pointer-events:none;}
 .car-tick{
-  position:absolute; top:50%; width:16px; height:16px; margin:-8px 0 0 -8px; padding:0; display:grid; place-items:center; pointer-events:auto; cursor:pointer;
-  font-family:var(--mono); font-size:0.56rem; line-height:1; color:var(--ice-dim); background:var(--navy-deep); border:1px solid var(--border-fine);
+  position:absolute; top:50%; width:24px; height:24px; margin:-12px 0 0 -12px; padding:0; display:grid; place-items:center; pointer-events:auto; cursor:pointer;   /* 24 px: objetivo táctil mínimo WCAG 2.2 */
+  font-family:var(--mono); font-size:0.62rem; line-height:1; color:var(--ice-dim); background:var(--navy-deep); border:1px solid var(--border-fine);
 }
 .car-tick:hover{border-color:var(--emerald); color:var(--emerald);}
 .car-tick.is-lit{background:var(--emerald); border-color:var(--emerald); color:var(--navy-deep);}

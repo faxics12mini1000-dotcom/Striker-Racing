@@ -20,8 +20,9 @@ const types = {
   '.html':'text/html; charset=utf-8', '.js':'text/javascript; charset=utf-8', '.mjs':'text/javascript; charset=utf-8',
   '.css':'text/css; charset=utf-8', '.json':'application/json; charset=utf-8', '.glb':'model/gltf-binary',
   '.png':'image/png', '.mp4':'video/mp4', '.webm':'video/webm', '.jpg':'image/jpeg', '.jpeg':'image/jpeg', '.pdf':'application/pdf', '.webp':'image/webp', '.svg':'image/svg+xml', '.ico':'image/x-icon',
+  '.avif':'image/avif', '.webmanifest':'application/manifest+json', '.xml':'application/xml', '.txt':'text/plain; charset=utf-8', '.md':'text/markdown; charset=utf-8', '.usdz':'model/vnd.usdz+zip',
 };
-const compressible = new Set(['.html', '.js', '.mjs', '.css', '.json', '.svg']);
+const compressible = new Set(['.html', '.js', '.mjs', '.css', '.json', '.svg', '.xml', '.txt', '.webmanifest']);
 
 http.createServer(async (req, res) => {
   try{
@@ -46,6 +47,12 @@ http.createServer(async (req, res) => {
     res.writeHead(200, headers);
     res.end(data);
   }catch(e){
+    // como en Vercel: las rutas que no existen devuelven /404.html con estado 404
+    try{
+      var nf = await readFile(path.join(root, '404.html'));
+      res.writeHead(404, { 'Content-Type': types['.html'], 'Content-Length': nf.length });
+      return res.end(nf);
+    }catch(e2){ /* sin 404.html */ }
     res.writeHead(404);
     res.end('Not found: ' + req.url);
   }

@@ -3,3 +3,11 @@ scripts/
 node_modules/
 capturas/
 team-photos.zip
+qa/
+docs/
+data/
+AUDITORIA.md
+INFORME.md
+CAMBIOS_PARA_EL_EQUIPO.md
+TODO-EQUIPO.md
+package-lock.json

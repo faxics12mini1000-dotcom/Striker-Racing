@@ -1,0 +1,92 @@
+{
+  "/": {
+    "perf": 78,
+    "a11y": 100,
+    "bp": 100,
+    "seo": 100,
+    "lcp": 2191,
+    "cls": 0,
+    "tbt": 739,
+    "fcp": 1071,
+    "bytes": 535,
+    "fails": [
+      "speed-index(0.76)",
+      "total-blocking-time(0.4)",
+      "max-potential-fid(0.02)",
+      "mainthread-work-breakdown(0)",
+      "cache-insight(0.5)",
+      "forced-reflow-insight(0)",
+      "image-delivery-insight(0.5)",
+      "lcp-breakdown-insight(0)",
+      "lcp-discovery-insight(0)",
+      "network-dependency-tree-insight(0)",
+      "render-blocking-insight(0)"
+    ]
+  },
+  "/en/": {
+    "perf": 80,
+    "a11y": 100,
+    "bp": 100,
+    "seo": 100,
+    "lcp": 2197,
+    "cls": 0,
+    "tbt": 640,
+    "fcp": 1082,
+    "bytes": 628,
+    "fails": [
+      "speed-index(0.77)",
+      "total-blocking-time(0.46)",
+      "max-potential-fid(0.03)",
+      "mainthread-work-breakdown(0)",
+      "cache-insight(0.5)",
+      "forced-reflow-insight(0)",
+      "image-delivery-insight(0.5)",
+      "lcp-breakdown-insight(0)",
+      "lcp-discovery-insight(0)",
+      "network-dependency-tree-insight(0)",
+      "render-blocking-insight(0)"
+    ]
+  },
+  "/auto/": {
+    "perf": 92,
+    "a11y": 100,
+    "bp": 100,
+    "seo": 100,
+    "lcp": 1968,
+    "cls": 0,
+    "tbt": 254,
+    "fcp": 1377,
+    "bytes": 158,
+    "fails": [
+      "speed-index(0.76)",
+      "total-blocking-time(0.84)",
+      "max-potential-fid(0.35)",
+      "cache-insight(0.5)",
+      "forced-reflow-insight(0)",
+      "lcp-breakdown-insight(0)",
+      "network-dependency-tree-insight(0)",
+      "render-blocking-insight(0)"
+    ]
+  },
+  "/en/car/": {
+    "perf": 87,
+    "a11y": 100,
+    "bp": 100,
+    "seo": 100,
+    "lcp": 1973,
+    "cls": 0,
+    "tbt": 401,
+    "fcp": 1385,
+    "bytes": 158,
+    "fails": [
+      "speed-index(0.76)",
+      "total-blocking-time(0.68)",
+      "max-potential-fid(0.05)",
+      "cache-insight(0.5)",
+      "forced-reflow-insight(0)",
+      "lcp-breakdown-insight(0)",
+      "network-dependency-tree-insight(0)",
+      "render-blocking-insight(0)"
+    ]
+  }
+}

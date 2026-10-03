@@ -31,11 +31,10 @@ const urls = {
   webm: existsSync(VIDEO.webm) ? `/${VIDEO.webm}?v=${hash(VIDEO.webm)}` : '',
 };
 const hasVideo = !!(urls.mp4 || urls.webm);
-// Precarga solo donde el 3D se usará de inmediato: sin ahorro de datos ni 2G y, si hay video, fuera de teléfonos (≤ 560 px).
-const preload = '(function(){var c=navigator.connection||{};if(c.saveData||/2g/.test(c.effectiveType||\'\'))return;'
-  + (hasVideo ? 'if(matchMedia(\'(max-width:560px)\').matches)return;' : '')
-  + 'var h=document.head;function l(r,u,a){var e=document.createElement(\'link\');e.rel=r;e.href=u;for(var k in a)e.setAttribute(k,a[k]);h.appendChild(e)}'
-  + `l('modulepreload','${urls.viewer}');l('preload','${urls.model}',{as:'fetch',type:'model/gltf-binary',crossorigin:''});l('preload','${urls.env}',{as:'fetch',crossorigin:''})})();`;
+// Precarga solo del módulo del visor y solo donde el 3D arranca de inmediato (> 560 px, sin ahorro de datos ni 2G). El GLB y el entorno ya no se
+// precargan con <link rel=preload>: js/stage.js los descarga en cuanto decide mostrar el 3D y se los pasa al visor (así no quedan sin usar).
+const preload = `(function(){var c=navigator.connection||{};if(c.saveData||/2g/.test(c.effectiveType||'')||matchMedia('(max-width:560px)').matches)return;`
+  + `var e=document.createElement('link');e.rel='modulepreload';e.href='${urls.viewer}';document.head.appendChild(e)})();`;
 
 for (const page of PAGES) {
   let html = readFileSync(page, 'utf8'); const crlf = html.includes('\r\n'); html = html.replace(/\r\n/g, '\n');

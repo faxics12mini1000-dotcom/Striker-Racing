@@ -8,12 +8,17 @@
   (function(){
     var c = document.documentElement.classList;
     c.add('js');
-    if('IntersectionObserver' in window) c.add('has-io');
+    if('IntersectionObserver' in window){
+      c.add('has-io');
+      // si site.js no llega a ejecutarse (red caída, error), el contenido no se queda oculto
+      setTimeout(function(){ if(!window.__sr) c.remove('has-io'); }, 3500);
+    }
   })();
 </script>
 <title>SR-26 · 3D car and technical sheet | Striker Racing</title>
 <meta name="description" content="Explore the SR-26 in 3D: spin it, open it into an exploded view and check the STEM Racing Mexico technical regulation dimensions.">
 <meta name="theme-color" content="#071B33">
+<meta name="color-scheme" content="dark">
 <link rel="canonical" href="https://strikerracing.com/en/car/">
 <link rel="alternate" hreflang="es-mx" href="https://strikerracing.com/auto/">
 <link rel="alternate" hreflang="en" href="https://strikerracing.com/en/car/">
@@ -22,22 +27,25 @@
 <meta property="og:description" content="Spin the SR-26 in 3D, open it into an exploded view and check the official regulation dimensions.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://strikerracing.com/en/car/">
-<meta property="og:image" content="https://strikerracing.com/og-share.png">
+<meta property="og:image" content="https://strikerracing.com/assets/img/og/auto-en.jpg">
+<meta property="og:image:type" content="image/jpeg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:locale" content="en_US">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="SR-26, the Striker Racing car">
 <meta name="twitter:description" content="Spin the SR-26 in 3D, open it into an exploded view and check the official regulation dimensions.">
-<meta name="twitter:image" content="https://strikerracing.com/og-share.png">
+<meta name="twitter:image" content="https://strikerracing.com/assets/img/og/auto-en.jpg">
+<link rel="icon" href="/favicon.ico" sizes="48x48">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
 <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48.png">
 <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192.png">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="manifest" href="/site.webmanifest">
 <link rel="preload" href="/fonts/inter-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/fonts/oswald-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="preload" href="/fonts/jetbrains-mono-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
 <!-- viewer:head:begin -->
-<script>(function(){var c=navigator.connection||{};if(c.saveData||/2g/.test(c.effectiveType||''))return;var h=document.head;function l(r,u,a){var e=document.createElement('link');e.rel=r;e.href=u;for(var k in a)e.setAttribute(k,a[k]);h.appendChild(e)}l('modulepreload','/js/dist/viewer.IMPSCIEE.js');l('preload','/assets/models/sr26.glb?v=e992e3fa',{as:'fetch',type:'model/gltf-binary',crossorigin:''});l('preload','/assets/models/env-room.png?v=586e7346',{as:'fetch',crossorigin:''})})();</script>
+<script>(function(){var c=navigator.connection||{};if(c.saveData||/2g/.test(c.effectiveType||'')||matchMedia('(max-width:560px)').matches)return;var e=document.createElement('link');e.rel='modulepreload';e.href='/js/dist/viewer.2QW7CRSW.js';document.head.appendChild(e)})();</script>
 <!-- viewer:head:end -->
 <script type="application/ld+json">
 {
@@ -129,7 +137,7 @@
   </div>
   <div class="wrap hero-frame">
     <div class="hero-main">
-      <div class="model-stage" id="modelStage" data-viewer="/js/dist/viewer.IMPSCIEE.js" data-model="/assets/models/sr26.glb?v=e992e3fa" data-video-mp4="" data-video-webm="" data-env="/assets/models/env-room.png?v=586e7346" data-logo="/logo.png" aria-label="3D model of the SR-26, the Striker Racing car, with an exploded-view animation">
+      <div class="model-stage" id="modelStage" data-viewer="/js/dist/viewer.2QW7CRSW.js" data-model="/assets/models/sr26.glb?v=e992e3fa" data-video-mp4="" data-video-webm="" data-env="/assets/models/env-room.png?v=586e7346" data-logo="/logo.png" aria-label="3D model of the SR-26, the Striker Racing car, with an exploded-view animation">
         <picture>
           <source media="(min-width:961px)" srcset="/assets/img/car-poster-desktop.webp?v=d0cbc3d7" width="1097" height="1094">
           <source media="(min-width:561px)" srcset="/assets/img/car-poster-tablet.webp?v=83268480" width="910" height="681">
@@ -165,7 +173,7 @@
         <p>Preparatoria Celta, Querétaro · STEM Racing Mexico, 2026–2027 season.</p>
       </div>
       <div class="footer-col">
-        <h3 class="footer-heading">Navigate</h3>
+        <h2 class="footer-heading">Navigate</h2>
         <ul>
           <li><a href="/en/">Home</a></li>
           <li><a href="/en/car/">Car</a></li>
@@ -174,7 +182,7 @@
         </ul>
       </div>
       <div class="footer-col">
-        <h3 class="footer-heading">Contact</h3>
+        <h2 class="footer-heading">Contact</h2>
         <ul>
           <li><a href="mailto:strikerracingf1@gmail.com">strikerracingf1@gmail.com</a></li>
           <li><a class="footer-wa" href="https://wa.me/525511839779?text=Hello%2C%20I%20am%20interested%20in%20sponsoring%20Striker%20Racing.%20Can%20we%20talk%3F" target="_blank" rel="noopener">WhatsApp sponsorships: Unai Bozalongo · +52 55 1183 9779</a></li>
@@ -193,6 +201,6 @@
 <button id="backToTop" class="hud-top-btn" type="button" aria-label="Back to top">&#9650; TOP</button>
 
 <script src="/js/site.js" defer></script>
-<!-- viewer:script:begin --><script type="module" src="/js/dist/stage.XZ55X66S.js"></script><!-- viewer:script:end -->
+<!-- viewer:script:begin --><script type="module" src="/js/dist/stage.ZH2OX7SJ.js"></script><!-- viewer:script:end -->
 </body>
 </html>

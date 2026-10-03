@@ -8,12 +8,17 @@
   (function(){
     var c = document.documentElement.classList;
     c.add('js');
-    if('IntersectionObserver' in window) c.add('has-io');
+    if('IntersectionObserver' in window){
+      c.add('has-io');
+      // si site.js no llega a ejecutarse (red caída, error), el contenido no se queda oculto
+      setTimeout(function(){ if(!window.__sr) c.remove('has-io'); }, 3500);
+    }
   })();
 </script>
 <title>Striker Racing · STEM Racing Mexico team · 2026–2027 season</title>
 <meta name="description" content="Meet Striker Racing, Preparatoria Celta's team in the STEM Racing Mexico challenge, 2026–2027: five members, one mentor and a car designed from scratch.">
 <meta name="theme-color" content="#071B33">
+<meta name="color-scheme" content="dark">
 <link rel="canonical" href="https://strikerracing.com/en/">
 <link rel="alternate" hreflang="es-mx" href="https://strikerracing.com/">
 <link rel="alternate" hreflang="en" href="https://strikerracing.com/en/">
@@ -22,20 +27,23 @@
 <meta property="og:description" content="Preparatoria Celta's team in the STEM Racing Mexico challenge, 2026–2027 season. Join us as a sponsor.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://strikerracing.com/en/">
-<meta property="og:image" content="https://strikerracing.com/og-share.png">
+<meta property="og:image" content="https://strikerracing.com/assets/img/og/inicio-en.jpg">
+<meta property="og:image:type" content="image/jpeg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:locale" content="en_US">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Striker Racing · STEM Racing Mexico, 2026–2027 season">
 <meta name="twitter:description" content="Preparatoria Celta's team in the STEM Racing Mexico challenge, 2026–2027 season. Join us as a sponsor.">
-<meta name="twitter:image" content="https://strikerracing.com/og-share.png">
+<meta name="twitter:image" content="https://strikerracing.com/assets/img/og/inicio-en.jpg">
+<link rel="icon" href="/favicon.ico" sizes="48x48">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
 <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48.png">
 <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192.png">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="manifest" href="/site.webmanifest">
 <link rel="preload" href="/fonts/inter-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/fonts/oswald-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="preload" href="/fonts/jetbrains-mono-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -80,6 +88,31 @@
     {"@type":"Person","name":"Carlo David Serafín González Pacheco"}
   ],
   "sameAs": ["https://www.instagram.com/striker.racing_mx/"]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": "https://strikerracing.com/#org",
+      "name": "Striker Racing",
+      "url": "https://strikerracing.com/",
+      "logo": "https://strikerracing.com/logo.png",
+      "email": "strikerracingf1@gmail.com",
+      "sameAs": ["https://www.instagram.com/striker.racing_mx/"],
+      "parentOrganization": { "@type": "EducationalOrganization", "name": "Preparatoria Celta" }
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://strikerracing.com/#website",
+      "name": "Striker Racing",
+      "url": "https://strikerracing.com/",
+      "inLanguage": ["es-MX", "en"],
+      "publisher": { "@id": "https://strikerracing.com/#org" }
+    }
+  ]
 }
 </script>
 <link rel="stylesheet" href="/css/site.css">
@@ -155,7 +188,7 @@
     <div class="pass-grid">
 
       <article class="card-reveal paddock-pass">
-        <img class="pass-img" src="/team/ari.webp" width="680" height="1020" loading="lazy" decoding="async" alt="Ariadna Mejía, Team Direction &amp; CAD Design, Striker Racing">
+        <picture><source type="image/avif" srcset="/team/ari-340.avif 340w, /team/ari-680.avif 680w" sizes="(max-width:640px) 100vw, (max-width:1000px) 50vw, 380px"><source type="image/webp" srcset="/team/ari-340.webp 340w, /team/ari.webp 680w" sizes="(max-width:640px) 100vw, (max-width:1000px) 50vw, 380px"><img class="pass-img" src="/team/ari.webp" width="680" height="1020" loading="lazy" decoding="async" alt="Ariadna Mejía, Team Direction &amp; CAD Design, Striker Racing"></picture>
         <div class="pass-head"><span class="micro">Team member</span><span class="micro">Striker Racing · 26/27</span></div>
         <div class="pass-top"><div class="pass-no">01</div></div>
         <div class="pass-id">
@@ -173,7 +206,7 @@
       </article>
 
       <article class="card-reveal paddock-pass">
-        <img class="pass-img" src="/team/unai.webp" width="680" height="1020" loading="lazy" decoding="async" alt="Unai Bozalongo, Operations &amp; Finance Direction, Striker Racing">
+        <picture><source type="image/avif" srcset="/team/unai-340.avif 340w, /team/unai-680.avif 680w" sizes="(max-width:640px) 100vw, (max-width:1000px) 50vw, 380px"><source type="image/webp" srcset="/team/unai-340.webp 340w, /team/unai.webp 680w" sizes="(max-width:640px) 100vw, (max-width:1000px) 50vw, 380px"><img class="pass-img" src="/team/unai.webp" width="680" height="1020" loading="lazy" decoding="async" alt="Unai Bozalongo, Operations &amp; Finance Direction, Striker Racing"></picture>
         <div class="pass-head"><span class="micro">Team member</span><span class="micro">Striker Racing · 26/27</span></div>
         <div class="pass-top"><div class="pass-no">02</div></div>
         <div class="pass-id">
@@ -191,7 +224,7 @@
       </article>
 
       <article class="card-reveal paddock-pass">
-        <img class="pass-img" src="/team/mafer.webp" width="680" height="1020" loading="lazy" decoding="async" alt="María Fernanda Escobar, Creative &amp; Brand Direction, Striker Racing">
+        <picture><source type="image/avif" srcset="/team/mafer-340.avif 340w, /team/mafer-680.avif 680w" sizes="(max-width:640px) 100vw, (max-width:1000px) 50vw, 380px"><source type="image/webp" srcset="/team/mafer-340.webp 340w, /team/mafer.webp 680w" sizes="(max-width:640px) 100vw, (max-width:1000px) 50vw, 380px"><img class="pass-img" src="/team/mafer.webp" width="680" height="1020" loading="lazy" decoding="async" alt="María Fernanda Escobar, Creative &amp; Brand Direction, Striker Racing"></picture>
         <div class="pass-head"><span class="micro">Team member</span><span class="micro">Striker Racing · 26/27</span></div>
         <div class="pass-top"><div class="pass-no">03</div></div>
         <div class="pass-id">
@@ -209,7 +242,7 @@
       </article>
 
       <article class="card-reveal paddock-pass">
-        <img class="pass-img" src="/team/ulises.webp" width="680" height="1020" loading="lazy" decoding="async" alt="Josué Ulises Gutiérrez, Manufacturing &amp; Prototyping Lead, Striker Racing">
+        <picture><source type="image/avif" srcset="/team/ulises-340.avif 340w, /team/ulises-680.avif 680w" sizes="(max-width:640px) 100vw, (max-width:1000px) 50vw, 380px"><source type="image/webp" srcset="/team/ulises-340.webp 340w, /team/ulises.webp 680w" sizes="(max-width:640px) 100vw, (max-width:1000px) 50vw, 380px"><img class="pass-img" src="/team/ulises.webp" width="680" height="1020" loading="lazy" decoding="async" alt="Josué Ulises Gutiérrez, Manufacturing &amp; Prototyping Lead, Striker Racing"></picture>
         <div class="pass-head"><span class="micro">Team member</span><span class="micro">Striker Racing · 26/27</span></div>
         <div class="pass-top"><div class="pass-no">04</div></div>
         <div class="pass-id">
@@ -227,7 +260,7 @@
       </article>
 
       <article class="card-reveal paddock-pass">
-        <img class="pass-img" src="/team/carlo.webp" width="680" height="1020" loading="lazy" decoding="async" alt="Carlo David Serafín, Chief Technology Officer (CTO) &amp; CFD Analysis, Striker Racing">
+        <picture><source type="image/avif" srcset="/team/carlo-340.avif 340w, /team/carlo-680.avif 680w" sizes="(max-width:640px) 100vw, (max-width:1000px) 50vw, 380px"><source type="image/webp" srcset="/team/carlo-340.webp 340w, /team/carlo.webp 680w" sizes="(max-width:640px) 100vw, (max-width:1000px) 50vw, 380px"><img class="pass-img" src="/team/carlo.webp" width="680" height="1020" loading="lazy" decoding="async" alt="Carlo David Serafín, Chief Technology Officer (CTO) &amp; CFD Analysis, Striker Racing"></picture>
         <div class="pass-head"><span class="micro">Team member</span><span class="micro">Striker Racing · 26/27</span></div>
         <div class="pass-top"><div class="pass-no">05</div></div>
         <div class="pass-id">
@@ -245,7 +278,7 @@
       </article>
 
       <article class="card-reveal paddock-pass is-mentor">
-        <img class="pass-img" src="/team/profe-alex.webp" width="680" height="1020" loading="lazy" decoding="async" alt="Alejandro Félix Barajas, Mechatronics Engineer · Official Mentor, Striker Racing">
+        <picture><source type="image/avif" srcset="/team/profe-alex-340.avif 340w, /team/profe-alex-680.avif 680w" sizes="(max-width:640px) 100vw, (max-width:1000px) 50vw, 380px"><source type="image/webp" srcset="/team/profe-alex-340.webp 340w, /team/profe-alex.webp 680w" sizes="(max-width:640px) 100vw, (max-width:1000px) 50vw, 380px"><img class="pass-img" src="/team/profe-alex.webp" width="680" height="1020" loading="lazy" decoding="async" alt="Alejandro Félix Barajas, Mechatronics Engineer · Official Mentor, Striker Racing"></picture>
         <div class="pass-head"><span class="micro">Mentor</span><span class="micro">Institutional backing · Preparatoria Celta</span></div>
         <div class="pass-top"><div class="pass-no">MT</div></div>
         <div class="pass-id">
@@ -375,7 +408,7 @@
         <p>Preparatoria Celta, Querétaro · STEM Racing Mexico, 2026–2027 season.</p>
       </div>
       <div class="footer-col">
-        <h3 class="footer-heading">Navigate</h3>
+        <h2 class="footer-heading">Navigate</h2>
         <ul>
           <li><a href="/en/">Home</a></li>
           <li><a href="/en/car/">Car</a></li>
@@ -384,7 +417,7 @@
         </ul>
       </div>
       <div class="footer-col">
-        <h3 class="footer-heading">Contact</h3>
+        <h2 class="footer-heading">Contact</h2>
         <ul>
           <li><a href="mailto:strikerracingf1@gmail.com">strikerracingf1@gmail.com</a></li>
           <li><a class="footer-wa" href="https://wa.me/525511839779?text=Hello%2C%20I%20am%20interested%20in%20sponsoring%20Striker%20Racing.%20Can%20we%20talk%3F" target="_blank" rel="noopener">WhatsApp sponsorships: Unai Bozalongo · +52 55 1183 9779</a></li>

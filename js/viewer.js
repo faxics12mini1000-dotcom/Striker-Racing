@@ -4,14 +4,16 @@ import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { MeshoptDecoder } from 'three/addons/libs/meshopt_decoder.module.js';
 import * as Look from './car-look.js';
 
-/* js/stage.js decide cuándo cargar este módulo (póster, video o 3D, según pantalla y conexión) y llama a mount(stage). */
-export function mount(stage){
+/* js/stage.js decide cuándo cargar este módulo (póster, video o 3D, según pantalla y conexión) y llama a mount(stage, pre), donde `pre`
+ * trae las descargas del GLB y del entorno ya iniciadas ({ glb, env }: promesas de Response); sin `pre` el visor las pide él. */
+export function mount(stage, pre){
   // Visor 3D del monoplaza SR-26 (assets/models/sr26.glb) en /auto/: gira solo, se arma y se desarma en bucle,
   // y se puede arrastrar para girar o mover el control para ver el despiece. NO secuestra el scroll de la página.
-  // Carga: este bundle se pide con modulepreload y el GLB con preload (solo en pantallas > 560 px y sin ahorro de datos); al terminar de
-  // pintar el poster (idéntico al primer cuadro del visor) se descargan/parsean en paralelo el GLB, el entorno horneado y el logo,
-  // y el canvas se funde sobre el poster.
+  // Carga: este bundle se pide con modulepreload (solo en pantallas > 560 px y sin ahorro de datos) y js/stage.js ya inició la descarga del GLB
+  // y del entorno; al terminar de pintar el poster (idéntico al primer cuadro del visor) se parsean en paralelo con el logo y el canvas se funde
+  // sobre el poster. fail() = sin WebGL (definitivo, queda el póster); loadError() = fallo de red o de datos (se ofrece reintentar).
   function fail(){ stage.classList.add('no-3d'); }
+  function loadError(){ stage.classList.remove('is-loading'); stage.dispatchEvent(new CustomEvent('sr26-error')); }
   var EN = (document.documentElement.lang || 'es').slice(0, 2) === 'en';
   var TXT = EN
     ? { slider:'Exploded view of the car', assembled:'Assembled', exploded:'Exploded', pause:'Pause animation', play:'Play animation',
@@ -48,8 +50,8 @@ export function mount(stage){
     if(barFill) barFill.style.transform = 'scaleX(' + progress.toFixed(3) + ')';
   }
 
-  function fetchGlb(url, onProgress){
-    return fetch(url).then(function(res){
+  function fetchGlb(src, onProgress){
+    return Promise.resolve(typeof src === 'string' ? fetch(src) : src).then(function(res){
       if(!res.ok) throw new Error('glb ' + res.status);
       var total = +res.headers.get('content-length') || 0;
       if(!res.body || !total) return res.arrayBuffer().then(function(b){ onProgress(1); return b; });
@@ -74,12 +76,12 @@ export function mount(stage){
     stage.classList.add('is-loading');
     setProgress(0.05);
     // Todo lo de red arranca ya y en paralelo: GLB (con progreso), logo + fuentes de los decals y entorno horneado.
-    var glbP = fetchGlb(URLS.model, function(f){ setProgress(0.05 + f * 0.45); });
+    var glbP = fetchGlb(pre ? pre.glb : URLS.model, function(f){ setProgress(0.05 + f * 0.45); });
     var decalsP = Look.preloadDecalAssets(URLS.logo).catch(function(){ return null; });
     glbP.catch(function(){});
     try{
       initViewer(glbP, decalsP);
-    }catch(e){ fail(); }
+    }catch(e){ loadError(); }
   }
 
   function initViewer(glbP, decalsP){
@@ -101,7 +103,7 @@ export function mount(stage){
     // Esta escena trabaja en metros (el GLB viene en metros), de ahí u = 0.001.
     mark('renderer');
     // Entorno prefiltrado y horneado (16 KB); si falla se genera el PMREM en el cliente.
-    var envP = Look.lookEnvironmentBaked(scene, URLS.env).catch(function(){ return Look.lookEnvironment(renderer, scene); }).then(function(){ mark('env'); });
+    var envP = Look.lookEnvironmentBaked(scene, pre ? pre.env : URLS.env).catch(function(){ return Look.lookEnvironment(renderer, scene); }).then(function(){ mark('env'); });
     var keyLight = Look.lookLights(scene, 0.001, !lowEnd);
     var ground = Look.lookGround(scene, 0.001);
 
@@ -502,7 +504,7 @@ export function mount(stage){
       // Los shaders se compilan en paralelo mientras se pegan los logos; el poster sigue visible hasta que todo está listo.
       var compiled = renderer.compileAsync ? renderer.compileAsync(scene, camera).catch(function(){}) : Promise.resolve();
       Promise.all([decalsDone, compiled]).then(reveal, reveal);
-    }).catch(function(e){ if(window.console) console.error('[SR-26 visor]', e); fail(); });
+    }).catch(function(e){ if(window.console) console.error('[SR-26 visor]', e); loadError(); });
 
     // ---------- Controles: reproducir, Armado/Despiece, deslizador con marcas por etapa, vistas y pantalla completa ----------
     var ICON = {

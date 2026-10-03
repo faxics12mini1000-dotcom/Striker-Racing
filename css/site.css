@@ -22,6 +22,7 @@
     --focus-ring: var(--emerald);
 
     --mono:'JetBrains Mono', ui-monospace, 'SFMono-Regular', monospace;
+    color-scheme:dark;   /* controles nativos (scrollbar, input de archivo) en oscuro */
   }
   :focus-visible{outline:2px solid var(--focus-ring); outline-offset:2px;}
   .skip-link{
@@ -39,6 +40,10 @@
   }
   *{box-sizing:border-box; margin:0; padding:0;}
   html{scroll-behavior:smooth;}
+  @media (prefers-reduced-motion:reduce){
+    html{scroll-behavior:auto;}
+    *,*::before,*::after{animation-duration:.01ms !important; animation-iteration-count:1 !important; transition-duration:.01ms !important; scroll-behavior:auto !important;}
+  }
   body{
     font-family:'Inter', system-ui, sans-serif;
     color:var(--ice);

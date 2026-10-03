@@ -116,7 +116,9 @@ export async function lookEnvironment(renderer, scene, cubeSize) {
 export const ENV_MAX = 64;
 export async function lookEnvironmentBaked(scene, url) {
   const mk = n => { try { performance.mark('sr26:env-' + n); } catch (e) {} };
-  const blob = await (await fetch(url)).blob(); mk('fetched');
+  const res = await (typeof url === 'string' ? fetch(url) : url);   // url: ruta o promesa de Response ya iniciada (js/stage.js)
+  if (!res.ok) throw new Error('env ' + res.status);
+  const blob = await res.blob(); mk('fetched');
   const bmp = await createImageBitmap(blob, { colorSpaceConversion: 'none', premultiplyAlpha: 'none' });
   const c = document.createElement('canvas'); c.width = bmp.width; c.height = bmp.height;
   const g = c.getContext('2d', { willReadFrequently: true }); g.drawImage(bmp, 0, 0);

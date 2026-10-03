@@ -2,52 +2,58 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
     <loc>https://strikerracing.com/</loc>
+    <lastmod>2026-10-03</lastmod>
     <xhtml:link rel="alternate" hreflang="es-mx" href="https://strikerracing.com/"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://strikerracing.com/en/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://strikerracing.com/"/>
   </url>
   <url>
     <loc>https://strikerracing.com/en/</loc>
+    <lastmod>2026-10-03</lastmod>
     <xhtml:link rel="alternate" hreflang="es-mx" href="https://strikerracing.com/"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://strikerracing.com/en/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://strikerracing.com/"/>
   </url>
   <url>
     <loc>https://strikerracing.com/auto/</loc>
+    <lastmod>2026-10-03</lastmod>
     <xhtml:link rel="alternate" hreflang="es-mx" href="https://strikerracing.com/auto/"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://strikerracing.com/en/car/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://strikerracing.com/auto/"/>
   </url>
   <url>
     <loc>https://strikerracing.com/en/car/</loc>
+    <lastmod>2026-10-03</lastmod>
     <xhtml:link rel="alternate" hreflang="es-mx" href="https://strikerracing.com/auto/"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://strikerracing.com/en/car/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://strikerracing.com/auto/"/>
   </url>
   <url>
     <loc>https://strikerracing.com/presupuesto/</loc>
+    <lastmod>2026-10-03</lastmod>
     <xhtml:link rel="alternate" hreflang="es-mx" href="https://strikerracing.com/presupuesto/"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://strikerracing.com/en/budget/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://strikerracing.com/presupuesto/"/>
   </url>
   <url>
     <loc>https://strikerracing.com/en/budget/</loc>
+    <lastmod>2026-10-03</lastmod>
     <xhtml:link rel="alternate" hreflang="es-mx" href="https://strikerracing.com/presupuesto/"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://strikerracing.com/en/budget/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://strikerracing.com/presupuesto/"/>
   </url>
   <url>
     <loc>https://strikerracing.com/patrocinios/</loc>
+    <lastmod>2026-10-03</lastmod>
     <xhtml:link rel="alternate" hreflang="es-mx" href="https://strikerracing.com/patrocinios/"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://strikerracing.com/en/sponsorship/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://strikerracing.com/patrocinios/"/>
   </url>
   <url>
     <loc>https://strikerracing.com/en/sponsorship/</loc>
+    <lastmod>2026-10-03</lastmod>
     <xhtml:link rel="alternate" hreflang="es-mx" href="https://strikerracing.com/patrocinios/"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://strikerracing.com/en/sponsorship/"/>
-  </url>
-  <url>
-    <loc>https://strikerracing.com/privacidad.html</loc>
-    <xhtml:link rel="alternate" hreflang="es-mx" href="https://strikerracing.com/privacidad.html"/>
-    <xhtml:link rel="alternate" hreflang="en" href="https://strikerracing.com/en/privacidad.html"/>
-  </url>
-  <url>
-    <loc>https://strikerracing.com/en/privacidad.html</loc>
-    <xhtml:link rel="alternate" hreflang="es-mx" href="https://strikerracing.com/privacidad.html"/>
-    <xhtml:link rel="alternate" hreflang="en" href="https://strikerracing.com/en/privacidad.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://strikerracing.com/patrocinios/"/>
   </url>
 </urlset>

@@ -91,12 +91,16 @@
   }
 
   // ---------- REVEAL AL SCROLL ----------
-  if('IntersectionObserver' in window){
+  // threshold 0: basta con que un píxel de la sección entre al viewport. Con un porcentaje (antes 0.12) una sección más alta que ~8 veces la
+  // ventana (p. ej. #patrocinios en 320×480 u 844×390) nunca llegaba al umbral y se quedaba en opacity 0. El <head> quita `has-io` si este
+  // archivo no corre (ver window.__sr), así que sin JS o con JS roto el contenido siempre se ve.
+  window.__sr = 1;
+  if('IntersectionObserver' in window && document.documentElement.classList.contains('has-io')){
     var io = new IntersectionObserver(function(entries){
       entries.forEach(function(entry){
         if(entry.isIntersecting){ entry.target.classList.add('in-view'); io.unobserve(entry.target); }
       });
-    }, { threshold: 0.12, rootMargin: '0px 0px -60px 0px' });
+    }, { threshold: 0, rootMargin: '0px 0px -60px 0px' });
     document.querySelectorAll('.reveal').forEach(function(el){ io.observe(el); });
     document.querySelectorAll('.card-reveal').forEach(function(el){
       if(!el.closest('.pass-grid, .tiers')) io.observe(el);
@@ -114,7 +118,7 @@
             gio.unobserve(entry.target);
           }
         });
-      }, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
+      }, { threshold: 0, rootMargin: '0px 0px -40px 0px' });
       cards.forEach(function(el){ gio.observe(el); });
     });
   }
