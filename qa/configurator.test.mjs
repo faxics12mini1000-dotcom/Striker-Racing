@@ -27,6 +27,7 @@ for (const [url, lang] of [['/auto/', 'es'], ['/en/car/', 'en']]) {
   const posts = []; page.on('request', r => { if (r.method() !== 'GET') posts.push(r.method() + ' ' + r.url()); });
   await page.goto(BASE + url);
   await page.waitForSelector('#modelStage.is-ready', { timeout: 60000 });
+  await page.locator('#configurador').scrollIntoViewIfNeeded(); await page.waitForTimeout(800);   // el configurador arranca al acercarse
   const before = await nonBlank(page, '#cfgUniform');
   check(before >= 2, `${url} maqueta del uniforme se dibuja sin logo (${before} colores)`);
   const levels = await page.locator('#cfgLevel option').allTextContents();
