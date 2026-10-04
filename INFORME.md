@@ -58,3 +58,8 @@ Rendimiento: inicio 90/91, /auto/ 98/98, presupuesto 99/99, patrocinios 99/99. A
 - **Visor.**  ya no tiene fondo  ni bordes: es el mismo navy y la cuadrícula del plano ( con ) entra y sale suave. Efecto lateral: lo mismo aplica al visor de /auto/.
 - **Póster del visor.** Los  tenían el menú fijo («STRIKER RACING / Patrocinar») horneado en la esquina;  ahora oculta el menú y se regeneraron.
 - **Capturas.**  →  (1920, 1440, 1024, 390). Queda una línea normal de sección entre los datos del equipo y «Cinco integrantes» (borde de la siguiente sección, mismo navy); no se tocó.
+
+## Hero: encuadre más lejano (3-oct, quinta tanda)
+- **Altura.** En escritorio (>900 px) el hero mide `min(100svh, 56.25vw)`: la foto 16:9 se ajusta al ancho sin ampliarse de más (equipo completo, aire sobre las cabezas, torsos visibles), con `object-position: 50% 30%`. Antes medía ~1090 px a 1440 y la foto se ampliaba ~1.5×.
+- **Texto.** Etiqueta y título (máx. 2 líneas) arriba sobre el muro; subtexto y botones abajo sobre la zona difuminada (piernas); `--fs: clamp(1.5rem, 3.3vw, 3.2rem)`. El HTML (ES y EN) agrupa el texto en `.hero-copy-top` y `.hero-copy-bottom`. ≤900 px sin cambios.
+- **Pruebas.** `qa:hero` pasa a 1920, 1440, 1024 y 390 (ES y EN). El tamaño de la cabeza ya no depende del alto de la ventana sino solo del ancho: la cabeza más grande (rizado) mide ~20 % del alto de la foto con 1 % de margen en `hero-safe.json` (~17 % sin margen), no 12-14 %; bajarlo más exige una foto con más aire o encuadre más abierto. Capturas: `qa/screens/hero-safe-*` y `hero-seams-*`.

@@ -891,6 +891,18 @@ dialog.ar-dialog::backdrop{background:rgba(7,27,51,0.85);}
   .hero-scroll{left:16px; right:auto; bottom:12px;}
 }
 @media (max-width:640px){ .hero-photo{--fs:1.4rem;} }
+/* Escritorio (>900 px): encuadre lejano. El hero mide min(100svh, 56.25vw): la foto 16:9 no se amplía más que lo justo para el ancho (equipo completo, aire sobre las cabezas);
+   título arriba sobre el muro vacío, subtexto y botones abajo sobre la zona difuminada (piernas). Ninguno toca las caras (qa:hero). */
+@media (min-width:901px){
+  .hero-photo{--fs:clamp(1.5rem,3.3vw,3.2rem); height:min(100svh, 56.25vw);}
+  .hero-bg{top:0; bottom:auto; height:100%;}
+  .hero-bg img{object-position:50% 30%;}
+  .hero-copy{height:100%; padding-top:calc(var(--hdr) + clamp(8px,1.6vw,28px)); padding-bottom:clamp(20px,3vw,56px); display:flex; flex-direction:column; justify-content:space-between;}
+  .hero-copy .room-tag{margin-bottom:8px;}
+  .hero-copy h1{margin:0; max-width:min(980px,100%);}
+  .hero-copy .hero-lead{font-size:clamp(0.9rem,1.1vw,1.02rem); max-width:min(100ch,100%); margin-bottom:14px;}
+}
+
 .viewer-band{padding:0; background:var(--navy-deep);}
 .viewer-full .model-stage{margin:0; width:100%; aspect-ratio:auto; min-height:80vh; min-height:80svh; border:none; background:transparent;}
 /* la cuadrícula del plano vive en ::before y entra y sale con mask-image: el visor continúa el mismo navy del hero y de la sección siguiente, sin bordes ni cambio de fondo */
