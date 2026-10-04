@@ -18,7 +18,8 @@ const VARIANTS = [
 // Todo transparente salvo el canvas: el poster debe llevar solo el auto y su sombra (alfa); el fondo lo pone el CSS del visor.
 const HIDE = `*,*::before,*::after{background:transparent!important;background-image:none!important;box-shadow:none!important;border-color:transparent!important}
 *::before,*::after,.model-poster,.model-tag,.model-hint,.model-loader,.car-labels,.car-tip{display:none!important}
-.car-ctl,.car-ctl *{visibility:hidden!important}`;
+.car-ctl,.car-ctl *{visibility:hidden!important}
+.cockpit,.sticky-cta,.hud-top-btn,#backToTop{display:none!important}`;   /* el menú fijo no debe colarse en la captura del canvas */
 mkdirSync('assets/img', { recursive: true });
 // servidor local si hace falta
 let server = null;

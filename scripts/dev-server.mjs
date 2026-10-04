@@ -37,6 +37,7 @@ http.createServer(async (req, res) => {
     var headers = { 'Content-Type': types[ext] || 'application/octet-stream' };
     if(useCache){
       if(urlPath.startsWith('/fonts/') || urlPath.startsWith('/vendor/') || urlPath.startsWith('/js/dist/') || urlPath.startsWith('/assets/models/') || urlPath.startsWith('/assets/video/')) headers['Cache-Control'] = 'public, max-age=31536000, immutable';
+      else if(['.css', '.js'].includes(ext)) headers['Cache-Control'] = 'public, max-age=0, must-revalidate';
       else if(['.glb', '.webp', '.png'].includes(ext)) headers['Cache-Control'] = 'public, max-age=604800';
     }
     if(compressible.has(ext) && /\bgzip\b/.test(req.headers['accept-encoding'] || '')){

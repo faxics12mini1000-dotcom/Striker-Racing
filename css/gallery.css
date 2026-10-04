@@ -853,16 +853,18 @@ dialog.ar-dialog::backdrop{background:rgba(7,27,51,0.85);}
 /* ---------- Inicio: hero con foto a todo el ancho y visor del SR-26 grande ----------
    La foto va a todo el ancho con su proporción (16:9), anclada abajo; el texto va en el muro vacío sobre las cabezas (el borde superior e inferior
    de la foto se difuminan hacia el navy con mask-image, solo transparencia). Cajas de caras en data/hero-safe.json: --face-top = 38 % del alto de la foto. */
-.hero-photo{--ph:56.25vw; --face-top:0.378; position:relative; display:block; min-height:0; padding:0; overflow:hidden; background:var(--navy-deep); border-bottom:0;}
+.hero-photo{--hdr:65px; --fs:clamp(1.7rem,4.4vw,3.5rem); --face-top:0.378;
+  --ph:max(56.25vw, calc((var(--hdr) + 40px + 171px + 2 * var(--fs) + 28px) / var(--face-top)));   /* alto de la foto: lo justo para que el texto quede sobre las cabezas y la foto llegue hasta el borde superior */
+  position:relative; display:block; min-height:0; padding:0; overflow:hidden; background:var(--navy-deep); border-bottom:0;}
 .hero-photo::before{display:none;}
 .hero-bg{position:absolute; left:0; right:0; bottom:0; height:var(--ph); z-index:0;}
 .hero-bg picture, .hero-bg img{display:block; width:100%; height:100%;}
-.hero-bg img{object-fit:cover; object-position:50% 50%;
-  -webkit-mask-image:linear-gradient(to bottom, transparent 0, #000 24%, #000 80%, transparent 100%); mask-image:linear-gradient(to bottom, transparent 0, #000 24%, #000 80%, transparent 100%);}
+.hero-bg img{object-fit:cover; object-position:40% 50%;   /* cover por alto en pantallas angostas: recorta a los lados sin cortar las caras (qa:hero) */
+  -webkit-mask-image:linear-gradient(to bottom, #000 0, #000 62%, transparent 100%); mask-image:linear-gradient(to bottom, #000 0, #000 62%, transparent 100%);}   /* difuminado largo (38 %) hacia el navy, solo transparencia */
 .hero-bg::after{content:""; position:absolute; inset:0; background:rgba(7,27,51,0.45); pointer-events:none;}   /* oscurece la foto con navy plano (sin filter: es lento en WebGL por software) */
-.hero-copy{position:relative; z-index:2; width:100%; padding-top:40px; padding-bottom:calc(var(--ph) * (1 - var(--face-top)) + 16px);}
+.hero-copy{position:relative; z-index:2; width:100%; padding-top:calc(var(--hdr) + 40px); padding-bottom:calc(var(--ph) * (1 - var(--face-top)) + 16px);}
 .hero-copy > *{max-width:980px;}
-.hero-copy h1{font-family:'Oswald', system-ui, sans-serif; font-weight:600; text-transform:uppercase; font-size:clamp(1.7rem,4.4vw,3.5rem); line-height:1.02; color:var(--ice); margin:0 0 14px;}
+.hero-copy h1{font-family:'Oswald', system-ui, sans-serif; font-weight:600; text-transform:uppercase; font-size:var(--fs); line-height:1.02; color:var(--ice); margin:0 0 14px;}
 .hero-copy h1 em{font-style:normal; color:var(--purple-text);}
 .hero-copy .hero-lead{color:var(--ice); max-width:64ch; margin-bottom:20px;}
 .hero-copy .room-tag{margin-bottom:14px; color:var(--ice);}
@@ -871,16 +873,30 @@ dialog.ar-dialog::backdrop{background:rgba(7,27,51,0.85);}
   font-family:var(--mono); font-size:0.72rem; letter-spacing:0.12em; text-transform:uppercase; color:var(--ice);
 }
 .hero-scroll::after{content:""; width:9px; height:9px; border-right:2px solid var(--emerald); border-bottom:2px solid var(--emerald); transform:rotate(45deg) translateY(-2px);}
-@media (max-width:640px){   /* teléfono: la foto arriba (recorte con las 6 caras a la vista) y el texto debajo, sin encimarse */
+/* Escritorio (>900 px): el menú es transparente sobre la foto (velo navy plano al 55 %) y pasa a navy sólido al hacer scroll (>40 px, clase is-solid) o con el menú abierto */
+@media (min-width:901px){
+  body:has(.hero-photo) .cockpit{position:fixed; left:0; right:0; top:0; border-bottom-color:transparent; transition:border-color .2s ease;}
+  body:has(.hero-photo) .cockpit::before{background:rgba(7,27,51,0.55); transition:background-color .2s ease;}
+  body:has(.hero-photo) .cockpit.is-solid, body:has(.hero-photo) .cockpit:has(.nav-panel.open){border-bottom-color:var(--border-fine);}
+  body:has(.hero-photo) .cockpit.is-solid::before, body:has(.hero-photo) .cockpit:has(.nav-panel.open)::before{background:var(--navy-deep);}
+  body:has(.hero-photo) .cockpit:not(.is-solid) .contact-cta.is-ghost{border-color:var(--ice-dim);}
+}
+@media (prefers-reduced-motion:reduce){ body:has(.hero-photo) .cockpit, body:has(.hero-photo) .cockpit::before{transition:none;} }
+@media (max-width:900px){   /* tableta y teléfono: la foto arriba (recorte con las 6 caras a la vista) y el texto debajo, sin encimarse; menú sólido */
+  .hero-photo{--fs:clamp(1.4rem,5.2vw,2.2rem);}
   .hero-bg{top:0; bottom:auto; height:420px;}
   .hero-bg::after{display:none;}
-  .hero-bg img{object-position:40% 50%; -webkit-mask-image:linear-gradient(to bottom, #000 0, #000 78%, transparent 100%); mask-image:linear-gradient(to bottom, #000 0, #000 78%, transparent 100%);}
+  .hero-bg img{object-position:40% 50%;}
   .hero-copy{padding-top:400px; padding-bottom:72px;}
-  .hero-copy h1{font-size:1.4rem;}
   .hero-scroll{left:16px; right:auto; bottom:12px;}
 }
+@media (max-width:640px){ .hero-photo{--fs:1.4rem;} }
 .viewer-band{padding:0; background:var(--navy-deep);}
-.viewer-full .model-stage{margin:0; width:100%; aspect-ratio:auto; min-height:80vh; min-height:80svh; border:none; border-bottom:1px solid var(--border-fine); background-color:var(--surface); background-size:32px 32px;}
+.viewer-full .model-stage{margin:0; width:100%; aspect-ratio:auto; min-height:80vh; min-height:80svh; border:none; background:transparent;}
+/* la cuadrícula del plano vive en ::before y entra y sale con mask-image: el visor continúa el mismo navy del hero y de la sección siguiente, sin bordes ni cambio de fondo */
+.viewer-full .model-stage::before{content:""; position:absolute; inset:0; z-index:0; pointer-events:none;
+  background-image:linear-gradient(var(--grid-line) 1px, transparent 1px), linear-gradient(90deg, var(--grid-line) 1px, transparent 1px); background-size:40px 40px;
+  -webkit-mask-image:linear-gradient(to bottom, transparent 0, #000 22%, #000 78%, transparent 100%); mask-image:linear-gradient(to bottom, transparent 0, #000 22%, #000 78%, transparent 100%);}
 .viewer-full .model-poster{object-fit:contain;}
 .viewer-full .model-stage .model-hint{top:10px; bottom:auto;}
 @media (max-width:640px){ .viewer-full .model-stage{min-height:0; aspect-ratio:4/5;} }

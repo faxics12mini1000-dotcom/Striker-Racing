@@ -60,6 +60,14 @@
     });
   });
 
+  // ---------- MENÚ SOBRE EL HERO: transparente arriba, navy sólido al pasar de 40 px (la clase is-solid solo importa en escritorio con hero de foto) ----------
+  var cockpit = document.querySelector('.cockpit'), navTicking = false;
+  function updateNav(){ navTicking = false; cockpit.classList.toggle('is-solid', window.scrollY > 40); }
+  if(cockpit && document.querySelector('.hero-photo')){
+    window.addEventListener('scroll', function(){ if(!navTicking){ navTicking = true; requestAnimationFrame(updateNav); } }, { passive: true });
+    requestAnimationFrame(updateNav);
+  }
+
   // ---------- VOLVER ARRIBA + BOTÓN FIJO «PATROCINAR» (móvil) ----------
   // Una sola lectura de scrollY por cuadro (rAF) y ninguna lectura al cargar: así no se fuerza un layout antes del primer pintado.
   // El botón fijo no aparece mientras el visor 3D está en pantalla (taparía sus controles) ni en pantalla completa.
