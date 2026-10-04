@@ -848,12 +848,22 @@ dialog.ar-dialog::backdrop{background:rgba(7,27,51,0.85);}
 .sw-list a{display:grid; place-items:center; width:100%; min-height:64px; color:var(--ice);}
 .sw-list img{max-width:100%; max-height:64px; width:auto; height:auto; object-fit:contain;}
 .sw-list a:hover, .sw-list a:focus-visible{outline-offset:6px;}
-/* «Ver en tu mesa»: justo debajo del visor. Oculta hasta que ar.js confirma AR; en móvil/tablet reserva su alto desde el primer pintado (is-maybe) para no mover la página */
-.car-ar{grid-column:1/-1; display:none; margin:0; padding:14px 16px; border-top:1px solid var(--border-fine); flex-direction:column; align-items:flex-start; gap:8px;}
-.car-ar.is-on{display:flex;}
-.car-ar.is-maybe:not(.is-on){display:flex; visibility:hidden;}
+/* «Ver en tu mesa»: justo debajo del visor. Teléfono (≤960 px): botón siempre visible. Escritorio: QR (ar-qr-*.svg, módulos oscuros sobre fondo claro) para abrirlo en el celular */
+.car-ar{grid-column:1/-1; display:flex; margin:0; padding:14px 16px; border-top:1px solid var(--border-fine); flex-direction:column; align-items:flex-start; gap:8px;}
+.car-ar[hidden]{display:none;}   /* AR apagado: data/features.json */
 .car-ar .btn{min-height:44px;}
 .car-ar-note{margin:0; font-size:0.85rem; color:var(--ice); opacity:0.8;}
+.car-ar-msg{display:flex; flex-direction:column; align-items:flex-start; gap:10px; font-size:0.9rem; color:var(--ice);}
+.car-ar-msg[hidden]{display:none;}
+.car-ar-msg p{margin:0;}
+.car-ar-qr{display:flex; align-items:center; gap:16px;}
+.car-ar-qr img{width:132px; height:132px; flex:none; background:#fff; border-radius:2px;}
+.car-ar-qr-title{margin:0 0 4px; font-weight:600; color:var(--ice);}
+@media (min-width:961px){ .car-ar > .btn, .car-ar > .car-ar-note, .car-ar-msg{display:none;} }
+@media (max-width:960px){ .car-ar-qr{display:none;} }
+@keyframes ar-hl{0%,100%{box-shadow:0 0 0 0 rgba(0,200,150,0);} 50%{box-shadow:0 0 0 6px rgba(0,200,150,0.55);}}
+.car-ar .btn.is-hl{border-color:var(--emerald); animation:ar-hl 1s ease-in-out 4;}
+@media (prefers-reduced-motion:reduce){ .car-ar .btn.is-hl{animation:none; box-shadow:0 0 0 3px var(--emerald);} }
 @media (max-width:960px){ .hero-main .model-stage{order:1;} .car-ar{order:2;} .hud-panel{order:3;} }
 .car-cta-note{flex:0 0 100%; text-align:center; font-family:var(--mono); font-size:0.7rem; letter-spacing:0.07em; text-transform:uppercase; color:var(--ice); text-shadow:0 1px 3px rgba(7,27,51,0.9);}
 
@@ -953,3 +963,18 @@ section{padding:var(--sp-section) 0;}
 .log-list-wrap, .log-entry{padding:calc(var(--sp-section) * .75) 0 var(--sp-section);}
 .viewer-band, .gates{padding:0;}
 .section-head{margin-bottom:clamp(32px,4vw,56px);}
+
+/* Teléfonos angostos (375 px): el logo del encabezado cabe en una línea */
+@media (max-width:420px){
+  .cockpit-bar{padding:0 12px; gap:8px;}
+  .brand{white-space:nowrap; font-size:1rem; letter-spacing:0.03em; gap:7px;}
+  .brand-mark{height:26px;}
+  .contact-cta.is-sponsor-m{padding:0 10px;}
+  /* hero: la foto completa (16:9) para que no se corte ningún integrante; el texto va debajo */
+  .hero-bg{height:56.25vw;}
+  .hero-bg img{object-position:50% 50%;}
+  .hero-copy{padding-top:calc(56.25vw - 8px);}
+}
+/* Pie de foto del hero, discreto */
+.hero-cap{position:absolute; right:16px; bottom:8px; z-index:1; margin:0; font-family:var(--mono); font-size:0.66rem; letter-spacing:0.06em; color:var(--ice); opacity:0.7; pointer-events:none;}
+@media (min-width:901px){ .hero-cap{bottom:84px; right:24px;} }

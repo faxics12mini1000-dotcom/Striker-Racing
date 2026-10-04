@@ -105,29 +105,22 @@
     {
       "id": "B",
       "name": {
-        "es": "B · Pontones (idea)",
-        "en": "B · Sidepods (idea)"
+        "es": "B · Alerón trasero",
+        "en": "B · Rear wing"
       }
     },
     {
       "id": "C",
       "name": {
-        "es": "C · Alerón trasero",
-        "en": "C · Rear wing"
+        "es": "C · Alerón delantero",
+        "en": "C · Front wing"
       }
     },
     {
       "id": "D",
       "name": {
-        "es": "D · Alerón delantero",
-        "en": "D · Front wing"
-      }
-    },
-    {
-      "id": "E",
-      "name": {
-        "es": "E · Cápsula / cuerpo",
-        "en": "E · Capsule / body"
+        "es": "D · Cápsula / cuerpo",
+        "en": "D · Capsule / body"
       }
     }
   ]

@@ -183,7 +183,7 @@ export function lookPart(mesh) {
 
 /* ───────────── logos dibujados en código ─────────────
  * - Espina (24), ambos lados: lockup de Striker Racing en una línea (STRIKER en hielo, RACING en esmeralda).
- * - Zona B, los costados (pontones): reservados por completo al logo oficial de STEM Racing en vector (obligatorio a cada lado, entre las ruedas).
+ * - Costados (pontones): reservados por completo al logo oficial de STEM Racing en vector (obligatorio a cada lado, entre las ruedas).
  * - Espacios del Partner Estratégico, el único nivel con lugar en el auto (contorno fino en hielo + texto chico): nariz (A), alerón trasero, 2 recuadros (C),
  *   alerón delantero a cada lado de la nariz (D), a negociar según la propuesta. Las placas traseras quedan sin recuadro (diseño aún no final).
  * Los puntos de pegado vienen en mm del modelo (x = largo, y = alto, z = ancho; +z = lado derecho). */
@@ -255,7 +255,6 @@ export const SLOTS = {
   alaDel:{ x:198.5, y:9.8, z:21, w:20, h:14 },         // cara superior del alerón delantero, a cada lado de la nariz (Partner Estratégico, a negociar)
   nariz:{ x:191, y:20.4, z:0, w:23, h:4.2 },           // panel plano sobre la nariz
   aleron:{ x:13.5, y:57, z:0, w:62, h:17 },            // cara superior del alerón trasero (4 recuadros)
-  ponEj:{ x:124, y:14.2, z:31, w:24, h:12 },            // IDEA de ubicación en el costado del pontón (hoy reservado al logo oficial de STEM Racing)
   capsula:{ x:140, y:30, z:0, w:30, h:10 },            // IDEA de ubicación sobre el cuerpo/cápsula, entre la espina y la nariz
   espina:{ x:57, y:49.6, z:1.2, w:40, h:40 * 320 / 1792, tilt:12 },   // lockup de Striker Racing sobre la espina, inclinado con la caída del lomo
 };
@@ -288,30 +287,25 @@ export async function addLogoDecals(parts, logoUrl, lang = 'es', origin = null) 
   });
   ['02', '03'].forEach((k, i) => {   // 02 = pontón derecho (+z), 03 = izquierdo (-z)
     const m = parts[k]; if (!m) return; const side = i === 0 ? 1 : -1;
-    // Zona B: el costado es solo del logo de STEM Racing (obligatorio a cada lado, entre las ruedas), con las letras oficiales
+    // Costado: el costado es solo del logo de STEM Racing (obligatorio a cada lado, entre las ruedas), con las letras oficiales
     const d = stick(m, stemMat, S.ponton.w * .001, S.ponton.h * .001, mm(S.ponton.x, S.ponton.y, side * 200), V(0, 0, -side), V(0, 1, 0));
     if (d) out.push({ kind:'stem', zone:'', mesh:d });
   });
   if (parts['05']) [1, -1].forEach(side => {   // alerón delantero: un recuadro a cada lado de la nariz
     const d = stick(parts['05'], wingFront, S.alaDel.w * .001, S.alaDel.h * .001, mm(S.alaDel.x, 200, side * S.alaDel.z), V(0, -1, 0), V(1, 0, 0));
-    if (d) out.push({ kind:'partner', zone:'D', mesh:d });
+    if (d) out.push({ kind:'partner', zone:'C', mesh:d });
   });
   if (parts['04']) { const d = stick(parts['04'], partner, S.nariz.w * .001, S.nariz.h * .001, mm(S.nariz.x, 200, 0), V(0, -1, 0), V(0, 0, -1)); if (d) out.push({ kind:'partner', zone:'A', mesh:d }); }
-  if (parts['09']) { const d = stick(parts['09'], wing, S.aleron.w * .001, S.aleron.h * .001, mm(S.aleron.x, 200, 0), V(0, -1, 0), V(1, 0, 0)); if (d) out.push({ kind:'wing', zone:'C', mesh:d }); }
-  // Ideas extra: costado del pontón (B, ambos lados) y cápsula/cuerpo (E)
-  ['02', '03'].forEach((k, i) => {
-    const m = parts[k]; if (!m) return; const side = i === 0 ? 1 : -1;
-    const d = stick(m, blank, S.ponEj.w * .001, S.ponEj.h * .001, mm(S.ponEj.x, S.ponEj.y, side * 200), V(0, 0, -side), V(0, 1, 0));
-    if (d) out.push({ kind:'idea', zone:'B', mesh:d });
-  });
-  if (parts['01']) { const d = stick(parts['01'], blank, S.capsula.w * .001, S.capsula.h * .001, mm(S.capsula.x, 200, 0), V(0, -1, 0), V(1, 0, 0)); if (d) out.push({ kind:'idea', zone:'E', mesh:d }); }
+  if (parts['09']) { const d = stick(parts['09'], wing, S.aleron.w * .001, S.aleron.h * .001, mm(S.aleron.x, 200, 0), V(0, -1, 0), V(1, 0, 0)); if (d) out.push({ kind:'wing', zone:'B', mesh:d }); }
+  // Idea extra: cápsula/cuerpo (D). Los costados (pontones) son solo del logo oficial de STEM Racing y no se ofrecen como zona.
+  if (parts['01']) { const d = stick(parts['01'], blank, S.capsula.w * .001, S.capsula.h * .001, mm(S.capsula.x, 200, 0), V(0, -1, 0), V(1, 0, 0)); if (d) out.push({ kind:'idea', zone:'D', mesh:d }); }
   return out;
 }
 
 /* ───────────── logo del visitante (configurador) ─────────────
- * slotCanvas(zona, imagen): dibuja el logo (PNG/SVG con o sin fondo transparente) dentro del espacio de la zona A (nariz), C (alerón trasero, 2 recuadros) o D
- * (alerón delantero, a cada lado de la nariz), con el mismo contorno fino de los recuadros. Todo ocurre en el navegador; el archivo nunca se envía a ningún lado. */
-const SLOT_PX = { A:[1024, Math.round(1024 * SLOTS.nariz.h / SLOTS.nariz.w)], C:[1024, 280], B:[1024, 512], E:[1024, 341], D:[700, Math.round(700 * SLOTS.alaDel.h / SLOTS.alaDel.w)] };
+ * slotCanvas(zona, imagen): dibuja el logo (PNG/SVG con o sin fondo transparente) dentro del espacio de la zona A (nariz), B (alerón trasero, 2 recuadros), C
+ * (alerón delantero, a cada lado de la nariz) o D (cápsula), con el mismo contorno fino de los recuadros. Todo ocurre en el navegador; el archivo nunca se envía a ningún lado. */
+const SLOT_PX = { A:[1024, Math.round(1024 * SLOTS.nariz.h / SLOTS.nariz.w)], B:[1024, 280], D:[1024, 341], C:[700, Math.round(700 * SLOTS.alaDel.h / SLOTS.alaDel.w)] };
 function fitLogo(g, img, x, y, w, h) {
   const pad = Math.min(w, h) * .14, bw = w - 2 * pad, bh = h - 2 * pad, k = Math.min(bw / img.width, bh / img.height);
   g.drawImage(img, x + (w - img.width * k) / 2, y + (h - img.height * k) / 2, img.width * k, img.height * k);
@@ -319,7 +313,7 @@ function fitLogo(g, img, x, y, w, h) {
 export function slotCanvas(zone, img) {
   const [W, H] = SLOT_PX[zone], c = canvasOf(W, H), g = c.getContext('2d'), lw = Math.max(3, Math.round(H / 60));
   const box = (x, w) => { g.save(); g.strokeStyle = COLORS.ice; g.globalAlpha = .55; g.lineWidth = lw; g.strokeRect(x + lw, lw, w - 2 * lw, H - 2 * lw); g.restore(); fitLogo(g, img, x, 0, w, H); };
-  if (zone === 'C') { const gap = 70, bw = (W - gap) / 2; box(0, bw); box(bw + gap, bw); } else box(0, W);
+  if (zone === 'B') { const gap = 70, bw = (W - gap) / 2; box(0, bw); box(bw + gap, bw); } else box(0, W);
   return c;
 }
 export const userLogoMaterial = canvas => decalMaterial(canvas);

@@ -8,27 +8,54 @@
   var EN = (document.documentElement.lang || 'es').slice(0, 2) === 'en';
   var T = EN
     ? { title:'See the SR-26 on your table', hint:'Point the camera at a flat surface: the car appears at real size (1:1 scale). Visual prototype.', go:'Open in AR', close:'Close',
-        loading:'Loading…', no:'Your device or browser does not support augmented reality. Try an Android phone with Chrome or an iPhone with Safari.', alt:'3D model of the SR-26, Striker Racing car', fail:'The model could not be loaded.' }
+        loading:'Loading…', no:'Your device or browser does not support augmented reality. Try an Android phone with Chrome or an iPhone with Safari.',
+        ios:'On iPhone, open this page in Safari to see it on your table', copy:'Copy link', copied:'Link copied', alt:'3D model of the SR-26, Striker Racing car', fail:'The model could not be loaded.' }
     : { title:'Ver el SR-26 en tu mesa', hint:'Apunta la cámara a una superficie plana: el auto aparece a tamaño real (escala 1:1). Prototipo visual.', go:'Abrir en AR', close:'Cerrar',
-        loading:'Cargando…', no:'Tu dispositivo o navegador no permite realidad aumentada. Prueba con un teléfono Android con Chrome o un iPhone con Safari.', alt:'Modelo 3D del SR-26, monoplaza de Striker Racing', fail:'No se pudo cargar el modelo.' };
+        loading:'Cargando…', no:'Tu dispositivo o navegador no permite realidad aumentada. Prueba con un teléfono Android con Chrome o un iPhone con Safari.',
+        ios:'En iPhone, abre esta página en Safari para verlo en tu mesa', copy:'Copiar enlace', copied:'Enlace copiado', alt:'Modelo 3D del SR-26, monoplaza de Striker Racing', fail:'No se pudo cargar el modelo.' };
 
-  // ¿puede este dispositivo hacer AR? (comprobación ligera; la definitiva es model-viewer.canActivateAR)
+  // ¿puede este dispositivo hacer AR? (comprobación ligera; la definitiva es model-viewer.canActivateAR). Resuelve 'ok', 'ios' (iPhone/iPad fuera de Safari) o 'no'
   function supportsAr(){
     var ua = navigator.userAgent || '';
     var ios = /iPhone|iPad|iPod/.test(ua) || (/Macintosh/.test(ua) && navigator.maxTouchPoints > 1);
     var android = /Android/.test(ua);
     var quickLook = false;
     try{ var a = document.createElement('a'); quickLook = !!(a.relList && a.relList.supports && a.relList.supports('ar')); }catch(e){}
-    if(ios) return Promise.resolve(quickLook);                       // iPhone/iPad: solo Safari (Quick Look) puede
+    if(ios) return Promise.resolve(quickLook ? 'ok' : 'ios');       // iPhone/iPad: solo Safari (Quick Look) puede
     if(navigator.xr && navigator.xr.isSessionSupported){            // Android con ARCore (WebXR) o Scene Viewer
-      return navigator.xr.isSessionSupported('immersive-ar').then(function(ok){ return ok || android; }, function(){ return android; });
+      return navigator.xr.isSessionSupported('immersive-ar').then(function(ok){ return ok || android ? 'ok' : 'no'; }, function(){ return android ? 'ok' : 'no'; });
     }
-    return Promise.resolve(android);
+    return Promise.resolve(android ? 'ok' : 'no');
   }
-  var row = document.getElementById('arRow');
-  function show(on){ btn.hidden = !on; if(row){ row.classList.toggle('is-on', on); if(!on) row.classList.remove('is-maybe'); } }
-  if(row && /Android|iPhone|iPad|iPod|Macintosh/.test(navigator.userAgent || '') && window.matchMedia('(max-width:960px)').matches) row.classList.add('is-maybe');   // reserva el alto antes de saber
-  supportsAr().then(show).catch(function(){ show(false); });
+  // En teléfonos (≤960 px) el botón se ve SIEMPRE; si el aparato no puede, al tocarlo se explica por qué. En escritorio el CSS muestra el QR en su lugar.
+  var support = 'ok';
+  supportsAr().then(function(r){ support = r; }, function(){ support = 'no'; });
+  var msgBox = document.getElementById('arMsg');
+  function explain(kind){
+    if(!msgBox) return;
+    msgBox.textContent = ''; msgBox.hidden = false;
+    var p = document.createElement('p'); p.textContent = kind === 'ios' ? T.ios : T.no; msgBox.appendChild(p);
+    if(kind !== 'ios') return;
+    var c = document.createElement('button'); c.type = 'button'; c.className = 'btn'; c.textContent = T.copy;
+    c.addEventListener('click', function(){
+      var url = location.origin + location.pathname + '?ar=1', done = function(){ c.textContent = T.copied; };
+      function fallback(){
+        var t = document.createElement('textarea'); t.value = url; t.setAttribute('readonly', ''); t.style.position = 'fixed'; t.style.opacity = '0';
+        document.body.appendChild(t); t.select(); try{ document.execCommand('copy'); done(); }catch(e){} t.remove();
+      }
+      if(navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(url).then(done, fallback); else fallback();
+    });
+    msgBox.appendChild(c);
+  }
+  // ?ar=1 (viene del QR del escritorio): en teléfono lleva al botón y lo resalta, sin abrirlo (el AR exige un toque del visitante)
+  if(/(^|[?&])ar=1(&|$)/.test(location.search) && window.matchMedia('(max-width:960px)').matches){
+    var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    setTimeout(function(){
+      btn.scrollIntoView({ block:'center', behavior: reduce ? 'auto' : 'smooth' });
+      btn.classList.add('is-hl');
+      setTimeout(function(){ btn.classList.remove('is-hl'); }, 4000);
+    }, 400);
+  }
 
   var dlg = null, mv = null, loaded = false;
   function build(){
@@ -56,11 +83,12 @@
     mv.addEventListener('load', function(){
       msg('');
       if(mv.canActivateAR){ go.hidden = false; dlg.querySelector('.ar-actions').appendChild(go); go.removeAttribute('slot'); go.addEventListener('click', function(){ mv.activateAR(); }); }
-      else{ msg(T.no); show(false); }
+      else{ msg(T.no); }
     });
     mv.addEventListener('error', function(){ msg(T.fail); });
   }
   btn.addEventListener('click', function(){
+    if(support !== 'ok'){ explain(support); return; }
     if(!dlg) build();
     dlg.showModal();
     if(loaded) return;

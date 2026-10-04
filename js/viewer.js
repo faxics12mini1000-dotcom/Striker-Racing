@@ -911,7 +911,7 @@ export function mount(stage, pre){
       });
     }
 
-    // ---------- ZONAS DE PATROCINIO: contorno y letra (A nariz, B pontones, C alerón trasero, D alerón delantero), como en el mapa de /patrocinios/ ----------
+    // ---------- ZONAS DE PATROCINIO: contorno y letra (A nariz, B alerón trasero, C alerón delantero, D cápsula), como en el mapa de /patrocinios/ ----------
     function ensureZones(){
       if(zoneEls.length || !decals.length) return;
       zoneHost = document.createElement('div'); zoneHost.className = 'car-notes'; zoneHost.setAttribute('aria-hidden', 'true');
@@ -947,12 +947,12 @@ export function mount(stage, pre){
         z.el.style.opacity = (tmpV.z > 1 || (-tmpV.y * 0.5 + 0.5) * h > h - insetPx) ? 0 : 1;
       }
     }
-    // El logo que carga el visitante (js/configurator.js) se pega, COMO EJEMPLO, en UNA de las zonas posibles (A nariz, B pontones, C alerón trasero,
-    // D alerón delantero, E cápsula). Todo local; el diseño final se acuerda con el equipo.
+    // El logo que carga el visitante (js/configurator.js) se pega, COMO EJEMPLO, en UNA de las zonas posibles (A nariz, B alerón trasero, C alerón delantero,
+    // D cápsula). Todo local; el diseño final se acuerda con el equipo.
     function applyLogo(img, zone){
       window.__srLogo = img ? { img:img, zone:zone } : null;
       decals.forEach(function(d){
-        if(!/^[A-E]$/.test(d.zone)) return;
+        if(!/^[A-D]$/.test(d.zone)) return;
         if(!d.origMat) d.origMat = d.mesh.material;
         if(d.userMat){ if(d.userMat.map) d.userMat.map.dispose(); d.userMat.dispose(); d.userMat = null; }
         if(img && d.zone === zone){ d.userMat = Look.userLogoMaterial(Look.slotCanvas(d.zone, img)); d.mesh.material = d.userMat; }

@@ -1,0 +1,4 @@
+{
+  "_ayuda": "Banderas de funciones del sitio. ar=false apaga «Ver en tu mesa»: build-viewer.mjs (npm run build:viewer) oculta #arRow y quita <script src=/js/ar.js>, así no se carga ar.js ni model-viewer. Para encenderlo: poner true y correr npm run build:viewer. El código del AR (js/ar.js, QR, estilos, ?ar=1) se conserva.",
+  "ar": false
+}

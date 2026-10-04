@@ -110,8 +110,9 @@
   }
   .model-stage.is-ready canvas{opacity:1;}
   .model-stage canvas:active{cursor:grabbing;}
+  .model-stage > picture{position:absolute; inset:0; display:block; z-index:1;}   /* WebKit: un <img> absoluto dentro de un <picture> en línea podía quedar sin caja */
   .model-poster{
-    position:absolute; inset:0; z-index:1; width:100%; height:100%; object-fit:cover; object-position:center;
+    display:block; position:absolute; inset:0; z-index:1; width:100%; height:100%; object-fit:cover; object-position:center;
     opacity:1; transition:opacity .35s ease;
   }
   /* Fundido cruzado: el canvas aparece encima del poster (idéntico al primer cuadro) y el poster se retira cuando ya quedó tapado */

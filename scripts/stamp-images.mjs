@@ -16,7 +16,7 @@ const pages = [];
 let changed = 0;
 for (const page of pages) {
   const src = readFileSync(page, 'utf8');
-  const out = src.replace(/(\/assets\/img\/[A-Za-z0-9._-]+\.(?:webp|png|jpg))(\?v=[0-9a-f]+)?/g, (m, file) => {
+  const out = src.replace(/(\/assets\/img\/[A-Za-z0-9._-]+\.(?:webp|png|jpg|svg))(\?v=[0-9a-f]+)?/g, (m, file) => {
     const f = '.' + file; if (!existsSync(f)) return m;
     return `${file}?v=${createHash('sha1').update(readFileSync(f)).digest('hex').slice(0, 8)}`;
   });

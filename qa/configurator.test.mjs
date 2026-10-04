@@ -58,8 +58,8 @@ for (const [url, lang] of [['/auto/', 'es'], ['/en/car/', 'en']]) {
   check(await page.locator('#cfgStatus.is-bad').count() === 0 && await page.locator('#cfgDownload').isEnabled(), `${url} acepta SVG`);
 
   // zona de ejemplo: el logo va en UNA zona elegida
-  await page.selectOption('#cfgZone', 'E'); await page.waitForTimeout(500);
-  check(await page.locator('.car-zone:visible').count() === 1 && (await page.locator('.car-zone:visible').innerText()) === 'E', `${url} el logo se muestra solo en la zona elegida (E)`);
+  await page.selectOption('#cfgZone', 'D'); await page.waitForTimeout(500);
+  check(await page.locator('.car-zone:visible').count() === 1 && (await page.locator('.car-zone:visible').innerText()) === 'D', `${url} el logo se muestra solo en la zona elegida (D)`);
   check(await page.locator('.car-zones-tag:visible').count() === 1, `${url} etiqueta «Ideas de ubicación» visible`);
   // fondo claro
   await page.locator('input[name="cfgBg"][value="light"]').check(); await page.waitForTimeout(200);
@@ -82,7 +82,7 @@ for (const [url, lang] of [['/auto/', 'es'], ['/en/car/', 'en']]) {
   const zones1 = await page.locator('.car-zone:visible').count();
   check(zones0 === 0 && zones1 >= 5, `${url} el botón resalta las zonas (${zones0} → ${zones1} letras)`);
   const letters = [...new Set(await page.locator('.car-zone:visible').allTextContents())].sort().join('');
-  check(letters === 'ABCDE', `${url} letras de zona A–E: ${letters}`);
+  check(letters === 'ABCD', `${url} letras de zona A–D: ${letters}`);
   check(await page.locator('#zonas a[href*="niveles"], #zonas a[href*="tiers"]').count() >= 4, `${url} cada zona enlaza a su nivel`);
 
   check(posts.length === 0, `${url} ninguna petición POST/PUT (privacidad): ${posts.join(', ')}`);
@@ -99,7 +99,7 @@ for (const [url, lang] of [['/auto/', 'es'], ['/en/car/', 'en']]) {
   check(await page.locator('.car-zone:visible').count() >= 5, '/auto/#zonas abre con las zonas resaltadas');
   await page.goto(BASE + '/patrocinios/');
   check(await page.locator('a[href="/auto/#zonas"]').count() === 1, '/patrocinios/ enlaza a /auto/#zonas');
-  check(await page.locator('.sm-legend a[href="#niveles"]').count() === 4, '/patrocinios/ enlaza las zonas A, C, D y E a #niveles');
+  check(await page.locator('.sm-legend a[href="#niveles"]').count() === 4, '/patrocinios/ enlaza las zonas A, B, C y D a #niveles');
   await ctx.close();
 }
 await browser.close();

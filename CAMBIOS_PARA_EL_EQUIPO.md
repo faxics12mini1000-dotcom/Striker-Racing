@@ -37,7 +37,7 @@ El sitio ahora presenta las ubicaciones en el auto como **ideas** («podría ir 
 - **Uniforme, todos los niveles** («logotipo en cuadrante inferior de espalda», «patrocinador central en el pecho», etc.): el configurador los marca como «ubicaciones de ejemplo». *Propuesto:* anteponer «ejemplo:» o «según propuesta» si no están confirmadas con el proveedor del uniforme.
 - **«Tu logo va en un proyecto real de ingeniería»** (Patrocinios, encabezado de beneficios): es figurativo, no una ubicación; se puede dejar.
 - **«fotos del pit display con tu marca»** (FAQ de reportes): promete una foto con la marca; confirmar que el Pit Display llevará a todos los patrocinadores.
-- **Zona B (pontones):** el reglamento la reserva al logo oficial de STEM Racing. Se muestra solo como idea de ejemplo y con esa aclaración; si prefieren no mostrarla, quitar la zona `B` de `data/zonas.json` (`carZones`) y su fila en las páginas.
+- **Pontones (ya no son zona):** el reglamento la reserva al logo oficial de STEM Racing. Se muestra solo como idea de ejemplo y con esa aclaración; si prefieren no mostrarla, quitar la zona `B` de `data/zonas.json` (`carZones`) y su fila en las páginas.
 
 ### A6. Halo y casco aún no están modelados
 El reglamento Development 2026–27 exige halo y casco, y el sitio lo afirma. **El SR-26 3D que se muestra todavía no los incluye: falta el CAD oficial.** El visor ya está listo para mostrarlos si el GLB trae `13_Halo` / `14_Casco` (ver B1). Mientras tanto, el prototipo visual debe seguir presentándose como tal.

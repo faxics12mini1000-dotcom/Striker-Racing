@@ -4,10 +4,19 @@ import { readFileSync, writeFileSync } from 'node:fs';
 import { execFileSync } from 'node:child_process';
 import { launch, ensureServer, BASE, check, finish } from './lib.mjs';
 
+const FEATURES = JSON.parse(readFileSync('data/features.json', 'utf8'));   // ar=false apaga el AR (data/features.json)
 const stop = await ensureServer();
 const browser = await launch();
 
 for (const [url, label] of [['/auto/', 'Ver en tu mesa'], ['/en/car/', 'See it on your table']]) {
+  if (!FEATURES.ar) {   // AR apagado: fila oculta y sin ar.js ni model-viewer, ni en teléfono
+    const ctx = await browser.newContext({ viewport: { width: 390, height: 844 }, hasTouch: true, isMobile: true, userAgent: 'Mozilla/5.0 (Linux; Android 14; Pixel 8) AppleWebKit/537.36 Chrome/120 Mobile Safari/537.36' });
+    const page = await ctx.newPage(); const reqs = []; page.on('request', r => reqs.push(r.url()));
+    await page.goto(BASE + url); await page.waitForTimeout(1200);
+    check(await page.locator('#arRow').isHidden(), `${url} AR apagado: la fila «${label}» no se ve`);
+    check(!reqs.some(u => /\/js\/ar\.js|model-viewer|sr26-ar/.test(u)), `${url} AR apagado: no se carga ar.js ni model-viewer`);
+    await ctx.close(); continue;
+  }
   // escritorio sin AR: oculto, sin descargar model-viewer
   {
     const ctx = await browser.newContext({ viewport: { width: 1280, height: 800 } });
