@@ -38,7 +38,7 @@
     "qa:ar": "node qa/ar-cfd.test.mjs",
     "qa:content": "node qa/content.test.mjs",
     "qa": "node qa/reveal.test.mjs && node qa/smoke.mjs && node qa/viewer.test.mjs && node qa/viewer-features.test.mjs && node qa/configurator.test.mjs && node qa/ar-cfd.test.mjs && node qa/content.test.mjs && node qa/hero-safe.test.mjs && node qa/audit.mjs && node qa/links.mjs && node qa/parity.mjs && node qa/axe.mjs && node scripts/check-budget.mjs",
-    "build:deploy": "node scripts/build-viewer.mjs",
+    "build:deploy": "node scripts/build-viewer.mjs && node scripts/assemble-public.mjs",
     "build:all": "node scripts/build-model.mjs && node scripts/build-facts.mjs && node scripts/build-viewer.mjs && node scripts/build-content.mjs && node scripts/stamp-images.mjs"
   },
   "devDependencies": {
