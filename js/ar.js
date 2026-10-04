@@ -25,7 +25,10 @@
     }
     return Promise.resolve(android);
   }
-  supportsAr().then(function(ok){ if(ok) btn.hidden = false; }).catch(function(){});
+  var row = document.getElementById('arRow');
+  function show(on){ btn.hidden = !on; if(row){ row.classList.toggle('is-on', on); if(!on) row.classList.remove('is-maybe'); } }
+  if(row && /Android|iPhone|iPad|iPod|Macintosh/.test(navigator.userAgent || '') && window.matchMedia('(max-width:960px)').matches) row.classList.add('is-maybe');   // reserva el alto antes de saber
+  supportsAr().then(show).catch(function(){ show(false); });
 
   var dlg = null, mv = null, loaded = false;
   function build(){
@@ -53,7 +56,7 @@
     mv.addEventListener('load', function(){
       msg('');
       if(mv.canActivateAR){ go.hidden = false; dlg.querySelector('.ar-actions').appendChild(go); go.removeAttribute('slot'); go.addEventListener('click', function(){ mv.activateAR(); }); }
-      else{ msg(T.no); btn.hidden = true; }
+      else{ msg(T.no); show(false); }
     });
     mv.addEventListener('error', function(){ msg(T.fail); });
   }

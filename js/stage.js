@@ -13,9 +13,9 @@
   var EN = (document.documentElement.lang || 'es').slice(0, 2) === 'en';
   var T = EN
     ? { loading:'Loading the 3D model…', error:'The 3D model could not be loaded. Check your connection and try again.', ready:'3D model ready. Use the arrow keys to rotate it, Home for the ISO view.',
-        video:'Watch video', d3:'Explore in 3D', load3d:'View in 3D', retry:'Try again', vlabel:'Video of the SR-26 exploded view', pause:'Tap to pause or play' }
+        note:'Rotate and zoom', video:'Watch video', d3:'Explore in 3D', load3d:'View in 3D', retry:'Try again', vlabel:'Video of the SR-26 exploded view', pause:'Tap to pause or play' }
     : { loading:'Cargando el modelo 3D…', error:'No se pudo cargar el modelo 3D. Revisa tu conexión e inténtalo de nuevo.', ready:'Modelo 3D listo. Usa las flechas para girarlo y Inicio para la vista ISO.',
-        video:'Ver video', d3:'Explorar en 3D', load3d:'Ver en 3D', retry:'Reintentar', vlabel:'Video del despiece del SR-26', pause:'Toca para pausar o reanudar' };
+        note:'Gira y acerca', video:'Ver video', d3:'Explorar en 3D', load3d:'Ver en 3D', retry:'Reintentar', vlabel:'Video del despiece del SR-26', pause:'Toca para pausar o reanudar' };
   var ds = stage.dataset;
   var conn = navigator.connection || {};
   var saveData = !!conn.saveData, slow = /(^|-)2g$/.test(conn.effectiveType || '');
@@ -87,6 +87,7 @@
   function showCta(buttons){
     if(!cta){ cta = document.createElement('div'); cta.className = 'car-cta'; stage.appendChild(cta); stage.classList.add('is-idle'); }
     cta.hidden = false; cta.textContent = '';
+    if(buttons.length && buttons.every(function(b){ return b.textContent !== T.retry; })){ var n = document.createElement('span'); n.className = 'car-cta-note'; n.textContent = '↻ ' + T.note; cta.appendChild(n); }
     buttons.forEach(function(b){ cta.appendChild(b); });
   }
 
