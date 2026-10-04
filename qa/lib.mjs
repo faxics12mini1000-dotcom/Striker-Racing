@@ -24,7 +24,7 @@ export async function launch(extraArgs = []) {
   return chromium.launch({
     executablePath: EXE,
     headless: true,
-    args: ['--use-angle=swiftshader', '--enable-unsafe-swiftshader', '--ignore-gpu-blocklist', ...extraArgs],
+    args: ['--use-angle=swiftshader', '--enable-unsafe-swiftshader', '--ignore-gpu-blocklist', '--disable-gpu-compositing', ...extraArgs],
   });
 }
 

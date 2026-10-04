@@ -35,6 +35,25 @@ for (const p of pairs()) {
     ['niveles', '.tier'], ['tarjetas de equipo', '.paddock-pass'], ['preguntas', 'details'], ['elementos del menú', 'nav .cockpit-links li'], ['filas de presupuesto', '.budget-list li'], ['zonas', '.zone-row'], ['pasos', '.car-steps li']]) {
     check(N('es', sel) === N('en', sel), `${p.id}: ${name} igual en ES y EN (${N('es', sel)})`);
   }
+  // hero, menú y CTAs: misma estructura (etiquetas, clases, orden, destinos y atributos), no solo el texto
+  const sig = (lang, sel) => $[lang](sel).find('*').map((_, e) => e.tagName + '.' + (e.attribs.class || '').split(/\s+/).filter(Boolean).join('.')).get().join('>');
+  if ($.es('header.hero-photo').length || $.en('header.hero-photo').length) {
+    check(sig('es', 'header.hero-photo') === sig('en', 'header.hero-photo'), `${p.id}: hero con la misma estructura de elementos y clases`);
+    const heroImg = lang => { const i = $[lang]('header.hero-photo img'); return [i.attr('width'), i.attr('height'), i.attr('fetchpriority'), i.attr('decoding'), $[lang]('header.hero-photo source').map((_, e) => e.attribs.type + e.attribs.srcset.replace(/\s+/g, ' ') + e.attribs.sizes).get().join('|'), i.attr('src')].join(' ; '); };
+    check(heroImg('es') === heroImg('en'), `${p.id}: foto del hero con el mismo srcset, sizes, tamaño y prioridad`);
+    const ctas = lang => $[lang]('header.hero-photo .cta-row a').map((_, e) => e.attribs.class + '→' + (e.attribs.href.startsWith('#') ? 'ancla' : e.attribs.href.startsWith('/') ? 'ruta' : 'externo')).get().join(' | ');
+    check($.es('header.hero-photo .cta-row a').length === 2 && ctas('es') === ctas('en'), `${p.id}: CTAs del hero iguales en clase y tipo de destino (${ctas('es')})`);
+    check(N('es', 'header.hero-photo .hero-scroll') === 1 && N('en', 'header.hero-photo .hero-scroll') === 1 && $.es('.hero-scroll').attr('href') === '#sr26' && $.en('.hero-scroll').attr('href') === '#sr26', `${p.id}: enlace «Ver el auto» con el mismo ancla (#sr26)`);
+  }
+  const navSig = lang => $[lang]('nav.cockpit .cockpit-bar *, .cockpit-bar *').map((_, e) => e.tagName + '.' + (e.attribs.class || '') + (e.attribs.target ? '[' + e.attribs.target + ']' : '') + (e.attribs.id ? '#' + e.attribs.id : '')).get().join('>');
+  check(navSig('es') === navSig('en'), `${p.id}: menú con la misma estructura (marca, enlaces, idioma, botones)`);
+  const ctaBtn = lang => $[lang]('.cockpit-bar .contact-cta').map((_, e) => e.attribs.class + '→' + (e.attribs.href.startsWith('http') ? 'wa' : 'ruta')).get().join(' | ');
+  check(ctaBtn('es') === ctaBtn('en') && N('es', '.cockpit-bar .contact-cta') === 3, `${p.id}: botones del menú (Patrocina / Contáctanos) iguales (${ctaBtn('es')})`);
+  {
+    const labels = lang => $[lang]('.cockpit-links a').map((_, e) => norm($[lang](e).text())).get().join(' / ');
+    const ctaTxt = lang => $[lang]('.cockpit-actions .contact-cta').map((_, e) => norm($[lang](e).text())).get().join(' / ');
+    { check(labels('en') === 'Home / Car / Budget / Sponsorship', `${p.id} EN: menú «${labels('en')}»`); check(ctaTxt('en') === 'Sponsor us / Contact us', `${p.id} EN: botones «${ctaTxt('en')}»`); }
+  }
   // cifras y contactos
   const text = lang => norm($[lang]('main').text());
   check(money(text('es')) === money(text('en')), `${p.id}: mismas cantidades de dinero (${money(text('es')).slice(0, 80)})`);

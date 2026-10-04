@@ -10,3 +10,11 @@ scripts/*.tmp.mjs
 video/
 qa/tmp/
 scripts/.car-look.bundle.js
+
+# registros
+*.log
+npm-debug.log*
+
+# capturas regenerables de las pruebas (npm run qa:audit / qa:hero)
+qa/screens/audit-*.png
+qa/screens/hero-safe-*.png

@@ -73,3 +73,8 @@ El equipo compite en **Desarrollo (Development), Bachillerato**. Se revisaron ES
 - Video de Fusion para teléfonos (ver `TODO-EQUIPO.md`), logos de patrocinadores reales y la primera entrada de bitácora.
 - Probar «Ver en tu mesa» en un Android y un iPhone reales (`docs/AR_Y_CFD.md`); si en iPhone el USDZ automático pierde detalle, exportar el USDZ con Reality Converter (plan B documentado).
 - Confirmar el endpoint de analítica (Plausible u otro) si deciden encenderla.
+
+## D. Tercera tanda (3-oct): hero, original de la foto y deploy
+- **Foto original del equipo:** soltarla como `assets/img/original/team.jpg` (idealmente 2560×1440 o más, 16:9) y correr `npm run build:images`. Si la proporción o el encuadre cambian, hay que volver a medir las caras en `data/hero-safe.json` (la prueba `qa/hero-safe.test.mjs` dirá si algo toca una cara). En la foto actual se ven 6 personas en el encuadre del hero, no 5: confirmar quién es quién.
+- **Vercel:** el proyecto ahora instala solo `esbuild` y `three` y corre solo el empaquetado del visor. Lo generado (imágenes, OG, dossier, modelo, capturas) va commiteado; para regenerarlo en local: `npm run build:all`, `npm run build:images`, etc. Si en el panel de Vercel hay un *Build Command* o *Install Command* propio, el de `vercel.json` lo sustituye.
+- **Copy en inglés:** el botón móvil del menú pasó de «Sponsor» a «Sponsor us» para igualar escritorio y el español («Patrocínanos»).

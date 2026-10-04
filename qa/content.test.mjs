@@ -10,7 +10,7 @@ const stop = await ensureServer();
 const browser = await launch();
 const ctx = await browser.newContext({ viewport: { width: 1280, height: 900 } });
 const page = await ctx.newPage();
-const get = async (url) => (await page.goto(BASE + url)).status();
+const get = async (url) => (await page.goto(BASE + url, { waitUntil: 'domcontentloaded' })).status();
 const text = file => load(readFileSync(file, 'utf8'));
 const norm = s => s.replace(/\s+/g, ' ').trim();
 
