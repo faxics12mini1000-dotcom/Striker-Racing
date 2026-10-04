@@ -886,7 +886,7 @@ dialog.ar-dialog::backdrop{background:rgba(7,27,51,0.85);}
   .hero-photo{--fs:clamp(1.4rem,5.2vw,2.2rem);}
   .hero-bg{top:0; bottom:auto; height:420px;}
   .hero-bg::after{display:none;}
-  .hero-bg img{object-position:40% 50%;}
+  .hero-bg img{object-position:48% 50%;}
   .hero-copy{padding-top:400px; padding-bottom:72px;}
   .hero-scroll{left:16px; right:auto; bottom:12px;}
 }

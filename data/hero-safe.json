@@ -1,13 +1,49 @@
 {
-  "_nota": "Cajas de las caras (cabeza completa con pelo, con ~1 % de margen) en % del ancho/alto de team/grupo.webp. Ningún texto, botón ni el menú puede tocarlas (qa/hero-safe.test.mjs). Al cambiar la foto, vuelve a medirlas aquí. En la foto actual se ven 6 caras, no 5.",
+  "_nota": "Cajas de las caras (cabeza completa con pelo, con ~1 % de margen) en % del ancho/alto de team/grupo.webp. Ningún texto, botón ni el menú puede tocarlas (qa/hero-safe.test.mjs). Al cambiar la foto, vuelve a medirlas aquí. Medidas sobre team/grupo-1920.jpg (original 4000×2252 de la cámara). Son 6 caras: 5 integrantes y el mentor.",
   "image": "team/grupo.webp",
   "aspect": 1.7778,
   "faces": [
-    { "id": "f1-atras-izq",  "x": 20.4, "y": 38.6, "w": 6.8,  "h": 12.6 },
-    { "id": "f2-frente-izq", "x": 24.3, "y": 46.2, "w": 7.8,  "h": 15.9 },
-    { "id": "f3-centro",     "x": 36.8, "y": 40.3, "w": 6.5,  "h": 13.7 },
-    { "id": "f4-alto",       "x": 47.9, "y": 40.6, "w": 6.7,  "h": 13.4 },
-    { "id": "f5-rizado",     "x": 54.4, "y": 48.9, "w": 10.2, "h": 20.4 },
-    { "id": "f6-der",        "x": 62.0, "y": 37.8, "w": 6.6,  "h": 14.6 }
+    {
+      "id": "f1-atras-izq",
+      "x": 26,
+      "y": 39.1,
+      "w": 7.1,
+      "h": 11.5
+    },
+    {
+      "id": "f2-frente-izq",
+      "x": 33.8,
+      "y": 46.4,
+      "w": 8.3,
+      "h": 13.9
+    },
+    {
+      "id": "f3-centro",
+      "x": 40.7,
+      "y": 40.2,
+      "w": 7,
+      "h": 12.7
+    },
+    {
+      "id": "f4-rizado-chico",
+      "x": 50.9,
+      "y": 40.8,
+      "w": 7.2,
+      "h": 12
+    },
+    {
+      "id": "f5-rizada",
+      "x": 56.9,
+      "y": 49,
+      "w": 9.7,
+      "h": 17.3
+    },
+    {
+      "id": "f6-der",
+      "x": 64.9,
+      "y": 38,
+      "w": 7.3,
+      "h": 12.6
+    }
   ]
 }

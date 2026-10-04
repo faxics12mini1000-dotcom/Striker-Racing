@@ -13,6 +13,8 @@ const FILES = ['index.html', '404.html', 'privacidad.html', 'logo.png', 'logo-64
 rmSync(OUT, { recursive: true, force: true });
 mkdirSync(OUT, { recursive: true });
 for (const d of DIRS) { if (!existsSync(d)) throw new Error(`falta la carpeta ${d}`); cpSync(d, join(OUT, d), { recursive: true }); }
+// Los originales de alta resolucion (assets/img/original) son solo fuente: nunca se publican.
+rmSync(join(OUT, 'assets', 'img', 'original'), { recursive: true, force: true });
 for (const f of FILES) { if (!existsSync(f)) throw new Error(`falta el archivo ${f}`); cpSync(f, join(OUT, f)); }
 // Sellado por contenido: ?v=<hash> en todas las referencias locales sin hash en el nombre (primero el CSS, luego el HTML, para que el hash del CSS ya incluya sus fuentes).
 const walkFiles = (p, ext) => readdirSync(p).flatMap(e => { const q = join(p, e); return statSync(q).isDirectory() ? walkFiles(q, ext) : q.endsWith(ext) ? [q] : []; });
