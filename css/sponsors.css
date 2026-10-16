@@ -1,0 +1,55 @@
+/* Carrusel de patrocinadores: franja blanca de borde a borde, logos a color sobre blanco puro */
+.sponsor-strip{position:relative;background:#fff;color:var(--navy-deep);overflow:hidden;padding:20px 0 22px}
+.sponsor-strip .ss-label{display:flex;align-items:center;justify-content:center;gap:14px;font-family:var(--mono);font-size:.7rem;font-weight:600;letter-spacing:.24em;text-transform:uppercase;color:var(--navy-deep);margin:0 0 6px;padding:0 16px}
+.sponsor-strip .ss-label::before,.sponsor-strip .ss-label::after{content:"";width:64px;height:1px;background:var(--navy-deep);opacity:.45}
+.ss-viewport{overflow:hidden;-webkit-mask-image:linear-gradient(90deg,transparent,#000 7%,#000 93%,transparent);mask-image:linear-gradient(90deg,transparent,#000 7%,#000 93%,transparent)}
+.ss-track{display:flex;width:max-content;align-items:center;animation:ss-scroll 36s linear infinite}
+.sponsor-strip:hover .ss-track,.sponsor-strip:focus-within .ss-track{animation-play-state:paused}
+.ss-item{display:flex;flex-direction:column;align-items:center;gap:8px;padding:8px 56px;position:relative;text-decoration:none;color:var(--navy-deep)}
+.ss-item::after{content:"";position:absolute;right:0;top:14%;bottom:14%;width:1px;background:linear-gradient(180deg,transparent,rgba(7,27,51,.35),transparent)}
+.ss-plate{display:block}
+.ss-plate img{display:block;height:96px;width:auto;max-width:none;transition:transform .25s ease}
+.ss-item.is-top .ss-plate img{height:108px}
+.ss-item:hover .ss-plate img{transform:scale(1.04)}
+.ss-item small{font-family:var(--mono);font-size:.62rem;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:var(--navy-deep);opacity:.65}
+.ss-item.is-top small{color:#0b7a44;opacity:1}
+@keyframes ss-scroll{to{transform:translateX(-50%)}}
+@media (prefers-reduced-motion:reduce){.ss-track{animation:none;width:auto;justify-content:center;flex-wrap:wrap}.ss-track [aria-hidden]{display:none}}
+@media (max-width:600px){.ss-item{padding:8px 32px}.ss-plate img{height:68px}.ss-item.is-top .ss-plate img{height:76px}}
+
+/* ---- Variantes de transicion azul -> blanco (a elegir) ---- */
+/* A) Degradado suave: el azul se aclara hasta blanco, sin corte */
+.sponsor-strip.v-fade{background:linear-gradient(180deg,var(--navy-deep) 0,#dfe8f2 22px,#fff 52px,#fff calc(100% - 52px),#dfe8f2 calc(100% - 22px),var(--navy-deep) 100%);padding:58px 0 60px}
+/* B) Bandera de carreras: borde a cuadros + filete verde del equipo */
+.sponsor-strip.v-racing{padding:30px 0 32px;border-block:3px solid var(--emerald)}
+.sponsor-strip.v-racing::before,.sponsor-strip.v-racing::after{content:"";position:absolute;left:0;right:0;height:14px;background:repeating-conic-gradient(var(--navy-deep) 0 25%,#fff 0 50%) 0 0/14px 14px;opacity:.95}
+.sponsor-strip.v-racing::before{top:0}.sponsor-strip.v-racing::after{bottom:0}
+/* C) Placa flotante: banda blanca redondeada con halo sobre el azul */
+.sponsor-wrap{padding:28px 28px}
+.sponsor-strip.v-float{border-radius:22px;padding:22px 0 24px;box-shadow:0 0 0 1px rgba(255,255,255,.9),0 0 0 8px rgba(255,255,255,.07),0 18px 50px rgba(0,0,0,.45),0 0 60px rgba(205,222,239,.18)}
+@media (max-width:600px){.sponsor-wrap{padding:18px 12px}.sponsor-strip.v-fade{padding-block:50px}}
+
+/* ---- Variantes de la B (bandera de carreras) ---- */
+.sponsor-strip.b-chk{--sq:14px}
+.sponsor-strip.b-chk::before,.sponsor-strip.b-chk::after{content:"";position:absolute;left:0;right:0;background:repeating-conic-gradient(var(--navy-deep) 0 25%,#fff 0 50%) 0 0/var(--sq) var(--sq)}
+/* B1: doble hilera de cuadros, filete verde interior y exterior */
+.sponsor-strip.b1{padding:30px 0 32px;border-block:3px solid var(--emerald)}
+.sponsor-strip.b1::before,.sponsor-strip.b1::after{height:14px}
+.sponsor-strip.b1::before{top:0;border-bottom:3px solid var(--emerald)}.sponsor-strip.b1::after{bottom:0;border-top:3px solid var(--emerald);height:17px}
+/* B2: banda inclinada como una bandera ondeando */
+.sponsor-strip.b2{transform:skewY(-1.6deg);margin:34px 0;padding:34px 0 36px;border-block:3px solid var(--emerald);overflow:visible}
+.sponsor-strip.b2>*{transform:skewY(1.6deg)}
+.sponsor-strip.b2::before,.sponsor-strip.b2::after{height:14px}.sponsor-strip.b2::before{top:0}.sponsor-strip.b2::after{bottom:0}
+/* B3: cuadros solo en los extremos laterales, filetes arriba y abajo */
+.sponsor-strip.b3{padding:24px 0 26px;border-block:3px solid var(--emerald);box-shadow:inset 0 0 0 1px #fff}
+.sponsor-strip.b3::before,.sponsor-strip.b3::after{top:0;bottom:0;width:calc(var(--sq)*3);height:auto}
+.sponsor-strip.b3::before{left:0;right:auto}.sponsor-strip.b3::after{right:0;left:auto}
+.sponsor-strip.b3 .ss-viewport{margin:0 calc(14px*3)}
+/* B4: cuadros en movimiento, arriba hacia un lado y abajo hacia el otro */
+.sponsor-strip.b4{padding:34px 0 36px;border-block:3px solid var(--emerald)}
+.sponsor-strip.b4::before,.sponsor-strip.b4::after{height:14px;animation:ss-chk 6s linear infinite}
+.sponsor-strip.b4::before{top:0}.sponsor-strip.b4::after{bottom:0;animation-direction:reverse}
+@keyframes ss-chk{to{background-position:calc(var(--sq)*2) 0}}
+@media (prefers-reduced-motion:reduce){.sponsor-strip.b4::before,.sponsor-strip.b4::after{animation:none}}
+@media (max-width:600px){.sponsor-strip.b3::before,.sponsor-strip.b3::after{width:calc(var(--sq)*2)}.sponsor-strip.b3 .ss-viewport{margin:0 calc(14px*2)}}
+@media print{.sponsor-strip{display:none}}

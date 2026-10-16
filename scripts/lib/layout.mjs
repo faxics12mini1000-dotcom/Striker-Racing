@@ -57,6 +57,7 @@ ${noindex ? '<meta name="robots" content="noindex">\n' : ''}<meta name="theme-co
 <link rel="preload" href="/fonts/oswald-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="/css/site.css">
 <link rel="stylesheet" href="/css/gallery.css">
+<link rel="stylesheet" href="/css/sponsors.css">
 ${css.map(c => `<link rel="stylesheet" href="${c}">`).join('\n')}
 </head>
 <body${bodyClass ? ` class="${bodyClass}"` : ''}>
@@ -67,6 +68,7 @@ ${s.nav}
 ${body}
 </main>
 
+<!-- sponsor-strip:begin --><!-- sponsor-strip:end -->
 ${s.footer}
 
 ${s.sticky}

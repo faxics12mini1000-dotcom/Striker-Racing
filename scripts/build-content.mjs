@@ -4,6 +4,7 @@
 import { buildBitacora } from './content/bitacora.mjs';
 import { buildCfd } from './content/cfd.mjs';
 import { buildSponsors } from './content/sponsors.mjs';
+import { buildSponsorStrip } from './content/sponsor-strip.mjs';
 import { buildAnalytics } from './content/analytics.mjs';
 import { buildDossier } from './content/dossier.mjs';
 import { execFileSync } from 'node:child_process';
@@ -14,6 +15,7 @@ results.cfd = buildCfd();
 results.sponsors = buildSponsors();
 results.analytics = buildAnalytics();
 results.dossier = await buildDossier();
+results.carrusel = buildSponsorStrip();   // al final: el Dossier y la bitácora se regeneran con el marcador vacío
 execFileSync(process.execPath, ['scripts/build-sitemap.mjs'], { stdio: 'inherit' });
 for (const [name, r] of Object.entries(results)) {
   const extra = Object.entries(r).filter(([k]) => !['empty', 'warnings'].includes(k)).map(([k, v]) => `${k}=${v}`).join(' ');

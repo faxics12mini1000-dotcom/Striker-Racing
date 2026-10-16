@@ -1,5 +1,19 @@
 {
-  "_ayuda": "Muro de patrocinadores. Oculto mientras esté vacío o \"show\" sea false. Cada patrocinador: { \"name\": \"Nombre\", \"logo\": \"/assets/sponsors/archivo.svg\" (PNG/SVG/WebP en assets/sponsors/), \"url\": \"https://…\" (opcional), \"level\": \"colaborador|impulsor|aliado|partner\" }. Solo patrocinadores reales que hayan aceptado aparecer. Después: npm run build:content. Guía: docs/CONTENIDO.md.",
-  "show": false,
-  "sponsors": []
+  "_ayuda": "Muro de patrocinadores. Oculto mientras esté vacío o \"show\" sea false. Cada patrocinador: { \"name\": \"Nombre\", \"logo\": \"/assets/sponsors/archivo.svg\" (PNG/SVG/WebP en assets/sponsors/), \"url\": \"https://…\" (opcional), \"level\": \"colaborador|impulsor|aliado|partner\" }. Solo patrocinadores reales que hayan aceptado aparecer. Después: npm run build:content. Guía: docs/CONTENIDO.md. \"show\" enciende el carrusel de la franja blanca (todas las páginas); \"wall\": true enciende además el muro de logos en inicio y /patrocinios/.",
+  "show": true,
+  "sponsors": [
+    {
+      "name": "Bodega Valreinas",
+      "logo": "/assets/sponsors/valreinas-color.png",
+      "level": "partner",
+      "url": "https://valreinas.com"
+    },
+    {
+      "name": "Grúas Mixquiahuala Jaguar",
+      "logo": "/assets/sponsors/jaguar-color.png",
+      "level": "impulsor",
+      "url": "tel:+527721236250"
+    }
+  ],
+  "wall": false
 }

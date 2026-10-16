@@ -18,7 +18,7 @@ for (const p of pairs()) for (const lang of ['es', 'en']) for (const w of [1440,
     const vis = e => { const b = e.getBoundingClientRect(), c = getComputedStyle(e); return b.width > 0 && b.height > 0 && c.visibility !== 'hidden' && c.display !== 'none'; };
     const name = e => e.tagName.toLowerCase() + (e.id ? '#' + e.id : '') + (e.className && typeof e.className === 'string' ? '.' + e.className.trim().split(/\s+/)[0] : '');
     for (const e of document.querySelectorAll('main *, nav *, footer *')) {
-      if (!vis(e) || e.closest('svg, #modelStage, .model-stage, .sr-only, .skip-link')) continue;
+      if (!vis(e) || e.closest('svg, #modelStage, .model-stage, .sr-only, .skip-link, .ss-viewport')) continue;
       const c = getComputedStyle(e);
       if (e.scrollWidth > e.clientWidth + 1 && e.clientWidth > 0 && (c.overflowX === 'hidden' || c.overflowX === 'clip' || c.textOverflow === 'ellipsis') && !['IMG', 'PICTURE'].includes(e.tagName)) out.clipped.push(name(e) + ` (${e.scrollWidth}>${e.clientWidth})`);
       else if (e.getBoundingClientRect().right > innerWidth + 1 && !e.closest('.cockpit, .hero-bg') && e.getBoundingClientRect().width < innerWidth * 3 && c.position !== 'fixed' && !e.closest('[style*="overflow"], .table-wrap, pre, .scroll-x')) {
@@ -26,7 +26,7 @@ for (const p of pairs()) for (const lang of ['es', 'en']) for (const w of [1440,
       }
     }
     for (const i of document.querySelectorAll('main img, .hero-bg img')) {
-      if (!vis(i) || i.closest('.model-stage')) continue;
+      if (!vis(i) || i.closest('.model-stage, .ss-viewport')) continue;
       const b = i.getBoundingClientRect(), c = getComputedStyle(i), pb = i.parentElement.getBoundingClientRect();
       if (i.complete && i.naturalWidth && c.objectFit === 'fill' && Math.abs(b.width / b.height - i.naturalWidth / i.naturalHeight) > 0.05) out.imgs.push(name(i) + ' deformada');
       if (b.right > innerWidth + 1 || b.left < -1) out.imgs.push(name(i) + ' fuera de la ventana');

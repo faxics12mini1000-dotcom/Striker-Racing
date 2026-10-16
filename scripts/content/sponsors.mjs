@@ -19,8 +19,8 @@ export function buildSponsors() {
     if (s.url && !/^https:\/\//.test(s.url)) warnings.push(`sponsors.json: el enlace de ${s.name} debe ser https://`);
     if (s.level && !ZONAS.levels.some(l => l.key === s.level)) warnings.push(`sponsors.json: nivel desconocido «${s.level}» en ${s.name} (usa ${ZONAS.levels.map(l => l.key).join(', ')})`);
   });
-  const on = d.show === true && list.length > 0;
-  if (list.length && !on) warnings.push('sponsors.json: hay patrocinadores pero "show" es false: el muro sigue oculto');
+  const on = d.show === true && d.wall === true && list.length > 0;   // el muro es opcional; el carrusel (sponsor-strip.mjs) usa solo "show"
+  
   for (const [file, lang] of FILES) {
     if (!on) { inject(file, 'sponsors', ''); continue; }
     const t = T[lang];

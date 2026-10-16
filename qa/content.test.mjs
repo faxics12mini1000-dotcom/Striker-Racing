@@ -47,7 +47,7 @@ const saved = Object.fromEntries(['data/sponsors.json', 'data/analytics.json'].m
 try {
   mkdirSync('data/bitacora', { recursive: true });
   writeFileSync('data/bitacora/2026-11-01-prueba.md', `---\nfecha: 2026-11-01\ntitulo_es: Entrada de prueba\ntitulo_en: Test entry\nresumen_es: Resumen de prueba\nresumen_en: Test summary\n---\nTexto **en español**.\n<!-- en -->\nText **in English**.\n`);
-  writeFileSync('data/sponsors.json', JSON.stringify({ show: true, sponsors: [{ name: 'Empresa Ejemplo', logo: '/logo.png', url: 'https://example.com', level: 'partner' }] }));
+  writeFileSync('data/sponsors.json', JSON.stringify({ show: true, wall: true, sponsors: [{ name: 'Empresa Ejemplo', logo: '/logo.png', url: 'https://example.com', level: 'partner' }] }));
   writeFileSync('data/analytics.json', JSON.stringify({ enabled: true, mode: 'beacon', endpoint: 'https://analytics.example.com/e', domain: 'strikerracing.com' }));
   build();
   check(await get('/bitacora/') === 200 && await get('/en/log/') === 200, 'con una entrada: existen /bitacora/ y /en/log/');
