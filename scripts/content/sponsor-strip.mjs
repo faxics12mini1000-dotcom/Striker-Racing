@@ -49,7 +49,7 @@ export function buildSponsorStrip() {
       const copies = Math.ceil(10 / sorted.length);
       const item = (sp, hidden) => {
         const lvl = ZONAS.levels.find(l => l.key === sp.level);
-        const inner = `<span class="ss-plate"><img src="${esc(sp.logo)}" alt="${hidden ? '' : esc(sp.name)}" height="108" decoding="async"></span>${lvl ? `<small>${esc(lvl.name[lang])}</small>` : ''}`;
+        const inner = `<span class="ss-plate"><img src="${esc(sp.logo)}" alt="${hidden ? '' : esc(sp.name)}" height="108" decoding="async"></span>${lvl ? `<small>${esc(lvl.name[lang])}</small>` : sp.role?.[lang] ? `<small>${esc(sp.role[lang])}</small>` : ''}`;
         const cls = `ss-item${sp.level === top ? ' is-top' : ''}`;
         return sp.url
           ? `<a class="${cls}" href="${esc(sp.url)}"${sp.url.startsWith('tel:') ? '' : ' target="_blank" rel="noopener sponsored"'}${hidden ? ' aria-hidden="true" tabindex="-1"' : ''}>${inner}</a>`

@@ -13,6 +13,11 @@
       "logo": "/assets/sponsors/jaguar-color.png",
       "level": "impulsor",
       "url": "tel:+527721236250"
+    },
+    {
+      "name": "Colegio Celta Internacional",
+      "logo": "/assets/sponsors/celta-color.jpg",
+      "role": { "es": "Apoyo", "en": "Support" }
     }
   ],
   "wall": false
