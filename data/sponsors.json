@@ -15,6 +15,16 @@
       "url": "tel:+527721236250"
     },
     {
+      "name": "Proalmo (Productos Almo del Bajío)",
+      "logo": "/assets/sponsors/proalmo-color.jpg",
+      "level": "partner"
+    },
+    {
+      "name": "ENI Networks",
+      "logo": "/assets/sponsors/eni-color.jpg",
+      "level": "impulsor"
+    },
+    {
       "name": "Colegio Celta Internacional",
       "logo": "/assets/sponsors/celta-color.jpg",
       "role": { "es": "Apoyo", "en": "Support" }
